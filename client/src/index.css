@@ -1,0 +1,409 @@
+@import "tailwindcss";
+
+/* ============================================
+   LEVELUP DESIGN SYSTEM — Tailwind v4 Theme
+   ============================================ */
+
+@theme {
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', monospace;
+
+  /* ---- Custom Semantic Colors ---- */
+  --color-surface: rgba(255, 255, 255, 0.03);
+  --color-surface-hover: rgba(255, 255, 255, 0.06);
+  --color-surface-active: rgba(255, 255, 255, 0.09);
+  --color-surface-raised: rgba(255, 255, 255, 0.05);
+
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+  --color-accent-dim: rgba(99, 102, 241, 0.15);
+  --color-accent-glow: rgba(99, 102, 241, 0.25);
+
+  --color-success: #10b981;
+  --color-success-dim: rgba(16, 185, 129, 0.15);
+  --color-warning: #f59e0b;
+  --color-warning-dim: rgba(245, 158, 11, 0.15);
+  --color-danger: #ef4444;
+  --color-danger-dim: rgba(239, 68, 68, 0.15);
+  --color-info: #06b6d4;
+  --color-info-dim: rgba(6, 182, 212, 0.15);
+
+  /* ---- Shadows ---- */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-deep: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-glow-accent: 0 0 24px rgba(99, 102, 241, 0.25);
+  --shadow-glow-violet: 0 0 24px rgba(139, 92, 246, 0.25);
+  --shadow-glow-success: 0 0 24px rgba(16, 185, 129, 0.25);
+
+  /* ---- Animations ---- */
+  --animate-fade-in: fade-in 0.4s ease-out both;
+  --animate-slide-up: slide-up 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-slide-down: slide-down 0.4s ease-out both;
+  --animate-scale-in: scale-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-shimmer: shimmer 2s infinite linear;
+  --animate-pulse-glow: pulse-glow 2.5s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin 8s linear infinite;
+
+  /* ---- Easing ---- */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ============================================
+   Keyframe Animations
+   ============================================ */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes progress-fill {
+  from { stroke-dashoffset: var(--circumference, 283); }
+  to   { stroke-dashoffset: var(--target-offset, 0); }
+}
+
+@keyframes check-pop {
+  0%   { transform: scale(0); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================
+   Base / Reset Styles
+   ============================================ */
+
+/* ─── Theme Variables (Dark = default) ─── */
+:root {
+  --th-bg: #08080d;
+  --th-bg-secondary: #0a0a0f;
+  --th-card: rgba(255, 255, 255, 0.03);
+  --th-card-solid: #111113;
+  --th-card-hover: rgba(255, 255, 255, 0.06);
+  --th-border: rgba(255, 255, 255, 0.06);
+  --th-border-hover: rgba(255, 255, 255, 0.12);
+  --th-input: rgba(15, 15, 21, 0.6);
+  --th-text: #ffffff;
+  --th-text-secondary: #a1a1aa;
+  --th-text-muted: #71717a;
+  --th-text-dim: #52525b;
+  --th-nav-bg: rgba(10, 10, 15, 0.92);
+  --th-divider-bg: #08080d;
+  --th-highlight: rgba(255, 255, 255, 0.06);
+  --th-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --th-autofill: #0f0f15;
+  --th-autofill-text: #ffffff;
+  --th-primary: #E8B94A;
+  --th-primary-dark: #D4952B;
+  --th-primary-light: #F5C95A;
+  --th-primary-rgb: 232, 185, 74;
+}
+
+[data-theme="light"] {
+  --th-bg: #F5F1EC;
+  --th-bg-secondary: #EDE8E2;
+  --th-card: rgba(255, 255, 255, 0.7);
+  --th-card-solid: #FFFFFF;
+  --th-card-hover: rgba(0, 0, 0, 0.03);
+  --th-border: rgba(0, 0, 0, 0.08);
+  --th-border-hover: rgba(0, 0, 0, 0.14);
+  --th-input: rgba(0, 0, 0, 0.03);
+  --th-text: #1A1714;
+  --th-text-secondary: #6B6560;
+  --th-text-muted: #9C9590;
+  --th-text-dim: #B5AFA9;
+  --th-nav-bg: rgba(245, 241, 236, 0.95);
+  --th-divider-bg: #F5F1EC;
+  --th-highlight: rgba(0, 0, 0, 0.04);
+  --th-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --th-autofill: #F0ECE7;
+  --th-autofill-text: #1A1714;
+  --th-primary: #DD9D2C;
+  --th-primary-dark: #C68925;
+  --th-primary-light: #EBB048;
+  --th-primary-rgb: 221, 157, 44;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Override browser autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--th-autofill) inset !important;
+  -webkit-text-fill-color: var(--th-autofill-text) !important;
+  caret-color: var(--th-primary) !important;
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--th-bg);
+  color: var(--th-text);
+  overflow-x: hidden;
+  min-height: 100dvh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100dvh;
+  isolation: isolate;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+/* ============================================
+   Selection
+   ============================================ */
+
+::selection {
+  background: rgba(99, 102, 241, 0.35);
+  color: white;
+}
+
+/* ============================================
+   Focus
+   ============================================ */
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
+/* ============================================
+   Custom Utility Classes
+   ============================================ */
+
+@layer utilities {
+  /* Glassmorphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .glass-nav {
+    background: rgba(15, 15, 18, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Gradients */
+  .gradient-text {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-warm {
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-bg {
+    background:
+      radial-gradient(ellipse at top left, rgba(99, 102, 241, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.05), transparent 50%);
+  }
+
+  .gradient-border {
+    position: relative;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.1));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+  }
+
+  /* Layout Helpers */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Text Utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Interactive */
+  .tap-highlight {
+    position: relative;
+    overflow: hidden;
+  }
+  .tap-highlight::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .tap-highlight:active::after {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Auth card (mobile glassmorphic, desktop transparent)
+   ============================================ */
+
+.auth-card-mobile {
+  background: var(--th-card);
+  border: 1px solid var(--th-border);
+}
+
+@media (min-width: 1024px) {
+  .auth-card-mobile {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    backdrop-filter: none !important;
+    border-radius: 0 !important;
+  }
+}
+
+/* ============================================
+   Page background pattern (subtle grid)
+   ============================================ */
+
+.page-bg {
+  background-color: var(--th-bg);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="light"] .page-bg {
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(232, 185, 74, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+}
+
+/* ============================================
+   Number & Stats Styling
+   ============================================ */
+
+.stat-number {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}

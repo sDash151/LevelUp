@@ -1,0 +1,410 @@
+// ============================================
+// LevelUp — Prisma Schema
+// ============================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== AUTH ====================
+
+model User {
+  id               String    @id @default(cuid())
+  name             String
+  email            String    @unique
+  passwordHash     String?
+  avatar           String?
+  googleId         String?   @unique
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  totalXp         Int      @default(0)
+  level            Int      @default(1)
+
+  refreshTokens   RefreshToken[]
+  habits          Habit[]
+  habitLogs       HabitLog[]
+  goals           Goal[]
+  reflections     Reflection[]
+  dsaProblems     DsaProblem[]
+  jobApplications JobApplication[]
+  projects        Project[]
+  transactions    Transaction[]
+  workouts        Workout[]
+  fitnessLogs     FitnessLog[]
+  focusSessions   FocusSession[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  isRevoked Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+// ==================== HABITS ====================
+
+model Habit {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  description  String?
+  icon         String    @default("check-circle")
+  color        String    @default("#6366f1")
+  category     String    @default("general")
+  frequency    Frequency @default(DAILY)
+  reminderTime String?
+  isArchived   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  logs HabitLog[]
+
+  @@index([userId])
+  @@map("habits")
+}
+
+model HabitLog {
+  id          String   @id @default(cuid())
+  habitId     String
+  habit       Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  completedAt DateTime @db.Date
+  note        String?
+  createdAt   DateTime @default(now())
+
+  @@unique([habitId, completedAt])
+  @@index([habitId])
+  @@index([userId])
+  @@index([completedAt])
+  @@map("habit_logs")
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+// ==================== GOALS ====================
+
+model Goal {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  type        GoalType
+  status      GoalStatus @default(IN_PROGRESS)
+  progress    Int          @default(0)
+  category    GoalCategory @default(PERSONAL)
+  startDate   DateTime     @db.Date
+  endDate     DateTime     @db.Date
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  milestones GoalMilestone[]
+
+  @@index([userId])
+  @@index([type])
+  @@map("goals")
+}
+
+model GoalMilestone {
+  id          String    @id @default(cuid())
+  goalId      String
+  goal        Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  title       String
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([goalId])
+  @@map("goal_milestones")
+}
+
+enum GoalType {
+  WEEKLY
+  MONTHLY
+}
+
+enum GoalCategory {
+  HEALTH
+  FITNESS
+  LEARNING
+  CAREER
+  PERSONAL
+}
+
+enum GoalStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+// ==================== REFLECTIONS ====================
+
+model Reflection {
+  id           String         @id @default(cuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         ReflectionType
+  title        String?
+  content      String
+  mood         Int?
+  tags         String[]       @default([])
+  gratitude    String?
+  improvements String?
+  date         DateTime       @db.Date
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([date])
+  @@map("reflections")
+}
+
+enum ReflectionType {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+// ==================== DSA TRACKER ====================
+
+model DsaProblem {
+  id         String        @id @default(cuid())
+  userId     String
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  platform   String        @default("LeetCode")
+  difficulty DsaDifficulty
+  topic      String
+  status     DsaStatus     @default(TODO)
+  url        String?
+  notes      String?
+  timeSpent  Int?
+  rating     Int?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([topic])
+  @@index([difficulty])
+  @@index([status])
+  @@map("dsa_problems")
+}
+
+enum DsaDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum DsaStatus {
+  TODO
+  ATTEMPTED
+  SOLVED
+  REVISIT
+}
+
+// ==================== JOB TRACKER ====================
+
+model JobApplication {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company      String
+  role         String
+  location     String?
+  type         JobType   @default(FULL_TIME)
+  status       JobStatus @default(SAVED)
+  url          String?
+  salary       String?
+  notes        String?
+  appliedDate  DateTime?
+  deadline     DateTime?
+  contactName  String?
+  contactEmail String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  source              String?
+  requiredSkills      String[]  @default([])
+  experience          String?
+  workMode            String?
+  description         String?
+  companyInfo         String?
+  interviewRounds     Json?
+  matchScore          Int?
+  recruiterNotes      String?
+  interviewNotes      String?
+  companyResearch     String?
+  checklist           Json?
+  personalNotes       String?
+  aiPrepData          Json?
+  aiPrepStatus        String    @default("idle")
+  aiPrepLastGeneratedAt DateTime?
+  prepStarted         Boolean   @default(false)
+  prepStartedAt       DateTime?
+  prepProgress        Int       @default(0)
+  prepConfidence      Int       @default(0)
+  prepDaysTotal       Int       @default(7)
+  stageHistory        Json?
+
+  @@index([userId])
+  @@index([status])
+  @@map("job_applications")
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  CONTRACT
+  FREELANCE
+}
+
+enum JobStatus {
+  SAVED
+  APPLIED
+  PHONE_SCREEN
+  INTERVIEW
+  OFFER
+  REJECTED
+  WITHDRAWN
+}
+
+// ==================== PROJECT TRACKER ====================
+
+model Project {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  status      ProjectStatus @default(PLANNING)
+  priority    ProjectPriority @default(MEDIUM)
+  techStack   String[]
+  githubUrl   String?
+  liveUrl     String?
+  startDate   DateTime?     @db.Date
+  endDate     DateTime?     @db.Date
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("projects")
+}
+
+enum ProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
+enum ProjectPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// ==================== FINANCE TRACKER ====================
+
+model Transaction {
+  id          String          @id @default(cuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        TransactionType
+  amount      Decimal         @db.Decimal(12, 2)
+  category    String
+  description String?
+  date        DateTime        @db.Date
+  isRecurring Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+
+  @@index([userId])
+  @@index([date])
+  @@index([type])
+  @@map("transactions")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+// ==================== FITNESS TRACKER ====================
+
+model Workout {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type           String
+  name           String
+  duration       Int
+  caloriesBurned Int?
+  notes          String?
+  exercises      Json     @default("[]")
+  date           DateTime @db.Date
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([date])
+  @@map("workouts")
+}
+
+model FitnessLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  weight    Float?
+  steps     Int?
+  water     Float?
+  sleep     Float?
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@map("fitness_logs")
+}
+// ==================== FOCUS SESSIONS ====================
+
+model FocusSession {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  duration    Int       // planned duration in minutes
+  actualMins  Int?      // actual minutes completed
+  label       String    @default("Deep Work Session")
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("focus_sessions")
+}

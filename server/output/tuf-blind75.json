@@ -1,0 +1,1672 @@
+{
+  "totalProblems": 75,
+  "premiumCount": 0,
+  "lastUpdated": "2026-06-19T00:23:47.852Z",
+  "topics": [
+    {
+      "name": "Array",
+      "problemCount": 10,
+      "subtopics": [
+        {
+          "name": "Array",
+          "problemCount": 10,
+          "problems": [
+            {
+              "id": "two-sum",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Two Sum",
+              "difficulty": "Easy",
+              "slug": "two-sum",
+              "url": "https://takeuforward.org/plus/dsa/problems/two-sum?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 0,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/two-sum/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "best-time-to-buy-and-sell-stock",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Best time to buy and sell stock",
+              "difficulty": "Medium",
+              "slug": "best-time-to-buy-and-sell-stock",
+              "url": "https://takeuforward.org/plus/dsa/problems/best-time-to-buy-and-sell-stock?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 1,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "contains-duplicate",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Contains Duplicate",
+              "difficulty": "Easy",
+              "slug": "contains-duplicate",
+              "url": "https://leetcode.com/problems/contains-duplicate/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 2,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/contains-duplicate/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "product-of-array-except-self",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Product of Array Except Self",
+              "difficulty": "Easy",
+              "slug": "product-of-array-except-self",
+              "url": "https://leetcode.com/problems/product-of-array-except-self/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 3,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/product-of-array-except-self/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "kadane's-algorithm",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Kadane's Algorithm, maximum subarray sum",
+              "difficulty": "Medium",
+              "slug": "kadane's-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/kadane's-algorithm?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 4,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-subarray/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "maximum-product-subarray-in-an-array",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Maximum Product Subarray in an Array",
+              "difficulty": "Hard",
+              "slug": "maximum-product-subarray-in-an-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-product-subarray-in-an-array?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 5,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-product-subarray/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "find-minimum-in-rotated-sorted-array",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Find minimum in Rotated Sorted Array",
+              "difficulty": "Easy",
+              "slug": "find-minimum-in-rotated-sorted-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-minimum-in-rotated-sorted-array?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 6,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "search-in-rotated-sorted-array-i",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Search in rotated sorted array-I",
+              "difficulty": "Medium",
+              "slug": "search-in-rotated-sorted-array-i",
+              "url": "https://takeuforward.org/plus/dsa/problems/search-in-rotated-sorted-array-i?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 7,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "3-sum",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "3 Sum",
+              "difficulty": "Medium",
+              "slug": "3-sum",
+              "url": "https://takeuforward.org/plus/dsa/problems/3-sum?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 8,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/3sum/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "container-with-most-water",
+              "topic": "Array",
+              "subtopic": "Array",
+              "title": "Container with most water",
+              "difficulty": "Easy",
+              "slug": "container-with-most-water",
+              "url": "https://leetcode.com/problems/container-with-most-water/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 9,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/container-with-most-water/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary",
+      "problemCount": 5,
+      "subtopics": [
+        {
+          "name": "Binary",
+          "problemCount": 5,
+          "problems": [
+            {
+              "id": "sum-of-two-integers",
+              "topic": "Binary",
+              "subtopic": "Binary",
+              "title": "Sum of Two Integers",
+              "difficulty": "Easy",
+              "slug": "sum-of-two-integers",
+              "url": "https://leetcode.com/problems/sum-of-two-integers/description/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 10,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/sum-of-two-integers/description/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "number-of-1-bits",
+              "topic": "Binary",
+              "subtopic": "Binary",
+              "title": "Number of 1 Bits",
+              "difficulty": "Easy",
+              "slug": "number-of-1-bits",
+              "url": "https://leetcode.com/problems/number-of-1-bits/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 11,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/number-of-1-bits/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "counting-bits",
+              "topic": "Binary",
+              "subtopic": "Binary",
+              "title": "Counting Bits",
+              "difficulty": "Easy",
+              "slug": "counting-bits",
+              "url": "https://leetcode.com/problems/counting-bits/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 12,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/counting-bits/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "find-missing-number",
+              "topic": "Binary",
+              "subtopic": "Binary",
+              "title": "Find missing number",
+              "difficulty": "Easy",
+              "slug": "find-missing-number",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-missing-number?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 13,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "reverse-bits",
+              "topic": "Binary",
+              "subtopic": "Binary",
+              "title": "Reverse Bits",
+              "difficulty": "Easy",
+              "slug": "reverse-bits",
+              "url": "https://leetcode.com/problems/reverse-bits/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 14,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-bits/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dynamic Programming",
+      "problemCount": 11,
+      "subtopics": [
+        {
+          "name": "Dynamic Programming",
+          "problemCount": 11,
+          "problems": [
+            {
+              "id": "climbing-stairs",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Climbing stairs",
+              "difficulty": "Medium",
+              "slug": "climbing-stairs",
+              "url": "https://takeuforward.org/plus/dsa/problems/climbing-stairs?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 15,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/climbing-stairs/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "coin-change-ii",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Coin change II",
+              "difficulty": "Hard",
+              "slug": "coin-change-ii",
+              "url": "https://takeuforward.org/plus/dsa/problems/coin-change-ii?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 16,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/coin-change-2/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "longest-increasing-subsequence",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Longest Increasing Subsequence",
+              "difficulty": "Medium",
+              "slug": "longest-increasing-subsequence",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-increasing-subsequence?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 17,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-common-subsequence",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Longest common subsequence",
+              "difficulty": "Hard",
+              "slug": "longest-common-subsequence",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-common-subsequence?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 18,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "word-break",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Word Break",
+              "difficulty": "Medium",
+              "slug": "word-break",
+              "url": "https://takeuforward.org/plus/dsa/problems/word-break?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 19,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "combination-sum",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Combination Sum",
+              "difficulty": "Medium",
+              "slug": "combination-sum",
+              "url": "https://takeuforward.org/plus/dsa/problems/combination-sum?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 20,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/combination-sum/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "maximum-sum-of-non-adjacent-elements",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Maximum sum of non adjacent elements",
+              "difficulty": "Medium",
+              "slug": "maximum-sum-of-non-adjacent-elements",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-sum-of-non-adjacent-elements?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 21,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/house-robber/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "house-robber",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "House robber",
+              "difficulty": "Medium",
+              "slug": "house-robber",
+              "url": "https://takeuforward.org/plus/dsa/problems/house-robber?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 22,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/house-robber-ii/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "decode-ways",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Decode Ways",
+              "difficulty": "Easy",
+              "slug": "decode-ways",
+              "url": "https://leetcode.com/problems/decode-ways/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 23,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/decode-ways/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "grid-unique-paths",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Grid unique paths",
+              "difficulty": "Medium",
+              "slug": "grid-unique-paths",
+              "url": "https://takeuforward.org/plus/dsa/problems/grid-unique-paths?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 24,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/unique-paths/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "jump-game---i",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Jump Game - I",
+              "difficulty": "Easy",
+              "slug": "jump-game---i",
+              "url": "https://takeuforward.org/plus/dsa/problems/jump-game---i?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 25,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/jump-game/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Graph",
+      "problemCount": 8,
+      "subtopics": [
+        {
+          "name": "Graph",
+          "problemCount": 8,
+          "problems": [
+            {
+              "id": "clone-graph",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Clone Graph",
+              "difficulty": "Medium",
+              "slug": "clone-graph",
+              "url": "https://takeuforward.org/plus/dsa/problems/clone-graph?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 26,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/clone-graph/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "course-schedule-i",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Course Schedule I",
+              "difficulty": "Hard",
+              "slug": "course-schedule-i",
+              "url": "https://takeuforward.org/plus/dsa/problems/course-schedule-i?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 27,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "pacific-atlantic-water-flow",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Pacific Atlantic Water Flow",
+              "difficulty": "Easy",
+              "slug": "pacific-atlantic-water-flow",
+              "url": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 28,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "number-of-islands",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Number of islands(Do in Grid and Graph Both)",
+              "difficulty": "Medium",
+              "slug": "number-of-islands",
+              "url": "https://takeuforward.org/plus/dsa/problems/number-of-islands?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 29,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/number-of-islands/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-consecutive-sequence-in-an-array",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Longest Consecutive Sequence in an Array",
+              "difficulty": "Medium",
+              "slug": "longest-consecutive-sequence-in-an-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-consecutive-sequence-in-an-array?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 30,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-consecutive-sequence/solution/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "alient-dictionary",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Alien Dictionary",
+              "difficulty": "Hard",
+              "slug": "alient-dictionary",
+              "url": "https://takeuforward.org/plus/dsa/problems/alient-dictionary?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 31,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/alien-dictionary/solution/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "graph-valid-tree",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Graph Valid Tree",
+              "difficulty": "Medium",
+              "slug": "graph-valid-tree",
+              "url": "https://takeuforward.org/plus/dsa/problems/graph-valid-tree?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 32,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/graph-valid-tree/solutions/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "connected-components",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Connected Components",
+              "difficulty": "Medium",
+              "slug": "connected-components",
+              "url": "https://takeuforward.org/plus/dsa/problems/connected-components?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 33,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Interval",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Interval",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "insert-interval",
+              "topic": "Interval",
+              "subtopic": "Interval",
+              "title": "Insert Interval",
+              "difficulty": "Medium",
+              "slug": "insert-interval",
+              "url": "https://takeuforward.org/plus/dsa/problems/insert-interval?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 34,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/insert-interval/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "merge-intervals",
+              "topic": "Interval",
+              "subtopic": "Interval",
+              "title": "Merge Intervals",
+              "difficulty": "Medium",
+              "slug": "merge-intervals",
+              "url": "https://takeuforward.org/plus/dsa/problems/merge-intervals?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 35,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-intervals/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "non-overlapping-intervals",
+              "topic": "Interval",
+              "subtopic": "Interval",
+              "title": "Non-overlapping Intervals",
+              "difficulty": "Medium",
+              "slug": "non-overlapping-intervals",
+              "url": "https://takeuforward.org/plus/dsa/problems/non-overlapping-intervals?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 36,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/non-overlapping-intervals/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-the-repeating-and-missing-number",
+              "topic": "Interval",
+              "subtopic": "Interval",
+              "title": "Find the repeating and missing number",
+              "difficulty": "Hard",
+              "slug": "find-the-repeating-and-missing-number",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-the-repeating-and-missing-number?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 37,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "meeting-rooms",
+              "topic": "Interval",
+              "subtopic": "Interval",
+              "title": "Meeting Rooms",
+              "difficulty": "Easy",
+              "slug": "meeting-rooms",
+              "url": "https://takeuforward.org/plus/dsa/problems/meeting-rooms?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 38,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/meeting-rooms/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "meeting-rooms-ii",
+              "topic": "Interval",
+              "subtopic": "Interval",
+              "title": "Meeting Rooms II",
+              "difficulty": "Medium",
+              "slug": "meeting-rooms-ii",
+              "url": "https://takeuforward.org/plus/dsa/problems/meeting-rooms-ii?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 39,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/meeting-rooms-ii/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Linked List",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Linked List",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "reverse-a-ll",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Reverse a LL",
+              "difficulty": "Medium",
+              "slug": "reverse-a-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/reverse-a-ll?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 40,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-linked-list/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "detect-a-loop-in-ll",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Detect a loop in LL",
+              "difficulty": "Medium",
+              "slug": "detect-a-loop-in-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/detect-a-loop-in-ll?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 41,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/linked-list-cycle/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "merge-sorted-lists-",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Merge two Sorted Lists",
+              "difficulty": "Hard",
+              "slug": "merge-sorted-lists-",
+              "url": "https://takeuforward.org/plus/dsa/problems/merge-sorted-lists-?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 42,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-two-sorted-lists/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "merge-k-sorted-arrays",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Merge K Sorted Arrays",
+              "difficulty": "Medium",
+              "slug": "merge-k-sorted-arrays",
+              "url": "https://takeuforward.org/plus/dsa/problems/merge-k-sorted-arrays?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 43,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "remove-nth-node-from-the-back-of-the-ll",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Remove Nth node from the back of the LL",
+              "difficulty": "Medium",
+              "slug": "remove-nth-node-from-the-back-of-the-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/remove-nth-node-from-the-back-of-the-ll?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 44,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "reorder-list",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Reorder List",
+              "difficulty": "Easy",
+              "slug": "reorder-list",
+              "url": "https://leetcode.com/problems/reorder-list/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 45,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reorder-list/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Matrix",
+      "problemCount": 4,
+      "subtopics": [
+        {
+          "name": "Matrix",
+          "problemCount": 4,
+          "problems": [
+            {
+              "id": "set-matrix-zeroes",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Set Matrix Zeroes",
+              "difficulty": "Medium",
+              "slug": "set-matrix-zeroes",
+              "url": "https://takeuforward.org/plus/dsa/problems/set-matrix-zeroes?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 46,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/set-matrix-zeroes/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "print-the-matrix-in-spiral-manner",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Print the matrix in spiral manner",
+              "difficulty": "Medium",
+              "slug": "print-the-matrix-in-spiral-manner",
+              "url": "https://takeuforward.org/plus/dsa/problems/print-the-matrix-in-spiral-manner?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 47,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/spiral-matrix/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "rotate-matrix-by-90-degrees",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Rotate matrix by 90 degrees",
+              "difficulty": "Medium",
+              "slug": "rotate-matrix-by-90-degrees",
+              "url": "https://takeuforward.org/plus/dsa/problems/rotate-matrix-by-90-degrees?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 48,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/rotate-image/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "word-search",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Word Search",
+              "difficulty": "Hard",
+              "slug": "word-search",
+              "url": "https://takeuforward.org/plus/dsa/problems/word-search?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 49,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/word-search/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "String",
+      "problemCount": 10,
+      "subtopics": [
+        {
+          "name": "String",
+          "problemCount": 10,
+          "problems": [
+            {
+              "id": "longest-substring-without-repeating-characters",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Longest Substring Without Repeating Characters",
+              "difficulty": "Medium",
+              "slug": "longest-substring-without-repeating-characters",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-substring-without-repeating-characters?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 50,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-repeating-character-replacement",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Longest Repeating Character Replacement",
+              "difficulty": "Hard",
+              "slug": "longest-repeating-character-replacement",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-repeating-character-replacement?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 51,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "minimum-window-substring-",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Minimum Window Substring",
+              "difficulty": "Hard",
+              "slug": "minimum-window-substring-",
+              "url": "https://takeuforward.org/plus/dsa/problems/minimum-window-substring-?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 52,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-window-substring/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "valid-anagram",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Valid Anagram",
+              "difficulty": "Easy",
+              "slug": "valid-anagram",
+              "url": "https://takeuforward.org/plus/dsa/problems/valid-anagram?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 53,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/valid-anagram/#:~:text=Given%20two%20strings%20s%20and,the%20original%20letters%20exactly%20once.&text=Constraints%3A,.length%20%3C%3D%205%20*%2010",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "group-words-by-anagrams",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Group Words by Anagrams",
+              "difficulty": "Medium",
+              "slug": "group-words-by-anagrams",
+              "url": "https://takeuforward.org/plus/dsa/problems/group-words-by-anagrams?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 54,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/group-anagrams/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "balanced-paranthesis",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Balanced Paranthesis",
+              "difficulty": "Easy",
+              "slug": "balanced-paranthesis",
+              "url": "https://takeuforward.org/plus/dsa/problems/balanced-paranthesis?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 55,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/valid-parentheses/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "palindrome-number",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Palindrome Number",
+              "difficulty": "Easy",
+              "slug": "palindrome-number",
+              "url": "https://takeuforward.org/plus/dsa/problems/palindrome-number?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 56,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/palindrome-number/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "longest-palindromic-substring",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Longest Palindromic Substring",
+              "difficulty": "Medium",
+              "slug": "longest-palindromic-substring",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-palindromic-substring?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 57,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-palindromic-substring/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "count-palindromic-subsequences",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Palindromic Substrings",
+              "difficulty": "Medium",
+              "slug": "count-palindromic-subsequences",
+              "url": "https://takeuforward.org/plus/dsa/problems/count-palindromic-subsequences?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 58,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/palindromic-substrings/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "encode-and-decode-strings",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Encode and Decode Strings",
+              "difficulty": "Medium",
+              "slug": "encode-and-decode-strings",
+              "url": "https://takeuforward.org/problems/?search=Encode%20and%20Decode%20Strings",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 59,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tree",
+      "problemCount": 13,
+      "subtopics": [
+        {
+          "name": "Tree",
+          "problemCount": 13,
+          "problems": [
+            {
+              "id": "maximum-depth-in-bt",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Maximum Depth in BT",
+              "difficulty": "Medium",
+              "slug": "maximum-depth-in-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-depth-in-bt?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 60,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "check-if-two-trees-are-identical-or-not",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Check if two trees are identical or not",
+              "difficulty": "Medium",
+              "slug": "check-if-two-trees-are-identical-or-not",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-if-two-trees-are-identical-or-not?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 61,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/same-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "check-for-symmetrical-bts",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Invert/Flip Binary Tree (Create)",
+              "difficulty": "Medium",
+              "slug": "check-for-symmetrical-bts",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-for-symmetrical-bts?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 62,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/invert-binary-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "maximum-path-sum-",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Maximum path sum",
+              "difficulty": "Medium",
+              "slug": "maximum-path-sum-",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-path-sum-?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 63,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "level-order-traversal",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Level Order Traversal",
+              "difficulty": "Easy",
+              "slug": "level-order-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/level-order-traversal?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 64,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "serialize-and-de-serialize-bt",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Serialize and De-serialize BT",
+              "difficulty": "Hard",
+              "slug": "serialize-and-de-serialize-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/serialize-and-de-serialize-bt?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 65,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "subtree-of-another-tree",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Subtree of Another Tree",
+              "difficulty": "Easy",
+              "slug": "subtree-of-another-tree",
+              "url": "https://leetcode.com/problems/subtree-of-another-tree/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 66,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/subtree-of-another-tree/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "construct-a-bt-from-postorder-and-inorder",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Construct the Binary Tree from Postorder and Inorder Traversal",
+              "difficulty": "Hard",
+              "slug": "construct-a-bt-from-postorder-and-inorder",
+              "url": "https://takeuforward.org/plus/dsa/problems/construct-a-bt-from-postorder-and-inorder?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 67,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "check-if-a-tree-is-a-bst-or-not",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Check if a tree is a BST or not",
+              "difficulty": "Medium",
+              "slug": "check-if-a-tree-is-a-bst-or-not",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-if-a-tree-is-a-bst-or-not?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 68,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/validate-binary-search-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "kth-smallest-and-largest-element-in-bst",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Find K-th smallest element in BST",
+              "difficulty": "Medium",
+              "slug": "kth-smallest-and-largest-element-in-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/kth-smallest-and-largest-element-in-bst?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 69,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "lca-in-bst",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "LCA in BST",
+              "difficulty": "Medium",
+              "slug": "lca-in-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/lca-in-bst?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 70,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "trie-implementation-and-operations",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Trie Implementation and Operations",
+              "difficulty": "Hard",
+              "slug": "trie-implementation-and-operations",
+              "url": "https://takeuforward.org/plus/dsa/problems/trie-implementation-and-operations?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 71,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "trie-implementation-and-advanced-operations",
+              "topic": "Tree",
+              "subtopic": "Tree",
+              "title": "Trie Implementation and Advanced Operations",
+              "difficulty": "Hard",
+              "slug": "trie-implementation-and-advanced-operations",
+              "url": "https://takeuforward.org/plus/dsa/problems/trie-implementation-and-advanced-operations?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 72,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Heap",
+      "problemCount": 2,
+      "subtopics": [
+        {
+          "name": "Heap",
+          "problemCount": 2,
+          "problems": [
+            {
+              "id": "top-k-frequent-elements",
+              "topic": "Heap",
+              "subtopic": "Heap",
+              "title": "Top K Frequent Elements",
+              "difficulty": "Medium",
+              "slug": "top-k-frequent-elements",
+              "url": "https://takeuforward.org/plus/dsa/problems/top-k-frequent-elements?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 73,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/top-k-frequent-elements/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-median-from-data-stream",
+              "topic": "Heap",
+              "subtopic": "Heap",
+              "title": "Find Median from Data Stream",
+              "difficulty": "Hard",
+              "slug": "find-median-from-data-stream",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-median-from-data-stream?source=blind-75",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 74,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-median-from-data-stream/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -24,11 +24,8 @@ const NotFoundPage = lazy(() => import('@/app/NotFoundPage'));
 
 function LoadingFallback() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-950">
-      <div className="glass rounded-2xl p-8 flex flex-col items-center gap-3">
-        <Loader2 className="w-8 h-8 text-accent animate-spin" />
-        <p className="text-sm text-zinc-400">Loading...</p>
-      </div>
+    <div className="min-h-screen w-full page-bg flex items-center justify-center">
+      {/* Invisible loader to prevent layout shifts while lazy loading chunks */}
     </div>
   );
 }

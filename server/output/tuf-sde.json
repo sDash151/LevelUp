@@ -1,0 +1,4386 @@
+{
+  "totalProblems": 191,
+  "premiumCount": 0,
+  "lastUpdated": "2026-06-19T00:18:34.429Z",
+  "topics": [
+    {
+      "name": "Arrays",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Arrays",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "set-matrix-zeroes",
+              "topic": "Arrays",
+              "subtopic": "Arrays",
+              "title": "Set Matrix Zeroes",
+              "difficulty": "Medium",
+              "slug": "set-matrix-zeroes",
+              "url": "https://takeuforward.org/plus/dsa/problems/set-matrix-zeroes?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 0,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/set-matrix-zeroes/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "pascals-triangle-i",
+              "topic": "Arrays",
+              "subtopic": "Arrays",
+              "title": "Pascal's Triangle I",
+              "difficulty": "Easy",
+              "slug": "pascals-triangle-i",
+              "url": "https://takeuforward.org/plus/dsa/problems/pascals-triangle-i?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 1,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/pascals-triangle/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "next-permutation",
+              "topic": "Arrays",
+              "subtopic": "Arrays",
+              "title": "Next Permutation",
+              "difficulty": "Medium",
+              "slug": "next-permutation",
+              "url": "https://takeuforward.org/plus/dsa/problems/next-permutation?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 2,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/next-permutation/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "kadane's-algorithm",
+              "topic": "Arrays",
+              "subtopic": "Arrays",
+              "title": "Kadane's Algorithm",
+              "difficulty": "Medium",
+              "slug": "kadane's-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/kadane's-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 3,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-subarray/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "sort-an-array-of-0's-1's-and-2's",
+              "topic": "Arrays",
+              "subtopic": "Arrays",
+              "title": "Sort an array of 0's 1's and 2's",
+              "difficulty": "Medium",
+              "slug": "sort-an-array-of-0's-1's-and-2's",
+              "url": "https://takeuforward.org/plus/dsa/problems/sort-an-array-of-0's-1's-and-2's?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 4,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/sort-colors/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "best-time-to-buy-and-sell-stock",
+              "topic": "Arrays",
+              "subtopic": "Arrays",
+              "title": "Stock Buy and Sell",
+              "difficulty": "Medium",
+              "slug": "best-time-to-buy-and-sell-stock",
+              "url": "https://takeuforward.org/plus/dsa/problems/best-time-to-buy-and-sell-stock?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 5,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Arrays Part-II",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Arrays Part-II",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "rotate-matrix-by-90-degrees",
+              "topic": "Arrays Part-II",
+              "subtopic": "Arrays Part-II",
+              "title": "Rotate matrix by 90 degrees",
+              "difficulty": "Medium",
+              "slug": "rotate-matrix-by-90-degrees",
+              "url": "https://takeuforward.org/plus/dsa/problems/rotate-matrix-by-90-degrees?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 6,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/rotate-image/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "merge-overlapping-subintervals",
+              "topic": "Arrays Part-II",
+              "subtopic": "Arrays Part-II",
+              "title": "Merge Overlapping Subintervals",
+              "difficulty": "Medium",
+              "slug": "merge-overlapping-subintervals",
+              "url": "https://takeuforward.org/plus/dsa/problems/merge-overlapping-subintervals?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 7,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-intervals/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "merge-two-sorted-arrays-without-extra-space",
+              "topic": "Arrays Part-II",
+              "subtopic": "Arrays Part-II",
+              "title": "Merge two sorted arrays without extra space",
+              "difficulty": "Medium",
+              "slug": "merge-two-sorted-arrays-without-extra-space",
+              "url": "https://takeuforward.org/plus/dsa/problems/merge-two-sorted-arrays-without-extra-space?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 8,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-sorted-array/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-the-duplicate-number",
+              "topic": "Arrays Part-II",
+              "subtopic": "Arrays Part-II",
+              "title": "Find the Duplicate Number",
+              "difficulty": "Medium",
+              "slug": "find-the-duplicate-number",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-the-duplicate-number?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 9,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-the-duplicate-number/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-the-repeating-and-missing-number",
+              "topic": "Arrays Part-II",
+              "subtopic": "Arrays Part-II",
+              "title": "Find the repeating and missing number",
+              "difficulty": "Hard",
+              "slug": "find-the-repeating-and-missing-number",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-the-repeating-and-missing-number?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 10,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "count-inversions",
+              "topic": "Arrays Part-II",
+              "subtopic": "Arrays Part-II",
+              "title": "Inversion of Array (Pre-req: Merge Sort)",
+              "difficulty": "Hard",
+              "slug": "count-inversions",
+              "url": "https://takeuforward.org/plus/dsa/problems/count-inversions?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 11,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Arrays Part-III",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Arrays Part-III",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "search-in-a-2d-matrix",
+              "topic": "Arrays Part-III",
+              "subtopic": "Arrays Part-III",
+              "title": "Search in a 2D matrix",
+              "difficulty": "Hard",
+              "slug": "search-in-a-2d-matrix",
+              "url": "https://takeuforward.org/plus/dsa/problems/search-in-a-2d-matrix?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 12,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/search-a-2d-matrix/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "pow(x,n)",
+              "topic": "Arrays Part-III",
+              "subtopic": "Arrays Part-III",
+              "title": "Pow(x, n)",
+              "difficulty": "Easy",
+              "slug": "pow(x,n)",
+              "url": "https://takeuforward.org/plus/dsa/problems/pow(x,n)?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 13,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/powx-n/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "majority-element-i",
+              "topic": "Arrays Part-III",
+              "subtopic": "Arrays Part-III",
+              "title": "Majority Element-I",
+              "difficulty": "Easy",
+              "slug": "majority-element-i",
+              "url": "https://takeuforward.org/plus/dsa/problems/majority-element-i?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 14,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/majority-element/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "majority-element-ii",
+              "topic": "Arrays Part-III",
+              "subtopic": "Arrays Part-III",
+              "title": "Majority Element-II",
+              "difficulty": "Hard",
+              "slug": "majority-element-ii",
+              "url": "https://takeuforward.org/plus/dsa/problems/majority-element-ii?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 15,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/majority-element-ii/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "grid-unique-paths",
+              "topic": "Arrays Part-III",
+              "subtopic": "Arrays Part-III",
+              "title": "Grid unique paths",
+              "difficulty": "Medium",
+              "slug": "grid-unique-paths",
+              "url": "https://takeuforward.org/plus/dsa/problems/grid-unique-paths?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 16,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/unique-paths/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "reverse-pairs",
+              "topic": "Arrays Part-III",
+              "subtopic": "Arrays Part-III",
+              "title": "Reverse Pairs",
+              "difficulty": "Hard",
+              "slug": "reverse-pairs",
+              "url": "https://takeuforward.org/plus/dsa/problems/reverse-pairs?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 17,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-pairs/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Arrays Part-IV",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Arrays Part-IV",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "two-sum",
+              "topic": "Arrays Part-IV",
+              "subtopic": "Arrays Part-IV",
+              "title": "Two Sum",
+              "difficulty": "Easy",
+              "slug": "two-sum",
+              "url": "https://takeuforward.org/plus/dsa/problems/two-sum?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 18,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/two-sum/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "4-sum",
+              "topic": "Arrays Part-IV",
+              "subtopic": "Arrays Part-IV",
+              "title": "4 Sum",
+              "difficulty": "Medium",
+              "slug": "4-sum",
+              "url": "https://takeuforward.org/plus/dsa/problems/4-sum?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 19,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/4sum/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-consecutive-sequence-in-an-array",
+              "topic": "Arrays Part-IV",
+              "subtopic": "Arrays Part-IV",
+              "title": "Longest Consecutive Sequence in an Array",
+              "difficulty": "Medium",
+              "slug": "longest-consecutive-sequence-in-an-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-consecutive-sequence-in-an-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 20,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-consecutive-sequence/solution/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-subarray-with-sum-k",
+              "topic": "Arrays Part-IV",
+              "subtopic": "Arrays Part-IV",
+              "title": "Largest Subarray with K sum",
+              "difficulty": "Medium",
+              "slug": "longest-subarray-with-sum-k",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-subarray-with-sum-k?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 21,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "count-subarrays-with-given-xor-k",
+              "topic": "Arrays Part-IV",
+              "subtopic": "Arrays Part-IV",
+              "title": "Count subarrays with given xor K",
+              "difficulty": "Hard",
+              "slug": "count-subarrays-with-given-xor-k",
+              "url": "https://takeuforward.org/plus/dsa/problems/count-subarrays-with-given-xor-k?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 22,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "longest-substring-without-repeating-characters",
+              "topic": "Arrays Part-IV",
+              "subtopic": "Arrays Part-IV",
+              "title": "Longest Substring Without Repeating Characters",
+              "difficulty": "Medium",
+              "slug": "longest-substring-without-repeating-characters",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-substring-without-repeating-characters?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 23,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Linked List",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Linked List",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "reverse-a-ll",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Reverse a LL",
+              "difficulty": "Medium",
+              "slug": "reverse-a-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/reverse-a-ll?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 24,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-linked-list/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-middle-of-linked-list",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Find Middle of Linked List",
+              "difficulty": "Easy",
+              "slug": "find-middle-of-linked-list",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-middle-of-linked-list?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 25,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/middle-of-the-linked-list/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "merge-sorted-lists-",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Merge two Sorted Lists",
+              "difficulty": "Hard",
+              "slug": "merge-sorted-lists-",
+              "url": "https://takeuforward.org/plus/dsa/problems/merge-sorted-lists-?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 26,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-two-sorted-lists/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "remove-nth-node-from-the-back-of-the-ll",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Remove Nth node from the back of the LL",
+              "difficulty": "Medium",
+              "slug": "remove-nth-node-from-the-back-of-the-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/remove-nth-node-from-the-back-of-the-ll?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 27,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "add-two-numbers-in-ll",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Add two numbers as LinkedList",
+              "difficulty": "Medium",
+              "slug": "add-two-numbers-in-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/add-two-numbers-in-ll?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 28,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/add-two-numbers/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "delete-node-in-a-linked-list-o1",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Delete Node in a Linked List O(1)",
+              "difficulty": "Medium",
+              "slug": "delete-node-in-a-linked-list-o1",
+              "url": "https://takeuforward.org/plus/dsa/problems/delete-node-in-a-linked-list-o1?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 29,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/delete-node-in-a-linked-list/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Linked List Part-II",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Linked List Part-II",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "find-the-intersection-point-of-y-ll",
+              "topic": "Linked List Part-II",
+              "subtopic": "Linked List Part-II",
+              "title": "Find the intersection point of Y LL",
+              "difficulty": "Medium",
+              "slug": "find-the-intersection-point-of-y-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-the-intersection-point-of-y-ll?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 30,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/intersection-of-two-linked-lists/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "detect-a-loop-in-ll",
+              "topic": "Linked List Part-II",
+              "subtopic": "Linked List Part-II",
+              "title": "Detect a loop in LL",
+              "difficulty": "Medium",
+              "slug": "detect-a-loop-in-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/detect-a-loop-in-ll?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 31,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/linked-list-cycle/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "reverse-ll-in-group-of-given-size-k",
+              "topic": "Linked List Part-II",
+              "subtopic": "Linked List Part-II",
+              "title": "Reverse LL in group of given size K",
+              "difficulty": "Hard",
+              "slug": "reverse-ll-in-group-of-given-size-k",
+              "url": "https://takeuforward.org/plus/dsa/problems/reverse-ll-in-group-of-given-size-k?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 32,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-nodes-in-k-group/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "check-if-ll-is-palindrome-or-not",
+              "topic": "Linked List Part-II",
+              "subtopic": "Linked List Part-II",
+              "title": "Check if LL is palindrome or not",
+              "difficulty": "Medium",
+              "slug": "check-if-ll-is-palindrome-or-not",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-if-ll-is-palindrome-or-not?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 33,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/palindrome-linked-list/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-the-starting-point-in-ll",
+              "topic": "Linked List Part-II",
+              "subtopic": "Linked List Part-II",
+              "title": "Find the starting point in LL",
+              "difficulty": "Medium",
+              "slug": "find-the-starting-point-in-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-the-starting-point-in-ll?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 34,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/linked-list-cycle-ii/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "flattening-of-ll",
+              "topic": "Linked List Part-II",
+              "subtopic": "Linked List Part-II",
+              "title": "Flattening of LL",
+              "difficulty": "Hard",
+              "slug": "flattening-of-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/flattening-of-ll?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 35,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Linked List and Arrays",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Linked List and Arrays",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "rotate-a-ll",
+              "topic": "Linked List and Arrays",
+              "subtopic": "Linked List and Arrays",
+              "title": "Rotate a LL",
+              "difficulty": "Hard",
+              "slug": "rotate-a-ll",
+              "url": "https://takeuforward.org/plus/dsa/problems/rotate-a-ll?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 36,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/rotate-list/description/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "clone-a-ll-with-random-and-next-pointer",
+              "topic": "Linked List and Arrays",
+              "subtopic": "Linked List and Arrays",
+              "title": "Clone a LL with random and next pointer",
+              "difficulty": "Hard",
+              "slug": "clone-a-ll-with-random-and-next-pointer",
+              "url": "https://takeuforward.org/plus/dsa/problems/clone-a-ll-with-random-and-next-pointer?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 37,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/copy-list-with-random-pointer/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "3-sum",
+              "topic": "Linked List and Arrays",
+              "subtopic": "Linked List and Arrays",
+              "title": "3 Sum",
+              "difficulty": "Medium",
+              "slug": "3-sum",
+              "url": "https://takeuforward.org/plus/dsa/problems/3-sum?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 38,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/3sum/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "trapping-rainwater",
+              "topic": "Linked List and Arrays",
+              "subtopic": "Linked List and Arrays",
+              "title": "Trapping Rainwater",
+              "difficulty": "Hard",
+              "slug": "trapping-rainwater",
+              "url": "https://takeuforward.org/plus/dsa/problems/trapping-rainwater?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 39,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/trapping-rain-water/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "remove-duplicates-from-sorted-array",
+              "topic": "Linked List and Arrays",
+              "subtopic": "Linked List and Arrays",
+              "title": "Remove duplicates from sorted array",
+              "difficulty": "Easy",
+              "slug": "remove-duplicates-from-sorted-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/remove-duplicates-from-sorted-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 40,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/remove-duplicates-from-sorted-array/#:~:text=Input%3A%20nums%20%3D%20%5B0%2C,%2C%203%2C%20and%204%20respectively.",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "maximum-consecutive-ones",
+              "topic": "Linked List and Arrays",
+              "subtopic": "Linked List and Arrays",
+              "title": "Maximum Consecutive Ones",
+              "difficulty": "Easy",
+              "slug": "maximum-consecutive-ones",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-consecutive-ones?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 41,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/max-consecutive-ones/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Greedy Algorithm",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Greedy Algorithm",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "n-meetings-in-one-room",
+              "topic": "Greedy Algorithm",
+              "subtopic": "Greedy Algorithm",
+              "title": "N meetings in one room",
+              "difficulty": "Medium",
+              "slug": "n-meetings-in-one-room",
+              "url": "https://takeuforward.org/plus/dsa/problems/n-meetings-in-one-room?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 42,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "greedy"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "minimum-number-of-platforms-required-for-a-railway",
+              "topic": "Greedy Algorithm",
+              "subtopic": "Greedy Algorithm",
+              "title": "Minimum number of platforms required for a railway",
+              "difficulty": "Medium",
+              "slug": "minimum-number-of-platforms-required-for-a-railway",
+              "url": "https://takeuforward.org/plus/dsa/problems/minimum-number-of-platforms-required-for-a-railway?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 43,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "greedy"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "job-sequencing-problem",
+              "topic": "Greedy Algorithm",
+              "subtopic": "Greedy Algorithm",
+              "title": "Job sequencing Problem",
+              "difficulty": "Medium",
+              "slug": "job-sequencing-problem",
+              "url": "https://takeuforward.org/plus/dsa/problems/job-sequencing-problem?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 44,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "greedy"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "fractional-knapsack",
+              "topic": "Greedy Algorithm",
+              "subtopic": "Greedy Algorithm",
+              "title": "Fractional Knapsack",
+              "difficulty": "Medium",
+              "slug": "fractional-knapsack",
+              "url": "https://takeuforward.org/plus/dsa/problems/fractional-knapsack?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 45,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "greedy"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "minimum-coins",
+              "topic": "Greedy Algorithm",
+              "subtopic": "Greedy Algorithm",
+              "title": "Minimum coins",
+              "difficulty": "Hard",
+              "slug": "minimum-coins",
+              "url": "https://takeuforward.org/plus/dsa/problems/minimum-coins?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 46,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "greedy"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/coin-change/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "assign-cookies",
+              "topic": "Greedy Algorithm",
+              "subtopic": "Greedy Algorithm",
+              "title": "Assign Cookies",
+              "difficulty": "Easy",
+              "slug": "assign-cookies",
+              "url": "https://takeuforward.org/plus/dsa/problems/assign-cookies?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 47,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "greedy"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/assign-cookies/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Recursion",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Recursion",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "subset-sum-equals-to-target",
+              "topic": "Recursion",
+              "subtopic": "Recursion",
+              "title": "Subset Sums",
+              "difficulty": "Hard",
+              "slug": "subset-sum-equals-to-target",
+              "url": "https://takeuforward.org/plus/dsa/problems/subset-sum-equals-to-target?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 48,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "subsets-ii",
+              "topic": "Recursion",
+              "subtopic": "Recursion",
+              "title": "Subsets II",
+              "difficulty": "Medium",
+              "slug": "subsets-ii",
+              "url": "https://takeuforward.org/plus/dsa/problems/subsets-ii?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 49,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/subsets-ii/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "combination-sum",
+              "topic": "Recursion",
+              "subtopic": "Recursion",
+              "title": "Combination Sum",
+              "difficulty": "Medium",
+              "slug": "combination-sum",
+              "url": "https://takeuforward.org/plus/dsa/problems/combination-sum?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 50,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/combination-sum/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "combination-sum-ii",
+              "topic": "Recursion",
+              "subtopic": "Recursion",
+              "title": "Combination Sum II",
+              "difficulty": "Medium",
+              "slug": "combination-sum-ii",
+              "url": "https://takeuforward.org/plus/dsa/problems/combination-sum-ii?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 51,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/combination-sum-ii/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "palindrome-partitioning",
+              "topic": "Recursion",
+              "subtopic": "Recursion",
+              "title": "Palindrome partitioning",
+              "difficulty": "Hard",
+              "slug": "palindrome-partitioning",
+              "url": "https://takeuforward.org/plus/dsa/problems/palindrome-partitioning?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 52,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "permutation-sequence",
+              "topic": "Recursion",
+              "subtopic": "Recursion",
+              "title": "Permutation Sequence",
+              "difficulty": "Medium",
+              "slug": "permutation-sequence",
+              "url": "https://takeuforward.org/plus/dsa/problems/permutation-sequence?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 53,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/permutation-sequence/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Recursion and Backtracking",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Recursion and Backtracking",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "permutations-of-a-string",
+              "topic": "Recursion and Backtracking",
+              "subtopic": "Recursion and Backtracking",
+              "title": "Permutations of a String",
+              "difficulty": "Medium",
+              "slug": "permutations-of-a-string",
+              "url": "https://takeuforward.org/plus/dsa/problems/permutations-of-a-string?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 54,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion",
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/permutations/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "n-queen",
+              "topic": "Recursion and Backtracking",
+              "subtopic": "Recursion and Backtracking",
+              "title": "N Queen",
+              "difficulty": "Hard",
+              "slug": "n-queen",
+              "url": "https://takeuforward.org/plus/dsa/problems/n-queen?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 55,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion",
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/n-queens/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "sudoko-solver",
+              "topic": "Recursion and Backtracking",
+              "subtopic": "Recursion and Backtracking",
+              "title": "Sudoku Solver",
+              "difficulty": "Hard",
+              "slug": "sudoko-solver",
+              "url": "https://takeuforward.org/plus/dsa/problems/sudoko-solver?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 56,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion",
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/sudoku-solver/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "m-coloring-problem",
+              "topic": "Recursion and Backtracking",
+              "subtopic": "Recursion and Backtracking",
+              "title": "M Coloring Problem",
+              "difficulty": "Hard",
+              "slug": "m-coloring-problem",
+              "url": "https://takeuforward.org/plus/dsa/problems/m-coloring-problem?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 57,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion",
+                "backtracking"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "rat-in-a-maze",
+              "topic": "Recursion and Backtracking",
+              "subtopic": "Recursion and Backtracking",
+              "title": "Rat in a Maze",
+              "difficulty": "Hard",
+              "slug": "rat-in-a-maze",
+              "url": "https://takeuforward.org/plus/dsa/problems/rat-in-a-maze?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 58,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion",
+                "backtracking"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "word-break",
+              "topic": "Recursion and Backtracking",
+              "subtopic": "Recursion and Backtracking",
+              "title": "Word Break (print all ways)",
+              "difficulty": "Medium",
+              "slug": "word-break",
+              "url": "https://takeuforward.org/plus/dsa/problems/word-break?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 59,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "recursion",
+                "backtracking"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Search",
+      "problemCount": 8,
+      "subtopics": [
+        {
+          "name": "Binary Search",
+          "problemCount": 8,
+          "problems": [
+            {
+              "id": "find-nth-root-of-a-number",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "The N-th root of an integer",
+              "difficulty": "Medium",
+              "slug": "find-nth-root-of-a-number",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-nth-root-of-a-number?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 60,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "matrix-median",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Matrix Median",
+              "difficulty": "Hard",
+              "slug": "matrix-median",
+              "url": "https://takeuforward.org/plus/dsa/problems/matrix-median?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 61,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "single-element-in-sorted-array",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Single element in sorted array",
+              "difficulty": "Medium",
+              "slug": "single-element-in-sorted-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/single-element-in-sorted-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 62,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/single-element-in-a-sorted-array/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "search-in-rotated-sorted-array-i",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Search element in a sorted and rotated array/ find pivot where it is rotated",
+              "difficulty": "Medium",
+              "slug": "search-in-rotated-sorted-array-i",
+              "url": "https://takeuforward.org/plus/dsa/problems/search-in-rotated-sorted-array-i?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 63,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "median-of-2-sorted-arrays",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Median of 2 sorted arrays",
+              "difficulty": "Hard",
+              "slug": "median-of-2-sorted-arrays",
+              "url": "https://takeuforward.org/plus/dsa/problems/median-of-2-sorted-arrays?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 64,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "kth-element-of-2-sorted-arrays",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Kth element of 2 sorted arrays",
+              "difficulty": "Medium",
+              "slug": "kth-element-of-2-sorted-arrays",
+              "url": "https://takeuforward.org/plus/dsa/problems/kth-element-of-2-sorted-arrays?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 65,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "book-allocation-problem",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Allocate Minimum Number of Pages",
+              "difficulty": "Hard",
+              "slug": "book-allocation-problem",
+              "url": "https://takeuforward.org/plus/dsa/problems/book-allocation-problem?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 66,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "aggressive-cows",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Aggressive Cows",
+              "difficulty": "Hard",
+              "slug": "aggressive-cows",
+              "url": "https://takeuforward.org/plus/dsa/problems/aggressive-cows?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 67,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Heaps",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Heaps",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "implement-max-heap",
+              "topic": "Heaps",
+              "subtopic": "Heaps",
+              "title": "Implement Max Heap",
+              "difficulty": "Medium",
+              "slug": "implement-max-heap",
+              "url": "https://takeuforward.org/plus/dsa/problems/implement-max-heap?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 68,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "k-th-largest-element-in-an-array",
+              "topic": "Heaps",
+              "subtopic": "Heaps",
+              "title": "K-th Largest element in an array",
+              "difficulty": "Medium",
+              "slug": "k-th-largest-element-in-an-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/k-th-largest-element-in-an-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 69,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "maximum-sum-combination",
+              "topic": "Heaps",
+              "subtopic": "Heaps",
+              "title": "Maximum Sum Combination",
+              "difficulty": "Hard",
+              "slug": "maximum-sum-combination",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-sum-combination?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 70,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "find-median-from-data-stream",
+              "topic": "Heaps",
+              "subtopic": "Heaps",
+              "title": "Find Median from Data Stream",
+              "difficulty": "Hard",
+              "slug": "find-median-from-data-stream",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-median-from-data-stream?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 71,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-median-from-data-stream/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "merge-k-sorted-arrays",
+              "topic": "Heaps",
+              "subtopic": "Heaps",
+              "title": "Merge K Sorted Arrays",
+              "difficulty": "Medium",
+              "slug": "merge-k-sorted-arrays",
+              "url": "https://takeuforward.org/plus/dsa/problems/merge-k-sorted-arrays?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 72,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "top-k-frequent-elements",
+              "topic": "Heaps",
+              "subtopic": "Heaps",
+              "title": "Top K Frequent Elements",
+              "difficulty": "Medium",
+              "slug": "top-k-frequent-elements",
+              "url": "https://takeuforward.org/plus/dsa/problems/top-k-frequent-elements?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 73,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/top-k-frequent-elements/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Stack and Queue",
+      "problemCount": 7,
+      "subtopics": [
+        {
+          "name": "Stack and Queue",
+          "problemCount": 7,
+          "problems": [
+            {
+              "id": "implement-stack-using-arrays",
+              "topic": "Stack and Queue",
+              "subtopic": "Stack and Queue",
+              "title": "Implement Stack using Arrays",
+              "difficulty": "Easy",
+              "slug": "implement-stack-using-arrays",
+              "url": "https://takeuforward.org/plus/dsa/problems/implement-stack-using-arrays?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 74,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "implement-queue-using-arrays",
+              "topic": "Stack and Queue",
+              "subtopic": "Stack and Queue",
+              "title": "Implement Queue using Arrays",
+              "difficulty": "Easy",
+              "slug": "implement-queue-using-arrays",
+              "url": "https://takeuforward.org/plus/dsa/problems/implement-queue-using-arrays?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 75,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "implement-stack-using-queue",
+              "topic": "Stack and Queue",
+              "subtopic": "Stack and Queue",
+              "title": "Implement Stack using Queue (using single queue)",
+              "difficulty": "Easy",
+              "slug": "implement-stack-using-queue",
+              "url": "https://takeuforward.org/plus/dsa/problems/implement-stack-using-queue?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 76,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/implement-stack-using-queues/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "implement-queue-using-stack",
+              "topic": "Stack and Queue",
+              "subtopic": "Stack and Queue",
+              "title": "Implement Queue using Stack",
+              "difficulty": "Easy",
+              "slug": "implement-queue-using-stack",
+              "url": "https://takeuforward.org/plus/dsa/problems/implement-queue-using-stack?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 77,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/implement-queue-using-stacks/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "balanced-paranthesis",
+              "topic": "Stack and Queue",
+              "subtopic": "Stack and Queue",
+              "title": "Balanced Paranthesis",
+              "difficulty": "Easy",
+              "slug": "balanced-paranthesis",
+              "url": "https://takeuforward.org/plus/dsa/problems/balanced-paranthesis?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 78,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/valid-parentheses/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "next-greater-element",
+              "topic": "Stack and Queue",
+              "subtopic": "Stack and Queue",
+              "title": "Next Greater Element",
+              "difficulty": "Medium",
+              "slug": "next-greater-element",
+              "url": "https://takeuforward.org/plus/dsa/problems/next-greater-element?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 79,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/next-greater-element-i/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "sort-a-stack",
+              "topic": "Stack and Queue",
+              "subtopic": "Stack and Queue",
+              "title": "Sort a Stack",
+              "difficulty": "Medium",
+              "slug": "sort-a-stack",
+              "url": "https://takeuforward.org/plus/dsa/problems/sort-a-stack?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 80,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Stack and Queue Part-II",
+      "problemCount": 10,
+      "subtopics": [
+        {
+          "name": "Stack and Queue Part-II",
+          "problemCount": 10,
+          "problems": [
+            {
+              "id": "next-smaller-element",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "Next Smaller Element",
+              "difficulty": "Medium",
+              "slug": "next-smaller-element",
+              "url": "https://takeuforward.org/plus/dsa/problems/next-smaller-element?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 81,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "lru-cache",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "LRU Cache",
+              "difficulty": "Medium",
+              "slug": "lru-cache",
+              "url": "https://takeuforward.org/plus/dsa/problems/lru-cache?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 82,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "lfu-cache",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "LFU Cache",
+              "difficulty": "Hard",
+              "slug": "lfu-cache",
+              "url": "https://takeuforward.org/plus/dsa/problems/lfu-cache?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 83,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/lfu-cache/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "largest-rectangle-in-a-histogram",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "Largest rectangle in a histogram",
+              "difficulty": "Hard",
+              "slug": "largest-rectangle-in-a-histogram",
+              "url": "https://takeuforward.org/plus/dsa/problems/largest-rectangle-in-a-histogram?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 84,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "sliding-window-maximum",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "Sliding Window Maximum",
+              "difficulty": "Hard",
+              "slug": "sliding-window-maximum",
+              "url": "https://takeuforward.org/plus/dsa/problems/sliding-window-maximum?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 85,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/sliding-window-maximum/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "implement-min-stack",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "Implement Min Stack",
+              "difficulty": "Hard",
+              "slug": "implement-min-stack",
+              "url": "https://takeuforward.org/plus/dsa/problems/implement-min-stack?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 86,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/min-stack/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "rotten-oranges",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "Rotten Oranges",
+              "difficulty": "Medium",
+              "slug": "rotten-oranges",
+              "url": "https://takeuforward.org/plus/dsa/problems/rotten-oranges?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 87,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/rotting-oranges/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "stock-span-problem",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "Stock span problem",
+              "difficulty": "Hard",
+              "slug": "stock-span-problem",
+              "url": "https://takeuforward.org/plus/dsa/problems/stock-span-problem?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 88,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/online-stock-span/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "maximum-of-minimums-for-every-window-size",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "Maximum of Minimums for Every Window Size",
+              "difficulty": "Medium",
+              "slug": "maximum-of-minimums-for-every-window-size",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-of-minimums-for-every-window-size?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 89,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "celebrity-problem",
+              "topic": "Stack and Queue Part-II",
+              "subtopic": "Stack and Queue Part-II",
+              "title": "Celebrity Problem",
+              "difficulty": "Hard",
+              "slug": "celebrity-problem",
+              "url": "https://takeuforward.org/plus/dsa/problems/celebrity-problem?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 90,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack",
+                "queue"
+              ],
+              "leetcodeUrl": "https://leetcode.com/accounts/login/?next=/problems/find-the-celebrity/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "String",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "String",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "reverse-every-word-in-a-string",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Reverse every word in a string",
+              "difficulty": "Medium",
+              "slug": "reverse-every-word-in-a-string",
+              "url": "https://takeuforward.org/plus/dsa/problems/reverse-every-word-in-a-string?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 91,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-words-in-a-string/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-palindromic-substring",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Longest Palindrome in a string",
+              "difficulty": "Medium",
+              "slug": "longest-palindromic-substring",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-palindromic-substring?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 92,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-palindromic-substring/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "roman-to-integer",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Roman to Integer",
+              "difficulty": "Medium",
+              "slug": "roman-to-integer",
+              "url": "https://takeuforward.org/plus/dsa/problems/roman-to-integer?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 93,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/roman-to-integer/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "string-to-integer-atoi",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Implement ATOI/STRSTR",
+              "difficulty": "Medium",
+              "slug": "string-to-integer-atoi",
+              "url": "https://takeuforward.org/plus/dsa/problems/string-to-integer-atoi?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 94,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/string-to-integer-atoi/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-common-prefix",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Longest Common Prefix",
+              "difficulty": "Easy",
+              "slug": "longest-common-prefix",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-common-prefix?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 95,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-common-prefix/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "rabin-karp-algorithm",
+              "topic": "String",
+              "subtopic": "String",
+              "title": "Rabin Karp Algorithm",
+              "difficulty": "Hard",
+              "slug": "rabin-karp-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/rabin-karp-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 96,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/repeated-string-match/discuss/416144/Rabin-Karp-algorithm-C%2B%2B-implementation",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "String Part-II",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "String Part-II",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "z-function",
+              "topic": "String Part-II",
+              "subtopic": "String Part-II",
+              "title": "Z function",
+              "difficulty": "Hard",
+              "slug": "z-function",
+              "url": "https://takeuforward.org/problems/?search=Z%20function",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 97,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "kmp-algorithm-or-lps-array",
+              "topic": "String Part-II",
+              "subtopic": "String Part-II",
+              "title": "KMP Algorithm or LPS array",
+              "difficulty": "Hard",
+              "slug": "kmp-algorithm-or-lps-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/kmp-algorithm-or-lps-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 98,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/implement-strstr/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "minimum-insertions-to-make-string-palindrome",
+              "topic": "String Part-II",
+              "subtopic": "String Part-II",
+              "title": "Minimum insertions to make string palindrome",
+              "difficulty": "Hard",
+              "slug": "minimum-insertions-to-make-string-palindrome",
+              "url": "https://takeuforward.org/plus/dsa/problems/minimum-insertions-to-make-string-palindrome?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 99,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "valid-anagram",
+              "topic": "String Part-II",
+              "subtopic": "String Part-II",
+              "title": "Valid Anagram",
+              "difficulty": "Easy",
+              "slug": "valid-anagram",
+              "url": "https://takeuforward.org/plus/dsa/problems/valid-anagram?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 100,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/valid-anagram/#:~:text=Given%20two%20strings%20s%20and,the%20original%20letters%20exactly%20once.&text=Constraints%3A,.length%20%3C%3D%205%20*%2010",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "count-and-say",
+              "topic": "String Part-II",
+              "subtopic": "String Part-II",
+              "title": "Count and say",
+              "difficulty": "Hard",
+              "slug": "count-and-say",
+              "url": "https://takeuforward.org/plus/dsa/problems/count-and-say?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 101,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/count-and-say/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "compare-version-numbers",
+              "topic": "String Part-II",
+              "subtopic": "String Part-II",
+              "title": "Compare version numbers",
+              "difficulty": "Medium",
+              "slug": "compare-version-numbers",
+              "url": "https://takeuforward.org/plus/dsa/problems/compare-version-numbers?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 102,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/compare-version-numbers/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Tree",
+      "problemCount": 12,
+      "subtopics": [
+        {
+          "name": "Binary Tree",
+          "problemCount": 12,
+          "problems": [
+            {
+              "id": "inorder-traversal",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Inorder Traversal",
+              "difficulty": "Easy",
+              "slug": "inorder-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/inorder-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 103,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-inorder-traversal/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "preorder-traversal",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Preorder Traversal",
+              "difficulty": "Easy",
+              "slug": "preorder-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/preorder-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 104,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-preorder-traversal/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "postorder-traversal",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Postorder Traversal",
+              "difficulty": "Easy",
+              "slug": "postorder-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/postorder-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 105,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-postorder-traversal/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "morris-inorder-traversal-",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Morris Inorder Traversal",
+              "difficulty": "Hard",
+              "slug": "morris-inorder-traversal-",
+              "url": "https://takeuforward.org/plus/dsa/problems/morris-inorder-traversal-?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 106,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-inorder-traversal/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "morris-preorder-traversal-",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Morris Preorder Traversal",
+              "difficulty": "Hard",
+              "slug": "morris-preorder-traversal-",
+              "url": "https://takeuforward.org/plus/dsa/problems/morris-preorder-traversal-?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 107,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-inorder-traversal/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "right-left-view-of-bt",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Right/Left View of BT",
+              "difficulty": "Medium",
+              "slug": "right-left-view-of-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/right-left-view-of-bt?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 108,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-right-side-view/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "bottom-view-of-bt",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Bottom view of BT",
+              "difficulty": "Medium",
+              "slug": "bottom-view-of-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/bottom-view-of-bt?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 109,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "top-view-of-bt",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Top View of BT",
+              "difficulty": "Medium",
+              "slug": "top-view-of-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/top-view-of-bt?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 110,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "pre,-post,-inorder-in-one-traversal",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Pre, Post, Inorder in one traversal",
+              "difficulty": "Easy",
+              "slug": "pre,-post,-inorder-in-one-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/pre,-post,-inorder-in-one-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 111,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "vertical-order-traversal",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Vertical Order Traversal",
+              "difficulty": "Medium",
+              "slug": "vertical-order-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/vertical-order-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 112,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "print-root-to-note-path-in-bt",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Print root to leaf path in BT",
+              "difficulty": "Medium",
+              "slug": "print-root-to-note-path-in-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/print-root-to-note-path-in-bt?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 113,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "maximum-width-of-bt",
+              "topic": "Binary Tree",
+              "subtopic": "Binary Tree",
+              "title": "Maximum Width of BT",
+              "difficulty": "Medium",
+              "slug": "maximum-width-of-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-width-of-bt?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 114,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-width-of-binary-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Tree part-II",
+      "problemCount": 8,
+      "subtopics": [
+        {
+          "name": "Binary Tree part-II",
+          "problemCount": 8,
+          "problems": [
+            {
+              "id": "level-order-traversal",
+              "topic": "Binary Tree part-II",
+              "subtopic": "Binary Tree part-II",
+              "title": "Level Order Traversal",
+              "difficulty": "Easy",
+              "slug": "level-order-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/level-order-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 115,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "maximum-depth-in-bt",
+              "topic": "Binary Tree part-II",
+              "subtopic": "Binary Tree part-II",
+              "title": "Maximum Depth in BT",
+              "difficulty": "Medium",
+              "slug": "maximum-depth-in-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-depth-in-bt?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 116,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "diameter-of-binary-tree",
+              "topic": "Binary Tree part-II",
+              "subtopic": "Binary Tree part-II",
+              "title": "Diameter of Binary Tree",
+              "difficulty": "Easy",
+              "slug": "diameter-of-binary-tree",
+              "url": "https://takeuforward.org/plus/dsa/problems/diameter-of-binary-tree?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 117,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/diameter-of-binary-tree/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "check-for-balanced-binary-tree",
+              "topic": "Binary Tree part-II",
+              "subtopic": "Binary Tree part-II",
+              "title": "Check for balanced binary tree",
+              "difficulty": "Medium",
+              "slug": "check-for-balanced-binary-tree",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-for-balanced-binary-tree?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 118,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/balanced-binary-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "lca-in-bt",
+              "topic": "Binary Tree part-II",
+              "subtopic": "Binary Tree part-II",
+              "title": "LCA in BT",
+              "difficulty": "Hard",
+              "slug": "lca-in-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/lca-in-bt?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 119,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "check-if-two-trees-are-identical-or-not",
+              "topic": "Binary Tree part-II",
+              "subtopic": "Binary Tree part-II",
+              "title": "Check if two trees are identical or not",
+              "difficulty": "Medium",
+              "slug": "check-if-two-trees-are-identical-or-not",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-if-two-trees-are-identical-or-not?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 120,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/same-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "zig-zag-or-spiral-traversal",
+              "topic": "Binary Tree part-II",
+              "subtopic": "Binary Tree part-II",
+              "title": "Zig Zag or Spiral Traversal",
+              "difficulty": "Medium",
+              "slug": "zig-zag-or-spiral-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/zig-zag-or-spiral-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 121,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "boundary-traversal",
+              "topic": "Binary Tree part-II",
+              "subtopic": "Binary Tree part-II",
+              "title": "Boundary Traversal",
+              "difficulty": "Medium",
+              "slug": "boundary-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/boundary-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 122,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/boundary-of-binary-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Tree part-III",
+      "problemCount": 7,
+      "subtopics": [
+        {
+          "name": "Binary Tree part-III",
+          "problemCount": 7,
+          "problems": [
+            {
+              "id": "maximum-path-sum-",
+              "topic": "Binary Tree part-III",
+              "subtopic": "Binary Tree part-III",
+              "title": "Maximum path sum",
+              "difficulty": "Medium",
+              "slug": "maximum-path-sum-",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-path-sum-?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 123,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "construct-a-bt-from-preorder-and-inorder",
+              "topic": "Binary Tree part-III",
+              "subtopic": "Binary Tree part-III",
+              "title": "Construct a BT from Preorder and Inorder",
+              "difficulty": "Hard",
+              "slug": "construct-a-bt-from-preorder-and-inorder",
+              "url": "https://takeuforward.org/plus/dsa/problems/construct-a-bt-from-preorder-and-inorder?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 124,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "construct-a-bt-from-postorder-and-inorder",
+              "topic": "Binary Tree part-III",
+              "subtopic": "Binary Tree part-III",
+              "title": "Construct a BT from Postorder and Inorder",
+              "difficulty": "Hard",
+              "slug": "construct-a-bt-from-postorder-and-inorder",
+              "url": "https://takeuforward.org/plus/dsa/problems/construct-a-bt-from-postorder-and-inorder?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 125,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "check-for-symmetrical-bts",
+              "topic": "Binary Tree part-III",
+              "subtopic": "Binary Tree part-III",
+              "title": "Symmetric Binary Tree",
+              "difficulty": "Medium",
+              "slug": "check-for-symmetrical-bts",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-for-symmetrical-bts?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 126,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/symmetric-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "flatten-binary-tree-to-linked-list",
+              "topic": "Binary Tree part-III",
+              "subtopic": "Binary Tree part-III",
+              "title": "Flatten Binary Tree to Linked List",
+              "difficulty": "Medium",
+              "slug": "flatten-binary-tree-to-linked-list",
+              "url": "https://takeuforward.org/plus/dsa/problems/flatten-binary-tree-to-linked-list?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 127,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/flatten-binary-tree-to-linked-list/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "check-for-symmetrical-bts",
+              "topic": "Binary Tree part-III",
+              "subtopic": "Binary Tree part-III",
+              "title": "Check for symmetrical BTs",
+              "difficulty": "Medium",
+              "slug": "check-for-symmetrical-bts",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-for-symmetrical-bts?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 128,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/symmetric-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "children-sum-property-in-binary-tree",
+              "topic": "Binary Tree part-III",
+              "subtopic": "Binary Tree part-III",
+              "title": "Children Sum Property in Binary Tree",
+              "difficulty": "Medium",
+              "slug": "children-sum-property-in-binary-tree",
+              "url": "https://takeuforward.org/plus/dsa/problems/children-sum-property-in-binary-tree?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 129,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Search Tree",
+      "problemCount": 7,
+      "subtopics": [
+        {
+          "name": "Binary Search Tree",
+          "problemCount": 7,
+          "problems": [
+            {
+              "id": "populating-next-right-pointers-in-each-node",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Populating Next Right Pointers in Each Node",
+              "difficulty": "Medium",
+              "slug": "populating-next-right-pointers-in-each-node",
+              "url": "https://takeuforward.org/plus/dsa/problems/populating-next-right-pointers-in-each-node?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 130,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/populating-next-right-pointers-in-each-node/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "search-in-bst",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Search in BST",
+              "difficulty": "Easy",
+              "slug": "search-in-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/search-in-bst?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 131,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/search-in-a-binary-search-tree/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "convert-sorted-array-to-binary-search-tree",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Construct BST from given keys",
+              "difficulty": "Easy",
+              "slug": "convert-sorted-array-to-binary-search-tree",
+              "url": "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/",
+              "platform": "LeetCode",
+              "source": "takeuforward",
+              "order": 132,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "construct-a-bst-from-a-preorder-traversal",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Construct a BST from a preorder traversal",
+              "difficulty": "Medium",
+              "slug": "construct-a-bst-from-a-preorder-traversal",
+              "url": "https://takeuforward.org/plus/dsa/problems/construct-a-bst-from-a-preorder-traversal?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 133,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "check-if-a-tree-is-a-bst-or-not",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Check if a tree is a BST or not",
+              "difficulty": "Medium",
+              "slug": "check-if-a-tree-is-a-bst-or-not",
+              "url": "https://takeuforward.org/plus/dsa/problems/check-if-a-tree-is-a-bst-or-not?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 134,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/validate-binary-search-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "lca-in-bst",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "LCA in BST",
+              "difficulty": "Medium",
+              "slug": "lca-in-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/lca-in-bst?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 135,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "inorder-successor-and-predecessor-in-bst",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Inorder successor and predecessor in BST",
+              "difficulty": "Medium",
+              "slug": "inorder-successor-and-predecessor-in-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/inorder-successor-and-predecessor-in-bst?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 136,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/inorder-successor-in-bst/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Search Tree Part-II",
+      "problemCount": 8,
+      "subtopics": [
+        {
+          "name": "Binary Search Tree Part-II",
+          "problemCount": 8,
+          "problems": [
+            {
+              "id": "floor-and-ceil-in-a-bst",
+              "topic": "Binary Search Tree Part-II",
+              "subtopic": "Binary Search Tree Part-II",
+              "title": "Floor in a BST",
+              "difficulty": "Easy",
+              "slug": "floor-and-ceil-in-a-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/floor-and-ceil-in-a-bst?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 137,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "floor-and-ceil-in-a-bst",
+              "topic": "Binary Search Tree Part-II",
+              "subtopic": "Binary Search Tree Part-II",
+              "title": "Ceil in a BST",
+              "difficulty": "Easy",
+              "slug": "floor-and-ceil-in-a-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/floor-and-ceil-in-a-bst?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 138,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "kth-smallest-and-largest-element-in-bst",
+              "topic": "Binary Search Tree Part-II",
+              "subtopic": "Binary Search Tree Part-II",
+              "title": "Find K-th smallest element in BST",
+              "difficulty": "Medium",
+              "slug": "kth-smallest-and-largest-element-in-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/kth-smallest-and-largest-element-in-bst?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 139,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "kth-smallest-and-largest-element-in-bst",
+              "topic": "Binary Search Tree Part-II",
+              "subtopic": "Binary Search Tree Part-II",
+              "title": "Kth Smallest and Largest element in BST",
+              "difficulty": "Medium",
+              "slug": "kth-smallest-and-largest-element-in-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/kth-smallest-and-largest-element-in-bst?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 140,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "two-sum-in-bst",
+              "topic": "Binary Search Tree Part-II",
+              "subtopic": "Binary Search Tree Part-II",
+              "title": "Two sum in BST",
+              "difficulty": "Hard",
+              "slug": "two-sum-in-bst",
+              "url": "https://takeuforward.org/plus/dsa/problems/two-sum-in-bst?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 141,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/two-sum-iv-input-is-a-bst/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "bst-iterator",
+              "topic": "Binary Search Tree Part-II",
+              "subtopic": "Binary Search Tree Part-II",
+              "title": "BST iterator",
+              "difficulty": "Hard",
+              "slug": "bst-iterator",
+              "url": "https://takeuforward.org/plus/dsa/problems/bst-iterator?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 142,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-search-tree-iterator/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "largest-bst-in-binary-tree",
+              "topic": "Binary Search Tree Part-II",
+              "subtopic": "Binary Search Tree Part-II",
+              "title": "Size of the largest BST in a Binary Tree",
+              "difficulty": "Hard",
+              "slug": "largest-bst-in-binary-tree",
+              "url": "https://takeuforward.org/plus/dsa/problems/largest-bst-in-binary-tree?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 143,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-sum-bst-in-binary-tree/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "serialize-and-de-serialize-bt",
+              "topic": "Binary Search Tree Part-II",
+              "subtopic": "Binary Search Tree Part-II",
+              "title": "Serialize and De-serialize BT",
+              "difficulty": "Hard",
+              "slug": "serialize-and-de-serialize-bt",
+              "url": "https://takeuforward.org/plus/dsa/problems/serialize-and-de-serialize-bt?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 144,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Trees[Miscellaneous]",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Binary Trees[Miscellaneous]",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "binary-tree-to-doubly-linked-list",
+              "topic": "Binary Trees[Miscellaneous]",
+              "subtopic": "Binary Trees[Miscellaneous]",
+              "title": "Binary Tree to Doubly Linked List",
+              "difficulty": "Medium",
+              "slug": "binary-tree-to-doubly-linked-list",
+              "url": "https://takeuforward.org/plus/dsa/problems/binary-tree-to-doubly-linked-list?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 145,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/flatten-binary-tree-to-linked-list/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-median-in-a-stream",
+              "topic": "Binary Trees[Miscellaneous]",
+              "subtopic": "Binary Trees[Miscellaneous]",
+              "title": "Find Median in a Stream",
+              "difficulty": "Medium",
+              "slug": "find-median-in-a-stream",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-median-in-a-stream?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 146,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-median-from-data-stream/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "kth-largest-element-in-a-stream-of-running-integers",
+              "topic": "Binary Trees[Miscellaneous]",
+              "subtopic": "Binary Trees[Miscellaneous]",
+              "title": "Kth largest element in a stream of running integers",
+              "difficulty": "Hard",
+              "slug": "kth-largest-element-in-a-stream-of-running-integers",
+              "url": "https://takeuforward.org/plus/dsa/problems/kth-largest-element-in-a-stream-of-running-integers?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 147,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/kth-largest-element-in-a-stream/#:~:text=Implement%20KthLargest%20class%3A,largest%20element%20in%20the%20stream.",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "distinct-numbers-in-each-subarray",
+              "topic": "Binary Trees[Miscellaneous]",
+              "subtopic": "Binary Trees[Miscellaneous]",
+              "title": "Distinct Numbers in Each Subarray",
+              "difficulty": "Medium",
+              "slug": "distinct-numbers-in-each-subarray",
+              "url": "https://takeuforward.org/plus/dsa/problems/distinct-numbers-in-each-subarray?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 148,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "k-th-largest-element-in-an-array",
+              "topic": "Binary Trees[Miscellaneous]",
+              "subtopic": "Binary Trees[Miscellaneous]",
+              "title": "K-th largest element in an unsorted array.",
+              "difficulty": "Medium",
+              "slug": "k-th-largest-element-in-an-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/k-th-largest-element-in-an-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 149,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "flood-fill-algorithm",
+              "topic": "Binary Trees[Miscellaneous]",
+              "subtopic": "Binary Trees[Miscellaneous]",
+              "title": "Flood-fill Algorithm",
+              "difficulty": "Medium",
+              "slug": "flood-fill-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/flood-fill-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 150,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/flood-fill/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Graph",
+      "problemCount": 12,
+      "subtopics": [
+        {
+          "name": "Graph",
+          "problemCount": 12,
+          "problems": [
+            {
+              "id": "clone-graph",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Clone Graph",
+              "difficulty": "Medium",
+              "slug": "clone-graph",
+              "url": "https://takeuforward.org/plus/dsa/problems/clone-graph?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 151,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/clone-graph/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "traversal-techniques",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "DFS",
+              "difficulty": "Medium",
+              "slug": "traversal-techniques",
+              "url": "https://takeuforward.org/plus/dsa/problems/traversal-techniques?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 152,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "traversal-techniques",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Traversal Techniques",
+              "difficulty": "Medium",
+              "slug": "traversal-techniques",
+              "url": "https://takeuforward.org/plus/dsa/problems/traversal-techniques?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 153,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "detect-a-cycle-in-an-undirected-graph",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Detect A cycle in Undirected Graph using BFS",
+              "difficulty": "Hard",
+              "slug": "detect-a-cycle-in-an-undirected-graph",
+              "url": "https://takeuforward.org/plus/dsa/problems/detect-a-cycle-in-an-undirected-graph?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 154,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "detect-a-cycle-in-an-undirected-graph",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Detect A cycle in Undirected Graph using DFS",
+              "difficulty": "Hard",
+              "slug": "detect-a-cycle-in-an-undirected-graph",
+              "url": "https://takeuforward.org/plus/dsa/problems/detect-a-cycle-in-an-undirected-graph?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 155,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "detect-a-cycle-in-a-directed-graph",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Detect A cycle in a Directed Graph using DFS",
+              "difficulty": "Hard",
+              "slug": "detect-a-cycle-in-a-directed-graph",
+              "url": "https://takeuforward.org/plus/dsa/problems/detect-a-cycle-in-a-directed-graph?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 156,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "detect-a-cycle-in-a-directed-graph",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Detect A cycle in a Directed Graph using BFS",
+              "difficulty": "Hard",
+              "slug": "detect-a-cycle-in-a-directed-graph",
+              "url": "https://takeuforward.org/plus/dsa/problems/detect-a-cycle-in-a-directed-graph?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 157,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "topological-sort-or-kahns-algorithm",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Topological Sort BFS",
+              "difficulty": "Hard",
+              "slug": "topological-sort-or-kahns-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/topological-sort-or-kahns-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 158,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "topological-sort-or-kahns-algorithm",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Topological Sort DFS",
+              "difficulty": "Hard",
+              "slug": "topological-sort-or-kahns-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/topological-sort-or-kahns-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 159,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "number-of-islands",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Number of islands(Do in Grid and Graph Both)",
+              "difficulty": "Medium",
+              "slug": "number-of-islands",
+              "url": "https://takeuforward.org/plus/dsa/problems/number-of-islands?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 160,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/number-of-islands/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "bipartite-graph",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Bipartite graph",
+              "difficulty": "Hard",
+              "slug": "bipartite-graph",
+              "url": "https://takeuforward.org/plus/dsa/problems/bipartite-graph?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 161,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/is-graph-bipartite/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "bipartite-graph",
+              "topic": "Graph",
+              "subtopic": "Graph",
+              "title": "Bipartite Check using DFS",
+              "difficulty": "Hard",
+              "slug": "bipartite-graph",
+              "url": "https://takeuforward.org/plus/dsa/problems/bipartite-graph?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 162,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/is-graph-bipartite/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Graph Part-II",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Graph Part-II",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "kosaraju's-algorithm",
+              "topic": "Graph Part-II",
+              "subtopic": "Graph Part-II",
+              "title": "Strongly Connected Component(using KosaRajuΓÇÖs algo)",
+              "difficulty": "Hard",
+              "slug": "kosaraju's-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/kosaraju's-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 163,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-number-of-non-overlapping-substrings/discuss/766485/kosaraju-algorithm-on",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "dijkstra's-algorithm",
+              "topic": "Graph Part-II",
+              "subtopic": "Graph Part-II",
+              "title": "Dijkstra's algorithm",
+              "difficulty": "Hard",
+              "slug": "dijkstra's-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/dijkstra's-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 164,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "bellman-ford-algorithm",
+              "topic": "Graph Part-II",
+              "subtopic": "Graph Part-II",
+              "title": "Bellman ford algorithm",
+              "difficulty": "Hard",
+              "slug": "bellman-ford-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/bellman-ford-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 165,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "floyd-warshall-algorithm",
+              "topic": "Graph Part-II",
+              "subtopic": "Graph Part-II",
+              "title": "Floyd Warshall Algorithm",
+              "difficulty": "Hard",
+              "slug": "floyd-warshall-algorithm",
+              "url": "https://takeuforward.org/plus/dsa/problems/floyd-warshall-algorithm?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 166,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "find-the-mst-weight",
+              "topic": "Graph Part-II",
+              "subtopic": "Graph Part-II",
+              "title": "MST using Prim's Algo",
+              "difficulty": "Hard",
+              "slug": "find-the-mst-weight",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-the-mst-weight?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 167,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "find-the-mst-weight",
+              "topic": "Graph Part-II",
+              "subtopic": "Graph Part-II",
+              "title": "MST using KruskalΓÇÖs Algo",
+              "difficulty": "Hard",
+              "slug": "find-the-mst-weight",
+              "url": "https://takeuforward.org/plus/dsa/problems/find-the-mst-weight?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 168,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dynamic Programming",
+      "problemCount": 7,
+      "subtopics": [
+        {
+          "name": "Dynamic Programming",
+          "problemCount": 7,
+          "problems": [
+            {
+              "id": "maximum-product-subarray-in-an-array",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Max Product Subarray",
+              "difficulty": "Hard",
+              "slug": "maximum-product-subarray-in-an-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-product-subarray-in-an-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 169,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-product-subarray/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "longest-increasing-subsequence",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Longest Increasing Subsequence",
+              "difficulty": "Medium",
+              "slug": "longest-increasing-subsequence",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-increasing-subsequence?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 170,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-common-subsequence",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Longest common subsequence",
+              "difficulty": "Hard",
+              "slug": "longest-common-subsequence",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-common-subsequence?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 171,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "0-and-1-knapsack",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "0 and 1 Knapsack",
+              "difficulty": "Hard",
+              "slug": "0-and-1-knapsack",
+              "url": "https://takeuforward.org/plus/dsa/problems/0-and-1-knapsack?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 172,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "edit-distance",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Edit distance",
+              "difficulty": "Hard",
+              "slug": "edit-distance",
+              "url": "https://takeuforward.org/plus/dsa/problems/edit-distance?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 173,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/edit-distance/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "maximum-sum-increasing-subsequence",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Maximum Sum Increasing Subsequence",
+              "difficulty": "Medium",
+              "slug": "maximum-sum-increasing-subsequence",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-sum-increasing-subsequence?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 174,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "matrix-chain-multiplication",
+              "topic": "Dynamic Programming",
+              "subtopic": "Dynamic Programming",
+              "title": "Matrix chain multiplication",
+              "difficulty": "Hard",
+              "slug": "matrix-chain-multiplication",
+              "url": "https://takeuforward.org/plus/dsa/problems/matrix-chain-multiplication?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 175,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dynamic Programming Part-II",
+      "problemCount": 8,
+      "subtopics": [
+        {
+          "name": "Dynamic Programming Part-II",
+          "problemCount": 8,
+          "problems": [
+            {
+              "id": "minimum-falling-path-sum",
+              "topic": "Dynamic Programming Part-II",
+              "subtopic": "Dynamic Programming Part-II",
+              "title": "Minimum sum path in the matrix, (count paths and similar type do, also backtrack to find the Minimum path)",
+              "difficulty": "Medium",
+              "slug": "minimum-falling-path-sum",
+              "url": "https://takeuforward.org/plus/dsa/problems/minimum-falling-path-sum?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 176,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-path-sum/",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "coin-change-ii",
+              "topic": "Dynamic Programming Part-II",
+              "subtopic": "Dynamic Programming Part-II",
+              "title": "Coin change II",
+              "difficulty": "Hard",
+              "slug": "coin-change-ii",
+              "url": "https://takeuforward.org/plus/dsa/problems/coin-change-ii?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 177,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/coin-change-2/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "subset-sum-equals-to-target",
+              "topic": "Dynamic Programming Part-II",
+              "subtopic": "Dynamic Programming Part-II",
+              "title": "Subset sum equals to target",
+              "difficulty": "Hard",
+              "slug": "subset-sum-equals-to-target",
+              "url": "https://takeuforward.org/plus/dsa/problems/subset-sum-equals-to-target?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 178,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "rod-cutting-problem",
+              "topic": "Dynamic Programming Part-II",
+              "subtopic": "Dynamic Programming Part-II",
+              "title": "Rod cutting problem",
+              "difficulty": "Hard",
+              "slug": "rod-cutting-problem",
+              "url": "https://takeuforward.org/plus/dsa/problems/rod-cutting-problem?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 179,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "super-egg-drop",
+              "topic": "Dynamic Programming Part-II",
+              "subtopic": "Dynamic Programming Part-II",
+              "title": "Super Egg Drop",
+              "difficulty": "Medium",
+              "slug": "super-egg-drop",
+              "url": "https://takeuforward.org/plus/dsa/problems/super-egg-drop?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 180,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "word-break",
+              "topic": "Dynamic Programming Part-II",
+              "subtopic": "Dynamic Programming Part-II",
+              "title": "Word Break",
+              "difficulty": "Medium",
+              "slug": "word-break",
+              "url": "https://takeuforward.org/plus/dsa/problems/word-break?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 181,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "palindrome-partitioning",
+              "topic": "Dynamic Programming Part-II",
+              "subtopic": "Dynamic Programming Part-II",
+              "title": "Palindrome Partitioning (MCM Variation)",
+              "difficulty": "Hard",
+              "slug": "palindrome-partitioning",
+              "url": "https://takeuforward.org/plus/dsa/problems/palindrome-partitioning?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 182,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "maximum-profit-in-job-scheduling",
+              "topic": "Dynamic Programming Part-II",
+              "subtopic": "Dynamic Programming Part-II",
+              "title": "Maximum Profit in Job Scheduling",
+              "difficulty": "Medium",
+              "slug": "maximum-profit-in-job-scheduling",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-profit-in-job-scheduling?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 183,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Trie",
+      "problemCount": 7,
+      "subtopics": [
+        {
+          "name": "Trie",
+          "problemCount": 7,
+          "problems": [
+            {
+              "id": "trie-implementation-and-operations",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Trie Implementation and Operations",
+              "difficulty": "Hard",
+              "slug": "trie-implementation-and-operations",
+              "url": "https://takeuforward.org/plus/dsa/problems/trie-implementation-and-operations?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 184,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "trie-implementation-and-advanced-operations",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Trie Implementation and Advanced Operations",
+              "difficulty": "Hard",
+              "slug": "trie-implementation-and-advanced-operations",
+              "url": "https://takeuforward.org/plus/dsa/problems/trie-implementation-and-advanced-operations?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 185,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "longest-word-with-all-prefixes",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Longest Word with All Prefixes",
+              "difficulty": "Medium",
+              "slug": "longest-word-with-all-prefixes",
+              "url": "https://takeuforward.org/plus/dsa/problems/longest-word-with-all-prefixes?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 186,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "number-of-distinct-substrings-in-a-string",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Number of distinct substrings in a string",
+              "difficulty": "Medium",
+              "slug": "number-of-distinct-substrings-in-a-string",
+              "url": "https://takeuforward.org/plus/dsa/problems/number-of-distinct-substrings-in-a-string?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 187,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "power-set",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Power Set (this is very important)",
+              "difficulty": "Medium",
+              "slug": "power-set",
+              "url": "https://takeuforward.org/plus/dsa/problems/power-set?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 188,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "maximum-xor-of-two-numbers-in-an-array",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Maximum XOR of two numbers in an array",
+              "difficulty": "Hard",
+              "slug": "maximum-xor-of-two-numbers-in-an-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-xor-of-two-numbers-in-an-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 189,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "maximum-xor-with-an-element-from-an-array",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Maximum Xor with an element from an array",
+              "difficulty": "Hard",
+              "slug": "maximum-xor-with-an-element-from-an-array",
+              "url": "https://takeuforward.org/plus/dsa/problems/maximum-xor-with-an-element-from-an-array?source=strivers-sde-sheet",
+              "platform": "TUF",
+              "source": "takeuforward",
+              "order": 190,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-xor-with-an-element-from-array/",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

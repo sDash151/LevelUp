@@ -6,7 +6,7 @@ import {
   CheckCircle2, AlertTriangle, Circle, MoreVertical, Filter,
   Heart, Dumbbell, BookOpen, Briefcase, Star, Zap, Flame, Trash2, Pencil,
 } from 'lucide-react';
-import { AnimatedPage } from '@/design-system/components';
+import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useGoals, useGoalStats, useToggleMilestone, useCreateGoal, useUpdateGoal, useDeleteGoal } from '../hooks/useGoals';
 import { GoalForm } from '../components/GoalForm';
 import MonthlyGoalsView from '../components/MonthlyGoalsView';

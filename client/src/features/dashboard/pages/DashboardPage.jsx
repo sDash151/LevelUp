@@ -7,7 +7,7 @@ import {
   CheckCircle, Target, Dumbbell, Wallet,
   Sparkles, ArrowRight, Calendar, Play, Pause, RotateCcw, Quote, Trophy, Zap,
 } from 'lucide-react';
-import { AnimatedPage } from '@/design-system/components';
+import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useAuthStore } from '@/shared/stores/authStore';
 import { getGreeting, formatDate } from '@/shared/utils/dates';
 import { useDashboardSummary, useStartFocus, useCompleteFocus } from '../hooks/useDashboard';
@@ -418,6 +418,8 @@ export default function DashboardPage() {
   const qc = useQueryClient();
   const { data, isLoading } = useDashboardSummary();
   const firstName = user?.name?.split(' ')[0] || 'there';
+
+  if (isLoading || !data) return <PageSkeleton />;
 
   // Toggle habit from dashboard
   const handleToggleHabit = async (habitId, currentlyCompleted) => {

@@ -6,7 +6,7 @@ import {
   MoreVertical, ExternalLink, Eye, Sparkles, Filter, Calendar, Check,
   ChevronDown, ArrowRight, BookOpen, Flame, Target,
 } from 'lucide-react';
-import { AnimatedPage } from '@/design-system/components';
+import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useJobs, useJobStats, useCreateJob, useDeleteJob, useUpdateJob, useJob } from '../hooks/useJobs';
 import { JobForm } from '../components/JobForm';
 import { JobDetailDrawer } from '../components/JobDetailDrawer';

@@ -1,0 +1,3420 @@
+{
+  "totalProblems": 150,
+  "premiumCount": 0,
+  "lastUpdated": "2026-06-19T08:49:56.668Z",
+  "topics": [
+    {
+      "name": "Array / String",
+      "problemCount": 24,
+      "subtopics": [
+        {
+          "name": "Array / String",
+          "problemCount": 24,
+          "problems": [
+            {
+              "id": "merge-sorted-array",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Merge Sorted Array",
+              "difficulty": "Easy",
+              "slug": "merge-sorted-array",
+              "url": "https://leetcode.com/problems/merge-sorted-array?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 0,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-sorted-array?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "remove-element",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Remove Element",
+              "difficulty": "Easy",
+              "slug": "remove-element",
+              "url": "https://leetcode.com/problems/remove-element?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 1,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/remove-element?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "remove-duplicates-from-sorted-array",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Remove Duplicates from Sorted Array",
+              "difficulty": "Easy",
+              "slug": "remove-duplicates-from-sorted-array",
+              "url": "https://leetcode.com/problems/remove-duplicates-from-sorted-array?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 2,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/remove-duplicates-from-sorted-array?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "remove-duplicates-from-sorted-array-ii",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Remove Duplicates from Sorted Array II",
+              "difficulty": "Medium",
+              "slug": "remove-duplicates-from-sorted-array-ii",
+              "url": "https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 3,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "majority-element",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Majority Element",
+              "difficulty": "Easy",
+              "slug": "majority-element",
+              "url": "https://leetcode.com/problems/majority-element?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 4,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/majority-element?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "rotate-array",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Rotate Array",
+              "difficulty": "Medium",
+              "slug": "rotate-array",
+              "url": "https://leetcode.com/problems/rotate-array?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 5,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/rotate-array?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "best-time-to-buy-and-sell-stock",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Best Time to Buy and Sell Stock",
+              "difficulty": "Easy",
+              "slug": "best-time-to-buy-and-sell-stock",
+              "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 6,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "best-time-to-buy-and-sell-stock-ii",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Best Time to Buy and Sell Stock II",
+              "difficulty": "Medium",
+              "slug": "best-time-to-buy-and-sell-stock-ii",
+              "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 7,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "jump-game",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Jump Game",
+              "difficulty": "Medium",
+              "slug": "jump-game",
+              "url": "https://leetcode.com/problems/jump-game?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 8,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/jump-game?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "jump-game-ii",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Jump Game II",
+              "difficulty": "Medium",
+              "slug": "jump-game-ii",
+              "url": "https://leetcode.com/problems/jump-game-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 9,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/jump-game-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "h-index",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "H-Index",
+              "difficulty": "Medium",
+              "slug": "h-index",
+              "url": "https://leetcode.com/problems/h-index?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 10,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/h-index?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "insert-delete-getrandom-o1",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Insert Delete GetRandom O(1)",
+              "difficulty": "Medium",
+              "slug": "insert-delete-getrandom-o1",
+              "url": "https://leetcode.com/problems/insert-delete-getrandom-o1?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 11,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/insert-delete-getrandom-o1?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "product-of-array-except-self",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Product of Array Except Self",
+              "difficulty": "Medium",
+              "slug": "product-of-array-except-self",
+              "url": "https://leetcode.com/problems/product-of-array-except-self?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 12,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/product-of-array-except-self?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "gas-station",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Gas Station",
+              "difficulty": "Medium",
+              "slug": "gas-station",
+              "url": "https://leetcode.com/problems/gas-station?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 13,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/gas-station?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "candy",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Candy",
+              "difficulty": "Hard",
+              "slug": "candy",
+              "url": "https://leetcode.com/problems/candy?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 14,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/candy?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "trapping-rain-water",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Trapping Rain Water",
+              "difficulty": "Hard",
+              "slug": "trapping-rain-water",
+              "url": "https://leetcode.com/problems/trapping-rain-water?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 15,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/trapping-rain-water?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "roman-to-integer",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Roman to Integer",
+              "difficulty": "Easy",
+              "slug": "roman-to-integer",
+              "url": "https://leetcode.com/problems/roman-to-integer?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 16,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/roman-to-integer?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "integer-to-roman",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Integer to Roman",
+              "difficulty": "Medium",
+              "slug": "integer-to-roman",
+              "url": "https://leetcode.com/problems/integer-to-roman?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 17,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/integer-to-roman?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "length-of-last-word",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Length of Last Word",
+              "difficulty": "Easy",
+              "slug": "length-of-last-word",
+              "url": "https://leetcode.com/problems/length-of-last-word?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 18,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/length-of-last-word?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "longest-common-prefix",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Longest Common Prefix",
+              "difficulty": "Easy",
+              "slug": "longest-common-prefix",
+              "url": "https://leetcode.com/problems/longest-common-prefix?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 19,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-common-prefix?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "reverse-words-in-a-string",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Reverse Words in a String",
+              "difficulty": "Medium",
+              "slug": "reverse-words-in-a-string",
+              "url": "https://leetcode.com/problems/reverse-words-in-a-string?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 20,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-words-in-a-string?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "zigzag-conversion",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Zigzag Conversion",
+              "difficulty": "Medium",
+              "slug": "zigzag-conversion",
+              "url": "https://leetcode.com/problems/zigzag-conversion?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 21,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/zigzag-conversion?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-the-index-of-the-first-occurrence-in-a-string",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Find the Index of the First Occurrence in a String",
+              "difficulty": "Easy",
+              "slug": "find-the-index-of-the-first-occurrence-in-a-string",
+              "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 22,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "text-justification",
+              "topic": "Array / String",
+              "subtopic": "Array / String",
+              "title": "Text Justification",
+              "difficulty": "Hard",
+              "slug": "text-justification",
+              "url": "https://leetcode.com/problems/text-justification?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 23,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "array",
+                "string"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/text-justification?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Two Pointers",
+      "problemCount": 5,
+      "subtopics": [
+        {
+          "name": "Two Pointers",
+          "problemCount": 5,
+          "problems": [
+            {
+              "id": "valid-palindrome",
+              "topic": "Two Pointers",
+              "subtopic": "Two Pointers",
+              "title": "Valid Palindrome",
+              "difficulty": "Easy",
+              "slug": "valid-palindrome",
+              "url": "https://leetcode.com/problems/valid-palindrome?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 24,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/valid-palindrome?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "is-subsequence",
+              "topic": "Two Pointers",
+              "subtopic": "Two Pointers",
+              "title": "Is Subsequence",
+              "difficulty": "Easy",
+              "slug": "is-subsequence",
+              "url": "https://leetcode.com/problems/is-subsequence?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 25,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/is-subsequence?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "two-sum-ii-input-array-is-sorted",
+              "topic": "Two Pointers",
+              "subtopic": "Two Pointers",
+              "title": "Two Sum II - Input Array Is Sorted",
+              "difficulty": "Medium",
+              "slug": "two-sum-ii-input-array-is-sorted",
+              "url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 26,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "container-with-most-water",
+              "topic": "Two Pointers",
+              "subtopic": "Two Pointers",
+              "title": "Container With Most Water",
+              "difficulty": "Medium",
+              "slug": "container-with-most-water",
+              "url": "https://leetcode.com/problems/container-with-most-water?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 27,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/container-with-most-water?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "3sum",
+              "topic": "Two Pointers",
+              "subtopic": "Two Pointers",
+              "title": "3Sum",
+              "difficulty": "Medium",
+              "slug": "3sum",
+              "url": "https://leetcode.com/problems/3sum?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 28,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/3sum?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sliding Window",
+      "problemCount": 4,
+      "subtopics": [
+        {
+          "name": "Sliding Window",
+          "problemCount": 4,
+          "problems": [
+            {
+              "id": "minimum-size-subarray-sum",
+              "topic": "Sliding Window",
+              "subtopic": "Sliding Window",
+              "title": "Minimum Size Subarray Sum",
+              "difficulty": "Medium",
+              "slug": "minimum-size-subarray-sum",
+              "url": "https://leetcode.com/problems/minimum-size-subarray-sum?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 29,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-size-subarray-sum?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-substring-without-repeating-characters",
+              "topic": "Sliding Window",
+              "subtopic": "Sliding Window",
+              "title": "Longest Substring Without Repeating Characters",
+              "difficulty": "Medium",
+              "slug": "longest-substring-without-repeating-characters",
+              "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 30,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "substring-with-concatenation-of-all-words",
+              "topic": "Sliding Window",
+              "subtopic": "Sliding Window",
+              "title": "Substring with Concatenation of All Words",
+              "difficulty": "Hard",
+              "slug": "substring-with-concatenation-of-all-words",
+              "url": "https://leetcode.com/problems/substring-with-concatenation-of-all-words?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 31,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/substring-with-concatenation-of-all-words?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "minimum-window-substring",
+              "topic": "Sliding Window",
+              "subtopic": "Sliding Window",
+              "title": "Minimum Window Substring",
+              "difficulty": "Hard",
+              "slug": "minimum-window-substring",
+              "url": "https://leetcode.com/problems/minimum-window-substring?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 32,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-window-substring?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Matrix",
+      "problemCount": 5,
+      "subtopics": [
+        {
+          "name": "Matrix",
+          "problemCount": 5,
+          "problems": [
+            {
+              "id": "valid-sudoku",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Valid Sudoku",
+              "difficulty": "Medium",
+              "slug": "valid-sudoku",
+              "url": "https://leetcode.com/problems/valid-sudoku?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 33,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "matrix"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/valid-sudoku?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "spiral-matrix",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Spiral Matrix",
+              "difficulty": "Medium",
+              "slug": "spiral-matrix",
+              "url": "https://leetcode.com/problems/spiral-matrix?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 34,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "matrix"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/spiral-matrix?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "rotate-image",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Rotate Image",
+              "difficulty": "Medium",
+              "slug": "rotate-image",
+              "url": "https://leetcode.com/problems/rotate-image?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 35,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "matrix"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/rotate-image?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "set-matrix-zeroes",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Set Matrix Zeroes",
+              "difficulty": "Medium",
+              "slug": "set-matrix-zeroes",
+              "url": "https://leetcode.com/problems/set-matrix-zeroes?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 36,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "matrix"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/set-matrix-zeroes?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "game-of-life",
+              "topic": "Matrix",
+              "subtopic": "Matrix",
+              "title": "Game of Life",
+              "difficulty": "Medium",
+              "slug": "game-of-life",
+              "url": "https://leetcode.com/problems/game-of-life?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 37,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "matrix"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/game-of-life?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hashmap",
+      "problemCount": 9,
+      "subtopics": [
+        {
+          "name": "Hashmap",
+          "problemCount": 9,
+          "problems": [
+            {
+              "id": "ransom-note",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Ransom Note",
+              "difficulty": "Easy",
+              "slug": "ransom-note",
+              "url": "https://leetcode.com/problems/ransom-note?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 38,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/ransom-note?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "isomorphic-strings",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Isomorphic Strings",
+              "difficulty": "Easy",
+              "slug": "isomorphic-strings",
+              "url": "https://leetcode.com/problems/isomorphic-strings?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 39,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/isomorphic-strings?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "word-pattern",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Word Pattern",
+              "difficulty": "Easy",
+              "slug": "word-pattern",
+              "url": "https://leetcode.com/problems/word-pattern?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 40,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/word-pattern?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "valid-anagram",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Valid Anagram",
+              "difficulty": "Easy",
+              "slug": "valid-anagram",
+              "url": "https://leetcode.com/problems/valid-anagram?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 41,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/valid-anagram?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "group-anagrams",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Group Anagrams",
+              "difficulty": "Medium",
+              "slug": "group-anagrams",
+              "url": "https://leetcode.com/problems/group-anagrams?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 42,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/group-anagrams?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "two-sum",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Two Sum",
+              "difficulty": "Easy",
+              "slug": "two-sum",
+              "url": "https://leetcode.com/problems/two-sum?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 43,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/two-sum?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "happy-number",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Happy Number",
+              "difficulty": "Easy",
+              "slug": "happy-number",
+              "url": "https://leetcode.com/problems/happy-number?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 44,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/happy-number?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "contains-duplicate-ii",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Contains Duplicate II",
+              "difficulty": "Easy",
+              "slug": "contains-duplicate-ii",
+              "url": "https://leetcode.com/problems/contains-duplicate-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 45,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/contains-duplicate-ii?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "longest-consecutive-sequence",
+              "topic": "Hashmap",
+              "subtopic": "Hashmap",
+              "title": "Longest Consecutive Sequence",
+              "difficulty": "Medium",
+              "slug": "longest-consecutive-sequence",
+              "url": "https://leetcode.com/problems/longest-consecutive-sequence?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 46,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "hashing"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-consecutive-sequence?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intervals",
+      "problemCount": 4,
+      "subtopics": [
+        {
+          "name": "Intervals",
+          "problemCount": 4,
+          "problems": [
+            {
+              "id": "summary-ranges",
+              "topic": "Intervals",
+              "subtopic": "Intervals",
+              "title": "Summary Ranges",
+              "difficulty": "Easy",
+              "slug": "summary-ranges",
+              "url": "https://leetcode.com/problems/summary-ranges?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 47,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/summary-ranges?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "merge-intervals",
+              "topic": "Intervals",
+              "subtopic": "Intervals",
+              "title": "Merge Intervals",
+              "difficulty": "Medium",
+              "slug": "merge-intervals",
+              "url": "https://leetcode.com/problems/merge-intervals?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 48,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-intervals?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "insert-interval",
+              "topic": "Intervals",
+              "subtopic": "Intervals",
+              "title": "Insert Interval",
+              "difficulty": "Medium",
+              "slug": "insert-interval",
+              "url": "https://leetcode.com/problems/insert-interval?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 49,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/insert-interval?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "minimum-number-of-arrows-to-burst-balloons",
+              "topic": "Intervals",
+              "subtopic": "Intervals",
+              "title": "Minimum Number of Arrows to Burst Balloons",
+              "difficulty": "Medium",
+              "slug": "minimum-number-of-arrows-to-burst-balloons",
+              "url": "https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 50,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Stack",
+      "problemCount": 5,
+      "subtopics": [
+        {
+          "name": "Stack",
+          "problemCount": 5,
+          "problems": [
+            {
+              "id": "valid-parentheses",
+              "topic": "Stack",
+              "subtopic": "Stack",
+              "title": "Valid Parentheses",
+              "difficulty": "Easy",
+              "slug": "valid-parentheses",
+              "url": "https://leetcode.com/problems/valid-parentheses?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 51,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/valid-parentheses?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "simplify-path",
+              "topic": "Stack",
+              "subtopic": "Stack",
+              "title": "Simplify Path",
+              "difficulty": "Medium",
+              "slug": "simplify-path",
+              "url": "https://leetcode.com/problems/simplify-path?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 52,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/simplify-path?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "min-stack",
+              "topic": "Stack",
+              "subtopic": "Stack",
+              "title": "Min Stack",
+              "difficulty": "Medium",
+              "slug": "min-stack",
+              "url": "https://leetcode.com/problems/min-stack?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 53,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/min-stack?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "evaluate-reverse-polish-notation",
+              "topic": "Stack",
+              "subtopic": "Stack",
+              "title": "Evaluate Reverse Polish Notation",
+              "difficulty": "Medium",
+              "slug": "evaluate-reverse-polish-notation",
+              "url": "https://leetcode.com/problems/evaluate-reverse-polish-notation?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 54,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/evaluate-reverse-polish-notation?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "basic-calculator",
+              "topic": "Stack",
+              "subtopic": "Stack",
+              "title": "Basic Calculator",
+              "difficulty": "Hard",
+              "slug": "basic-calculator",
+              "url": "https://leetcode.com/problems/basic-calculator?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 55,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "stack"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/basic-calculator?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Linked List",
+      "problemCount": 11,
+      "subtopics": [
+        {
+          "name": "Linked List",
+          "problemCount": 11,
+          "problems": [
+            {
+              "id": "linked-list-cycle",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Linked List Cycle",
+              "difficulty": "Easy",
+              "slug": "linked-list-cycle",
+              "url": "https://leetcode.com/problems/linked-list-cycle?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 56,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/linked-list-cycle?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "add-two-numbers",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Add Two Numbers",
+              "difficulty": "Medium",
+              "slug": "add-two-numbers",
+              "url": "https://leetcode.com/problems/add-two-numbers?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 57,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/add-two-numbers?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "merge-two-sorted-lists",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Merge Two Sorted Lists",
+              "difficulty": "Easy",
+              "slug": "merge-two-sorted-lists",
+              "url": "https://leetcode.com/problems/merge-two-sorted-lists?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 58,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-two-sorted-lists?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "copy-list-with-random-pointer",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Copy List with Random Pointer",
+              "difficulty": "Medium",
+              "slug": "copy-list-with-random-pointer",
+              "url": "https://leetcode.com/problems/copy-list-with-random-pointer?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 59,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/copy-list-with-random-pointer?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "reverse-linked-list-ii",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Reverse Linked List II",
+              "difficulty": "Medium",
+              "slug": "reverse-linked-list-ii",
+              "url": "https://leetcode.com/problems/reverse-linked-list-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 60,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-linked-list-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "reverse-nodes-in-k-group",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Reverse Nodes in k-Group",
+              "difficulty": "Hard",
+              "slug": "reverse-nodes-in-k-group",
+              "url": "https://leetcode.com/problems/reverse-nodes-in-k-group?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 61,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-nodes-in-k-group?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "remove-nth-node-from-end-of-list",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Remove Nth Node From End of List",
+              "difficulty": "Medium",
+              "slug": "remove-nth-node-from-end-of-list",
+              "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 62,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/remove-nth-node-from-end-of-list?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "remove-duplicates-from-sorted-list-ii",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Remove Duplicates from Sorted List II",
+              "difficulty": "Medium",
+              "slug": "remove-duplicates-from-sorted-list-ii",
+              "url": "https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 63,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "rotate-list",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Rotate List",
+              "difficulty": "Medium",
+              "slug": "rotate-list",
+              "url": "https://leetcode.com/problems/rotate-list?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 64,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/rotate-list?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "partition-list",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "Partition List",
+              "difficulty": "Medium",
+              "slug": "partition-list",
+              "url": "https://leetcode.com/problems/partition-list?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 65,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/partition-list?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "lru-cache",
+              "topic": "Linked List",
+              "subtopic": "Linked List",
+              "title": "LRU Cache",
+              "difficulty": "Medium",
+              "slug": "lru-cache",
+              "url": "https://leetcode.com/problems/lru-cache?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 66,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "linked-list"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/lru-cache?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Tree General",
+      "problemCount": 14,
+      "subtopics": [
+        {
+          "name": "Binary Tree General",
+          "problemCount": 14,
+          "problems": [
+            {
+              "id": "maximum-depth-of-binary-tree",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Maximum Depth of Binary Tree",
+              "difficulty": "Easy",
+              "slug": "maximum-depth-of-binary-tree",
+              "url": "https://leetcode.com/problems/maximum-depth-of-binary-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 67,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-depth-of-binary-tree?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "same-tree",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Same Tree",
+              "difficulty": "Easy",
+              "slug": "same-tree",
+              "url": "https://leetcode.com/problems/same-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 68,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/same-tree?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "invert-binary-tree",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Invert Binary Tree",
+              "difficulty": "Easy",
+              "slug": "invert-binary-tree",
+              "url": "https://leetcode.com/problems/invert-binary-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 69,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/invert-binary-tree?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "symmetric-tree",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Symmetric Tree",
+              "difficulty": "Easy",
+              "slug": "symmetric-tree",
+              "url": "https://leetcode.com/problems/symmetric-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 70,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/symmetric-tree?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "construct-binary-tree-from-preorder-and-inorder-traversal",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+              "difficulty": "Medium",
+              "slug": "construct-binary-tree-from-preorder-and-inorder-traversal",
+              "url": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 71,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "construct-binary-tree-from-inorder-and-postorder-traversal",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Construct Binary Tree from Inorder and Postorder Traversal",
+              "difficulty": "Medium",
+              "slug": "construct-binary-tree-from-inorder-and-postorder-traversal",
+              "url": "https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 72,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "populating-next-right-pointers-in-each-node-ii",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Populating Next Right Pointers in Each Node II",
+              "difficulty": "Medium",
+              "slug": "populating-next-right-pointers-in-each-node-ii",
+              "url": "https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 73,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "flatten-binary-tree-to-linked-list",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Flatten Binary Tree to Linked List",
+              "difficulty": "Medium",
+              "slug": "flatten-binary-tree-to-linked-list",
+              "url": "https://leetcode.com/problems/flatten-binary-tree-to-linked-list?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 74,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/flatten-binary-tree-to-linked-list?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "path-sum",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Path Sum",
+              "difficulty": "Easy",
+              "slug": "path-sum",
+              "url": "https://leetcode.com/problems/path-sum?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 75,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/path-sum?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "sum-root-to-leaf-numbers",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Sum Root to Leaf Numbers",
+              "difficulty": "Medium",
+              "slug": "sum-root-to-leaf-numbers",
+              "url": "https://leetcode.com/problems/sum-root-to-leaf-numbers?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 76,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/sum-root-to-leaf-numbers?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "binary-tree-maximum-path-sum",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Binary Tree Maximum Path Sum",
+              "difficulty": "Hard",
+              "slug": "binary-tree-maximum-path-sum",
+              "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 77,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-maximum-path-sum?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "binary-search-tree-iterator",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Binary Search Tree Iterator",
+              "difficulty": "Medium",
+              "slug": "binary-search-tree-iterator",
+              "url": "https://leetcode.com/problems/binary-search-tree-iterator?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 78,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-search-tree-iterator?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "count-complete-tree-nodes",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Count Complete Tree Nodes",
+              "difficulty": "Easy",
+              "slug": "count-complete-tree-nodes",
+              "url": "https://leetcode.com/problems/count-complete-tree-nodes?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 79,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/count-complete-tree-nodes?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "lowest-common-ancestor-of-a-binary-tree",
+              "topic": "Binary Tree General",
+              "subtopic": "Binary Tree General",
+              "title": "Lowest Common Ancestor of a Binary Tree",
+              "difficulty": "Medium",
+              "slug": "lowest-common-ancestor-of-a-binary-tree",
+              "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 80,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Tree BFS",
+      "problemCount": 4,
+      "subtopics": [
+        {
+          "name": "Binary Tree BFS",
+          "problemCount": 4,
+          "problems": [
+            {
+              "id": "binary-tree-right-side-view",
+              "topic": "Binary Tree BFS",
+              "subtopic": "Binary Tree BFS",
+              "title": "Binary Tree Right Side View",
+              "difficulty": "Medium",
+              "slug": "binary-tree-right-side-view",
+              "url": "https://leetcode.com/problems/binary-tree-right-side-view?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 81,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-right-side-view?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "average-of-levels-in-binary-tree",
+              "topic": "Binary Tree BFS",
+              "subtopic": "Binary Tree BFS",
+              "title": "Average of Levels in Binary Tree",
+              "difficulty": "Easy",
+              "slug": "average-of-levels-in-binary-tree",
+              "url": "https://leetcode.com/problems/average-of-levels-in-binary-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 82,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/average-of-levels-in-binary-tree?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "binary-tree-level-order-traversal",
+              "topic": "Binary Tree BFS",
+              "subtopic": "Binary Tree BFS",
+              "title": "Binary Tree Level Order Traversal",
+              "difficulty": "Medium",
+              "slug": "binary-tree-level-order-traversal",
+              "url": "https://leetcode.com/problems/binary-tree-level-order-traversal?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 83,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-level-order-traversal?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "binary-tree-zigzag-level-order-traversal",
+              "topic": "Binary Tree BFS",
+              "subtopic": "Binary Tree BFS",
+              "title": "Binary Tree Zigzag Level Order Traversal",
+              "difficulty": "Medium",
+              "slug": "binary-tree-zigzag-level-order-traversal",
+              "url": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 84,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Search Tree",
+      "problemCount": 3,
+      "subtopics": [
+        {
+          "name": "Binary Search Tree",
+          "problemCount": 3,
+          "problems": [
+            {
+              "id": "minimum-absolute-difference-in-bst",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Minimum Absolute Difference in BST",
+              "difficulty": "Easy",
+              "slug": "minimum-absolute-difference-in-bst",
+              "url": "https://leetcode.com/problems/minimum-absolute-difference-in-bst?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 85,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-absolute-difference-in-bst?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "kth-smallest-element-in-a-bst",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Kth Smallest Element in a BST",
+              "difficulty": "Medium",
+              "slug": "kth-smallest-element-in-a-bst",
+              "url": "https://leetcode.com/problems/kth-smallest-element-in-a-bst?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 86,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/kth-smallest-element-in-a-bst?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "validate-binary-search-tree",
+              "topic": "Binary Search Tree",
+              "subtopic": "Binary Search Tree",
+              "title": "Validate Binary Search Tree",
+              "difficulty": "Medium",
+              "slug": "validate-binary-search-tree",
+              "url": "https://leetcode.com/problems/validate-binary-search-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 87,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "tree",
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/validate-binary-search-tree?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Graph General",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Graph General",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "number-of-islands",
+              "topic": "Graph General",
+              "subtopic": "Graph General",
+              "title": "Number of Islands",
+              "difficulty": "Medium",
+              "slug": "number-of-islands",
+              "url": "https://leetcode.com/problems/number-of-islands?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 88,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/number-of-islands?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "surrounded-regions",
+              "topic": "Graph General",
+              "subtopic": "Graph General",
+              "title": "Surrounded Regions",
+              "difficulty": "Medium",
+              "slug": "surrounded-regions",
+              "url": "https://leetcode.com/problems/surrounded-regions?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 89,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/surrounded-regions?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "clone-graph",
+              "topic": "Graph General",
+              "subtopic": "Graph General",
+              "title": "Clone Graph",
+              "difficulty": "Medium",
+              "slug": "clone-graph",
+              "url": "https://leetcode.com/problems/clone-graph?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 90,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/clone-graph?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "evaluate-division",
+              "topic": "Graph General",
+              "subtopic": "Graph General",
+              "title": "Evaluate Division",
+              "difficulty": "Medium",
+              "slug": "evaluate-division",
+              "url": "https://leetcode.com/problems/evaluate-division?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 91,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/evaluate-division?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "course-schedule",
+              "topic": "Graph General",
+              "subtopic": "Graph General",
+              "title": "Course Schedule",
+              "difficulty": "Medium",
+              "slug": "course-schedule",
+              "url": "https://leetcode.com/problems/course-schedule?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 92,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/course-schedule?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "course-schedule-ii",
+              "topic": "Graph General",
+              "subtopic": "Graph General",
+              "title": "Course Schedule II",
+              "difficulty": "Medium",
+              "slug": "course-schedule-ii",
+              "url": "https://leetcode.com/problems/course-schedule-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 93,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/course-schedule-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Graph BFS",
+      "problemCount": 3,
+      "subtopics": [
+        {
+          "name": "Graph BFS",
+          "problemCount": 3,
+          "problems": [
+            {
+              "id": "snakes-and-ladders",
+              "topic": "Graph BFS",
+              "subtopic": "Graph BFS",
+              "title": "Snakes and Ladders",
+              "difficulty": "Medium",
+              "slug": "snakes-and-ladders",
+              "url": "https://leetcode.com/problems/snakes-and-ladders?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 94,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/snakes-and-ladders?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "minimum-genetic-mutation",
+              "topic": "Graph BFS",
+              "subtopic": "Graph BFS",
+              "title": "Minimum Genetic Mutation",
+              "difficulty": "Medium",
+              "slug": "minimum-genetic-mutation",
+              "url": "https://leetcode.com/problems/minimum-genetic-mutation?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 95,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-genetic-mutation?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "word-ladder",
+              "topic": "Graph BFS",
+              "subtopic": "Graph BFS",
+              "title": "Word Ladder",
+              "difficulty": "Hard",
+              "slug": "word-ladder",
+              "url": "https://leetcode.com/problems/word-ladder?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 96,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "graph"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/word-ladder?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Trie",
+      "problemCount": 3,
+      "subtopics": [
+        {
+          "name": "Trie",
+          "problemCount": 3,
+          "problems": [
+            {
+              "id": "implement-trie-prefix-tree",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Implement Trie (Prefix Tree)",
+              "difficulty": "Medium",
+              "slug": "implement-trie-prefix-tree",
+              "url": "https://leetcode.com/problems/implement-trie-prefix-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 97,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/implement-trie-prefix-tree?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "design-add-and-search-words-data-structure",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Design Add and Search Words Data Structure",
+              "difficulty": "Medium",
+              "slug": "design-add-and-search-words-data-structure",
+              "url": "https://leetcode.com/problems/design-add-and-search-words-data-structure?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 98,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/design-add-and-search-words-data-structure?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "word-search-ii",
+              "topic": "Trie",
+              "subtopic": "Trie",
+              "title": "Word Search II",
+              "difficulty": "Hard",
+              "slug": "word-search-ii",
+              "url": "https://leetcode.com/problems/word-search-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 99,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "trie"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/word-search-ii?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Backtracking",
+      "problemCount": 7,
+      "subtopics": [
+        {
+          "name": "Backtracking",
+          "problemCount": 7,
+          "problems": [
+            {
+              "id": "letter-combinations-of-a-phone-number",
+              "topic": "Backtracking",
+              "subtopic": "Backtracking",
+              "title": "Letter Combinations of a Phone Number",
+              "difficulty": "Medium",
+              "slug": "letter-combinations-of-a-phone-number",
+              "url": "https://leetcode.com/problems/letter-combinations-of-a-phone-number?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 100,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/letter-combinations-of-a-phone-number?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "combinations",
+              "topic": "Backtracking",
+              "subtopic": "Backtracking",
+              "title": "Combinations",
+              "difficulty": "Medium",
+              "slug": "combinations",
+              "url": "https://leetcode.com/problems/combinations?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 101,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/combinations?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "permutations",
+              "topic": "Backtracking",
+              "subtopic": "Backtracking",
+              "title": "Permutations",
+              "difficulty": "Medium",
+              "slug": "permutations",
+              "url": "https://leetcode.com/problems/permutations?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 102,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/permutations?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "combination-sum",
+              "topic": "Backtracking",
+              "subtopic": "Backtracking",
+              "title": "Combination Sum",
+              "difficulty": "Medium",
+              "slug": "combination-sum",
+              "url": "https://leetcode.com/problems/combination-sum?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 103,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/combination-sum?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "n-queens-ii",
+              "topic": "Backtracking",
+              "subtopic": "Backtracking",
+              "title": "N-Queens II",
+              "difficulty": "Hard",
+              "slug": "n-queens-ii",
+              "url": "https://leetcode.com/problems/n-queens-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 104,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/n-queens-ii?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "generate-parentheses",
+              "topic": "Backtracking",
+              "subtopic": "Backtracking",
+              "title": "Generate Parentheses",
+              "difficulty": "Medium",
+              "slug": "generate-parentheses",
+              "url": "https://leetcode.com/problems/generate-parentheses?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 105,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/generate-parentheses?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "word-search",
+              "topic": "Backtracking",
+              "subtopic": "Backtracking",
+              "title": "Word Search",
+              "difficulty": "Medium",
+              "slug": "word-search",
+              "url": "https://leetcode.com/problems/word-search?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 106,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "backtracking"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/word-search?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Divide & Conquer",
+      "problemCount": 4,
+      "subtopics": [
+        {
+          "name": "Divide & Conquer",
+          "problemCount": 4,
+          "problems": [
+            {
+              "id": "convert-sorted-array-to-binary-search-tree",
+              "topic": "Divide & Conquer",
+              "subtopic": "Divide & Conquer",
+              "title": "Convert Sorted Array to Binary Search Tree",
+              "difficulty": "Easy",
+              "slug": "convert-sorted-array-to-binary-search-tree",
+              "url": "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 107,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "sort-list",
+              "topic": "Divide & Conquer",
+              "subtopic": "Divide & Conquer",
+              "title": "Sort List",
+              "difficulty": "Medium",
+              "slug": "sort-list",
+              "url": "https://leetcode.com/problems/sort-list?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 108,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/sort-list?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "construct-quad-tree",
+              "topic": "Divide & Conquer",
+              "subtopic": "Divide & Conquer",
+              "title": "Construct Quad Tree",
+              "difficulty": "Medium",
+              "slug": "construct-quad-tree",
+              "url": "https://leetcode.com/problems/construct-quad-tree?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 109,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/construct-quad-tree?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "merge-k-sorted-lists",
+              "topic": "Divide & Conquer",
+              "subtopic": "Divide & Conquer",
+              "title": "Merge k Sorted Lists",
+              "difficulty": "Hard",
+              "slug": "merge-k-sorted-lists",
+              "url": "https://leetcode.com/problems/merge-k-sorted-lists?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 110,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/merge-k-sorted-lists?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Kadane's Algorithm",
+      "problemCount": 2,
+      "subtopics": [
+        {
+          "name": "Kadane's Algorithm",
+          "problemCount": 2,
+          "problems": [
+            {
+              "id": "maximum-subarray",
+              "topic": "Kadane's Algorithm",
+              "subtopic": "Kadane's Algorithm",
+              "title": "Maximum Subarray",
+              "difficulty": "Medium",
+              "slug": "maximum-subarray",
+              "url": "https://leetcode.com/problems/maximum-subarray?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 111,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-subarray?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "maximum-sum-circular-subarray",
+              "topic": "Kadane's Algorithm",
+              "subtopic": "Kadane's Algorithm",
+              "title": "Maximum Sum Circular Subarray",
+              "difficulty": "Medium",
+              "slug": "maximum-sum-circular-subarray",
+              "url": "https://leetcode.com/problems/maximum-sum-circular-subarray?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 112,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/maximum-sum-circular-subarray?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Binary Search",
+      "problemCount": 7,
+      "subtopics": [
+        {
+          "name": "Binary Search",
+          "problemCount": 7,
+          "problems": [
+            {
+              "id": "search-insert-position",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Search Insert Position",
+              "difficulty": "Easy",
+              "slug": "search-insert-position",
+              "url": "https://leetcode.com/problems/search-insert-position?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 113,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/search-insert-position?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "search-a-2d-matrix",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Search a 2D Matrix",
+              "difficulty": "Medium",
+              "slug": "search-a-2d-matrix",
+              "url": "https://leetcode.com/problems/search-a-2d-matrix?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 114,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/search-a-2d-matrix?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-peak-element",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Find Peak Element",
+              "difficulty": "Medium",
+              "slug": "find-peak-element",
+              "url": "https://leetcode.com/problems/find-peak-element?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 115,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-peak-element?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "search-in-rotated-sorted-array",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Search in Rotated Sorted Array",
+              "difficulty": "Medium",
+              "slug": "search-in-rotated-sorted-array",
+              "url": "https://leetcode.com/problems/search-in-rotated-sorted-array?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 116,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/search-in-rotated-sorted-array?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-first-and-last-position-of-element-in-sorted-array",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Find First and Last Position of Element in Sorted Array",
+              "difficulty": "Medium",
+              "slug": "find-first-and-last-position-of-element-in-sorted-array",
+              "url": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 117,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-minimum-in-rotated-sorted-array",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Find Minimum in Rotated Sorted Array",
+              "difficulty": "Medium",
+              "slug": "find-minimum-in-rotated-sorted-array",
+              "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 118,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "median-of-two-sorted-arrays",
+              "topic": "Binary Search",
+              "subtopic": "Binary Search",
+              "title": "Median of Two Sorted Arrays",
+              "difficulty": "Hard",
+              "slug": "median-of-two-sorted-arrays",
+              "url": "https://leetcode.com/problems/median-of-two-sorted-arrays?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 119,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "binary-search",
+                "searching"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/median-of-two-sorted-arrays?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Heap",
+      "problemCount": 4,
+      "subtopics": [
+        {
+          "name": "Heap",
+          "problemCount": 4,
+          "problems": [
+            {
+              "id": "kth-largest-element-in-an-array",
+              "topic": "Heap",
+              "subtopic": "Heap",
+              "title": "Kth Largest Element in an Array",
+              "difficulty": "Medium",
+              "slug": "kth-largest-element-in-an-array",
+              "url": "https://leetcode.com/problems/kth-largest-element-in-an-array?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 120,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/kth-largest-element-in-an-array?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "ipo",
+              "topic": "Heap",
+              "subtopic": "Heap",
+              "title": "IPO",
+              "difficulty": "Hard",
+              "slug": "ipo",
+              "url": "https://leetcode.com/problems/ipo?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 121,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/ipo?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "find-k-pairs-with-smallest-sums",
+              "topic": "Heap",
+              "subtopic": "Heap",
+              "title": "Find K Pairs with Smallest Sums",
+              "difficulty": "Medium",
+              "slug": "find-k-pairs-with-smallest-sums",
+              "url": "https://leetcode.com/problems/find-k-pairs-with-smallest-sums?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 122,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-k-pairs-with-smallest-sums?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "find-median-from-data-stream",
+              "topic": "Heap",
+              "subtopic": "Heap",
+              "title": "Find Median from Data Stream",
+              "difficulty": "Hard",
+              "slug": "find-median-from-data-stream",
+              "url": "https://leetcode.com/problems/find-median-from-data-stream?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 123,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "heap"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/find-median-from-data-stream?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bit Manipulation",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Bit Manipulation",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "add-binary",
+              "topic": "Bit Manipulation",
+              "subtopic": "Bit Manipulation",
+              "title": "Add Binary",
+              "difficulty": "Easy",
+              "slug": "add-binary",
+              "url": "https://leetcode.com/problems/add-binary?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 124,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "bit-manipulation"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/add-binary?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "reverse-bits",
+              "topic": "Bit Manipulation",
+              "subtopic": "Bit Manipulation",
+              "title": "Reverse Bits",
+              "difficulty": "Easy",
+              "slug": "reverse-bits",
+              "url": "https://leetcode.com/problems/reverse-bits?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 125,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "bit-manipulation"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/reverse-bits?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "number-of-1-bits",
+              "topic": "Bit Manipulation",
+              "subtopic": "Bit Manipulation",
+              "title": "Number of 1 Bits",
+              "difficulty": "Easy",
+              "slug": "number-of-1-bits",
+              "url": "https://leetcode.com/problems/number-of-1-bits?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 126,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "bit-manipulation"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/number-of-1-bits?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "single-number",
+              "topic": "Bit Manipulation",
+              "subtopic": "Bit Manipulation",
+              "title": "Single Number",
+              "difficulty": "Easy",
+              "slug": "single-number",
+              "url": "https://leetcode.com/problems/single-number?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 127,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "bit-manipulation"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/single-number?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "single-number-ii",
+              "topic": "Bit Manipulation",
+              "subtopic": "Bit Manipulation",
+              "title": "Single Number II",
+              "difficulty": "Medium",
+              "slug": "single-number-ii",
+              "url": "https://leetcode.com/problems/single-number-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 128,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "bit-manipulation"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/single-number-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "bitwise-and-of-numbers-range",
+              "topic": "Bit Manipulation",
+              "subtopic": "Bit Manipulation",
+              "title": "Bitwise AND of Numbers Range",
+              "difficulty": "Medium",
+              "slug": "bitwise-and-of-numbers-range",
+              "url": "https://leetcode.com/problems/bitwise-and-of-numbers-range?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 129,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "bit-manipulation"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/bitwise-and-of-numbers-range?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Math",
+      "problemCount": 6,
+      "subtopics": [
+        {
+          "name": "Math",
+          "problemCount": 6,
+          "problems": [
+            {
+              "id": "palindrome-number",
+              "topic": "Math",
+              "subtopic": "Math",
+              "title": "Palindrome Number",
+              "difficulty": "Easy",
+              "slug": "palindrome-number",
+              "url": "https://leetcode.com/problems/palindrome-number?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 130,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/palindrome-number?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "plus-one",
+              "topic": "Math",
+              "subtopic": "Math",
+              "title": "Plus One",
+              "difficulty": "Easy",
+              "slug": "plus-one",
+              "url": "https://leetcode.com/problems/plus-one?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 131,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/plus-one?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "factorial-trailing-zeroes",
+              "topic": "Math",
+              "subtopic": "Math",
+              "title": "Factorial Trailing Zeroes",
+              "difficulty": "Medium",
+              "slug": "factorial-trailing-zeroes",
+              "url": "https://leetcode.com/problems/factorial-trailing-zeroes?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 132,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/factorial-trailing-zeroes?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "sqrtx",
+              "topic": "Math",
+              "subtopic": "Math",
+              "title": "Sqrt(x)",
+              "difficulty": "Easy",
+              "slug": "sqrtx",
+              "url": "https://leetcode.com/problems/sqrtx?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 133,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/sqrtx?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "powx-n",
+              "topic": "Math",
+              "subtopic": "Math",
+              "title": "Pow(x, n)",
+              "difficulty": "Medium",
+              "slug": "powx-n",
+              "url": "https://leetcode.com/problems/powx-n?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 134,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/powx-n?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "max-points-on-a-line",
+              "topic": "Math",
+              "subtopic": "Math",
+              "title": "Max Points on a Line",
+              "difficulty": "Hard",
+              "slug": "max-points-on-a-line",
+              "url": "https://leetcode.com/problems/max-points-on-a-line?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 135,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [],
+              "leetcodeUrl": "https://leetcode.com/problems/max-points-on-a-line?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1D DP",
+      "problemCount": 5,
+      "subtopics": [
+        {
+          "name": "1D DP",
+          "problemCount": 5,
+          "problems": [
+            {
+              "id": "climbing-stairs",
+              "topic": "1D DP",
+              "subtopic": "1D DP",
+              "title": "Climbing Stairs",
+              "difficulty": "Easy",
+              "slug": "climbing-stairs",
+              "url": "https://leetcode.com/problems/climbing-stairs?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 136,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/climbing-stairs?utm=codolio",
+              "estimatedTime": 15,
+              "revisionWeight": 1
+            },
+            {
+              "id": "house-robber",
+              "topic": "1D DP",
+              "subtopic": "1D DP",
+              "title": "House Robber",
+              "difficulty": "Medium",
+              "slug": "house-robber",
+              "url": "https://leetcode.com/problems/house-robber?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 137,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/house-robber?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "word-break",
+              "topic": "1D DP",
+              "subtopic": "1D DP",
+              "title": "Word Break",
+              "difficulty": "Medium",
+              "slug": "word-break",
+              "url": "https://leetcode.com/problems/word-break?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 138,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/word-break?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "coin-change",
+              "topic": "1D DP",
+              "subtopic": "1D DP",
+              "title": "Coin Change",
+              "difficulty": "Medium",
+              "slug": "coin-change",
+              "url": "https://leetcode.com/problems/coin-change?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 139,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/coin-change?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-increasing-subsequence",
+              "topic": "1D DP",
+              "subtopic": "1D DP",
+              "title": "Longest Increasing Subsequence",
+              "difficulty": "Medium",
+              "slug": "longest-increasing-subsequence",
+              "url": "https://leetcode.com/problems/longest-increasing-subsequence?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 140,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-increasing-subsequence?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Multidimensional DP",
+      "problemCount": 9,
+      "subtopics": [
+        {
+          "name": "Multidimensional DP",
+          "problemCount": 9,
+          "problems": [
+            {
+              "id": "triangle",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Triangle",
+              "difficulty": "Medium",
+              "slug": "triangle",
+              "url": "https://leetcode.com/problems/triangle?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 141,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/triangle?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "minimum-path-sum",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Minimum Path Sum",
+              "difficulty": "Medium",
+              "slug": "minimum-path-sum",
+              "url": "https://leetcode.com/problems/minimum-path-sum?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 142,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/minimum-path-sum?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "unique-paths-ii",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Unique Paths II",
+              "difficulty": "Medium",
+              "slug": "unique-paths-ii",
+              "url": "https://leetcode.com/problems/unique-paths-ii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 143,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/unique-paths-ii?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "longest-palindromic-substring",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Longest Palindromic Substring",
+              "difficulty": "Medium",
+              "slug": "longest-palindromic-substring",
+              "url": "https://leetcode.com/problems/longest-palindromic-substring?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 144,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/longest-palindromic-substring?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "interleaving-string",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Interleaving String",
+              "difficulty": "Medium",
+              "slug": "interleaving-string",
+              "url": "https://leetcode.com/problems/interleaving-string?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 145,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/interleaving-string?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "edit-distance",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Edit Distance",
+              "difficulty": "Medium",
+              "slug": "edit-distance",
+              "url": "https://leetcode.com/problems/edit-distance?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 146,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/edit-distance?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            },
+            {
+              "id": "best-time-to-buy-and-sell-stock-iii",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Best Time to Buy and Sell Stock III",
+              "difficulty": "Hard",
+              "slug": "best-time-to-buy-and-sell-stock-iii",
+              "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 147,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "best-time-to-buy-and-sell-stock-iv",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Best Time to Buy and Sell Stock IV",
+              "difficulty": "Hard",
+              "slug": "best-time-to-buy-and-sell-stock-iv",
+              "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 148,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv?utm=codolio",
+              "estimatedTime": 45,
+              "revisionWeight": 3
+            },
+            {
+              "id": "maximal-square",
+              "topic": "Multidimensional DP",
+              "subtopic": "Multidimensional DP",
+              "title": "Maximal Square",
+              "difficulty": "Medium",
+              "slug": "maximal-square",
+              "url": "https://leetcode.com/problems/maximal-square?utm=codolio",
+              "platform": "LeetCode",
+              "source": "codolio-top150",
+              "order": 149,
+              "prerequisites": [],
+              "patterns": [],
+              "isPremium": false,
+              "tags": [
+                "dynamic-programming"
+              ],
+              "leetcodeUrl": "https://leetcode.com/problems/maximal-square?utm=codolio",
+              "estimatedTime": 30,
+              "revisionWeight": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

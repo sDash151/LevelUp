@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { SideNav } from './SideNav';
 import { MobileNav } from './MobileNav';
 import { ThemeToggle } from '@/design-system/components/ThemeToggle';
+import { PageSkeleton } from '@/design-system/components/PageSkeleton';
 
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
@@ -21,9 +22,11 @@ export function AppLayout() {
       {/* Main Content */}
       <main className="flex-1 min-h-screen pb-20 lg:pb-0 overflow-x-hidden">
         <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6">
-          <AnimatePresence mode="wait">
-            <Outlet />
-          </AnimatePresence>
+          <Suspense fallback={<PageSkeleton />}>
+            <AnimatePresence mode="wait">
+              <Outlet />
+            </AnimatePresence>
+          </Suspense>
         </div>
       </main>
 

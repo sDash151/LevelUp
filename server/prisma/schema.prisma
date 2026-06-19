@@ -27,19 +27,26 @@ model User {
 
   totalXp         Int      @default(0)
   level            Int      @default(1)
+  activeDsaPathId  String?
 
-  refreshTokens   RefreshToken[]
-  habits          Habit[]
-  habitLogs       HabitLog[]
-  goals           Goal[]
-  reflections     Reflection[]
-  dsaProblems     DsaProblem[]
-  jobApplications JobApplication[]
-  projects        Project[]
-  transactions    Transaction[]
-  workouts        Workout[]
-  fitnessLogs     FitnessLog[]
-  focusSessions   FocusSession[]
+  refreshTokens     RefreshToken[]
+  habits            Habit[]
+  habitLogs         HabitLog[]
+  goals             Goal[]
+  reflections       Reflection[]
+  dsaProgress       DsaUserProgress[]
+  dsaRevisionLogs   DsaRevisionLog[]
+  dsaPatternMastery DsaPatternMastery[]
+  dsaTopicMastery   DsaTopicMastery[]
+  dsaPathProgress   DsaPathProgress[]
+  dsaUnlockedPaths  DsaUnlockedPath[]
+  dsaHeatmap        DsaHeatmap[]
+  jobApplications   JobApplication[]
+  projects          Project[]
+  transactions      Transaction[]
+  workouts          Workout[]
+  fitnessLogs       FitnessLog[]
+  focusSessions     FocusSession[]
 
   @@map("users")
 }
@@ -188,42 +195,206 @@ enum ReflectionType {
   MONTHLY
 }
 
-// ==================== DSA TRACKER ====================
+// ==================== DSA TRACKER V2 ====================
+
+model DsaPath {
+  id            String   @id @default(cuid())
+  name          String   @unique
+  slug          String   @unique
+  fileName      String   @unique
+  source        String
+  icon          String   @default("route")
+  difficulty    String   @default("Mixed")
+  totalProblems Int      @default(0)
+  tier          Int      @default(1)
+  createdAt     DateTime @default(now())
+
+  pathProblems  DsaPathProblem[]
+  pathProgress  DsaPathProgress[]
+  unlockedBy    DsaUnlockedPath[]
+
+  @@map("dsa_paths")
+}
 
 model DsaProblem {
-  id         String        @id @default(cuid())
-  userId     String
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title      String
-  platform   String        @default("LeetCode")
-  difficulty DsaDifficulty
-  topic      String
-  status     DsaStatus     @default(TODO)
-  url        String?
-  notes      String?
-  timeSpent  Int?
-  rating     Int?
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
+  id                 String   @id @default(cuid())
+  externalId         String
+  title              String
+  slug               String
+  difficulty         String
+  url                String
+  canonicalProblemId String
+  platform           String   @default("LeetCode")
+  source             String
+  estimatedTime      Int      @default(20)
+  revisionWeight     Int      @default(1)
+  companies          String[] @default([])
+  tags               String[] @default([])
+  patterns           String[] @default([])
+  prerequisites      String[] @default([])
+  leetcodeUrl        String   @default("")
+  isPremium          Boolean  @default(false)
+  createdAt          DateTime @default(now())
 
-  @@index([userId])
-  @@index([topic])
+  pathProblems  DsaPathProblem[]
+  userProgress  DsaUserProgress[]
+  revisionLogs  DsaRevisionLog[]
+
+  @@unique([canonicalProblemId, platform])
+  @@index([canonicalProblemId])
+  @@index([leetcodeUrl])
   @@index([difficulty])
-  @@index([status])
   @@map("dsa_problems")
 }
 
-enum DsaDifficulty {
-  EASY
-  MEDIUM
-  HARD
+model DsaPathProblem {
+  id         String     @id @default(cuid())
+  pathId     String
+  path       DsaPath    @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  problemId  String
+  problem    DsaProblem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  topic      String
+  subtopic   String?
+  orderIndex Int
+
+  @@unique([pathId, problemId])
+  @@index([pathId])
+  @@index([problemId])
+  @@index([topic])
+  @@map("dsa_path_problems")
+}
+
+model DsaUserProgress {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problemId    String
+  problem      DsaProblem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  status       DsaStatus @default(TODO)
+  attemptCount Int       @default(0)
+  solvedAt     DateTime?
+  confidence   Int       @default(0)
+  revisionDue  DateTime?
+  notes        String?
+  timeSpent    Int?
+  xpEarned     Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([userId, problemId])
+  @@index([userId])
+  @@index([problemId])
+  @@index([status])
+  @@index([revisionDue])
+  @@map("dsa_user_progress")
+}
+
+model DsaRevisionLog {
+  id            String     @id @default(cuid())
+  userId        String
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problemId     String
+  problem       DsaProblem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  revisionDate  DateTime   @default(now())
+  revisionCount Int        @default(1)
+  performance   String     @default("good")
+  createdAt     DateTime   @default(now())
+
+  @@index([userId])
+  @@index([problemId])
+  @@index([revisionDate])
+  @@map("dsa_revision_logs")
+}
+
+model DsaPatternMastery {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pattern     String
+  solvedCount Int      @default(0)
+  totalCount  Int      @default(0)
+  masteryPct  Int      @default(0)
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, pattern])
+  @@index([userId])
+  @@map("dsa_pattern_mastery")
+}
+
+model DsaTopicMastery {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic       String
+  solvedCount Int      @default(0)
+  totalCount  Int      @default(0)
+  masteryPct  Int      @default(0)
+  weakScore   Int      @default(0)
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, topic])
+  @@index([userId])
+  @@map("dsa_topic_mastery")
+}
+
+model DsaPathProgress {
+  id            String  @id @default(cuid())
+  userId        String
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pathId        String
+  path          DsaPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  solvedCount   Int     @default(0)
+  xpEarned      Int     @default(0)
+  completionPct Int     @default(0)
+
+  @@unique([userId, pathId])
+  @@index([userId])
+  @@index([pathId])
+  @@map("dsa_path_progress")
+}
+
+model DsaUnlockedPath {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pathId    String
+  path      DsaPath  @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  unlockedAt DateTime @default(now())
+
+  @@unique([userId, pathId])
+  @@index([userId])
+  @@map("dsa_unlocked_paths")
+}
+
+model DsaHeatmap {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date     DateTime @db.Date
+  count    Int      @default(0)
+  xpEarned Int      @default(0)
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@map("dsa_heatmap")
+}
+
+model CompanyDsaMap {
+  id       String   @id @default(cuid())
+  company  String
+  topics   String[] @default([])
+  patterns String[] @default([])
+  priority Int      @default(0)
+
+  @@index([company])
+  @@map("company_dsa_maps")
 }
 
 enum DsaStatus {
   TODO
-  ATTEMPTED
+  IN_PROGRESS
   SOLVED
-  REVISIT
+  REVISING
 }
 
 // ==================== JOB TRACKER ====================

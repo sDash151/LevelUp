@@ -1,71 +1,159 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getDsaProblems, createDsaProblem, updateDsaProblem, deleteDsaProblem, getDsaStats } from '../api';
-import { useToast } from '@/design-system/components';
+import * as dsaApi from '../api';
 
-const MOCK_PROBLEMS = [
-  { id: '1', title: 'Two Sum', platform: 'LeetCode', difficulty: 'EASY', topic: 'Arrays', status: 'SOLVED', timeSpent: 15, rating: 4, url: 'https://leetcode.com/problems/two-sum', notes: 'Used hash map for O(n)', createdAt: new Date().toISOString() },
-  { id: '2', title: 'Valid Parentheses', platform: 'LeetCode', difficulty: 'EASY', topic: 'Stack', status: 'SOLVED', timeSpent: 10, rating: 5, url: '', notes: '', createdAt: new Date().toISOString() },
-  { id: '3', title: 'Longest Substring Without Repeating Characters', platform: 'LeetCode', difficulty: 'MEDIUM', topic: 'Strings', status: 'SOLVED', timeSpent: 25, rating: 3, url: '', notes: 'Sliding window technique', createdAt: new Date().toISOString() },
-  { id: '4', title: 'Merge Intervals', platform: 'LeetCode', difficulty: 'MEDIUM', topic: 'Arrays', status: 'REVISIT', timeSpent: 30, rating: 2, url: '', notes: 'Need to review sorting approach', createdAt: new Date().toISOString() },
-  { id: '5', title: 'Binary Tree Level Order Traversal', platform: 'LeetCode', difficulty: 'MEDIUM', topic: 'Trees', status: 'SOLVED', timeSpent: 20, rating: 4, url: '', notes: 'BFS with queue', createdAt: new Date().toISOString() },
-  { id: '6', title: 'Coin Change', platform: 'LeetCode', difficulty: 'MEDIUM', topic: 'Dynamic Programming', status: 'ATTEMPTED', timeSpent: 45, rating: 1, url: '', notes: 'Bottom-up DP. Need more practice.', createdAt: new Date().toISOString() },
-  { id: '7', title: 'Word Search', platform: 'LeetCode', difficulty: 'MEDIUM', topic: 'Backtracking', status: 'TODO', timeSpent: 0, rating: null, url: '', notes: '', createdAt: new Date().toISOString() },
-  { id: '8', title: 'Trapping Rain Water', platform: 'LeetCode', difficulty: 'HARD', topic: 'Arrays', status: 'TODO', timeSpent: 0, rating: null, url: '', notes: '', createdAt: new Date().toISOString() },
-];
-
-const MOCK_STATS = {
-  total: 8,
-  byDifficulty: [{ difficulty: 'EASY', _count: { id: 2 } }, { difficulty: 'MEDIUM', _count: { id: 5 } }, { difficulty: 'HARD', _count: { id: 1 } }],
-  byTopic: [{ topic: 'Arrays', _count: { id: 3 } }, { topic: 'Dynamic Programming', _count: { id: 1 } }, { topic: 'Trees', _count: { id: 1 } }, { topic: 'Stack', _count: { id: 1 } }, { topic: 'Strings', _count: { id: 1 } }, { topic: 'Backtracking', _count: { id: 1 } }],
-  byStatus: [{ status: 'SOLVED', _count: { id: 4 } }, { status: 'ATTEMPTED', _count: { id: 1 } }, { status: 'REVISIT', _count: { id: 1 } }, { status: 'TODO', _count: { id: 2 } }],
-};
-
-export function useDsaProblems(filters = {}) {
+// ── Dashboard ──
+export function useDsaDashboard() {
   return useQuery({
-    queryKey: ['dsa', filters],
-    queryFn: async () => {
-      const res = await getDsaProblems(filters);
-      return res.data ?? MOCK_PROBLEMS;
-    },
-    placeholderData: MOCK_PROBLEMS,
+    queryKey: ['dsa', 'dashboard'],
+    queryFn: async () => { const res = await dsaApi.getDsaDashboard(); return res.data; },
+    placeholderData: null,
   });
 }
 
-export function useDsaStats() {
+// ── Paths ──
+export function useDsaPaths() {
   return useQuery({
-    queryKey: ['dsa', 'stats'],
-    queryFn: async () => {
-      const res = await getDsaStats();
-      return res.data?.stats ?? MOCK_STATS;
+    queryKey: ['dsa', 'paths'],
+    queryFn: async () => { const res = await dsaApi.getDsaPaths(); return res.data ?? []; },
+    placeholderData: [],
+  });
+}
+
+export function useDsaPath(slug) {
+  return useQuery({
+    queryKey: ['dsa', 'paths', slug],
+    queryFn: async () => { const res = await dsaApi.getDsaPathDetail(slug); return res.data; },
+    enabled: !!slug,
+  });
+}
+
+export function useDsaPathProblems(slug, filters = {}) {
+  return useQuery({
+    queryKey: ['dsa', 'paths', slug, 'problems', filters],
+    queryFn: async () => { const res = await dsaApi.getDsaPathProblems(slug, filters); return res; },
+    enabled: !!slug,
+    placeholderData: { data: [], pagination: {} },
+  });
+}
+
+// ── Problem Detail ──
+export function useDsaProblem(id) {
+  return useQuery({
+    queryKey: ['dsa', 'problems', id],
+    queryFn: async () => { const res = await dsaApi.getDsaProblem(id); return res.data; },
+    enabled: !!id,
+  });
+}
+
+// ── Mutations ──
+export function useSolveProblem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => dsaApi.solveDsaProblem(id, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['dsa'] });
     },
-    placeholderData: MOCK_STATS,
   });
 }
 
-export function useCreateDsaProblem() {
+export function useUpdateDsaStatus() {
   const qc = useQueryClient();
-  const toast = useToast();
   return useMutation({
-    mutationFn: createDsaProblem,
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['dsa'] }); toast.success('Problem added!'); },
-    onError: () => toast.error('Failed to add problem'),
+    mutationFn: ({ id, status }) => dsaApi.updateDsaStatus(id, { status }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['dsa'] });
+    },
   });
 }
 
-export function useUpdateDsaProblem() {
+export function useUpdateDsaNotes() {
   const qc = useQueryClient();
-  const toast = useToast();
   return useMutation({
-    mutationFn: ({ id, data }) => updateDsaProblem(id, data),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['dsa'] }); toast.success('Problem updated'); },
+    mutationFn: ({ id, notes }) => dsaApi.updateDsaNotes(id, { notes }),
+    onSuccess: (_, variables) => {
+      qc.invalidateQueries({ queryKey: ['dsa', 'problems', variables.id] });
+    },
   });
 }
 
-export function useDeleteDsaProblem() {
+export function useReviseProblem() {
   const qc = useQueryClient();
-  const toast = useToast();
   return useMutation({
-    mutationFn: deleteDsaProblem,
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['dsa'] }); toast.success('Problem deleted'); },
+    mutationFn: ({ id, performance }) => dsaApi.reviseDsaProblem(id, { performance }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['dsa'] });
+    },
+  });
+}
+
+export function useSetActivePath() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (pathSlug) => dsaApi.setActiveDsaPath(pathSlug),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['dsa'] });
+    },
+  });
+}
+
+// ── Engines ──
+export function useDsaRevision() {
+  return useQuery({
+    queryKey: ['dsa', 'revision'],
+    queryFn: async () => { const res = await dsaApi.getDsaRevision(); return res.data ?? []; },
+    placeholderData: [],
+  });
+}
+
+export function useDsaWeakness() {
+  return useQuery({
+    queryKey: ['dsa', 'weakness'],
+    queryFn: async () => { const res = await dsaApi.getDsaWeakness(); return res.data; },
+  });
+}
+
+export function useDsaRecommendations() {
+  return useQuery({
+    queryKey: ['dsa', 'recommendations'],
+    queryFn: async () => { const res = await dsaApi.getDsaRecommendations(); return res.data; },
+  });
+}
+
+export function useDsaCompanyMode() {
+  return useQuery({
+    queryKey: ['dsa', 'company-mode'],
+    queryFn: async () => { const res = await dsaApi.getDsaCompanyMode(); return res.data; },
+  });
+}
+
+export function useDsaPatterns() {
+  return useQuery({
+    queryKey: ['dsa', 'patterns'],
+    queryFn: async () => { const res = await dsaApi.getDsaPatterns(); return res.data ?? []; },
+    placeholderData: [],
+  });
+}
+
+export function useDsaHeatmap() {
+  return useQuery({
+    queryKey: ['dsa', 'heatmap'],
+    queryFn: async () => { const res = await dsaApi.getDsaHeatmap(); return res.data ?? []; },
+    placeholderData: [],
+  });
+}
+
+export function useDsaSearch(query) {
+  return useQuery({
+    queryKey: ['dsa', 'search', query],
+    queryFn: async () => { const res = await dsaApi.searchDsaProblems(query); return res.data ?? []; },
+    enabled: !!query && query.length >= 2,
+    placeholderData: [],
+  });
+}
+
+export function useDsaQuickResume() {
+  return useQuery({
+    queryKey: ['dsa', 'quick-resume'],
+    queryFn: async () => { const res = await dsaApi.getDsaQuickResume(); return res.data; },
   });
 }

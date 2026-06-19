@@ -8,7 +8,7 @@ import {
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
-import { AnimatedPage } from '@/design-system/components';
+import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useReflections, useReflectionStats, useCreateReflection, useDeleteReflection } from '../hooks/useReflections';
 import { ReflectionForm } from '../components/ReflectionForm';
 import clsx from 'clsx';

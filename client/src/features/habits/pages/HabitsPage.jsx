@@ -6,7 +6,7 @@ import {
   List, CalendarDays, Filter, ChevronLeft, ChevronRight, Trash2, Pencil,
   LayoutGrid, BarChart2, Circle,
 } from 'lucide-react';
-import { AnimatedPage } from '@/design-system/components';
+import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useHabitRichStats, useToggleHabit, useDeleteHabit, useCreateHabit, useUpdateHabit } from '../hooks/useHabits';
 import { HabitForm } from '../components/HabitForm';
 import { HabitsCalendarView } from '../components/HabitsCalendarView';
@@ -292,6 +292,8 @@ export default function HabitsPage() {
   const deleteHabit = useDeleteHabit();
   const createHabit = useCreateHabit();
   const updateHabit = useUpdateHabit();
+
+  if (isLoading || !stats) return <PageSkeleton />;
 
   const [filter, setFilter] = useState('all');
   const [view, setView] = useState('list'); // 'list' | 'calendar'

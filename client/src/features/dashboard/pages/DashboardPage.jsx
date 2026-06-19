@@ -541,7 +541,7 @@ export default function DashboardPage() {
                   smartSummary.topPerformer && { tag: 'Top Performer', name: smartSummary.topPerformer.name, sub: `${smartSummary.topPerformer.pct}% completed`, color: 'var(--th-primary)' },
                   smartSummary.needsAttention && { tag: 'Needs Attention', name: smartSummary.needsAttention.name, sub: `${smartSummary.needsAttention.daysThisWeek}/7 days this week`, color: '#f97316' },
                 ].filter(Boolean).map((s) => (
-                  <div key={s.name} className="rounded-xl p-3" style={{ background: `${s.color}08`, border: `1px solid ${s.color}15` }}>
+                  <div key={s.tag} className="rounded-xl p-3" style={{ background: `${s.color}08`, border: `1px solid ${s.color}15` }}>
                     <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: s.color }}>{s.tag}</span>
                     <p className="text-[13px] font-medium mt-1" style={{ color: 'var(--th-text)' }}>{s.name}</p>
                     <p className="text-[11px]" style={{ color: 'var(--th-text-muted)' }}>{s.sub}</p>

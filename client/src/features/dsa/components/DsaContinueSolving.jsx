@@ -197,7 +197,7 @@ export function DsaContinueSolving({ problems = [], onProblemClick, onAddNote, o
             </tr>
           </thead>
           <tbody>
-            {filtered.map((p, i) => (
+            {filtered.slice(0, 50).map((p, i) => (
               <motion.tr
                 key={p.id}
                 initial={{ opacity: 0 }}

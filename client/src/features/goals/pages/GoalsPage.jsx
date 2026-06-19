@@ -536,6 +536,8 @@ export default function GoalsPage() {
     setShowForm(true);
   }, []);
 
+  if (isLoading) return <PageSkeleton />;
+
   return (
     <AnimatedPage>
 

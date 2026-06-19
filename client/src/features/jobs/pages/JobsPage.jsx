@@ -282,7 +282,7 @@ export default function JobsPage() {
   const [tablePage, setTablePage] = useState(1);
   const [jobToEdit, setJobToEdit] = useState(null);
 
-  const { data: allJobs = [] } = useJobs({ limit: 50 });
+  const { data: allJobs = [], isLoading } = useJobs({ limit: 50 });
   const { data: stats } = useJobStats();
   const { data: selectedJob, refetch: refetchJob } = useJob(selectedJobId);
   const createJob = useCreateJob();
@@ -331,6 +331,8 @@ export default function JobsPage() {
   const handleCardClick = (job) => {
     setSelectedJobId(job.id);
   };
+
+  if (isLoading) return <PageSkeleton />;
 
   return (
     <AnimatedPage>

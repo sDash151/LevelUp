@@ -215,7 +215,7 @@ function MoodJourneyChart({ moodJourney = [] }) {
           <span className="flex items-center gap-1">😞 1 Bad</span>
         </div>
         <div className="flex-1 h-[180px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height={180}>
             <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--th-border)" vertical={false} />
               <XAxis dataKey="date" tick={{ fontSize: 9, fill: 'var(--th-text-dim)' }} axisLine={false} tickLine={false} />
@@ -563,6 +563,8 @@ export default function ReflectionsPage() {
     setEditingReflection(reflection);
     setShowForm(true);
   }, []);
+
+  if (isLoading) return <PageSkeleton />;
 
   return (
     <AnimatedPage>

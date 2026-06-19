@@ -293,8 +293,6 @@ export default function HabitsPage() {
   const createHabit = useCreateHabit();
   const updateHabit = useUpdateHabit();
 
-  if (isLoading || !stats) return <PageSkeleton />;
-
   const [filter, setFilter] = useState('all');
   const [view, setView] = useState('list'); // 'list' | 'calendar'
   const [showForm, setShowForm] = useState(false);
@@ -340,6 +338,8 @@ export default function HabitsPage() {
       })}
     </div>
   );
+
+  if (isLoading || !stats) return <PageSkeleton />;
 
   return (
     <AnimatedPage>

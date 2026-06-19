@@ -60,7 +60,36 @@ export function useUpdateDsaStatus() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, status }) => dsaApi.updateDsaStatus(id, { status }),
-    onSuccess: () => {
+    onMutate: async ({ id, status }) => {
+      // Cancel outgoing refetches
+      await qc.cancelQueries({ queryKey: ['dsa'] });
+
+      // Snapshot the previous state (we only need the dashboard/path data where it's displayed, but there are multiple paths)
+      // A more robust way is to invalidate locally after mutating the query cache
+      // We will loop over the queries that start with ['dsa', 'paths'] and optimistically update the problem inside them
+      const queries = qc.getQueriesData({ queryKey: ['dsa', 'paths'] });
+      
+      queries.forEach(([queryKey, oldData]) => {
+        if (oldData && oldData.data && Array.isArray(oldData.data)) {
+          qc.setQueryData(queryKey, {
+            ...oldData,
+            data: oldData.data.map(p => p.id === id ? { ...p, status } : p)
+          });
+        }
+      });
+
+      return { previousQueries: queries };
+    },
+    onError: (err, newTodo, context) => {
+      // Revert on error
+      if (context?.previousQueries) {
+        context.previousQueries.forEach(([queryKey, oldData]) => {
+          qc.setQueryData(queryKey, oldData);
+        });
+      }
+    },
+    onSettled: () => {
+      // Force a full refetch behind the scenes to ensure consistency
       qc.invalidateQueries({ queryKey: ['dsa'] });
     },
   });

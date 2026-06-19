@@ -13,38 +13,38 @@ const STATUS_TABS = [
   { key: 'BOOKMARKED', label: 'Bookmarked' },
 ];
 
-function StatusBadge({ status, solvedAt }) {
+function StatusBadge({ status, solvedAt, onToggle }) {
   if (status === 'SOLVED') {
     const ago = solvedAt ? getRelativeTime(solvedAt) : '';
     return (
-      <div className="flex items-center gap-1">
+      <button onClick={onToggle} className="flex items-center gap-1 hover:opacity-80 transition-opacity">
         <Check className="w-3.5 h-3.5" style={{ color: '#10b981' }} />
         <span className="text-[10px]" style={{ color: '#10b981' }}>Solved</span>
         {ago && <span className="text-[9px]" style={{ color: 'var(--th-text-dim)' }}>{ago}</span>}
-      </div>
+      </button>
     );
   }
   if (status === 'IN_PROGRESS') {
     return (
-      <div className="flex items-center gap-1">
+      <button onClick={onToggle} className="flex items-center gap-1 hover:opacity-80 transition-opacity">
         <Clock className="w-3.5 h-3.5" style={{ color: '#f59e0b' }} />
         <span className="text-[10px]" style={{ color: '#f59e0b' }}>In Progress</span>
-      </div>
+      </button>
     );
   }
   if (status === 'REVISING') {
     return (
-      <div className="flex items-center gap-1">
+      <button onClick={onToggle} className="flex items-center gap-1 hover:opacity-80 transition-opacity">
         <Clock className="w-3.5 h-3.5" style={{ color: '#3b82f6' }} />
         <span className="text-[10px]" style={{ color: '#3b82f6' }}>Revision</span>
-      </div>
+      </button>
     );
   }
   return (
-    <div className="flex items-center gap-1">
+    <button onClick={onToggle} className="flex items-center gap-1 hover:opacity-80 transition-opacity">
       <Circle className="w-3.5 h-3.5" style={{ color: 'var(--th-text-dim)' }} />
       <span className="text-[10px]" style={{ color: 'var(--th-text-dim)' }}>To Do</span>
-    </div>
+    </button>
   );
 }
 
@@ -58,7 +58,7 @@ function getRelativeTime(date) {
   return `${Math.floor(diff / 7)}w ago`;
 }
 
-export function DsaContinueSolving({ problems = [], onProblemClick, onAddNote, onViewAll, totalCount, initialTopic = '' }) {
+export function DsaContinueSolving({ problems = [], onProblemClick, onAddNote, onViewAll, onToggleStatus, totalCount, initialTopic = '' }) {
   const [activeTab, setActiveTab] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTopic, setSelectedTopic] = useState(initialTopic);
@@ -245,7 +245,14 @@ export function DsaContinueSolving({ problems = [], onProblemClick, onAddNote, o
                   </span>
                 </td>
                 <td className="py-2.5 px-4 hidden md:table-cell">
-                  <StatusBadge status={p.status} solvedAt={p.solvedAt} />
+                  <StatusBadge 
+                    status={p.status} 
+                    solvedAt={p.solvedAt} 
+                    onToggle={(e) => {
+                      e.stopPropagation();
+                      onToggleStatus?.(p);
+                    }}
+                  />
                 </td>
 
                 <td className="py-2.5 px-4 hidden lg:table-cell">

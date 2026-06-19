@@ -29,7 +29,7 @@ function getTopicColor(topicName) {
   return '#8b5cf6'; // Vivid default
 }
 
-export function DsaPathDetail({ path, problems = [], onBack, onProblemClick }) {
+export function DsaPathDetail({ path, problems = [], onBack, onProblemClick, onToggleStatus }) {
   const [activeTab, setActiveTab] = useState('Topics');
   const [selectedProblemTopic, setSelectedProblemTopic] = useState('');
   
@@ -247,6 +247,7 @@ export function DsaPathDetail({ path, problems = [], onBack, onProblemClick }) {
                   setSelectedNoteProblem(p);
                   setActiveTab('Notes');
                 }}
+                onToggleStatus={onToggleStatus}
                 initialTopic={selectedProblemTopic}
               />
             </motion.div>

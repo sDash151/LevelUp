@@ -7,6 +7,7 @@ import {
   useDsaRecommendations, useDsaWeakness, useDsaPatterns, useDsaCompanyMode,
   useDsaHeatmap, useDsaQuickResume, useDsaRevision,
   useSolveProblem, useReviseProblem, useUpdateDsaNotes, useSetActivePath,
+  useUpdateDsaStatus,
 } from '../hooks/useDsa';
 import { DsaKpiCards } from '../components/DsaKpiCards';
 import { DsaTodayFocus } from '../components/DsaTodayFocus';
@@ -51,6 +52,12 @@ export default function DsaPage() {
   const reviseMutation = useReviseProblem();
   const notesMutation = useUpdateDsaNotes();
   const setActivePathMutation = useSetActivePath();
+  const updateStatusMut = useUpdateDsaStatus();
+
+  const handleToggleStatus = (problem) => {
+    const newStatus = problem.status === 'SOLVED' ? 'TODO' : 'SOLVED';
+    updateStatusMut.mutate({ id: problem.id, status: newStatus });
+  };
 
   const handleProblemClick = (p) => {
     setSelectedProblemId(p.id);
@@ -140,6 +147,7 @@ export default function DsaPage() {
           problems={activePathProblems?.data || []}
           onBack={() => setViewMode('dashboard')}
           onProblemClick={handleProblemClick}
+          onToggleStatus={handleToggleStatus}
         />
       ) : (
         <div className="space-y-4">
@@ -201,6 +209,7 @@ export default function DsaPage() {
               totalCount={activePathProblems?.pagination?.total}
               onProblemClick={handleProblemClick}
               onAddNote={handleAddNoteClick}
+              onToggleStatus={handleToggleStatus}
               onViewAll={() => setViewMode('path-detail')}
             />
           </div>

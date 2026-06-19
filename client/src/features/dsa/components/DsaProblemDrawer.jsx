@@ -17,7 +17,33 @@ export function DsaProblemDrawer({ problem, isOpen, onClose, onSolve, onRevise, 
     }
   }, [isOpen, initialTab, problem?.id, userProgress?.notes]);
 
-  if (!problem) return null;
+  // If loading problem data, show skeleton drawer
+  if (!problem) {
+    return (
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50" style={{ background: 'rgba(0,0,0,0.5)' }}
+              onClick={onClose}
+            />
+            <motion.div
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed top-0 right-0 h-full w-full max-w-[480px] z-50 p-6 flex flex-col gap-4"
+              style={{ background: 'var(--th-bg)', borderLeft: '1px solid var(--th-border)' }}
+            >
+              <div className="h-6 w-3/4 skeleton-shimmer rounded" />
+              <div className="h-4 w-1/4 skeleton-shimmer rounded mb-8" />
+              <div className="h-10 w-full skeleton-shimmer rounded" />
+              <div className="flex-1 w-full skeleton-shimmer rounded" />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    );
+  }
 
   const status = userProgress?.status || 'TODO';
   const diffColor = DIFF_COLORS[problem.difficulty] || '#6b7280';

@@ -45,7 +45,7 @@ function TabSkeleton() {
 export default function ProjectsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
-  const [showForm, setShowForm] = useState(false);
+  const [formState, setFormState] = useState({ isOpen: false, data: null });
 
   const { data: statsData } = useProjectStats();
   const { data: githubData } = useGithubRepos();
@@ -113,13 +113,16 @@ export default function ProjectsPage() {
   const tabInfo = TAB_TITLES[activeTab] || TAB_TITLES.overview;
 
   const renderTab = () => {
+    const handleNew = () => setFormState({ isOpen: true, data: null });
+    const handleEdit = (project) => setFormState({ isOpen: true, data: project });
+
     switch (activeTab) {
-      case 'overview': return <OverviewTab onNewProject={() => setShowForm(true)} />;
-      case 'projects': return <ProjectsTab onNewProject={() => setShowForm(true)} />;
-      case 'pipeline': return <PipelineTab />;
-      case 'learnings': return <LearningsTab />;
-      case 'intelligence': return <IntelligenceTab />;
-      default: return <OverviewTab onNewProject={() => setShowForm(true)} />;
+      case 'overview': return <OverviewTab onNewProject={handleNew} onEditProject={handleEdit} />;
+      case 'projects': return <ProjectsTab onNewProject={handleNew} onEditProject={handleEdit} />;
+      case 'pipeline': return <PipelineTab onNewProject={handleNew} onEditProject={handleEdit} />;
+      case 'learnings': return <LearningsTab onNewProject={handleNew} onEditProject={handleEdit} />;
+      case 'intelligence': return <IntelligenceTab onNewProject={handleNew} onEditProject={handleEdit} />;
+      default: return <OverviewTab onNewProject={handleNew} onEditProject={handleEdit} />;
     }
   };
 
@@ -136,28 +139,12 @@ export default function ProjectsPage() {
 
         <div className="flex items-center gap-2 flex-wrap">
           <button
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all hover:opacity-90 active:scale-[0.98] shadow-sm"
-            style={{ background: 'var(--th-card-solid)', color: 'var(--th-text)', border: '1px solid var(--th-border)' }}
-          >
-            <Sparkles className="w-4 h-4" style={{ color: 'var(--th-primary)' }} />
-            AI Builder
-          </button>
-
-          <button
-            onClick={() => setShowForm(true)}
+            onClick={() => setFormState({ isOpen: true, data: null })}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-bold text-white transition-all hover:opacity-90 active:scale-[0.98] shadow-md"
             style={{ background: 'linear-gradient(135deg, #f5c95a, #e8a830)' }}
           >
             <Plus className="w-4 h-4" />
             New Project
-          </button>
-
-          <button
-            className="relative p-2 rounded-xl transition-all hover:opacity-80 shadow-sm"
-            style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}
-          >
-            <Bell className="w-[18px] h-[18px]" style={{ color: 'var(--th-text-secondary)' }} />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500" />
           </button>
 
           <button
@@ -227,8 +214,8 @@ export default function ProjectsPage() {
         </AnimatePresence>
       </Suspense>
 
-      {/* ── New Project Modal ── */}
-      <ProjectForm isOpen={showForm} onClose={() => setShowForm(false)} />
+      {/* ── New/Edit Project Modal ── */}
+      <ProjectForm isOpen={formState.isOpen} initialData={formState.data} onClose={() => setFormState({ isOpen: false, data: null })} />
     </AnimatedPage>
   );
 }

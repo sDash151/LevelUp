@@ -591,6 +591,7 @@ model ProjectIntelligence {
   missingSkills     String[]
   strengths         String[]
   weaknesses        String[]
+  buildSuggestions  Json?
   updatedAt         DateTime @updatedAt
 
   @@map("project_intelligence")

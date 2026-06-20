@@ -41,4 +41,9 @@ export const askAi = async (data) => {
   return response.data;
 };
 
-export const getBuildSuggestions = (projectId) => api.get(`/projects/${projectId}/intelligence/builder`).then(r => r.data);
+export const getBuildSuggestions = (projectId, force = false) => 
+  api.get(`/projects/${projectId}/intelligence/builder`, { params: { force } }).then(r => r.data);
+
+export const syncGithubStats = () => api.post('/projects/github/sync').then(r => r.data);
+export const getGithubLanguages = () => api.get('/projects/github/languages').then(r => r.data);
+export const getGithubActivityGraph = () => api.get('/projects/github/activity-graph').then(r => r.data);

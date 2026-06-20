@@ -251,6 +251,228 @@ class ProjectsService {
     if (!connection) throw new NotFoundError('GitHub connection');
     return projectsRepository.deleteGithubConnection(userId);
   }
+
+  async syncGithubActivity(userId) {
+    const connection = await projectsRepository.findGithubConnection(userId);
+    if (!connection) return { status: 'no_connection' };
+
+    let token;
+    try {
+      token = decrypt(connection.accessToken);
+    } catch (err) {
+      throw new UnauthorizedError('GitHub connection corrupted');
+    }
+
+    const projects = await projectsRepository.findAllByUser(userId, {}, 1, 100);
+    const linkedProjects = projects.data.filter(p => p.repoUrl);
+
+    let totalCommits = 0;
+    let totalPRs = 0;
+    let lastPush = null;
+
+    for (const project of linkedProjects) {
+      // Extract owner/repo from URL (e.g., https://github.com/owner/repo)
+      const urlMatch = project.repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+      if (!urlMatch) continue;
+      let [, owner, repo] = urlMatch;
+      repo = repo.replace(/\.git$/, '');
+
+      try {
+        // Fetch repo details for last push
+        const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        if (!repoRes.ok) continue;
+        const repoData = await repoRes.json();
+
+        // Fetch total commits reliably using /commits endpoint
+        const commitsRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        
+        let repoCommits = 0;
+        if (commitsRes.ok) {
+          const link = commitsRes.headers.get('link');
+          if (link) {
+            const match = link.match(/page=(\d+)>; rel="last"/);
+            if (match) repoCommits = parseInt(match[1], 10);
+          } else {
+            const data = await commitsRes.json();
+            repoCommits = data.length;
+          }
+        }
+
+        // Fetch pulls
+        const pullsRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all&per_page=100`, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        let repoPRs = 0;
+        if (pullsRes.ok) {
+          const pullsData = await pullsRes.json();
+          repoPRs = pullsData.length || 0;
+        }
+
+        // Update Project Metrics
+        const pushedDate = new Date(repoData.pushed_at || repoData.updated_at);
+        if (!lastPush || pushedDate > lastPush) lastPush = pushedDate;
+
+        totalCommits += repoCommits;
+        totalPRs += repoPRs;
+
+        await projectsRepository.upsertMetrics(project.id, {
+          commitCount: repoCommits,
+          prCount: repoPRs,
+          lastCommitAt: pushedDate,
+        });
+
+      } catch (err) {
+        console.error(`Failed to sync github for ${owner}/${repo}`, err);
+      }
+    }
+
+    return { totalCommits, totalPRs, lastPush };
+  }
+
+  async getGithubLanguages(userId) {
+    const connection = await projectsRepository.findGithubConnection(userId);
+    if (!connection) return {};
+
+    let token;
+    try {
+      token = decrypt(connection.accessToken);
+    } catch (err) {
+      return {};
+    }
+
+    const projects = await projectsRepository.findAllByUser(userId, {}, 1, 100);
+    const linkedProjects = projects.data.filter(p => p.repoUrl);
+
+    const aggregatedLanguages = {};
+
+    for (const project of linkedProjects) {
+      const urlMatch = project.repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+      if (!urlMatch) continue;
+      let [, owner, repo] = urlMatch;
+      repo = repo.replace(/\.git$/, '');
+
+      try {
+        const langRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        
+        if (langRes.ok) {
+          const langs = await langRes.json();
+          for (const [lang, bytes] of Object.entries(langs)) {
+            aggregatedLanguages[lang] = (aggregatedLanguages[lang] || 0) + bytes;
+          }
+        }
+      } catch (err) {
+        console.error(`Failed to fetch languages for ${owner}/${repo}`, err);
+      }
+    }
+
+    return aggregatedLanguages;
+  }
+
+  async getGithubActivityGraph(userId) {
+    const connection = await projectsRepository.findGithubConnection(userId);
+    if (!connection) return [0, 0, 0, 0, 0, 0, 0];
+
+    let token;
+    try {
+      token = decrypt(connection.accessToken);
+    } catch (err) {
+      return [0, 0, 0, 0, 0, 0, 0];
+    }
+
+    const projects = await projectsRepository.findAllByUser(userId, {}, 1, 100);
+    const linkedProjects = projects.data.filter(p => p.repoUrl);
+
+    // Array mapped to [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+    const weeklyCommits = [0, 0, 0, 0, 0, 0, 0];
+    
+    // Calculate 7 days ago
+    const sinceDate = new Date();
+    sinceDate.setDate(sinceDate.getDate() - 7);
+    const sinceISO = sinceDate.toISOString();
+
+    for (const project of linkedProjects) {
+      const urlMatch = project.repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+      if (!urlMatch) continue;
+      let [, owner, repo] = urlMatch;
+      repo = repo.replace(/\.git$/, '');
+
+      try {
+        const commitsRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?since=${sinceISO}&per_page=100`, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        
+        if (!commitsRes.ok) continue;
+        const commitsData = await commitsRes.json();
+
+        for (const commit of commitsData) {
+          // Filter out commits that aren't by the linked user (if author data exists)
+          if (commit.author && String(commit.author.id) !== connection.githubId) {
+            continue;
+          }
+
+          const date = new Date(commit.commit.author.date);
+          // getDay() returns 0 (Sun) to 6 (Sat). We want 0 (Mon) to 6 (Sun)
+          const dayIndex = (date.getDay() + 6) % 7;
+          weeklyCommits[dayIndex]++;
+        }
+      } catch (err) {
+        console.error(`Failed to fetch commits graph for ${owner}/${repo}`, err);
+      }
+    }
+
+    return weeklyCommits;
+  }
+
+  async getGithubContextForAi(userId, repoUrl) {
+    if (!repoUrl) return null;
+    
+    const connection = await projectsRepository.findGithubConnection(userId);
+    if (!connection) return null;
+
+    let token;
+    try {
+      token = decrypt(connection.accessToken);
+    } catch (err) {
+      return null;
+    }
+
+    const urlMatch = repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+    if (!urlMatch) return null;
+    let [, owner, repo] = urlMatch;
+    repo = repo.replace(/\.git$/, '');
+
+    const context = {};
+
+    try {
+      const langRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (langRes.ok) {
+        context.languages = await langRes.json();
+      }
+    } catch (e) {}
+
+    try {
+      const readmeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (readmeRes.ok) {
+        const readmeData = await readmeRes.json();
+        if (readmeData.content && readmeData.encoding === 'base64') {
+          const decoded = Buffer.from(readmeData.content, 'base64').toString('utf8');
+          context.readme = decoded.substring(0, 2000); // Limit to 2000 chars
+        }
+      }
+    } catch (e) {}
+
+    return Object.keys(context).length > 0 ? context : null;
+  }
 }
 
 export const projectsService = new ProjectsService();

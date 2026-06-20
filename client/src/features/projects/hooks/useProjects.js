@@ -21,6 +21,9 @@ import {
   extractLearnings,
   askAi,
   getBuildSuggestions,
+  syncGithubStats,
+  getGithubLanguages,
+  getGithubActivityGraph,
 } from '../api.js';
 
 const STAGE_LABELS = {
@@ -233,8 +236,45 @@ export function useAskAi() {
 export function useBuildSuggestions(projectId) {
   return useQuery({
     queryKey: ['projects', projectId, 'intelligence', 'builder'],
-    queryFn: () => getBuildSuggestions(projectId),
+    queryFn: () => getBuildSuggestions(projectId, false),
     enabled: !!projectId,
-    staleTime: 1000 * 60 * 60, // 1 hour
+    staleTime: Infinity, // never stale, user must explicitly refresh
+  });
+}
+
+export function useGenerateBuildSuggestions() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (projectId) => getBuildSuggestions(projectId, true),
+    onSuccess: (data, projectId) => {
+      qc.setQueryData(['projects', projectId, 'intelligence', 'builder'], data);
+    },
+  });
+}
+
+export function useSyncGithubStats() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: syncGithubStats,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['projects'] });
+      qc.invalidateQueries({ queryKey: ['github', 'activity'] });
+    },
+  });
+}
+
+export function useGithubLanguages() {
+  return useQuery({
+    queryKey: ['github', 'languages'],
+    queryFn: getGithubLanguages,
+    staleTime: 1000 * 60 * 60,
+  });
+}
+
+export function useGithubActivityGraph() {
+  return useQuery({
+    queryKey: ['github', 'activity'],
+    queryFn: getGithubActivityGraph,
+    staleTime: 1000 * 60 * 60, // 1 hour cache to respect API limits
   });
 }

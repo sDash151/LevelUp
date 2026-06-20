@@ -274,6 +274,13 @@ class ProjectsRepository {
       },
     };
   }
+  async upsertMetrics(projectId, data) {
+    return prisma.projectMetrics.upsert({
+      where: { projectId },
+      create: { projectId, ...data },
+      update: data,
+    });
+  }
 
   async upsertIntelligence(projectId, data) {
     return prisma.projectIntelligence.upsert({

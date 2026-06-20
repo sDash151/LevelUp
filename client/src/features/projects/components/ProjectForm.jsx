@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Github, PenTool, ArrowLeft, X, Loader2 } from 'lucide-react';
 import { Modal } from '@/design-system/components';
-import { useCreateProject, useGithubRepos } from '../hooks/useProjects';
+import { useCreateProject, useUpdateProject, useGithubRepos } from '../hooks/useProjects';
 import { getGithubLoginUrl } from '../api';
+import { useEffect } from 'react';
 
 const STATUS_OPTIONS = [
   { value: 'IDEA', label: 'Idea' },
@@ -20,44 +21,71 @@ const PRIORITY_OPTIONS = [
   { value: 'CRITICAL', label: 'Critical' },
 ];
 
-export function ProjectForm({ isOpen, onClose }) {
-  const [step, setStep] = useState('choose');
+export function ProjectForm({ isOpen, onClose, initialData }) {
+  const isEditMode = !!initialData;
+  const [step, setStep] = useState(isEditMode ? 'manual' : 'choose');
   const [form, setForm] = useState({
     title: '', description: '', stack: '', status: 'IDEA', priority: 'MEDIUM',
     repoUrl: '', liveUrl: '', deadline: '',
   });
 
+  useEffect(() => {
+    if (isOpen && initialData) {
+      setStep('manual');
+      setForm({
+        title: initialData.title || '',
+        description: initialData.description || '',
+        stack: initialData.stack ? initialData.stack.join(', ') : '',
+        status: initialData.status || 'IDEA',
+        priority: initialData.priority || 'MEDIUM',
+        repoUrl: initialData.repoUrl || '',
+        liveUrl: initialData.liveUrl || '',
+        deadline: initialData.deadline ? new Date(initialData.deadline).toISOString().split('T')[0] : '',
+      });
+    } else if (isOpen && !initialData) {
+      setStep('choose');
+      setForm({ title: '', description: '', stack: '', status: 'IDEA', priority: 'MEDIUM', repoUrl: '', liveUrl: '', deadline: '' });
+    }
+  }, [isOpen, initialData]);
+
   const createProject = useCreateProject();
+  const updateProject = useUpdateProject();
   const { data: githubData } = useGithubRepos();
   const repos = githubData?.data?.repos || githubData?.repos || [];
   const isConnected = repos.length > 0;
 
   const handleClose = () => {
-    setStep('choose');
-    setForm({ title: '', description: '', stack: '', status: 'IDEA', priority: 'MEDIUM', repoUrl: '', liveUrl: '', deadline: '' });
     onClose();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createProject.mutate({
+    const payload = {
       ...form,
       stack: form.stack.split(',').map(s => s.trim()).filter(Boolean),
       deadline: form.deadline || undefined,
-    }, { onSuccess: handleClose });
+    };
+    
+    if (isEditMode) {
+      updateProject.mutate({ id: initialData.id, data: payload }, { onSuccess: handleClose });
+    } else {
+      createProject.mutate(payload, { onSuccess: handleClose });
+    }
   };
 
   const handleGithubImport = (repo) => {
-    createProject.mutate({
+    setForm({
+      ...form,
       title: repo.name,
       description: repo.description || '',
-      stack: repo.language ? [repo.language] : [],
-      repoUrl: repo.html_url,
-      liveUrl: repo.homepage || '',
+      stack: repo.language ? repo.language : '',
+      repoUrl: repo.url,
+      liveUrl: '',
       githubRepoId: String(repo.id),
       status: 'BUILDING',
       priority: 'MEDIUM',
-    }, { onSuccess: handleClose });
+    });
+    setStep('manual');
   };
 
   const inputCls = "w-full px-3 py-2.5 rounded-xl text-sm outline-none transition-all focus:ring-2 focus:ring-amber-500/30";
@@ -127,8 +155,8 @@ export function ProjectForm({ isOpen, onClose }) {
         {step === 'manual' && (
           <motion.div key="manual" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
             <div className="flex items-center gap-3 mb-4">
-              <button onClick={() => setStep('choose')} className="p-1 rounded-lg" style={{ color: 'var(--th-text-dim)' }}><ArrowLeft className="w-5 h-5" /></button>
-              <h2 className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>Create Project</h2>
+              {!isEditMode && <button onClick={() => setStep('choose')} className="p-1 rounded-lg" style={{ color: 'var(--th-text-dim)' }}><ArrowLeft className="w-5 h-5" /></button>}
+              <h2 className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>{isEditMode ? 'Edit Project' : 'Create Project'}</h2>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -173,11 +201,11 @@ export function ProjectForm({ isOpen, onClose }) {
                 <input type="date" value={form.deadline} onChange={e => setForm(p => ({ ...p, deadline: e.target.value }))} className={inputCls} style={inputStyle} />
               </div>
 
-              <button type="submit" disabled={createProject.isPending || !form.title}
+              <button type="submit" disabled={(isEditMode ? updateProject.isPending : createProject.isPending) || !form.title}
                 className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:scale-[1.01] disabled:opacity-50 flex items-center justify-center gap-2"
                 style={{ background: 'var(--th-primary)' }}>
-                {createProject.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-                {createProject.isPending ? 'Creating...' : 'Create Project'}
+                {(isEditMode ? updateProject.isPending : createProject.isPending) && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isEditMode ? 'Save Changes' : 'Create Project'}
               </button>
             </form>
           </motion.div>

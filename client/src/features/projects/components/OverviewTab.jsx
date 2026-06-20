@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useProjects, useProjectStats, useGithubRepos } from '../hooks/useProjects';
+import { useProjects, useProjectStats, useGithubRepos, useIntelligence, useSyncGithubStats, useGithubLanguages, useGithubActivityGraph } from '../hooks/useProjects';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
@@ -364,6 +364,8 @@ function ContinueBuildingCard({ projects, stats }) {
 /* ─── GitHub Activity ─── */
 function GitHubActivityCard({ projects, githubRepos, stats }) {
   const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  const { data: activityGraphData } = useGithubActivityGraph();
+  const activityData = activityGraphData?.data || [0, 0, 0, 0, 0, 0, 0];
   
   const totalCommits = projects.reduce((acc, p) => acc + (p.metrics?.commitCount || 0), 0) || 0;
   const totalPRs = projects.reduce((acc, p) => acc + (p.metrics?.prCount || 0), 0) || 0;
@@ -371,20 +373,45 @@ function GitHubActivityCard({ projects, githubRepos, stats }) {
   let lastCommitProject = [...projects].filter(p => p.metrics?.lastCommitAt).sort((a, b) => new Date(b.metrics.lastCommitAt) - new Date(a.metrics.lastCommitAt))[0];
   let lastPush = lastCommitProject?.metrics?.lastCommitAt ? timeAgo(lastCommitProject.metrics.lastCommitAt) : 'N/A';
 
-  const heights = days.map((_, i) => Math.max(5, (Math.abs(Math.sin((totalCommits || 14) * (i + 1))) * 100).toFixed(0)));
+  let activeBranch = 'main';
+  if (lastCommitProject?.repoUrl && githubRepos?.length) {
+    const match = lastCommitProject.repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+    if (match) {
+      const cleanRepo = match[2].replace(/\.git$/, '');
+      const ghRepo = githubRepos.find(r => r.name.toLowerCase() === cleanRepo.toLowerCase());
+      if (ghRepo && ghRepo.default_branch) {
+        activeBranch = ghRepo.default_branch;
+      }
+    }
+  }
+
+  const maxActivity = Math.max(...activityData, 1);
+  const heights = activityData.map(count => Math.max(5, (count / maxActivity) * 100));
   const barColors = heights.map(h => h > 70 ? 'var(--th-primary)' : '#10b981');
 
   const displayStats = [
     { label: 'Total Commits', value: totalCommits, large: true },
     { label: 'Last Push', value: lastPush, accent: true },
     { label: 'Pull Requests', value: totalPRs, large: true },
-    { label: 'Active Branch', value: 'main', dot: true },
+    { label: 'Active Branch', value: activeBranch, dot: true },
   ];
+
+  const syncMutation = useSyncGithubStats();
 
   return (
     <div className={clsx(card, 'p-5 h-full w-full flex flex-col')} style={cardBg}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[14px] font-bold" style={{ color: 'var(--th-text)' }}>GitHub Activity</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="text-[14px] font-bold" style={{ color: 'var(--th-text)' }}>GitHub Activity</h3>
+          <button 
+            onClick={() => syncMutation.mutate()}
+            disabled={syncMutation.isPending}
+            className="text-[10px] font-medium px-2 py-0.5 rounded bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 transition-colors disabled:opacity-50"
+            style={{ color: 'var(--th-text-dim)' }}
+          >
+            {syncMutation.isPending ? 'Syncing...' : 'Sync'}
+          </button>
+        </div>
         <button 
           onClick={() => {
             if (lastCommitProject?.repoUrl) window.open(lastCommitProject.repoUrl, '_blank');
@@ -451,8 +478,7 @@ function AIBuildInsightsCard({ projects }) {
     if (!projects || projects.length === 0) {
        insights.push({ icon: AlertTriangle, title: 'No Projects Found', desc: 'Create a project to get AI insights', badge: 'High', badgeBg: '#fef2f2', badgeColor: '#ef4444', iconColor: '#ef4444' });
     } else {
-       insights.push({ icon: Zap, title: 'Great Architecture', desc: 'All projects look structurally solid!', badge: 'Good', badgeBg: '#ecfdf5', badgeColor: '#10b981', iconColor: '#10b981' });
-       insights.push({ icon: Code2, title: 'Keep Building', desc: 'Add more complex features to get suggestions', badge: 'Improve', badgeBg: '#eff6ff', badgeColor: '#3b82f6', iconColor: '#3b82f6' });
+       insights.push({ icon: Sparkles, title: 'Analysis Required', desc: 'Click on a project and run AI Analysis to unlock insights.', badge: 'Action', badgeBg: '#fef2f2', badgeColor: '#ef4444', iconColor: '#ef4444' });
     }
   }
 
@@ -665,22 +691,23 @@ function RecentLearningsPreview({ projects }) {
 /* ─── Stack Heatmap ─── */
 function StackHeatmapPreview({ projects }) {
   const [, setSearchParams] = useSearchParams();
+  const { data: languagesResponse, isLoading } = useGithubLanguages();
+  
+  const languagesData = languagesResponse?.data || {};
 
-  const allStack = (projects || []).flatMap(p => p.stack || []);
-  const skillCounts = {};
-  allStack.forEach(s => skillCounts[s] = (skillCounts[s] || 0) + 1);
+  const totalBytes = Object.values(languagesData).reduce((acc, bytes) => acc + bytes, 0) || 1;
 
-  const topSkills = Object.entries(skillCounts)
+  const topSkills = Object.entries(languagesData)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
-    .map(([name, count]) => ({
+    .map(([name, bytes]) => ({
       name,
-      count,
-      pct: Math.round((count / Math.max(1, allStack.length)) * 100),
+      bytes,
+      pct: Math.round((bytes / totalBytes) * 100),
       color: getColor(name)
     }));
 
-  const totalHours = projects.reduce((sum, p) => sum + (p.metrics?.commitCount || 0) * 2, 0) || 0; // rough estimation if we don't have time tracking
+  const totalHours = projects.reduce((sum, p) => sum + (p.metrics?.commitCount || 0) * 2, 0) || 0;
 
   return (
     <div className={clsx(card, 'p-5 h-full flex flex-col')} style={cardBg}>
@@ -689,9 +716,13 @@ function StackHeatmapPreview({ projects }) {
       </h3>
       
       <div className="flex gap-5 items-center flex-1">
-        {topSkills.length === 0 ? (
+        {isLoading ? (
           <div className="flex-1 text-center" style={{ color: 'var(--th-text-dim)' }}>
-            <p className="text-[12px] font-semibold">No stack data available</p>
+            <p className="text-[12px] font-semibold">Loading GitHub data...</p>
+          </div>
+        ) : topSkills.length === 0 ? (
+          <div className="flex-1 text-center" style={{ color: 'var(--th-text-dim)' }}>
+            <p className="text-[12px] font-semibold">No repo languages found</p>
           </div>
         ) : (
           <>
@@ -734,12 +765,14 @@ function PortfolioIntelligencePreview({ projects }) {
   
   const projectsWithIntel = (projects || []).filter(p => p.intelligence);
   const intelCount = projectsWithIntel.length || 1;
-  const avg = (key) => Math.round(projectsWithIntel.reduce((acc, p) => acc + (p.intelligence[key] || 0), 0) / intelCount);
+  
+  // AI returns scores out of 10, but this UI displays them out of 100
+  const avg = (key) => Math.round((projectsWithIntel.reduce((acc, p) => acc + (p.intelligence[key] || 0), 0) / intelCount) * 10);
   
   const avgResume = avg('resumeScore') || 0;
   const avgRecruiter = avg('recruiterScore') || 0;
   const avgScalability = avg('scalabilityScore') || 0;
-  const avgDemo = avg('demoScore') || 0;
+  const avgDemo = avg('interviewScore') || 0; // The DB uses interviewScore, not demoScore
   const avgArch = avg('architectureScore') || 0;
   
   const overall = projectsWithIntel.length ? Math.round((avgResume + avgRecruiter + avgScalability + avgDemo + avgArch) / 5) : 0;

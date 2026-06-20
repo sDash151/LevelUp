@@ -55,6 +55,17 @@ Project Details:
 - Tasks: ${JSON.stringify((project.tasks || []).slice(0, 20))}
 - Learnings: ${JSON.stringify((project.learnings || []).slice(0, 20))}
 
+${project.githubContext ? `GitHub Repository Context:
+- Actual Languages Used: ${JSON.stringify(project.githubContext.languages)}
+- README Excerpt:
+${project.githubContext.readme}
+` : ''}
+IMPORTANT RULES:
+1. If the Tech Stack is empty, DO NOT suggest generic technologies (e.g., "Add Frontend Framework", "Add Database", "Add React"). Assume the user already has a stack but hasn't documented it yet.
+2. Focus strictly on architectural concepts, system design, scalable patterns (e.g. caching, CI/CD, containerization), and domain-specific logic.
+3. missingSkills should contain specific architectural, operational, or advanced software engineering concepts, NOT basic frameworks.
+4. If GitHub Repository Context is provided, use it as the primary source of truth for the project's actual architecture, domain, and purpose.
+
 Return ONLY the JSON object, no markdown.`;
 
       return await this._generate(prompt);
@@ -203,6 +214,11 @@ Project:
 - Learnings: ${JSON.stringify((project.learnings || []).slice(0, 20))}
 - Metrics: ${JSON.stringify(project.metrics || {})}
 
+${project.githubContext ? `GitHub Repository Context:
+- Actual Languages Used: ${JSON.stringify(project.githubContext.languages)}
+- README Excerpt:
+${project.githubContext.readme}
+` : ''}
 Return a JSON array of actionable suggestions. Each element must have:
 - title (string): Short suggestion title
 - description (string): Detailed explanation of what to build and why
@@ -214,6 +230,12 @@ Focus on:
 3. Testing and DevOps enhancements
 4. Performance optimisations
 5. Missing best practices
+
+IMPORTANT RULES:
+1. Do NOT suggest generic boilerplate tasks like "Implement User Authentication", "Add a Database", "Create a Testing Suite", or "Set up CI/CD" unless specifically relevant.
+2. Assume the project already has basic frontend/backend infrastructure. Focus on domain-specific features related to the project's Name and Description.
+3. Be highly specific and creative. Avoid repetitive templates.
+4. If GitHub Repository Context is provided, use it as the primary source of truth for the project's actual architecture and gaps.
 
 Return ONLY the JSON array, no markdown.`;
 

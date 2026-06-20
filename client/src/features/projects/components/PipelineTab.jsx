@@ -7,9 +7,9 @@ import {
   SlidersHorizontal, ChevronDown, Settings, Lightbulb, ClipboardList,
   Hammer, FlaskConical, Rocket, X, FolderKanban, BarChart3, FileText,
   Check, Circle, AlertTriangle, Flame, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Plus, Briefcase, Target,
-  GripVertical, Loader2,
+  GripVertical, Loader2, PenLine,
 } from 'lucide-react';
-import { usePipeline, useMovePipelineProject, useBuildSuggestions, useCreateTask, useAnalyzeProject } from '../hooks/useProjects';
+import { usePipeline, useMovePipelineProject, useBuildSuggestions, useGenerateBuildSuggestions, useCreateTask, useAnalyzeProject } from '../hooks/useProjects';
 import clsx from 'clsx';
 
 const card = 'rounded-2xl shadow-sm';
@@ -504,7 +504,7 @@ function PipelineCardChrome({ project, stageKey, onSelect, selected, onMoveStage
 }
 
 /* ─── Project Context Drawer ─── */
-function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
+function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving, onEditProject }) {
   const [tab, setTab] = useState('ai');
 
   const handleEscape = useCallback((e) => {
@@ -522,7 +522,8 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
   }, [project, handleEscape]);
 
   // Hooks for AI integrations
-  const { data: suggestionsData, refetch, isFetching } = useBuildSuggestions(project?.id);
+  const { data: suggestionsData, isFetching } = useBuildSuggestions(project?.id);
+  const generateSuggestions = useGenerateBuildSuggestions();
   const createTask = useCreateTask();
   const analyze = useAnalyzeProject();
   const [createdTasks, setCreatedTasks] = useState(new Set());
@@ -599,9 +600,14 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
           >
         <div className="flex items-center justify-between p-4 border-b shrink-0" style={{ borderColor: 'var(--th-border)' }}>
           <h3 className="text-[13px] font-bold" style={{ color: 'var(--th-text)' }}>Project Context</h3>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:opacity-70 transition-opacity" style={{ color: 'var(--th-text-dim)' }}>
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button onClick={() => { onClose(); if (onEditProject) onEditProject(project); }} className="p-1.5 rounded-lg hover:opacity-70 transition-opacity" style={{ color: 'var(--th-text-dim)' }}>
+              <PenLine className="w-4 h-4" />
+            </button>
+            <button onClick={onClose} className="p-1.5 rounded-lg hover:opacity-70 transition-opacity" style={{ color: 'var(--th-text-dim)' }}>
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         <div className="p-4 border-b shrink-0" style={{ borderColor: 'var(--th-border)' }}>
@@ -722,11 +728,11 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
               ))}
             </div>
             <button 
-              onClick={() => refetch()} 
-              disabled={isFetching} 
+              onClick={() => generateSuggestions.mutate(project.id)} 
+              disabled={isFetching || generateSuggestions.isPending} 
               className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg transition-colors hover:opacity-90 disabled:opacity-50"
               style={{ background: 'rgba(var(--th-primary-rgb), 0.1)', color: 'var(--th-primary)' }}>
-              {isFetching ? 'Generating...' : 'Generate More Ideas'}
+              {isFetching || generateSuggestions.isPending ? 'Generating...' : 'Generate More Ideas'}
             </button>
           </div>
 
@@ -748,7 +754,25 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
                 ))}
               </>
             ) : (
-              <p className="text-[10px] text-center italic py-3" style={{ color: 'var(--th-text-dim)' }}>Run Project Analysis to see strengths and gaps.</p>
+              <div className="flex flex-col gap-2 py-2">
+                <p className="text-[10px] text-center italic" style={{ color: 'var(--th-text-dim)' }}>Run Project Analysis to see strengths and gaps.</p>
+                <button 
+                  onClick={() => analyze.mutate({ projectId: project.id })} 
+                  disabled={analyze.isPending}
+                  className="w-full text-[10px] font-semibold py-1.5 rounded-lg shadow transition-all hover:opacity-90 disabled:opacity-50 active:scale-[0.98]"
+                  style={{ background: 'var(--th-primary)', color: '#fff' }}>
+                  {analyze.isPending ? 'Analyzing...' : 'Run Analysis'}
+                </button>
+              </div>
+            )}
+            {improvements.length > 0 && (
+              <button 
+                onClick={() => analyze.mutate({ projectId: project.id })} 
+                disabled={analyze.isPending}
+                className="w-full mt-2 text-[10px] font-semibold py-1.5 rounded-lg transition-colors hover:opacity-90 disabled:opacity-50"
+                style={{ background: 'rgba(var(--th-primary-rgb), 0.1)', color: 'var(--th-primary)' }}>
+                {analyze.isPending ? 'Analyzing...' : 'Re-Analyze'}
+              </button>
             )}
           </div>
 
@@ -804,7 +828,7 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
 }
 
 /* ─── Main Pipeline Tab ─── */
-export default function PipelineTab() {
+export default function PipelineTab({ onNewProject, onEditProject }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const targetId = searchParams.get('id');
 
@@ -1011,6 +1035,7 @@ export default function PipelineTab() {
         onClose={closeDrawer}
         onMoveStage={handleMoveStage}
         isMoving={!!movingProjectId && movingProjectId === selected?.id}
+        onEditProject={onEditProject}
       />
     </div>
   );

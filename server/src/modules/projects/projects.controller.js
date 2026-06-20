@@ -95,6 +95,8 @@ export const getIntelligence = asyncHandler(async (req, res) => {
 export const aiAnalyze = asyncHandler(async (req, res) => {
   const { projectId } = req.body;
   const project = await projectsService.get(req.user.id, projectId);
+  const githubContext = await projectsService.getGithubContextForAi(req.user.id, project.repoUrl);
+  
   const { projectsAI } = await import('./projects.ai.js');
   const analysis = await projectsAI.analyzeProject({
     name: project.title,
@@ -103,6 +105,7 @@ export const aiAnalyze = asyncHandler(async (req, res) => {
     metrics: project.metrics,
     tasks: project.tasks,
     learnings: project.learnings,
+    githubContext,
   });
 
   if (analysis) {
@@ -188,6 +191,13 @@ export const askAi = asyncHandler(async (req, res) => {
 
 export const getBuildSuggestions = asyncHandler(async (req, res) => {
   const project = await projectsService.get(req.user.id, req.params.id);
+  const force = req.query.force === 'true';
+
+  if (!force && project.intelligence?.buildSuggestions) {
+    return success(res, { suggestions: project.intelligence.buildSuggestions }, 'Cached AI build suggestions retrieved');
+  }
+
+  const githubContext = await projectsService.getGithubContextForAi(req.user.id, project.repoUrl);
   const { projectsAI } = await import('./projects.ai.js');
   
   // Need to format project slightly to match what AI expects
@@ -198,10 +208,17 @@ export const getBuildSuggestions = asyncHandler(async (req, res) => {
     status: project.status,
     metrics: project.metrics,
     tasks: project.tasks,
-    learnings: project.learnings
+    learnings: project.learnings,
+    githubContext,
   };
   
   const suggestions = await projectsAI.getBuildSuggestions(projectForAi);
+
+  // Save the suggestions to the database for future use
+  await import('./projects.repository.js').then(m => m.projectsRepository.upsertIntelligence(project.id, {
+    buildSuggestions: suggestions
+  }));
+
   success(res, { suggestions }, 'AI build suggestions generated');
 });
 
@@ -220,8 +237,8 @@ export const connectGithub = asyncHandler(async (req, res) => {
 });
 
 export const getGithubRepos = asyncHandler(async (req, res) => {
-  const data = await projectsService.getGithubRepos(req.user.id);
-  success(res, data);
+  const repos = await projectsService.getGithubRepos(req.user.id);
+  success(res, repos, 'GitHub repos retrieved');
 });
 
 export const disconnectGithub = asyncHandler(async (req, res) => {
@@ -229,3 +246,17 @@ export const disconnectGithub = asyncHandler(async (req, res) => {
   success(res, null, 'GitHub disconnected');
 });
 
+export const syncGithub = asyncHandler(async (req, res) => {
+  const result = await projectsService.syncGithubActivity(req.user.id);
+  success(res, result, 'GitHub activity synced successfully');
+});
+
+export const getGithubLanguages = asyncHandler(async (req, res) => {
+  const result = await projectsService.getGithubLanguages(req.user.id);
+  success(res, result, 'GitHub languages retrieved');
+});
+
+export const getGithubActivityGraph = asyncHandler(async (req, res) => {
+  const result = await projectsService.getGithubActivityGraph(req.user.id);
+  success(res, result, 'GitHub activity graph retrieved');
+});

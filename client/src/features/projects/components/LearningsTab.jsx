@@ -7,14 +7,16 @@ import {
 } from 'lucide-react';
 import { useProjects } from '../hooks/useProjects';
 import { Select } from '../../../design-system/components/Select';
+import { Button } from '../../../design-system/components/Button';
+import { LearningForm } from './LearningForm';
 import clsx from 'clsx';
 
 const SUB_TABS = [
-  { key: 'learning', label: 'Learnings' },
+  { key: 'all', label: 'All' },
+  { key: 'learning', label: 'Insights' },
   { key: 'bug', label: 'Bugs' },
   { key: 'architecture', label: 'Architecture' },
   { key: 'pattern', label: 'Patterns' },
-  { key: 'all', label: 'All' },
 ];
 
 const TYPE_COLORS = {
@@ -291,7 +293,8 @@ function AIInsightsPanel({ learnings }) {
 
 /* ─── Main Learnings Tab ─── */
 export default function LearningsTab() {
-  const [subTab, setSubTab] = useState('learning'); 
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [subTab, setSubTab] = useState('all'); 
   const [search, setSearch] = useState('');
   const [projectIdFilter, setProjectIdFilter] = useState('all');
   const [tagFilter, setTagFilter] = useState('all');
@@ -338,6 +341,16 @@ export default function LearningsTab() {
 
   return (
     <div className="flex flex-col">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-[18px] font-bold" style={{ color: 'var(--th-text)' }}>Your Knowledge Base</h2>
+          <p className="text-[12px]" style={{ color: 'var(--th-text-dim)' }}>Capture, organize, and reuse knowledge from your building journey.</p>
+        </div>
+        <button onClick={() => setIsFormOpen(true)} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-semibold text-white transition-all hover:scale-[1.02]" style={{ background: 'var(--th-primary)' }}>
+          <Lightbulb className="w-4 h-4" />
+          Capture Learning
+        </button>
+      </div>
       
       <KpiCards learnings={allLearnings} />
 
@@ -447,6 +460,7 @@ export default function LearningsTab() {
         )}
       </div>
 
+      <LearningForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </div>
   );
 }

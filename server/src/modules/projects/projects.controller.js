@@ -126,11 +126,34 @@ export const aiAnalyze = asyncHandler(async (req, res) => {
 export const jobSync = asyncHandler(async (req, res) => {
   const projects = await projectsService.list(req.user.id, {}, 1, 50);
   const { projectsAI } = await import('./projects.ai.js');
-  const matches = await projectsAI.matchProjectsToJob(
+  const { projectsRepository } = await import('./projects.repository.js');
+  let matches = await projectsAI.matchProjectsToJob(
     projects.data.map(p => ({ id: p.id, title: p.title, stack: p.stack, description: p.description })),
     req.body.jobDescription || 'General full-stack developer role'
   );
-  success(res, { matches: matches || [] }, 'Job sync complete');
+
+  // Robustly handle cases where AI returns {"matches": [...]} instead of an array
+  if (matches && !Array.isArray(matches)) {
+    matches = matches.matches || matches.projects || Object.values(matches)[0] || [];
+  }
+  if (!Array.isArray(matches)) {
+    matches = [];
+  }
+
+  // Save matches to DB
+  for (const match of matches) {
+    if (match.projectId) {
+      await projectsRepository.upsertJobMatch({
+        jobId: 'custom-job', // Since it's arbitrary text now
+        projectId: match.projectId,
+        matchScore: match.matchScore || 0,
+        missingSkills: match.missingSkills || [],
+        recommendedImprovements: match.recommendedImprovements || [],
+      });
+    }
+  }
+
+  success(res, { matches }, 'Job sync complete');
 });
 
 export const extractLearnings = asyncHandler(async (req, res) => {
@@ -139,6 +162,47 @@ export const extractLearnings = asyncHandler(async (req, res) => {
   const { projectsAI } = await import('./projects.ai.js');
   const learnings = await projectsAI.extractLearnings(commits || []);
   success(res, { learnings: learnings || [] }, 'Learnings extracted');
+});
+
+export const askAi = asyncHandler(async (req, res) => {
+  const { question } = req.body;
+  if (!question) throw new AppError('Question is required', 400);
+
+  const projects = await projectsService.list(req.user.id, {}, 1, 50);
+  const { projectsAI } = await import('./projects.ai.js');
+  
+  const answer = await projectsAI.askPortfolio(
+    projects.data.map(p => ({
+      name: p.title,
+      techStack: p.stack,
+      description: p.description,
+      status: p.status,
+      metrics: p.metrics,
+      intelligence: p.intelligence
+    })),
+    question
+  );
+
+  success(res, { answer }, 'AI response generated');
+});
+
+export const getBuildSuggestions = asyncHandler(async (req, res) => {
+  const project = await projectsService.get(req.user.id, req.params.id);
+  const { projectsAI } = await import('./projects.ai.js');
+  
+  // Need to format project slightly to match what AI expects
+  const projectForAi = {
+    name: project.title,
+    techStack: project.stack,
+    description: project.description,
+    status: project.status,
+    metrics: project.metrics,
+    tasks: project.tasks,
+    learnings: project.learnings
+  };
+  
+  const suggestions = await projectsAI.getBuildSuggestions(projectForAi);
+  success(res, { suggestions }, 'AI build suggestions generated');
 });
 
 // ==================== GITHUB INTEGRATION ====================

@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -8,7 +9,7 @@ import {
   Check, Circle, AlertTriangle, Flame, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Plus, Briefcase, Target,
   GripVertical, Loader2,
 } from 'lucide-react';
-import { usePipeline, useMovePipelineProject } from '../hooks/useProjects';
+import { usePipeline, useMovePipelineProject, useBuildSuggestions, useCreateTask, useAnalyzeProject } from '../hooks/useProjects';
 import clsx from 'clsx';
 
 const card = 'rounded-2xl shadow-sm';
@@ -99,16 +100,38 @@ function PipelineKpis({ pipeline }) {
   const building = pipeline.BUILDING?.length || 0;
   const planning = pipeline.PLANNING?.length || 0;
   const testing = pipeline.TESTING?.length || 0;
-  const activeBuilds = building + planning + testing || 7;
-  const shipped = pipeline.SHIPPED?.length || 3;
-  const blocked = pipeline.BUILDING?.filter(p => p.priority === 'HIGH').length || 2;
-  const totalCommits = pipeline.BUILDING?.reduce((s, p) => s + (p.metrics?.commitCount || 0), 0) || 42;
+  const idea = pipeline.IDEA?.length || 0;
+  const activeBuilds = building + planning + testing + idea;
+  const shipped = pipeline.SHIPPED?.length || 0;
+
+  const allProjects = [
+    ...(pipeline.IDEA || []),
+    ...(pipeline.PLANNING || []),
+    ...(pipeline.BUILDING || []),
+    ...(pipeline.TESTING || []),
+    ...(pipeline.SHIPPED || []),
+  ];
+
+  let blockedCount = 0;
+  let totalCommits = 0;
+  let maxStreak = 0;
+
+  allProjects.forEach(p => {
+    totalCommits += (p.metrics?.commitCount || 0);
+    maxStreak = Math.max(maxStreak, p.metrics?.buildStreak || 0);
+    const hasBlocker = p.tasks?.some(t => t.status === 'blocked' || t.priority === 'critical');
+    if (hasBlocker) blockedCount++;
+  });
+
+  const generateBars = (base, offset) => {
+    return Array.from({ length: 7 }).map((_, i) => Math.max(15, (Math.abs(Math.sin((base || 14) * (i + offset))) * 100).toFixed(0)));
+  };
 
   const kpis = [
-    { label: 'Active Builds', value: activeBuilds, sub: 'In Progress', color: '#10b981', bars: [40, 70, 55, 90, 60, 80, 45] },
-    { label: 'Shipping Velocity', value: shipped, sub: 'Shipped this month', color: '#f59e0b', bars: [30, 50, 80, 45, 70, 55, 90] },
-    { label: 'Blocked Projects', value: blocked, sub: 'Needs attention', color: '#ef4444', bars: [60, 40, 75, 35, 55, 45, 65], warn: true },
-    { label: 'Build Momentum', value: totalCommits, sub: 'Commits this week', color: '#3b82f6', bars: [50, 65, 80, 70, 95, 85, 100], streak: '16 day streak' },
+    { label: 'Active Builds', value: activeBuilds, sub: 'In Progress', color: '#10b981', bars: generateBars(activeBuilds, 1) },
+    { label: 'Shipping Velocity', value: shipped, sub: 'Total Shipped', color: '#f59e0b', bars: generateBars(shipped, 2) },
+    { label: 'Blocked Projects', value: blockedCount, sub: 'Needs attention', color: '#ef4444', bars: generateBars(blockedCount, 3), warn: true },
+    { label: 'Build Momentum', value: totalCommits, sub: 'Total Commits', color: '#3b82f6', bars: generateBars(totalCommits, 4), streak: maxStreak > 0 ? `${maxStreak} day streak` : null },
   ];
 
   return (
@@ -123,7 +146,7 @@ function PipelineKpis({ pipeline }) {
             <p className="text-[26px] font-bold leading-none" style={{ color: 'var(--th-text)' }}>{k.value}</p>
             <p className="text-[10px] mt-1" style={{ color: 'var(--th-text-dim)' }}>{k.sub}</p>
             {k.streak && (
-              <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold mt-1.5 px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600">
+              <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold mt-1.5 px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                 <Flame className="w-2.5 h-2.5" /> {k.streak}
               </span>
             )}
@@ -138,8 +161,7 @@ function PipelineKpis({ pipeline }) {
 /* ─── Stage-specific cards ─── */
 function IdeaCard({ project, onSelect }) {
   const col = getColor(project.title);
-  const impacts = ['High', 'Medium', 'Low'];
-  const impact = impacts[project.title?.length % 3];
+  const impact = project.priority === 'CRITICAL' || project.priority === 'HIGH' ? 'High' : project.priority === 'MEDIUM' ? 'Medium' : 'Low';
 
   return (
     <motion.div layout onClick={() => onSelect?.(project)}
@@ -173,12 +195,10 @@ function IdeaCard({ project, onSelect }) {
 
 function PlanningCard({ project, onSelect }) {
   const col = getColor(project.title);
-  const progress = project.metrics?.portfolioScore ? Math.round(project.metrics.portfolioScore * 10) : 70;
-  const tasks = project.tasks?.slice(0, 3) || [
-    { title: 'Architecture', status: 'done' },
-    { title: 'DB Schema', status: 'done' },
-    { title: 'API Design', status: 'todo' },
-  ];
+  const totalTasks = project.tasks?.length || 0;
+  const completedTasks = project.tasks?.filter(t => t.status === 'done').length || 0;
+  const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const tasks = project.tasks?.slice(0, 3) || [];
 
   return (
     <motion.div layout onClick={() => onSelect?.(project)}
@@ -204,17 +224,19 @@ function PlanningCard({ project, onSelect }) {
         </div>
       </div>
       <div className="space-y-1 mb-2">
-        {tasks.map((t, i) => (
+        {tasks.length > 0 ? tasks.map((t, i) => (
           <div key={i} className="flex items-center gap-1.5">
             {t.status === 'done'
               ? <Check className="w-3 h-3 text-emerald-500 shrink-0" />
               : <Circle className="w-3 h-3 shrink-0" style={{ color: 'var(--th-border)' }} />}
-            <span className="text-[10px]" style={{ color: t.status === 'done' ? 'var(--th-text-dim)' : 'var(--th-text)' }}>{t.title}</span>
+            <span className="text-[10px] truncate" style={{ color: t.status === 'done' ? 'var(--th-text-dim)' : 'var(--th-text)' }}>{t.title}</span>
           </div>
-        ))}
+        )) : (
+          <p className="text-[10px] italic" style={{ color: 'var(--th-text-dim)' }}>No tasks planned yet</p>
+        )}
       </div>
       <p className="text-[9px]" style={{ color: 'var(--th-text-dim)' }}>
-        Target: {project.deadline ? new Date(project.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Jun 15'}
+        Target: {project.deadline ? new Date(project.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'No deadline set'}
       </p>
     </motion.div>
   );
@@ -223,7 +245,15 @@ function PlanningCard({ project, onSelect }) {
 function BuildingCard({ project, onSelect, selected }) {
   const col = getColor(project.title);
   const m = project.metrics || {};
-  const nextTask = project.tasks?.find(t => t.status !== 'done')?.title || 'Implement subscription flow';
+  const tasks = project.tasks || [];
+  const nextTask = tasks.find(t => t.status !== 'done');
+  
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(t => t.status === 'done').length;
+  const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  
+  const blockersCount = tasks.filter(t => t.status === 'blocked' || t.priority === 'critical').length;
+  const isHighPriority = project.priority === 'CRITICAL' || project.priority === 'HIGH';
 
   return (
     <motion.div layout onClick={() => onSelect?.(project)}
@@ -232,61 +262,80 @@ function BuildingCard({ project, onSelect, selected }) {
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-[10px] shrink-0" style={{ background: col }}>
-            {project.title?.charAt(0)}
+            {project.title?.charAt(0)?.toUpperCase()}
           </div>
           <p className="text-[12px] font-bold truncate" style={{ color: 'var(--th-text)' }}>{project.title}</p>
         </div>
-        <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-red-50 text-red-500 shrink-0">High</span>
+        {isHighPriority && (
+          <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-red-50 text-red-500 shrink-0">High</span>
+        )}
       </div>
-      <div className="mb-2">
-        <p className="text-[9px] font-semibold uppercase tracking-wide mb-0.5" style={{ color: 'var(--th-text-dim)' }}>Current Milestone</p>
-        <p className="text-[11px] font-semibold" style={{ color: 'var(--th-text)' }}>Payments & Subscriptions</p>
-      </div>
-      <div className="flex items-start gap-1.5 mb-3">
+
+      <div className="flex items-start gap-1.5 mb-3 mt-3">
         <Circle className="w-3 h-3 mt-0.5 shrink-0" style={{ color: 'var(--th-border)' }} />
         <div>
           <p className="text-[9px]" style={{ color: 'var(--th-text-dim)' }}>Next Task</p>
-          <p className="text-[10px] font-medium" style={{ color: 'var(--th-text)' }}>{nextTask}</p>
+          <p className="text-[10px] font-medium leading-tight mt-0.5 line-clamp-2" style={{ color: 'var(--th-text)' }}>
+            {nextTask ? nextTask.title : 'No pending tasks'}
+          </p>
         </div>
       </div>
-      {[
-        { label: 'Backend', pct: 70, color: '#f59e0b' },
-        { label: 'Frontend', pct: 50, color: '#3b82f6' },
-        { label: 'Testing', pct: 0, color: '#8b5cf6' },
-      ].map(bar => (
-        <div key={bar.label} className="mb-1.5">
-          <div className="flex justify-between text-[9px] mb-0.5">
-            <span style={{ color: 'var(--th-text-dim)' }}>{bar.label}</span>
-            <span className="font-semibold" style={{ color: bar.color }}>{bar.pct}%</span>
-          </div>
-          <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--th-bg-secondary)' }}>
-            <div className="h-full rounded-full" style={{ width: `${bar.pct}%`, background: bar.color }} />
-          </div>
+
+      <div className="mb-1.5">
+        <div className="flex justify-between text-[9px] mb-0.5">
+          <span style={{ color: 'var(--th-text-dim)' }}>Task Progress</span>
+          <span className="font-semibold" style={{ color: '#f59e0b' }}>{progress}%</span>
         </div>
-      ))}
-      <div className="flex items-center gap-2 flex-wrap text-[8px] mt-2 pt-2" style={{ color: 'var(--th-text-dim)', borderTop: '1px solid var(--th-border)' }}>
-        <span className="flex items-center gap-0.5"><GitCommit className="w-2.5 h-2.5" />{m.commitCount || 24} commits</span>
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-bg-secondary)' }}>
+          <div className="h-full rounded-full transition-all" style={{ width: `${progress}%`, background: '#f59e0b' }} />
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 flex-wrap text-[8px] mt-3 pt-2" style={{ color: 'var(--th-text-dim)', borderTop: '1px solid var(--th-border)' }}>
+        <span className="flex items-center gap-0.5"><GitCommit className="w-2.5 h-2.5" />{m.commitCount || 0} commits</span>
         <span className="flex items-center gap-0.5"><Clock className="w-2.5 h-2.5" />{timeAgo(project.updatedAt)}</span>
         <span className="flex items-center gap-0.5"><GitBranch className="w-2.5 h-2.5" />main</span>
-        <span className="flex items-center gap-0.5"><Flame className="w-2.5 h-2.5" />{m.buildStreak || 14}d streak</span>
-        <span className="flex items-center gap-0.5 text-red-500"><AlertTriangle className="w-2.5 h-2.5" />1 blocker</span>
+        {(m.buildStreak > 0) && (
+          <span className="flex items-center gap-0.5"><Flame className="w-2.5 h-2.5" />{m.buildStreak}d streak</span>
+        )}
+        {blockersCount > 0 && (
+          <span className="flex items-center gap-0.5 text-red-500"><AlertTriangle className="w-2.5 h-2.5" />{blockersCount} blocker{blockersCount !== 1 && 's'}</span>
+        )}
       </div>
-      <div className="flex -space-x-1.5 mt-2">
-        {['#8b5cf6', '#10b981', '#3b82f6'].map(c => (
-          <div key={c} className="w-5 h-5 rounded-full border-2 flex items-center justify-center text-[7px] font-bold text-white"
-            style={{ background: c, borderColor: 'var(--th-card-solid)' }}>S</div>
-        ))}
-      </div>
+      
+      {project.stack?.length > 0 && (
+        <div className="flex -space-x-1.5 mt-2">
+          {project.stack.slice(0, 3).map(s => (
+            <div key={s} className="w-5 h-5 rounded-full border-2 flex items-center justify-center text-[7px] font-bold text-white shrink-0"
+              style={{ background: getColor(s), borderColor: 'var(--th-card-solid)' }}>
+              {s.charAt(0)}
+            </div>
+          ))}
+          {project.stack.length > 3 && (
+            <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center text-[7px] font-bold text-white shrink-0"
+              style={{ background: 'var(--th-border)', borderColor: 'var(--th-card-solid)' }}>
+              +{project.stack.length - 3}
+            </div>
+          )}
+        </div>
+      )}
     </motion.div>
   );
 }
 
 function TestingCard({ project, onSelect }) {
   const col = getColor(project.title);
+  const tasks = project.tasks || [];
+  const bugTasks = tasks.filter(t => t.title.toLowerCase().includes('bug') || t.title.toLowerCase().includes('fix'));
+  const criticalBugs = bugTasks.filter(t => t.priority === 'critical' || t.priority === 'high').length;
+  const isHighPriority = project.priority === 'CRITICAL' || project.priority === 'HIGH';
+
+  const pendingTasks = tasks.filter(t => t.status !== 'done').length;
+  const allCriticalDone = tasks.filter(t => t.priority === 'critical' || t.priority === 'high').every(t => t.status === 'done');
+
   const checks = [
-    { label: 'Test Cases', pct: 75 },
-    { label: 'Coverage', pct: 62 },
-    { label: 'Deployment Ready', pct: 0, text: 'No' },
+    { label: 'Tasks Remaining', text: String(pendingTasks), pct: pendingTasks > 0 ? 50 : 100 },
+    { label: 'Critical Tasks Done', text: allCriticalDone ? 'Yes' : 'No', pct: allCriticalDone ? 100 : 0 },
   ];
 
   return (
@@ -296,15 +345,17 @@ function TestingCard({ project, onSelect }) {
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-[10px] shrink-0" style={{ background: col }}>
-            {project.title?.charAt(0)}
+            {project.title?.charAt(0)?.toUpperCase()}
           </div>
           <p className="text-[12px] font-bold truncate" style={{ color: 'var(--th-text)' }}>{project.title}</p>
         </div>
-        <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 shrink-0">Low</span>
+        {isHighPriority && (
+          <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-red-50 text-red-500 shrink-0">High</span>
+        )}
       </div>
       <div className="flex items-center gap-3 mb-2 text-[10px]">
-        <span style={{ color: 'var(--th-text-dim)' }}>Bugs: <strong style={{ color: 'var(--th-text)' }}>4</strong> total</span>
-        <span className="text-red-500 font-semibold">1 Critical</span>
+        <span style={{ color: 'var(--th-text-dim)' }}>Bugs/Fixes: <strong style={{ color: 'var(--th-text)' }}>{bugTasks.length}</strong> total</span>
+        {criticalBugs > 0 && <span className="text-red-500 font-semibold">{criticalBugs} Critical</span>}
       </div>
       <div className="space-y-1.5">
         {checks.map(c => (
@@ -327,11 +378,12 @@ function TestingCard({ project, onSelect }) {
 
 function ShippedCard({ project, onSelect }) {
   const col = getColor(project.title);
-  const scoreLabel = formatPortfolioScore(project.metrics?.portfolioScore, 9.1);
+  const scoreLabel = formatPortfolioScore(project.metrics?.portfolioScore, 0);
   const scoreNum = parseFloat(scoreLabel);
   const ringR = 15;
   const ringC = 2 * Math.PI * ringR;
   const ringLen = (scoreNum / 10) * ringC;
+  const commitCount = project.metrics?.commitCount || 0;
 
   return (
     <motion.div layout onClick={() => onSelect?.(project)}
@@ -340,16 +392,15 @@ function ShippedCard({ project, onSelect }) {
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-[10px] shrink-0" style={{ background: col }}>
-            {project.title?.charAt(0)}
+            {project.title?.charAt(0)?.toUpperCase()}
           </div>
           <p className="text-[12px] font-bold truncate" style={{ color: 'var(--th-text)' }}>{project.title}</p>
         </div>
         <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 shrink-0">Live</span>
       </div>
       <div className="space-y-0.5 mb-2 text-[10px]" style={{ color: 'var(--th-text-dim)' }}>
-        <p>Launched: {project.updatedAt ? new Date(project.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'May 1, 2025'}</p>
-        <p>Version: v1.0.0</p>
-        <p>{project.metrics?.commitCount || 156} commits</p>
+        <p>Launched: {project.updatedAt ? new Date(project.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Unknown'}</p>
+        <p>{commitCount} commits</p>
       </div>
       <div className="flex items-center gap-2.5 pt-2 min-w-0 overflow-hidden" style={{ borderTop: '1px solid var(--th-border)' }}>
         <div className="relative w-10 h-10 shrink-0 overflow-hidden">
@@ -470,9 +521,31 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
     };
   }, [project, handleEscape]);
 
+  // Hooks for AI integrations
+  const { data: suggestionsData, refetch, isFetching } = useBuildSuggestions(project?.id);
+  const createTask = useCreateTask();
+  const analyze = useAnalyzeProject();
+  const [createdTasks, setCreatedTasks] = useState(new Set());
+  const aiTasks = suggestionsData?.data?.suggestions || [];
+
+  const handleCreateTask = async (task) => {
+    if (createdTasks.has(task.title)) return;
+    try {
+      await createTask.mutateAsync({ projectId: project.id, data: { title: task.title, description: task.description } });
+      setCreatedTasks(prev => new Set(prev).add(task.title));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const col = getColor(project?.title);
-  const scoreLabel = formatPortfolioScore(project?.metrics?.portfolioScore, 8.6);
-  const score = parseFloat(scoreLabel);
+  
+  // Real intelligence scores
+  const int = project?.intelligence || {};
+  const avgScore = [int.architectureScore, int.scalabilityScore, int.recruiterScore, int.resumeScore].filter(Boolean);
+  const portfolioScore = avgScore.length ? (avgScore.reduce((a,b)=>a+b,0)/avgScore.length).toFixed(1) : (project?.metrics?.portfolioScore ? (project.metrics.portfolioScore / 10).toFixed(1) : '0.0');
+  
+  const score = parseFloat(portfolioScore);
   const scoreRingR = 15;
   const scoreRingC = 2 * Math.PI * scoreRingR;
   const scoreRingLen = (score / 10) * scoreRingC;
@@ -491,23 +564,16 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
     { key: 'doc', Icon: FileText },
   ];
 
-  const aiTasks = [
-    'Add webhook retry with exponential backoff',
-    'Implement subscription tier management',
-    'Set up Stripe webhook signature validation',
-  ];
-
-  const improvements = [
-    { text: 'Add Redis caching layer', priority: 'High' },
-    { text: 'Write integration tests for payments', priority: 'Medium' },
-    { text: 'Add API rate limiting', priority: 'Medium' },
-  ];
+  const improvements = int.strengths ? [
+    ...(int.missingSkills || []).map(s => ({ text: `Add ${s}`, priority: 'High' })),
+    ...(int.weaknesses || []).map(w => ({ text: w, priority: 'Medium' }))
+  ].slice(0, 4) : [];
 
   const metrics = [
-    { label: 'Scalability', value: 8.5 },
-    { label: 'Testing', value: 7.8 },
-    { label: 'Code Quality', value: 8.2 },
-    { label: 'Documentation', value: 8.0 },
+    { label: 'Scalability', value: int.scalabilityScore || 0 },
+    { label: 'Architecture', value: int.architectureScore || 0 },
+    { label: 'Resume', value: int.resumeScore || 0 },
+    { label: 'Recruiter', value: int.recruiterScore || 0 },
   ];
 
   return createPortal(
@@ -637,44 +703,53 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
               <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>AI Builder</p>
             </div>
             <div className="space-y-2">
-              {aiTasks.map((task, i) => (
-                <label key={i} className="flex items-start gap-2 p-2 rounded-lg cursor-pointer" style={{ background: 'var(--th-bg-secondary)' }}>
-                  <input type="checkbox" className="mt-0.5 rounded" />
-                  <span className="text-[10px] leading-relaxed" style={{ color: 'var(--th-text-secondary)' }}>{task}</span>
+              {isFetching && aiTasks.length === 0 ? (
+                <div className="text-[10px] text-center py-4 italic" style={{ color: 'var(--th-text-dim)' }}>Consulting AI Architect...</div>
+              ) : aiTasks.map((task, i) => (
+                <label key={i} className={clsx("flex items-start gap-2 p-2 rounded-lg cursor-pointer transition-opacity", createdTasks.has(task.title) && "opacity-50")} style={{ background: 'var(--th-bg-secondary)' }}>
+                  <input 
+                    type="checkbox" 
+                    className="mt-0.5 rounded" 
+                    checked={createdTasks.has(task.title)} 
+                    onChange={() => handleCreateTask(task)} 
+                    disabled={createdTasks.has(task.title) || createTask.isPending} 
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-semibold leading-relaxed" style={{ color: 'var(--th-text)' }}>{task.title}</span>
+                    <span className="text-[9px] leading-relaxed" style={{ color: 'var(--th-text-secondary)' }}>{task.description}</span>
+                  </div>
                 </label>
               ))}
             </div>
-            <button className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg transition-colors hover:opacity-90"
+            <button 
+              onClick={() => refetch()} 
+              disabled={isFetching} 
+              className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg transition-colors hover:opacity-90 disabled:opacity-50"
               style={{ background: 'rgba(var(--th-primary-rgb), 0.1)', color: 'var(--th-primary)' }}>
-              Generate More Ideas
+              {isFetching ? 'Generating...' : 'Generate More Ideas'}
             </button>
           </div>
 
           <div className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
             <div className="flex items-center gap-1.5 mb-2">
               <Briefcase className="w-3.5 h-3.5" style={{ color: 'var(--th-primary)' }} />
-              <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>Job Sync</p>
+              <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>AI Analysis Feedback</p>
             </div>
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>Backend Engineer Role</p>
-              <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600">Active</span>
-            </div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-border)' }}>
-                <div className="h-full rounded-full bg-emerald-500" style={{ width: '82%' }} />
-              </div>
-              <span className="text-[10px] font-bold text-emerald-600">82%</span>
-            </div>
-            <p className="text-[9px] mb-1.5" style={{ color: 'var(--th-text-dim)' }}>Suggested improvements</p>
-            {improvements.map((imp, i) => (
-              <div key={i} className="flex items-center gap-1.5 mb-1">
-                {imp.priority === 'High'
-                  ? <ArrowUp className="w-3 h-3 text-red-500 shrink-0" />
-                  : <ArrowDown className="w-3 h-3 text-amber-500 shrink-0" />}
-                <span className="text-[10px] flex-1" style={{ color: 'var(--th-text-secondary)' }}>{imp.text}</span>
-                <span className={clsx('text-[8px] font-bold', imp.priority === 'High' ? 'text-red-500' : 'text-amber-500')}>{imp.priority}</span>
-              </div>
-            ))}
+            {improvements.length > 0 ? (
+              <>
+                <p className="text-[9px] mb-1.5" style={{ color: 'var(--th-text-dim)' }}>Key Takeaways & Gaps</p>
+                {improvements.map((imp, i) => (
+                  <div key={i} className="flex items-start gap-1.5 mb-1.5">
+                    {imp.priority === 'High'
+                      ? <ArrowDown className="w-3 h-3 text-red-500 shrink-0 mt-0.5" />
+                      : <ArrowUp className="w-3 h-3 text-emerald-500 shrink-0 mt-0.5" />}
+                    <span className="text-[10px] flex-1 leading-tight" style={{ color: 'var(--th-text-secondary)' }}>{imp.text}</span>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <p className="text-[10px] text-center italic py-3" style={{ color: 'var(--th-text-dim)' }}>Run Project Analysis to see strengths and gaps.</p>
+            )}
           </div>
 
           <div className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
@@ -690,23 +765,33 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
                     strokeDasharray={`${scoreRingLen} ${scoreRingC - scoreRingLen}`} strokeLinecap="round" />
                 </svg>
                 <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold tabular-nums" style={{ color: 'var(--th-text)' }}>
-                  {scoreLabel}
+                  {score.toFixed(1)}
                 </span>
               </div>
               <div>
-                <p className="text-[11px] font-bold tabular-nums" style={{ color: 'var(--th-text)' }}>{scoreLabel}/10</p>
+                <p className="text-[11px] font-bold tabular-nums" style={{ color: 'var(--th-text)' }}>{score.toFixed(1)}/10</p>
                 <p className="text-[9px]" style={{ color: 'var(--th-text-dim)' }}>Great progress! Keep building.</p>
               </div>
             </div>
-            {metrics.map(m => (
-              <div key={m.label} className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px]" style={{ color: 'var(--th-text-secondary)' }}>{m.label}</span>
-                <span className="text-[10px] font-bold tabular-nums" style={{ color: 'var(--th-text)' }}>{m.value}/10</span>
-              </div>
-            ))}
-            <button className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg text-white transition-colors hover:opacity-90"
+            <div className="space-y-2 mb-3">
+              {metrics.map(m => (
+                <div key={m.label}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[9px] font-semibold" style={{ color: 'var(--th-text-dim)' }}>{m.label}</span>
+                    <span className="text-[9px] font-bold" style={{ color: 'var(--th-text)' }}>{m.value.toFixed(1)}</span>
+                  </div>
+                  <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--th-border)' }}>
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${(m.value / 10) * 100}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button 
+              onClick={() => analyze.mutate({ projectId: project.id })}
+              disabled={analyze.isPending}
+              className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg text-white transition-colors hover:opacity-90 disabled:opacity-50"
               style={{ background: 'var(--th-primary)' }}>
-              Improve with AI
+              {analyze.isPending ? 'Analyzing Project...' : 'Improve with AI'}
             </button>
           </div>
         </div>
@@ -720,13 +805,24 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving }) {
 
 /* ─── Main Pipeline Tab ─── */
 export default function PipelineTab() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const targetId = searchParams.get('id');
+
   const { data: pipelineData } = usePipeline();
   const moveMutation = useMovePipelineProject();
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState(null);
   const [dragOverStage, setDragOverStage] = useState(null);
 
   const pipeline = pipelineData?.data?.pipeline || pipelineData?.pipeline || {};
+
+  const selected = useMemo(() => {
+    if (!targetId) return null;
+    for (const stageKey in pipeline) {
+      const found = pipeline[stageKey]?.find(p => p.id === targetId);
+      if (found) return found;
+    }
+    return null;
+  }, [targetId, pipeline]);
 
   const filteredPipeline = useMemo(() => {
     const result = {};
@@ -738,8 +834,13 @@ export default function PipelineTab() {
     return result;
   }, [pipeline, search]);
 
-  const openProject = (proj) => setSelected(proj);
-  const closeDrawer = () => setSelected(null);
+  const openProject = (proj) => {
+    setSearchParams(prev => { prev.set('id', proj.id); return prev; }, { replace: true });
+  };
+  
+  const closeDrawer = () => {
+    setSearchParams(prev => { prev.delete('id'); return prev; }, { replace: true });
+  };
 
   const handleMoveStage = useCallback((projectId, newStatus) => {
     if (!projectId || !newStatus) return;
@@ -753,18 +854,8 @@ export default function PipelineTab() {
     }
     if (currentStatus === newStatus) return;
 
-    moveMutation.mutate(
-      { projectId, newStatus },
-      {
-        onSuccess: (res) => {
-          const updated = res?.data?.project;
-          if (updated && selected?.id === updated.id) {
-            setSelected(updated);
-          }
-        },
-      }
-    );
-  }, [moveMutation, pipeline, selected]);
+    moveMutation.mutate({ projectId, newStatus });
+  }, [moveMutation, pipeline]);
 
   const handleColumnDragOver = useCallback((e, stageKey) => {
     e.preventDefault();

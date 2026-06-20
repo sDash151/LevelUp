@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Lightbulb, Bug, Code, Building2, Target, Search, ChevronDown, 
   ArrowRight, MoreVertical, Sparkles, Database, Zap, Rocket, Cloud
 } from 'lucide-react';
 import { useProjects } from '../hooks/useProjects';
+import { Select } from '../../../design-system/components/Select';
 import clsx from 'clsx';
 
 const SUB_TABS = [
@@ -44,12 +46,16 @@ function KpiCards({ learnings }) {
   const architecture = learnings.filter(l => l.type === 'architecture').length;
   const avgImpact = total > 0 ? (learnings.reduce((s, l) => s + (l.impactScore || 5), 0) / total).toFixed(1) : '0.0';
 
+  const thisMonth = new Date();
+  thisMonth.setDate(1);
+  const recentLearnings = learnings.filter(l => new Date(l.createdAt) >= thisMonth).length;
+
   const kpis = [
-    { label: 'Total Learnings', value: total, trend: '+18 this month', icon: Lightbulb, color: '#f59e0b', bars: [40, 70, 55, 90, 60, 80, 45, 100, 60] },
-    { label: 'Bugs Solved', value: bugs, trend: '+7 this month', icon: Bug, color: '#10b981', bars: [30, 50, 80, 45, 70, 55, 90, 40, 80] },
-    { label: 'Patterns Created', value: patterns, trend: '+5 this month', icon: Code, color: '#8b5cf6', bars: [60, 40, 75, 35, 55, 45, 65, 85, 50] },
-    { label: 'Architecture Decisions', value: architecture, trend: '+3 this month', icon: Building2, color: '#3b82f6', bars: [50, 65, 80, 70, 95, 85, 100, 70, 90] },
-    { label: 'Avg. Impact Score', value: `${avgImpact}/10`, trend: '+0.7 this month', icon: Target, color: '#f59e0b', bars: [40, 70, 55, 90, 60, 80, 45, 100, 60] },
+    { label: 'Total Learnings', value: total, trend: `+${recentLearnings} this month`, icon: Lightbulb, color: '#f59e0b', bars: Array.from({length: 9}, () => Math.random() * 60 + 40) },
+    { label: 'Bugs Solved', value: bugs, trend: '', icon: Bug, color: '#10b981', bars: Array.from({length: 9}, () => Math.random() * 60 + 40) },
+    { label: 'Patterns Created', value: patterns, trend: '', icon: Code, color: '#8b5cf6', bars: Array.from({length: 9}, () => Math.random() * 60 + 40) },
+    { label: 'Architecture Decisions', value: architecture, trend: '', icon: Building2, color: '#3b82f6', bars: Array.from({length: 9}, () => Math.random() * 60 + 40) },
+    { label: 'Avg. Impact Score', value: `${avgImpact}/10`, trend: '', icon: Target, color: '#f59e0b', bars: Array.from({length: 9}, () => Math.random() * 60 + 40) },
   ];
 
   return (
@@ -164,37 +170,48 @@ function LearningCard({ learning, index }) {
 }
 
 /* ─── AI Insights Panel (Horizontal) ─── */
-function AIInsightsPanel() {
-  const growthAreas = [
-    { label: 'Backend', pct: 92, color: '#10b981' },
-    { label: 'DevOps', pct: 74, color: '#3b82f6' },
-    { label: 'Database', pct: 68, color: '#8b5cf6' },
-    { label: 'Testing', pct: 45, color: '#f59e0b' },
-    { label: 'Frontend', pct: 38, color: '#ef4444' },
-  ];
+function AIInsightsPanel({ learnings }) {
+  const [, setSearchParams] = useSearchParams();
 
-  const recentLearnings = [
-    { title: 'Queue retries for failed webhooks', project: 'EventPulse', icon: Lightbulb, color: '#10b981' },
-    { title: 'Redis rate limiting for auth endpoints', project: 'Portfolio', icon: Zap, color: '#3b82f6' },
-    { title: 'Prisma transaction for payment flow', project: 'EventPulse', icon: Database, color: '#f59e0b' },
-  ];
+  const tagCounts = {};
+  learnings.forEach(l => {
+    (l.tags || []).forEach(t => {
+      tagCounts[t] = (tagCounts[t] || 0) + 1;
+    });
+  });
+  
+  const knowledgeAreas = Object.entries(tagCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([label, count]) => ({ label, count }))
+    .slice(0, 7);
 
-  const knowledgeAreas = [
-    { label: 'Backend', count: 42 },
-    { label: 'Database', count: 23 },
-    { label: 'DevOps', count: 20 },
-    { label: 'Performance', count: 15 },
-    { label: 'Security', count: 12 },
-    { label: 'Testing', count: 10 },
-    { label: 'Frontend', count: 6 },
-  ];
+  const totalTags = Object.values(tagCounts).reduce((a, b) => a + b, 0);
 
+  const growthAreas = knowledgeAreas.slice(0, 5).map((k, i) => ({
+    label: k.label,
+    pct: totalTags > 0 ? Math.round((k.count / totalTags) * 200) : 0, 
+    color: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'][i % 5]
+  })).map(g => ({ ...g, pct: g.pct > 100 ? 100 : g.pct }));
+
+  const recentLearnings = learnings.slice(0, 3).map(l => ({
+    title: l.title,
+    project: l.project?.title || 'Unknown',
+    icon: TYPE_COLORS[l.type]?.icon || Lightbulb,
+    color: TYPE_COLORS[l.type]?.text || '#10b981'
+  }));
+
+  const topTag = knowledgeAreas[0]?.label || 'development';
+  
   return (
     <div className="mb-6 sm:mb-8 p-4 sm:p-6 rounded-2xl shadow-sm" style={{ border: '1px solid var(--th-border)', background: 'var(--th-card)' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <h3 className="text-[14px] sm:text-[15px] font-bold" style={{ color: 'var(--th-text)' }}>AI Insights</h3>
-        <button className="flex items-center gap-1 text-[11px] font-semibold hover:opacity-70" style={{ color: 'var(--th-text-dim)' }}>
+        <button 
+          onClick={() => setSearchParams({ tab: 'intelligence' })}
+          className="flex items-center gap-1 text-[11px] font-semibold hover:opacity-70" 
+          style={{ color: 'var(--th-text-dim)' }}
+        >
           View Full Report <ArrowRight className="w-3 h-3" />
         </button>
       </div>
@@ -207,7 +224,7 @@ function AIInsightsPanel() {
             <p className="text-[12px] font-bold text-amber-900">Top Insight</p>
           </div>
           <p className="text-[13px] leading-relaxed text-amber-900/80 relative z-10 font-medium">
-            You're solving a lot of reliability issues.<br className="hidden sm:block" /> Consider creating reusable patterns for queues and retries.
+            You're exploring a lot of <strong>{topTag}</strong> topics.<br className="hidden sm:block" /> Consider creating reusable patterns or adding them to your core stack.
           </p>
           <Sparkles className="absolute right-4 bottom-4 w-10 h-10 text-amber-400 opacity-40" />
         </div>
@@ -216,7 +233,7 @@ function AIInsightsPanel() {
         <div>
           <h4 className="text-[12px] sm:text-[13px] font-bold mb-3 sm:mb-4" style={{ color: 'var(--th-text)' }}>Your Growth Areas</h4>
           <div className="space-y-3">
-            {growthAreas.map(g => (
+            {growthAreas.length > 0 ? growthAreas.map(g => (
               <div key={g.label} className="relative">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[12px] font-semibold" style={{ color: 'var(--th-text)' }}>{g.label}</span>
@@ -226,7 +243,7 @@ function AIInsightsPanel() {
                   <div className="h-full rounded-full" style={{ width: `${g.pct}%`, background: g.color }} />
                 </div>
               </div>
-            ))}
+            )) : <p className="text-[11px] italic" style={{ color: 'var(--th-text-dim)' }}>No growth data yet</p>}
           </div>
         </div>
 
@@ -234,22 +251,24 @@ function AIInsightsPanel() {
         <div>
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <h4 className="text-[12px] sm:text-[13px] font-bold" style={{ color: 'var(--th-text)' }}>Recently Applied</h4>
-            <button className="text-[11px] font-semibold hover:opacity-70" style={{ color: 'var(--th-text-dim)' }}>View All</button>
           </div>
           <div className="space-y-4">
-            {recentLearnings.map(l => (
-              <div key={l.title} className="flex items-start justify-between gap-3">
-                <div className="flex items-start gap-3 min-w-0">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center mt-0.5 shrink-0" style={{ background: `${l.color}15` }}>
-                    <l.icon className="w-3 h-3" style={{ color: l.color }} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[12px] font-bold truncate leading-tight mb-0.5" style={{ color: 'var(--th-text)' }}>{l.title}</p>
-                    <p className="text-[10px] font-semibold" style={{ color: 'var(--th-text-dim)' }}>{l.project}</p>
+            {recentLearnings.length > 0 ? recentLearnings.map((l, i) => {
+              const IconComp = l.icon;
+              return (
+                <div key={i} className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3 min-w-0">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center mt-0.5 shrink-0" style={{ background: `${l.color}15` }}>
+                      <IconComp className="w-3 h-3" style={{ color: l.color }} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[12px] font-bold truncate leading-tight mb-0.5" style={{ color: 'var(--th-text)' }}>{l.title}</p>
+                      <p className="text-[10px] font-semibold" style={{ color: 'var(--th-text-dim)' }}>{l.project}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            }) : <p className="text-[11px] italic" style={{ color: 'var(--th-text-dim)' }}>No recent learnings</p>}
           </div>
         </div>
 
@@ -257,12 +276,12 @@ function AIInsightsPanel() {
         <div>
           <h4 className="text-[12px] sm:text-[13px] font-bold mb-3 sm:mb-4" style={{ color: 'var(--th-text)' }}>Top Knowledge Areas</h4>
           <div className="flex flex-wrap gap-2 sm:gap-2.5">
-            {knowledgeAreas.map(k => (
+            {knowledgeAreas.length > 0 ? knowledgeAreas.map(k => (
               <div key={k.label} className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all hover:bg-black/[0.02]" style={{ border: '1px solid var(--th-border)', background: 'var(--th-bg-secondary)' }}>
                 <span className="text-[11px] font-semibold" style={{ color: 'var(--th-text)' }}>{k.label}</span>
                 <span className="text-[10px] font-bold" style={{ color: 'var(--th-text-dim)' }}>{k.count}</span>
               </div>
-            ))}
+            )) : <p className="text-[11px] italic" style={{ color: 'var(--th-text-dim)' }}>No knowledge areas yet</p>}
           </div>
         </div>
       </div>
@@ -272,8 +291,13 @@ function AIInsightsPanel() {
 
 /* ─── Main Learnings Tab ─── */
 export default function LearningsTab() {
-  const [subTab, setSubTab] = useState('learning'); // Default to 'learning' as per mock
+  const [subTab, setSubTab] = useState('learning'); 
   const [search, setSearch] = useState('');
+  const [projectIdFilter, setProjectIdFilter] = useState('all');
+  const [tagFilter, setTagFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('latest');
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
 
   const { data: projectsData } = useProjects({});
   const projects = projectsData?.data || [];
@@ -282,13 +306,35 @@ export default function LearningsTab() {
     (p.learnings || []).map(l => ({ ...l, project: p }))
   );
 
+  const allTags = Array.from(new Set(allLearnings.flatMap(l => l.tags || []))).sort();
+
   let learnings = subTab === 'all' ? allLearnings : allLearnings.filter(l => l.type === subTab);
+  
+  if (projectIdFilter !== 'all') {
+    learnings = learnings.filter(l => l.project?.id === projectIdFilter);
+  }
+  
+  if (tagFilter !== 'all') {
+    learnings = learnings.filter(l => (l.tags || []).includes(tagFilter));
+  }
+
   if (search) learnings = learnings.filter(l =>
     l.title?.toLowerCase().includes(search.toLowerCase()) ||
     l.description?.toLowerCase().includes(search.toLowerCase())
   );
 
-  learnings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  if (sortBy === 'latest') {
+    learnings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  } else if (sortBy === 'impact') {
+    learnings.sort((a, b) => (b.impactScore || 0) - (a.impactScore || 0));
+  }
+
+  const totalPages = Math.ceil(learnings.length / itemsPerPage) || 1;
+  const paginatedLearnings = learnings.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  const projectOptions = [{ value: 'all', label: 'All Projects' }, ...projects.map(p => ({ value: p.id, label: p.title }))];
+  const tagOptions = [{ value: 'all', label: 'All Tags' }, ...allTags.map(t => ({ value: t, label: t }))];
+  const sortOptions = [{ value: 'latest', label: 'Latest First' }, { value: 'impact', label: 'Highest Impact' }];
 
   return (
     <div className="flex flex-col">
@@ -296,7 +342,7 @@ export default function LearningsTab() {
       <KpiCards learnings={allLearnings} />
 
       {/* Horizontal AI Insights Panel */}
-      <AIInsightsPanel />
+      <AIInsightsPanel learnings={allLearnings} />
 
       {/* Underlined Sub-Tabs */}
       <div className="flex items-center gap-6 sm:gap-10 mb-6 sm:mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide" style={{ borderBottom: '1px solid var(--th-border)' }}>
@@ -324,41 +370,46 @@ export default function LearningsTab() {
       {/* Filters Row */}
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full xl:w-auto flex-wrap">
-          <div className="relative w-full sm:w-auto">
+          <div className="relative w-full sm:w-auto z-10">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
             <input
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={e => { setSearch(e.target.value); setPage(1); }}
               placeholder="Search learnings..."
               className="pl-10 pr-4 py-2.5 rounded-xl text-[13px] font-medium w-full sm:w-[260px] outline-none"
               style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text)', border: '1px solid var(--th-border)' }}
             />
           </div>
           
-          <div className="grid grid-cols-2 sm:flex sm:flex-row gap-3 w-full sm:w-auto">
-            {['All Projects', 'All Categories', 'All Tags'].map(filter => (
-              <button key={filter} className="flex items-center justify-center sm:justify-start gap-2 px-4 py-2.5 rounded-xl text-[12px] sm:text-[13px] font-semibold w-full sm:w-auto"
-                style={{ background: 'var(--th-card)', color: 'var(--th-text)', border: '1px solid var(--th-border)' }}>
-                {filter}
-                <ChevronDown className="w-4 h-4 ml-1 shrink-0" style={{ color: 'var(--th-text-dim)' }} />
-              </button>
-            ))}
+          <div className="flex sm:flex-row gap-3 w-full sm:w-auto z-20">
+            <Select 
+              options={projectOptions} 
+              value={projectIdFilter} 
+              onChange={val => { setProjectIdFilter(val); setPage(1); }} 
+              className="w-full sm:w-40" 
+            />
+            <Select 
+              options={tagOptions} 
+              value={tagFilter} 
+              onChange={val => { setTagFilter(val); setPage(1); }} 
+              className="w-full sm:w-36" 
+            />
           </div>
         </div>
 
-        <button className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold shrink-0 w-full xl:w-auto mt-2 xl:mt-0"
-          style={{ background: 'var(--th-card)', color: 'var(--th-text)', border: '1px solid var(--th-border)' }}>
-          Latest First
-          <span className="flex flex-col -space-y-1.5 ml-1 text-slate-400">
-            <span className="text-[10px]">↑</span>
-            <span className="text-[10px]">↓</span>
-          </span>
-        </button>
+        <div className="w-full sm:w-40 xl:w-auto mt-2 xl:mt-0 z-20">
+          <Select 
+            options={sortOptions} 
+            value={sortBy} 
+            onChange={val => { setSortBy(val); setPage(1); }} 
+            className="w-full xl:w-40" 
+          />
+        </div>
       </div>
 
       {/* Learnings List Container */}
-      <div className="rounded-2xl overflow-hidden shadow-sm" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-        {learnings.length === 0 ? (
+      <div className="rounded-2xl overflow-hidden shadow-sm z-0" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+        {paginatedLearnings.length === 0 ? (
           <div className="text-center py-20">
             <Lightbulb className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--th-text-dim)' }} />
             <p className="text-[15px] font-bold" style={{ color: 'var(--th-text)' }}>No learnings found</p>
@@ -366,20 +417,32 @@ export default function LearningsTab() {
           </div>
         ) : (
           <div className="flex flex-col">
-            {learnings.map((l, i) => <LearningCard key={l.id} learning={l} index={i} />)}
+            {paginatedLearnings.map((l, i) => <LearningCard key={l.id} learning={l} index={i} />)}
           </div>
         )}
         
-        {/* Pagination Mockup */}
-        {learnings.length > 0 && (
+        {/* Pagination */}
+        {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 py-5" style={{ background: 'var(--th-bg)' }}>
-            <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[12px] font-semibold" style={{ color: 'var(--th-text-dim)' }}>{'<'}</button>
-            <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[13px] font-bold bg-amber-50 text-amber-600">1</button>
-            <button className="hidden sm:flex w-8 h-8 rounded-lg items-center justify-center text-[13px] font-semibold transition-colors" style={{ color: 'var(--th-text)' }} onMouseOver={e => e.currentTarget.style.background='var(--th-bg-secondary)'} onMouseOut={e => e.currentTarget.style.background='transparent'}>2</button>
-            <button className="hidden sm:flex w-8 h-8 rounded-lg items-center justify-center text-[13px] font-semibold transition-colors" style={{ color: 'var(--th-text)' }} onMouseOver={e => e.currentTarget.style.background='var(--th-bg-secondary)'} onMouseOut={e => e.currentTarget.style.background='transparent'}>3</button>
-            <span className="text-[13px] font-semibold mx-1" style={{ color: 'var(--th-text-dim)' }}>...</span>
-            <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[13px] font-semibold transition-colors" style={{ color: 'var(--th-text)' }} onMouseOver={e => e.currentTarget.style.background='var(--th-bg-secondary)'} onMouseOut={e => e.currentTarget.style.background='transparent'}>9</button>
-            <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[12px] font-semibold" style={{ color: 'var(--th-text-dim)' }}>{'>'}</button>
+            <button 
+              disabled={page === 1}
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-[12px] font-semibold disabled:opacity-50" 
+              style={{ color: 'var(--th-text-dim)' }}
+            >
+              {'<'}
+            </button>
+            <span className="text-[13px] font-semibold mx-1" style={{ color: 'var(--th-text-dim)' }}>
+              Page {page} of {totalPages}
+            </span>
+            <button 
+              disabled={page === totalPages}
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-[12px] font-semibold disabled:opacity-50" 
+              style={{ color: 'var(--th-text-dim)' }}
+            >
+              {'>'}
+            </button>
           </div>
         )}
       </div>

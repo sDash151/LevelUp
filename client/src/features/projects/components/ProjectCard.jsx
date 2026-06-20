@@ -37,10 +37,15 @@ export function ProjectCard({ project, onClick, index = 0 }) {
   const color = getColor(project.title);
   const stack = project.stack || [];
   const m = project.metrics || {};
+  
+  const tasks = project.tasks || [];
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(t => t.status === 'done').length;
+  
   const progress = project.status === 'SHIPPED'
     ? 100
-    : m.portfolioScore
-      ? Math.round(m.portfolioScore * 10)
+    : totalTasks > 0
+      ? Math.round((completedTasks / totalTasks) * 100)
       : 0;
   const score = m.portfolioScore || m.qualityScore || 0;
   const scoreDisplay = score > 0 ? score.toFixed(1) : null;
@@ -112,7 +117,7 @@ export function ProjectCard({ project, onClick, index = 0 }) {
         </span>
         <span className="flex items-center gap-0.5">
           <GitBranch className="w-3 h-3" />
-          main
+          {project.defaultBranch || 'main'}
         </span>
       </div>
 
@@ -131,12 +136,15 @@ export function ProjectCard({ project, onClick, index = 0 }) {
       <div className="flex items-center justify-between pt-2.5" style={{ borderTop: '1px solid var(--th-border)' }}>
         <div className="flex items-center gap-2">
           {(project.repoUrl || project.githubRepoId) && (
-            <Github className="w-3.5 h-3.5" style={{ color: 'var(--th-text-dim)' }} />
+            <button onClick={(e) => { e.stopPropagation(); if (project.repoUrl) window.open(project.repoUrl, '_blank'); }}>
+              <Github className="w-3.5 h-3.5 hover:opacity-70 transition-opacity" style={{ color: 'var(--th-text-dim)' }} />
+            </button>
           )}
           {project.liveUrl && (
-            <ExternalLink className="w-3.5 h-3.5" style={{ color: 'var(--th-text-dim)' }} />
+            <button onClick={(e) => { e.stopPropagation(); window.open(project.liveUrl, '_blank'); }}>
+              <ExternalLink className="w-3.5 h-3.5 hover:opacity-70 transition-opacity" style={{ color: 'var(--th-text-dim)' }} />
+            </button>
           )}
-          <Globe className="w-3.5 h-3.5" style={{ color: 'var(--th-text-dim)' }} />
         </div>
         {scoreDisplay && sc && (
           <span

@@ -70,7 +70,7 @@ export function ProjectForm({ isOpen, onClose }) {
         {step === 'choose' && (
           <motion.div key="choose" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <h2 className="text-lg font-bold mb-1" style={{ color: 'var(--th-text)' }}>New Project</h2>
-            <p className="text-[13px] mb-6" style={{ color: 'var(--th-text-dim)' }}>Choose how you want to start building something amazing.</p>
+            <p className="text-[13px] mb-6" style={{ color: 'var(--th-text-secondary)' }}>Choose how you want to start building something amazing.</p>
 
             <div className="grid grid-cols-2 gap-4">
               <button
@@ -80,7 +80,7 @@ export function ProjectForm({ isOpen, onClose }) {
               >
                 <Github className="w-8 h-8 mb-3" style={{ color: 'var(--th-text)' }} />
                 <p className="text-sm font-semibold mb-1" style={{ color: 'var(--th-text)' }}>Connect GitHub Repo</p>
-                <p className="text-[11px]" style={{ color: 'var(--th-text-dim)' }}>Import from your existing repositories.</p>
+                <p className="text-[11px]" style={{ color: 'var(--th-text-secondary)' }}>Import from your existing repositories.</p>
               </button>
 
               <button
@@ -90,7 +90,7 @@ export function ProjectForm({ isOpen, onClose }) {
               >
                 <PenTool className="w-8 h-8 mb-3" style={{ color: 'var(--th-text)' }} />
                 <p className="text-sm font-semibold mb-1" style={{ color: 'var(--th-text)' }}>Create Manually</p>
-                <p className="text-[11px]" style={{ color: 'var(--th-text-dim)' }}>Add project details manually.</p>
+                <p className="text-[11px]" style={{ color: 'var(--th-text-secondary)' }}>Add project details manually.</p>
               </button>
             </div>
           </motion.div>
@@ -133,26 +133,26 @@ export function ProjectForm({ isOpen, onClose }) {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className={labelCls} style={{ color: 'var(--th-text-dim)' }}>Project Title *</label>
+                <label className={labelCls} style={{ color: 'var(--th-text-secondary)' }}>Project Title *</label>
                 <input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required className={inputCls} placeholder="My Awesome Project" style={inputStyle} />
               </div>
               <div>
-                <label className={labelCls} style={{ color: 'var(--th-text-dim)' }}>Description</label>
+                <label className={labelCls} style={{ color: 'var(--th-text-secondary)' }}>Description</label>
                 <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} rows={3} className={inputCls + ' resize-none'} placeholder="Brief description..." style={inputStyle} />
               </div>
               <div>
-                <label className={labelCls} style={{ color: 'var(--th-text-dim)' }}>Tech Stack (comma separated)</label>
+                <label className={labelCls} style={{ color: 'var(--th-text-secondary)' }}>Tech Stack (comma separated)</label>
                 <input value={form.stack} onChange={e => setForm(p => ({ ...p, stack: e.target.value }))} className={inputCls} placeholder="React, Node.js, PostgreSQL" style={inputStyle} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className={labelCls} style={{ color: 'var(--th-text-dim)' }}>Status</label>
+                  <label className={labelCls} style={{ color: 'var(--th-text-secondary)' }}>Status</label>
                   <select value={form.status} onChange={e => setForm(p => ({ ...p, status: e.target.value }))} className={inputCls} style={inputStyle}>
                     {STATUS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className={labelCls} style={{ color: 'var(--th-text-dim)' }}>Priority</label>
+                  <label className={labelCls} style={{ color: 'var(--th-text-secondary)' }}>Priority</label>
                   <select value={form.priority} onChange={e => setForm(p => ({ ...p, priority: e.target.value }))} className={inputCls} style={inputStyle}>
                     {PRIORITY_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
@@ -160,16 +160,16 @@ export function ProjectForm({ isOpen, onClose }) {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className={labelCls} style={{ color: 'var(--th-text-dim)' }}>Repo URL</label>
+                  <label className={labelCls} style={{ color: 'var(--th-text-secondary)' }}>Repo URL</label>
                   <input value={form.repoUrl} onChange={e => setForm(p => ({ ...p, repoUrl: e.target.value }))} className={inputCls} placeholder="https://github.com/..." style={inputStyle} />
                 </div>
                 <div>
-                  <label className={labelCls} style={{ color: 'var(--th-text-dim)' }}>Live URL</label>
+                  <label className={labelCls} style={{ color: 'var(--th-text-secondary)' }}>Live URL</label>
                   <input value={form.liveUrl} onChange={e => setForm(p => ({ ...p, liveUrl: e.target.value }))} className={inputCls} placeholder="https://myapp.vercel.app" style={inputStyle} />
                 </div>
               </div>
               <div>
-                <label className={labelCls} style={{ color: 'var(--th-text-dim)' }}>Deadline</label>
+                <label className={labelCls} style={{ color: 'var(--th-text-secondary)' }}>Deadline</label>
                 <input type="date" value={form.deadline} onChange={e => setForm(p => ({ ...p, deadline: e.target.value }))} className={inputCls} style={inputStyle} />
               </div>
 

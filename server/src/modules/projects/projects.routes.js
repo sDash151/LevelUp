@@ -25,6 +25,7 @@ router.post('/github/connect', c.connectGithub);
 router.get('/github/repos', c.getGithubRepos);
 router.delete('/github/disconnect', c.disconnectGithub);
 router.post('/ai/analyze', validate(aiAnalyzeSchema), c.aiAnalyze);
+router.post('/ai/chat', c.askAi);
 router.post('/job-sync', c.jobSync);
 router.post('/learnings/extract', c.extractLearnings);
 
@@ -39,6 +40,7 @@ router.get('/:id/metrics', c.getProjectMetrics);
 router.get('/:id/learnings', c.getLearnings);
 router.post('/:id/learnings', validate(createLearningSchema), c.createLearning);
 router.post('/:id/tasks', validate(createTaskSchema), c.createTask);
+router.get('/:id/intelligence/builder', c.getBuildSuggestions);
 
 // ── Create project (LAST to avoid catching named routes) ─────────────────────
 router.post('/', validate(createProjectSchema), c.create);

@@ -31,4 +31,14 @@ export const disconnectGithub = () => api.delete('/projects/github/disconnect').
 // ── AI ─────────────────────────────────────────────────────────
 export const analyzeProject = (data) => api.post('/projects/ai/analyze', data).then(r => r.data);
 export const syncJobProjects = (data) => api.post('/projects/job-sync', data).then(r => r.data);
-export const extractLearnings = (data) => api.post('/projects/learnings/extract', data).then(r => r.data);
+export const extractLearnings = async (data) => {
+  const response = await api.post('/projects/learnings/extract', data);
+  return response.data;
+};
+
+export const askAi = async (data) => {
+  const response = await api.post('/projects/ai/chat', data);
+  return response.data;
+};
+
+export const getBuildSuggestions = (projectId) => api.get(`/projects/${projectId}/intelligence/builder`).then(r => r.data);

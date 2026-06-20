@@ -21,6 +21,7 @@ class ProjectsAI {
       contents: prompt,
       config: { responseMimeType: 'application/json' },
     });
+    console.log('RAW AI RESPONSE TEXT:', response.text);
     return JSON.parse(response.text);
   }
 
@@ -111,24 +112,27 @@ Return ONLY the JSON array, no markdown.`;
     try {
       const projectSummaries = projects.map((p) => ({
         id: p.id,
-        name: p.name,
-        techStack: p.techStack || [],
+        name: p.title || p.name,
+        techStack: p.stack || p.techStack || [],
         description: p.description || '',
       }));
 
-      const prompt = `You are a technical recruiter evaluating project portfolios against a job posting.
+      const prompt = `You are a technical recruiter evaluating a candidate's project portfolio against a job posting.
 
 Job Description:
 ${jobDescription}
 
-Projects:
+Candidate's Projects:
 ${JSON.stringify(projectSummaries)}
 
-For each project, return a JSON array with objects containing:
+Task: Identify the TOP 3 best matching projects from the candidate's portfolio for this job.
+You MUST return EXACTLY 3 projects (or all projects if they have fewer than 3), even if they are very poor matches (e.g., 5% match score).
+
+Return a JSON array containing ONLY these top matches. Each object must exactly have these keys:
 - projectId (string): The project's id
-- matchScore (number 0-100): How well the project matches the job requirements
-- missingSkills (string[]): Skills required by the job that this project doesn't demonstrate
-- recommendedImprovements (string[]): Specific things to add to make the project more relevant
+- matchScore (number 0-100): How well this project matches the job requirements
+- missingSkills (string[]): Up to 3 skills required by the job that this project lacks
+- recommendedImprovements (string[]): 1-2 specific things to add to make the project more relevant
 
 Return ONLY the JSON array, no markdown.`;
 
@@ -253,6 +257,46 @@ Return ONLY the JSON array, no markdown.`;
     } catch (error) {
       console.error('ProjectsAI.getGrowthGaps failed:', error.message);
       return [];
+    }
+  }
+
+  /**
+   * Ask AI a general question about the portfolio.
+   * @param {Array<object>} projects
+   * @param {string} question
+   * @returns {Promise<{answer: string}>}
+   */
+  async askPortfolio(projects, question) {
+    if (!this.client) return { answer: 'AI is currently offline.' };
+    try {
+      const summaries = projects.map((p) => ({
+        name: p.title || p.name,
+        techStack: p.stack || p.techStack || [],
+        description: p.description || '',
+        status: p.status,
+        metrics: p.metrics || {},
+        intelligence: p.intelligence || {},
+      }));
+
+      const prompt = `You are an expert technical career mentor and AI assistant.
+A software engineer is asking you a question about their project portfolio.
+
+Portfolio Summary:
+${JSON.stringify(summaries)}
+
+User's Question: "${question}"
+
+Provide a highly helpful, concise, and encouraging answer based ONLY on the portfolio data provided.
+Return a JSON object with EXACTLY this key:
+- answer (string): Your detailed response to the user.
+
+Return ONLY the JSON object, no markdown.`;
+
+      const response = await this._generate(prompt);
+      return response || { answer: 'I could not process your request at this time.' };
+    } catch (error) {
+      console.error('ProjectsAI.askPortfolio failed:', error.message);
+      return { answer: 'An error occurred while analyzing your portfolio.' };
     }
   }
 }

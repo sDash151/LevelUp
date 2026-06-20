@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Search, LayoutGrid, List, Github, PenLine, ArrowRight,
   Package, ChevronDown, FolderOpen,
@@ -6,6 +7,7 @@ import {
 import { useProjects } from '../hooks/useProjects';
 import { getGithubLoginUrl } from '../api';
 import { ProjectCard } from './ProjectCard';
+import { Select } from '../../../design-system/components/Select';
 import clsx from 'clsx';
 
 const FILTERS = [
@@ -21,10 +23,12 @@ const card = 'rounded-2xl shadow-sm';
 const cardStyle = { background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' };
 
 export default function ProjectsTab({ onNewProject }) {
+  const [, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState(null);
   const [search, setSearch] = useState('');
   const [view, setView] = useState('grid');
   const [limit, setLimit] = useState(10);
+  const [sortBy, setSortBy] = useState('updated');
 
   const { data: projectsData } = useProjects({});
   const allProjects = projectsData?.data || [];
@@ -37,7 +41,16 @@ export default function ProjectsTab({ onNewProject }) {
   if (filter === 'portfolio') projects = projects.filter(p => (p.metrics?.portfolioScore || 0) >= 7);
   if (search) projects = projects.filter(p => p.title?.toLowerCase().includes(search.toLowerCase()));
 
-  projects.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+  if (sortBy === 'updated') {
+    projects.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+  } else if (sortBy === 'created') {
+    projects.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  } else if (sortBy === 'name') {
+    projects.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+  } else if (sortBy === 'priority') {
+    const pWeight = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1, default: 0 };
+    projects.sort((a, b) => (pWeight[b.priority] || 0) - (pWeight[a.priority] || 0));
+  }
 
   const displayed = projects.slice(0, limit);
   const totalActive = allProjects.filter(p => ['BUILDING', 'PLANNING', 'TESTING', 'IDEA'].includes(p.status)).length;
@@ -97,13 +110,17 @@ export default function ProjectsTab({ onNewProject }) {
 
         {/* Sort + view */}
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            className="flex items-center gap-1 px-3 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap"
-            style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text-secondary)', border: '1px solid var(--th-border)' }}
-          >
-            Sort by: Last Worked On
-            <ChevronDown className="w-3 h-3" />
-          </button>
+          <Select
+            value={sortBy}
+            onChange={setSortBy}
+            options={[
+              { value: 'updated', label: 'Sort by: Last Worked On' },
+              { value: 'created', label: 'Sort by: Newest First' },
+              { value: 'name', label: 'Sort by: Name (A-Z)' },
+              { value: 'priority', label: 'Sort by: Priority' },
+            ]}
+            className="w-48"
+          />
           <div className="flex rounded-xl overflow-hidden" style={{ border: '1px solid var(--th-border)' }}>
             <button
               onClick={() => setView('grid')}
@@ -211,7 +228,12 @@ export default function ProjectsTab({ onNewProject }) {
             : 'flex flex-col gap-3',
         )}>
           {displayed.map((p, i) => (
-            <ProjectCard key={p.id} project={p} index={i} />
+            <ProjectCard 
+              key={p.id} 
+              project={p} 
+              index={i} 
+              onClick={() => setSearchParams({ tab: 'pipeline', id: p.id }, { replace: true })}
+            />
           ))}
         </div>
       )}

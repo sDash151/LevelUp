@@ -119,6 +119,7 @@ class ProjectsRepository {
       include: {
         tasks: { orderBy: { createdAt: 'desc' }, take: 5 },
         metrics: true,
+        intelligence: true,
         _count: { select: { tasks: true, learnings: true } },
       },
       orderBy: { updatedAt: 'desc' },

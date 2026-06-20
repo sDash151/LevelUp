@@ -19,6 +19,8 @@ import {
   analyzeProject,
   syncJobProjects,
   extractLearnings,
+  askAi,
+  getBuildSuggestions,
 } from '../api.js';
 
 const STAGE_LABELS = {
@@ -219,5 +221,20 @@ export function useExtractLearnings() {
   return useMutation({
     mutationFn: extractLearnings,
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
+}
+
+export function useAskAi() {
+  return useMutation({
+    mutationFn: askAi,
+  });
+}
+
+export function useBuildSuggestions(projectId) {
+  return useQuery({
+    queryKey: ['projects', projectId, 'intelligence', 'builder'],
+    queryFn: () => getBuildSuggestions(projectId),
+    enabled: !!projectId,
+    staleTime: 1000 * 60 * 60, // 1 hour
   });
 }

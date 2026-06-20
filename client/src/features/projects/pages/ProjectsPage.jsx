@@ -21,7 +21,7 @@ const TABS = [
   { key: 'projects', label: 'Projects' },
   { key: 'pipeline', label: 'Pipeline' },
   { key: 'learnings', label: 'Learnings' },
-  { key: 'intelligence', label: 'Showcase' },
+  { key: 'intelligence', label: 'Intelligence' },
 ];
 
 const TAB_TITLES = {

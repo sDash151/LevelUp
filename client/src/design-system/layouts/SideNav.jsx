@@ -4,7 +4,7 @@ import {
   LayoutDashboard, CheckCircle2, Target, BookOpen,
   BriefcaseBusiness, Code2, FolderKanban, BarChart3,
   Lightbulb, Dumbbell, Wallet, PanelLeftClose, PanelLeft,
-  ChevronRight,
+  ChevronRight, Workflow,
 } from 'lucide-react';
 import { useAuthStore } from '@/shared/stores/authStore';
 import { ThemeToggle } from '@/design-system/components/ThemeToggle';

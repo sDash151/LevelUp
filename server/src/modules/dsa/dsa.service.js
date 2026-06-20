@@ -380,8 +380,8 @@ class DsaService {
   // ── Recommendations ──
   async getRecommendations(userId) {
     const [weakTopics, revisionQueue, activePath] = await Promise.all([
-      dsaRepository.getWeakTopics(userId, 3),
-      dsaRepository.getRevisionQueue(userId, 2),
+      dsaRepository.getWeakTopics(userId, 5),
+      dsaRepository.getRevisionQueue(userId, 4),
       dsaRepository.getActivePath(userId),
     ]);
 
@@ -392,7 +392,7 @@ class DsaService {
     revisionQueue.forEach(r => {
       tasks.push({
         type: 'revision',
-        text: `Revise 1 ${r.problem.pathProblems[0]?.topic || 'DSA'} topic`,
+        text: `Revise: ${r.problem.title}`,
         xp: REVISION_XP,
         problemId: r.problem.id,
       });
@@ -400,11 +400,11 @@ class DsaService {
 
     // Add weak topic tasks
     if (weakTopicNames.length > 0) {
-      const weakProblems = await dsaRepository.getUnsolvedByTopicAndTags(userId, weakTopicNames, [], 3);
+      const weakProblems = await dsaRepository.getUnsolvedByTopicAndTags(userId, weakTopicNames, [], 5);
       weakProblems.forEach(p => {
         tasks.push({
           type: 'solve',
-          text: `Solve ${p.difficulty} ${p.pathProblems[0]?.topic || 'DSA'} problem`,
+          text: `Solve: ${p.title}`,
           xp: XP_MAP[p.difficulty] || 10,
           problemId: p.id,
           difficulty: p.difficulty,
@@ -418,7 +418,7 @@ class DsaService {
     const dailyGoal = 180;
 
     return {
-      tasks: tasks.slice(0, 5),
+      tasks: tasks.slice(0, 8),
       dailyProgress: Math.min(Math.round((todayXp / dailyGoal) * 100), 100),
       xpCurrent: todayXp,
       xpGoal: dailyGoal,

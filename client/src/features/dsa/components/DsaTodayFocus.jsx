@@ -111,6 +111,7 @@ export function DsaTodayFocus({
         <div
           style={{
             height: '100%',
+            maxHeight: '320px',
             overflowY: 'auto',
             padding: '4px 0',
             display: 'flex',

@@ -43,6 +43,7 @@ model User {
   dsaHeatmap        DsaHeatmap[]
   jobApplications   JobApplication[]
   projects          Project[]
+  githubConnection  GithubConnection?
   transactions      Transaction[]
   workouts          Workout[]
   fitnessLogs       FitnessLog[]
@@ -464,34 +465,59 @@ enum JobStatus {
   WITHDRAWN
 }
 
-// ==================== PROJECT TRACKER ====================
+// ==================== PROJECT TRACKER V2 ====================
+
+model GithubConnection {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  githubId     String   @unique
+  username     String
+  avatar       String?
+  email        String?
+  accessToken  String          // encrypted before storage
+  scope        String?
+  connectedAt  DateTime @default(now())
+  lastSyncedAt DateTime?
+
+  @@map("github_connections")
+}
 
 model Project {
-  id          String        @id @default(cuid())
-  userId      String
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name        String
-  description String?
-  status      ProjectStatus @default(PLANNING)
-  priority    ProjectPriority @default(MEDIUM)
-  techStack   String[]
-  githubUrl   String?
-  liveUrl     String?
-  startDate   DateTime?     @db.Date
-  endDate     DateTime?     @db.Date
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id            String          @id @default(cuid())
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String          @default("Untitled")
+  slug          String          @default("untitled")
+  description   String?
+  status        ProjectStatus   @default(IDEA)
+  priority      ProjectPriority @default(MEDIUM)
+  repoUrl       String?
+  liveUrl       String?
+  githubRepoId  String?
+  stack         String[]
+  deadline      DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 
+  tasks         ProjectTask[]
+  learnings     ProjectLearning[]
+  metrics       ProjectMetrics?
+  intelligence  ProjectIntelligence?
+  jobMatches    JobProjectMatch[]
+
+  @@unique([userId, slug])
   @@index([userId])
   @@index([status])
   @@map("projects")
 }
 
 enum ProjectStatus {
+  IDEA
   PLANNING
-  IN_PROGRESS
-  ON_HOLD
-  COMPLETED
+  BUILDING
+  TESTING
+  SHIPPED
   ARCHIVED
 }
 
@@ -500,6 +526,88 @@ enum ProjectPriority {
   MEDIUM
   HIGH
   CRITICAL
+}
+
+model ProjectTask {
+  id          String    @id @default(cuid())
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  status      String    @default("todo")
+  priority    String    @default("medium")
+  xpReward    Int       @default(10)
+  dueDate     DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([projectId])
+  @@map("project_tasks")
+}
+
+model ProjectLearning {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  type        String   @default("learning")
+  tags        String[]
+  impactScore Int      @default(5)
+  source      String   @default("manual")
+  createdAt   DateTime @default(now())
+
+  @@index([projectId])
+  @@index([type])
+  @@map("project_learnings")
+}
+
+model ProjectMetrics {
+  id             String    @id @default(cuid())
+  projectId      String    @unique
+  project        Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  commitCount    Int       @default(0)
+  prCount        Int       @default(0)
+  issueCount     Int       @default(0)
+  buildStreak    Int       @default(0)
+  lastCommitAt   DateTime?
+  velocityScore  Float     @default(0)
+  qualityScore   Float     @default(0)
+  portfolioScore Float     @default(0)
+
+  @@map("project_metrics")
+}
+
+model ProjectIntelligence {
+  id                String   @id @default(cuid())
+  projectId         String   @unique
+  project           Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  architectureScore Float    @default(0)
+  scalabilityScore  Float    @default(0)
+  resumeScore       Float    @default(0)
+  interviewScore    Float    @default(0)
+  recruiterScore    Float    @default(0)
+  missingSkills     String[]
+  strengths         String[]
+  weaknesses        String[]
+  updatedAt         DateTime @updatedAt
+
+  @@map("project_intelligence")
+}
+
+model JobProjectMatch {
+  id                      String   @id @default(cuid())
+  jobId                   String
+  projectId               String
+  project                 Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  matchScore              Float    @default(0)
+  missingSkills           String[]
+  recommendedImprovements String[]
+  createdAt               DateTime @default(now())
+
+  @@unique([jobId, projectId])
+  @@map("job_project_matches")
 }
 
 // ==================== FINANCE TRACKER ====================

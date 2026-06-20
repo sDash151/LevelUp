@@ -1,14 +1,167 @@
 import { asyncHandler } from '../../shared/utils/asyncHandler.js';
 import { success, created, paginated } from '../../shared/utils/response.js';
 import { projectsService } from './projects.service.js';
+import { env } from '../../config/env.js';
+
+// ==================== PROJECTS CRUD ====================
 
 export const getAll = asyncHandler(async (req, res) => {
-  const { status, page, limit } = req.query;
-  const result = await projectsService.list(req.user.id, { status }, page, limit);
+  const { status, priority, search, page, limit } = req.query;
+  const result = await projectsService.list(req.user.id, { status, priority, search }, page, limit);
   paginated(res, result.data, { page: result.page, limit: result.limit, total: result.total });
 });
-export const getOne = asyncHandler(async (req, res) => { success(res, { project: await projectsService.get(req.user.id, req.params.id) }); });
-export const create = asyncHandler(async (req, res) => { created(res, { project: await projectsService.create(req.user.id, req.body) }); });
-export const update = asyncHandler(async (req, res) => { success(res, { project: await projectsService.update(req.user.id, req.params.id, req.body) }, 'Project updated'); });
-export const remove = asyncHandler(async (req, res) => { await projectsService.delete(req.user.id, req.params.id); success(res, null, 'Project deleted'); });
-export const getStats = asyncHandler(async (req, res) => { success(res, { stats: await projectsService.stats(req.user.id) }); });
+
+export const getOne = asyncHandler(async (req, res) => {
+  const project = await projectsService.get(req.user.id, req.params.id);
+  success(res, { project });
+});
+
+export const create = asyncHandler(async (req, res) => {
+  const project = await projectsService.create(req.user.id, req.body);
+  created(res, { project });
+});
+
+export const update = asyncHandler(async (req, res) => {
+  const project = await projectsService.update(req.user.id, req.params.id, req.body);
+  success(res, { project }, 'Project updated');
+});
+
+export const remove = asyncHandler(async (req, res) => {
+  await projectsService.delete(req.user.id, req.params.id);
+  success(res, null, 'Project deleted');
+});
+
+// ==================== STATS & PIPELINE ====================
+
+export const getStats = asyncHandler(async (req, res) => {
+  const stats = await projectsService.stats(req.user.id);
+  success(res, { stats });
+});
+
+export const getPipeline = asyncHandler(async (req, res) => {
+  const pipeline = await projectsService.pipeline(req.user.id);
+  success(res, { pipeline });
+});
+
+export const movePipeline = asyncHandler(async (req, res) => {
+  const { projectId, newStatus } = req.body;
+  const project = await projectsService.moveProject(req.user.id, projectId, newStatus);
+  success(res, { project }, 'Project moved');
+});
+
+// ==================== METRICS ====================
+
+export const getProjectMetrics = asyncHandler(async (req, res) => {
+  const metrics = await projectsService.getMetrics(req.user.id, req.params.id);
+  success(res, { metrics });
+});
+
+// ==================== TASKS ====================
+
+export const createTask = asyncHandler(async (req, res) => {
+  const task = await projectsService.createTask(req.user.id, req.params.id, req.body);
+  created(res, { task });
+});
+
+export const updateTask = asyncHandler(async (req, res) => {
+  const task = await projectsService.updateTask(req.user.id, req.params.taskId, req.body);
+  success(res, { task }, 'Task updated');
+});
+
+// ==================== LEARNINGS ====================
+
+export const getLearnings = asyncHandler(async (req, res) => {
+  const { type, page, limit } = req.query;
+  const result = await projectsService.getLearnings(req.user.id, req.params.id, { type, page, limit });
+  paginated(res, result.data, { page: result.page, limit: result.limit, total: result.total });
+});
+
+export const createLearning = asyncHandler(async (req, res) => {
+  const learning = await projectsService.createLearning(req.user.id, req.params.id, req.body);
+  created(res, { learning });
+});
+
+// ==================== INTELLIGENCE ====================
+
+export const getIntelligence = asyncHandler(async (req, res) => {
+  const intelligence = await projectsService.getIntelligence(req.user.id);
+  success(res, { intelligence });
+});
+
+
+
+// ==================== AI ENDPOINTS ====================
+
+export const aiAnalyze = asyncHandler(async (req, res) => {
+  const { projectId } = req.body;
+  const project = await projectsService.get(req.user.id, projectId);
+  const { projectsAI } = await import('./projects.ai.js');
+  const analysis = await projectsAI.analyzeProject({
+    name: project.title,
+    stack: project.stack,
+    description: project.description,
+    metrics: project.metrics,
+    tasks: project.tasks,
+    learnings: project.learnings,
+  });
+
+  if (analysis) {
+    // Persist intelligence scores
+    const { projectsRepository } = await import('./projects.repository.js');
+    await projectsRepository.upsertIntelligence(projectId, {
+      architectureScore: analysis.architectureScore || 0,
+      scalabilityScore: analysis.scalabilityScore || 0,
+      resumeScore: analysis.resumeScore || 0,
+      interviewScore: analysis.interviewScore || 0,
+      recruiterScore: analysis.recruiterScore || 0,
+      missingSkills: analysis.missingSkills || [],
+      strengths: analysis.strengths || [],
+      weaknesses: analysis.weaknesses || [],
+    });
+  }
+
+  success(res, { projectId: project.id, analysis }, 'Analysis complete');
+});
+
+export const jobSync = asyncHandler(async (req, res) => {
+  const projects = await projectsService.list(req.user.id, {}, 1, 50);
+  const { projectsAI } = await import('./projects.ai.js');
+  const matches = await projectsAI.matchProjectsToJob(
+    projects.data.map(p => ({ id: p.id, title: p.title, stack: p.stack, description: p.description })),
+    req.body.jobDescription || 'General full-stack developer role'
+  );
+  success(res, { matches: matches || [] }, 'Job sync complete');
+});
+
+export const extractLearnings = asyncHandler(async (req, res) => {
+  const { projectId, commits } = req.body;
+  if (projectId) await projectsService.get(req.user.id, projectId);
+  const { projectsAI } = await import('./projects.ai.js');
+  const learnings = await projectsAI.extractLearnings(commits || []);
+  success(res, { learnings: learnings || [] }, 'Learnings extracted');
+});
+
+// ==================== GITHUB INTEGRATION ====================
+
+export const githubLogin = asyncHandler(async (req, res) => {
+  const { state } = req.query;
+  const url = await projectsService.getGithubAuthUrl(state);
+  success(res, { url });
+});
+
+export const connectGithub = asyncHandler(async (req, res) => {
+  const { code } = req.body;
+  await projectsService.connectGithub(req.user.id, code);
+  success(res, null, 'GitHub connected successfully');
+});
+
+export const getGithubRepos = asyncHandler(async (req, res) => {
+  const data = await projectsService.getGithubRepos(req.user.id);
+  success(res, data);
+});
+
+export const disconnectGithub = asyncHandler(async (req, res) => {
+  await projectsService.disconnectGithub(req.user.id);
+  success(res, null, 'GitHub disconnected');
+});
+

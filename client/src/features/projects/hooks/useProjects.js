@@ -1,39 +1,223 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getProjects, createProject, updateProject, deleteProject } from '../api';
 import { useToast } from '@/design-system/components';
+import {
+  getProjects,
+  getProject,
+  createProject,
+  updateProject,
+  deleteProject,
+  getProjectStats,
+  getPipeline,
+  movePipelineProject,
+  getIntelligence,
+  getProjectMetrics,
+  getProjectLearnings,
+  createProjectLearning,
+  createProjectTask,
+  updateProjectTask,
+  getGithubRepos,
+  analyzeProject,
+  syncJobProjects,
+  extractLearnings,
+} from '../api.js';
 
-const MOCK = [
-  { id: '1', name: 'LevelUp PWA', description: 'Full-stack life OS with React + Express + PostgreSQL', status: 'IN_PROGRESS', priority: 'HIGH', techStack: ['React', 'Tailwind', 'Express', 'PostgreSQL', 'Prisma'], githubUrl: 'https://github.com/user/levelup', liveUrl: '', startDate: new Date(Date.now() - 20 * 86400000).toISOString(), endDate: null, updatedAt: new Date().toISOString() },
-  { id: '2', name: 'Portfolio Website', description: 'Personal dev portfolio with blog and project showcase', status: 'COMPLETED', priority: 'MEDIUM', techStack: ['Next.js', 'Tailwind', 'MDX'], githubUrl: '', liveUrl: 'https://myportfolio.dev', startDate: new Date(Date.now() - 45 * 86400000).toISOString(), endDate: new Date(Date.now() - 5 * 86400000).toISOString(), updatedAt: new Date(Date.now() - 5 * 86400000).toISOString() },
-  { id: '3', name: 'CLI Task Manager', description: 'Terminal-based todo app built with Node.js and Ink', status: 'PLANNING', priority: 'LOW', techStack: ['Node.js', 'Ink', 'SQLite'], githubUrl: '', liveUrl: '', startDate: null, endDate: null, updatedAt: new Date(Date.now() - 2 * 86400000).toISOString() },
-  { id: '4', name: 'AI Code Reviewer', description: 'GitHub bot that reviews PRs using OpenAI API', status: 'ON_HOLD', priority: 'MEDIUM', techStack: ['Python', 'FastAPI', 'OpenAI'], githubUrl: 'https://github.com/user/ai-reviewer', liveUrl: '', startDate: new Date(Date.now() - 30 * 86400000).toISOString(), endDate: null, updatedAt: new Date(Date.now() - 10 * 86400000).toISOString() },
-];
+const STAGE_LABELS = {
+  IDEA: 'Idea',
+  PLANNING: 'Planning',
+  BUILDING: 'Building',
+  TESTING: 'Testing',
+  SHIPPED: 'Shipped',
+  ARCHIVED: 'Archived',
+};
 
-export function useProjects(status) {
+function applyPipelineMove(cache, projectId, newStatus) {
+  if (!cache) return cache;
+  const pipeline = cache?.data?.pipeline ?? cache?.pipeline;
+  if (!pipeline) return cache;
+
+  let movedProject = null;
+  const nextPipeline = {};
+
+  for (const [status, items] of Object.entries(pipeline)) {
+    const list = items || [];
+    const idx = list.findIndex((p) => p.id === projectId);
+    if (idx >= 0) {
+      movedProject = { ...list[idx], status: newStatus };
+      nextPipeline[status] = [...list.slice(0, idx), ...list.slice(idx + 1)];
+    } else {
+      nextPipeline[status] = list;
+    }
+  }
+
+  if (!movedProject) return cache;
+
+  nextPipeline[newStatus] = [...(nextPipeline[newStatus] || []), movedProject];
+
+  if (cache?.data?.pipeline) {
+    return { ...cache, data: { ...cache.data, pipeline: nextPipeline } };
+  }
+  return { ...cache, pipeline: nextPipeline };
+}
+
+// ── Query Hooks ────────────────────────────────────────────────
+
+/** List projects with optional filters (status, category, search, etc.) */
+export function useProjects(filters = {}) {
   return useQuery({
-    queryKey: ['projects', status],
-    queryFn: async () => {
-      const res = await getProjects({ status });
-      return res.data ?? MOCK.filter((p) => !status || p.status === status);
-    },
-    placeholderData: MOCK.filter((p) => !status || p.status === status),
+    queryKey: ['projects', filters],
+    queryFn: () => getProjects(filters),
   });
 }
 
+/** Single project by ID */
+export function useProject(id) {
+  return useQuery({
+    queryKey: ['projects', id],
+    queryFn: () => getProject(id),
+    enabled: !!id,
+  });
+}
+
+/** Aggregate project stats */
+export function useProjectStats() {
+  return useQuery({
+    queryKey: ['projects', 'stats'],
+    queryFn: getProjectStats,
+  });
+}
+
+/** Pipeline / Kanban view */
+export function usePipeline() {
+  return useQuery({
+    queryKey: ['projects', 'pipeline'],
+    queryFn: getPipeline,
+  });
+}
+
+/** AI-powered intelligence insights */
+export function useIntelligence() {
+  return useQuery({
+    queryKey: ['projects', 'intelligence'],
+    queryFn: getIntelligence,
+  });
+}
+
+/** Metrics for a single project */
+export function useProjectMetrics(id) {
+  return useQuery({
+    queryKey: ['projects', id, 'metrics'],
+    queryFn: () => getProjectMetrics(id),
+    enabled: !!id,
+  });
+}
+
+/** Learnings attached to a project */
+export function useProjectLearnings(id, filters = {}) {
+  return useQuery({
+    queryKey: ['projects', id, 'learnings', filters],
+    queryFn: () => getProjectLearnings(id, filters),
+    enabled: !!id,
+  });
+}
+
+/** GitHub repositories for project linking */
+export function useGithubRepos() {
+  return useQuery({
+    queryKey: ['github', 'repos'],
+    queryFn: getGithubRepos,
+  });
+}
+
+// ── Mutation Hooks ─────────────────────────────────────────────
+
 export function useCreateProject() {
   const qc = useQueryClient();
-  const toast = useToast();
-  return useMutation({ mutationFn: createProject, onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); toast.success('Project created!'); }, onError: () => toast.error('Failed to create project') });
+  return useMutation({
+    mutationFn: createProject,
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
 }
 
 export function useUpdateProject() {
   const qc = useQueryClient();
-  const toast = useToast();
-  return useMutation({ mutationFn: ({ id, data }) => updateProject(id, data), onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); toast.success('Project updated'); } });
+  return useMutation({
+    mutationFn: ({ id, data }) => updateProject(id, data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
 }
 
 export function useDeleteProject() {
   const qc = useQueryClient();
+  return useMutation({
+    mutationFn: deleteProject,
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
+}
+
+export function useMovePipelineProject() {
+  const qc = useQueryClient();
   const toast = useToast();
-  return useMutation({ mutationFn: deleteProject, onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); toast.success('Project deleted'); } });
+  return useMutation({
+    mutationFn: movePipelineProject,
+    onMutate: async ({ projectId, newStatus }) => {
+      await qc.cancelQueries({ queryKey: ['projects', 'pipeline'] });
+      const previous = qc.getQueryData(['projects', 'pipeline']);
+      qc.setQueryData(['projects', 'pipeline'], (old) => applyPipelineMove(old, projectId, newStatus));
+      return { previous };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previous) qc.setQueryData(['projects', 'pipeline'], ctx.previous);
+      toast.error('Failed to move project');
+    },
+    onSuccess: (_data, { newStatus }) => {
+      toast.success(`Moved to ${STAGE_LABELS[newStatus] || newStatus}`);
+    },
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ['projects'] });
+    },
+  });
+}
+
+export function useCreateTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ projectId, data }) => createProjectTask(projectId, data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
+}
+
+export function useUpdateTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ taskId, data }) => updateProjectTask(taskId, data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
+}
+
+export function useCreateLearning() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ projectId, data }) => createProjectLearning(projectId, data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
+}
+
+export function useAnalyzeProject() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: analyzeProject,
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
+}
+
+export function useJobSync() {
+  return useMutation({ mutationFn: syncJobProjects });
+}
+
+export function useExtractLearnings() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: extractLearnings,
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
 }

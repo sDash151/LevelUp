@@ -3,6 +3,7 @@ import { api } from '@/shared/utils/api-client';
 // ═══ Tab Data ═══
 export const getOverview = () => api.get('/finance/overview').then(r => r.data);
 export const getSpendData = () => api.get('/finance/spend').then(r => r.data);
+export const getMoodAnalytics = () => api.get('/finance/mood-analytics').then(r => r.data);
 export const getBuildData = () => api.get('/finance/build').then(r => r.data);
 export const getProtectData = () => api.get('/finance/protect').then(r => r.data);
 export const getIntelligenceData = () => api.get('/finance/intelligence').then(r => r.data);
@@ -23,6 +24,7 @@ export const updateAccount = (id, data) => api.put(`/finance/accounts/${id}`, da
 export const getBudgets = (month) => api.get('/finance/budgets', { params: { month } }).then(r => r.data);
 export const createBudget = (data) => api.post('/finance/budgets', data).then(r => r.data);
 export const updateBudget = (id, data) => api.put(`/finance/budgets/${id}`, data).then(r => r.data);
+export const deleteBudget = (id) => api.delete(`/finance/budgets/${id}`).then(r => r.data);
 
 // ═══ Goals ═══
 export const getGoals = () => api.get('/finance/goals').then(r => r.data);

@@ -84,6 +84,10 @@ model User {
   aiFinanceInsights      AIFinanceInsight[]
   weeklyFinanceChallenges WeeklyFinanceChallenge[]
 
+  // ── Analytics relations ──
+  analyticsSnapshots     AnalyticsSnapshot[]
+  aiAnalyticsInsights    AIAnalyticsInsight[]
+
   @@map("users")
 }
 
@@ -1208,4 +1212,44 @@ model FocusSession {
   @@index([userId])
   @@index([createdAt])
   @@map("focus_sessions")
+}
+
+// ==================== ANALYTICS ====================
+
+model AnalyticsSnapshot {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  snapshotDate     String   // "YYYY-MM-DD" format for clean daily uniqueness
+  lifeScore        Float    @default(0)
+  mindScore        Float    @default(0)
+  bodyScore        Float    @default(0)
+  careerScore      Float    @default(0)
+  moneyScore       Float    @default(0)
+  disciplineScore  Float    @default(0)
+  reflectionScore  Float    @default(0)
+  consistencyIndex Float    @default(0)
+  growthVelocity   Float    @default(0)
+  upgradeScore     Float    @default(0)
+  momentumScore    Float    @default(0)
+  momentumState    String   @default("Stable") // Rising, Stable, Falling
+  xpEarned         Int      @default(0)
+  tasksCompleted   Int      @default(0)
+  createdAt        DateTime @default(now())
+
+  @@unique([userId, snapshotDate])
+  @@index([userId, snapshotDate])
+  @@map("analytics_snapshots")
+}
+
+model AIAnalyticsInsight {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // QUICK_INSIGHTS, PREDICTIONS
+  content   Json
+  createdAt DateTime @default(now())
+
+  @@index([userId, type])
+  @@map("ai_analytics_insights")
 }

@@ -1,6 +1,11 @@
-import { asyncHandler } from '../../shared/utils/asyncHandler.js';
-import { success } from '../../shared/utils/response.js';
 import { analyticsService } from './analytics.service.js';
+import { success } from '../../shared/utils/response.js';
+import { asyncHandler } from '../../shared/middleware/asyncHandler.js';
+
+export const getFullAnalytics = asyncHandler(async (req, res) => {
+  const data = await analyticsService.getFullAnalytics(req.user.id);
+  res.json(success('Analytics retrieved successfully', data));
+});
 
 export const getOverview = asyncHandler(async (req, res) => {
   const overview = await analyticsService.getOverview(req.user.id);

@@ -24,6 +24,15 @@ export function useSpendData() {
   });
 }
 
+export function useMoodAnalytics() {
+  return useQuery({
+    queryKey: ['finance', 'moodAnalytics'],
+    queryFn: financeApi.getMoodAnalytics,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
 export function useBuildData() {
   return useQuery({
     queryKey: ['finance', 'build'],
@@ -126,6 +135,22 @@ export function useCreateBudget() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: financeApi.createBudget,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+export function useUpdateBudget() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => financeApi.updateBudget(id, data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+export function useDeleteBudget() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.deleteBudget,
     onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
   });
 }

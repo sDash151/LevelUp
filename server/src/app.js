@@ -9,6 +9,7 @@ import { defaultLimiter } from './shared/middlewares/rateLimiter.middleware.js';
 import { errorHandler } from './shared/middlewares/errorHandler.middleware.js';
 import { NotFoundError } from './shared/errors/NotFoundError.js';
 import routes from './routes/index.js';
+import { initAnalyticsCron } from './modules/analytics/analytics.snapshot.cron.js';
 
 const app = express();
 
@@ -45,5 +46,8 @@ app.use((_req, _res, next) => {
 
 // ── Global error handler (must be last) ───────
 app.use(errorHandler);
+
+// ── Initialize Cron Jobs ──────────────────────
+initAnalyticsCron();
 
 export default app;

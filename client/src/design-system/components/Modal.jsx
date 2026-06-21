@@ -47,15 +47,15 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }) {
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
             className={clsx(
-              'relative w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]',
+              'relative w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]',
               sizeMap[size]
             )}
-            style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}
+            style={{ border: '1px solid #F3F4F6' }}
           >
             {/* Header */}
             {title && (
-              <div className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--th-border)' }}>
-                <h2 className="text-lg font-semibold" style={{ color: 'var(--th-text)' }}>{title}</h2>
+              <div className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
                 <button
                   onClick={onClose}
                   className="p-1.5 rounded-lg transition-colors hover:bg-slate-500/10"

@@ -5,7 +5,7 @@ import { getScoreColor } from '../utils';
  * Circular gauge for Freedom Score / Protection Score / Wealth Score / AI Confidence.
  * Matches the design: circular progress ring with score in center + label below.
  */
-export default function ScoreGauge({ score = 0, label, maxScore = 100, size = 96, strokeWidth = 8 }) {
+export default function ScoreGauge({ score = 0, label, maxScore = 100, size = 80, strokeWidth = 6 }) {
   const color = getScoreColor(score);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -19,7 +19,7 @@ export default function ScoreGauge({ score = 0, label, maxScore = 100, size = 96
         <svg width={size} height={size} className="transform -rotate-90">
           <circle
             cx={size / 2} cy={size / 2} r={radius}
-            fill="none" stroke="var(--th-border)" strokeWidth={strokeWidth}
+            fill="none" stroke="#F3F4F6" strokeWidth={strokeWidth}
           />
           {/* Progress ring */}
           <motion.circle
@@ -35,19 +35,18 @@ export default function ScoreGauge({ score = 0, label, maxScore = 100, size = 96
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <motion.span
-            className="text-lg font-bold"
-            style={{ color: 'var(--th-text)' }}
+            className="text-[24px] font-bold text-gray-900 leading-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
             {score}
           </motion.span>
-          <span className="text-[10px]" style={{ color: 'var(--th-text-secondary)' }}>/{maxScore}</span>
+          <span className="text-[10px] font-medium text-gray-400 leading-none mt-1">/{maxScore}</span>
         </div>
       </div>
       {label && (
-        <span className="text-xs font-medium flex items-center gap-1" style={{ color }}>
+        <span className="text-[11px] font-medium mt-1.5 flex items-center gap-1.5" style={{ color }}>
           <span className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
           {label}
         </span>

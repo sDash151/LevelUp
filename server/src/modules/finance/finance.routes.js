@@ -25,6 +25,7 @@ const router = Router();
 // ═══ Tab Data ═══
 router.get('/overview', controller.getOverview);
 router.get('/spend', controller.getSpendData);
+router.get('/mood-analytics', controller.getMoodAnalytics);
 router.get('/build', controller.getBuildData);
 router.get('/protect', controller.getProtectData);
 router.get('/intelligence', controller.getIntelligenceData);
@@ -45,6 +46,7 @@ router.put('/accounts/:id', validate(updateAccountSchema), controller.updateAcco
 router.get('/budgets', validate(monthQuerySchema), controller.getBudgets);
 router.post('/budgets', validate(createBudgetSchema), controller.createBudget);
 router.put('/budgets/:id', validate(updateBudgetSchema), controller.updateBudget);
+router.delete('/budgets/:id', validate(idParamSchema), controller.deleteBudget);
 
 // ═══ Goals ═══
 router.get('/goals', controller.getGoals);

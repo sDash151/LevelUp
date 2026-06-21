@@ -19,6 +19,11 @@ export const getSpendData = asyncHandler(async (req, res) => {
   success(res, data);
 });
 
+export const getMoodAnalytics = asyncHandler(async (req, res) => {
+  const data = await financeService.getMoodAnalytics(req.user.id);
+  success(res, data);
+});
+
 export const getBuildData = asyncHandler(async (req, res) => {
   const data = await financeService.getBuildData(req.user.id);
   success(res, data);
@@ -100,6 +105,11 @@ export const createBudget = asyncHandler(async (req, res) => {
 export const updateBudget = asyncHandler(async (req, res) => {
   const budget = await financeService.updateBudget(req.user.id, req.params.id, req.body);
   success(res, budget);
+});
+
+export const deleteBudget = asyncHandler(async (req, res) => {
+  await financeService.deleteBudget(req.user.id, req.params.id);
+  success(res, null, 'Budget deleted');
 });
 
 // ══════════════════════════════════════════════

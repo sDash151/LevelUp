@@ -91,13 +91,26 @@ class FinanceService {
 
     // Expense leak detection
     const leakCategories = ['Food & Dining', 'Entertainment', 'Shopping'];
-    const leaks = categoryBreakdown
+    const rawLeaks = categoryBreakdown
       .filter(c => leakCategories.some(l => c.category?.includes(l)))
-      .map(c => ({
-        category: c.category,
-        amount: Math.round(parseFloat(c._sum.amount) * 100) / 100,
-        percentage: monthlyExpenses > 0 ? Math.round((parseFloat(c._sum.amount) / monthlyExpenses) * 100) : 0,
-      }));
+      .map(c => {
+        const catName = c.category;
+        const totalSpent = parseFloat(c._sum.amount);
+        const budget = budgetSpending.find(b => b.category?.name === catName);
+        
+        const leakAmount = budget ? Math.max(0, totalSpent - budget.monthlyLimit) : totalSpent;
+
+        return { category: catName, amount: leakAmount };
+      })
+      .filter(l => l.amount > 0);
+
+    const totalLeakAmount = rawLeaks.reduce((s, l) => s + l.amount, 0);
+
+    const leaks = rawLeaks.map(l => ({
+      category: l.category,
+      amount: Math.round(l.amount * 100) / 100,
+      percentage: totalLeakAmount > 0 ? Math.round((l.amount / totalLeakAmount) * 100) : 0,
+    })).sort((a, b) => b.amount - a.amount);
 
     // AI insight (cached 24h)
     let aiInsight = null;
@@ -119,6 +132,7 @@ class FinanceService {
         freedomScore,
       },
       wealthAllocation,
+      accounts,
       cashFlow: {
         income: monthlyIncome,
         expenses: monthlyExpenses,
@@ -214,6 +228,46 @@ class FinanceService {
       streaks: this._formatStreaks(streaks),
     };
   }
+  async getMoodAnalytics(userId) {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1); // Last 2 months
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    const data = await financeRepository.getDetailedMoodAnalytics(userId, monthStart, monthEnd);
+    
+    // Process Categories
+    const categoryMoods = {};
+    for (const item of data.byCategory) {
+      if (!categoryMoods[item.mood]) categoryMoods[item.mood] = [];
+      categoryMoods[item.mood].push({
+        name: item.category,
+        amount: parseFloat(item._sum.amount),
+        count: item._count
+      });
+    }
+
+    // Process Merchants
+    const merchantMoods = {};
+    for (const item of data.byMerchant) {
+      if (!merchantMoods[item.mood]) merchantMoods[item.mood] = [];
+      merchantMoods[item.mood].push({
+        name: item.merchant,
+        amount: parseFloat(item._sum.amount),
+        count: item._count
+      });
+    }
+
+    // Sort and limit
+    const result = {};
+    for (const mood of ['HAPPY', 'NEUTRAL', 'REGRET']) {
+      result[mood] = {
+        categories: (categoryMoods[mood] || []).sort((a, b) => b.amount - a.amount).slice(0, 5),
+        merchants: (merchantMoods[mood] || []).sort((a, b) => b.amount - a.amount).slice(0, 5)
+      };
+    }
+
+    return result;
+  }
 
   // ══════════════════════════════════════════════
   // BUILD TAB
@@ -280,8 +334,8 @@ class FinanceService {
       kpis: {
         totalAssets: { current: Math.round(totalAssets * 100) / 100, change: Math.round(((totalAssets - (totalAssets - monthlySavings)) / Math.max(totalAssets - monthlySavings, 1)) * 1000) / 10 },
         savingsRate: { current: savingsRate, change: prevAgg.income > 0 ? savingsRate - Math.round(((prevAgg.income - prevAgg.expense) / prevAgg.income) * 100) : 0 },
-        investmentValue: { current: Math.round(investmentValue * 100) / 100 },
-        opportunityFund: { current: Math.round(opportunityFund * 100) / 100 },
+        investmentValue: { current: Math.round(investmentValue * 100) / 100, change: Math.round((savingsRate * 0.28) * 10) / 10 },
+        opportunityFund: { current: Math.round(opportunityFund * 100) / 100, change: opportunityFund > 0 ? Math.round((savingsRate * 0.15) * 10) / 10 : 0 },
         wealthScore: { score: wealthScore, label: wealthScore >= 80 ? 'Excellent' : wealthScore >= 60 ? 'Good' : wealthScore >= 40 ? 'Growing' : 'Getting Started' },
       },
       goals,
@@ -720,6 +774,7 @@ class FinanceService {
   async getBudgets(userId, month) { return financeRepository.getBudgetSpending(userId, month || this._currentMonth()); }
   async createBudget(userId, data) { return financeRepository.createBudget(userId, data); }
   async updateBudget(userId, id, data) { return financeRepository.updateBudget(id, data); }
+  async deleteBudget(userId, id) { return financeRepository.deleteBudget(id); }
 
   async getGoals(userId) { return financeRepository.getGoals(userId); }
   async createGoal(userId, data) {
@@ -845,12 +900,15 @@ class FinanceService {
       const amt = parseFloat(c._sum.amount);
       const cat = c.category;
       if (['Bills & Utilities', 'Groceries', 'Transport', 'Rent', 'Insurance'].includes(cat)) buckets.Needs += amt;
-      else if (['Investments', 'Savings'].includes(cat)) buckets.Investments += amt;
+      else if (['Investments'].includes(cat)) buckets.Investments += amt;
       else if (['Learning', 'Education', 'Books', 'Courses'].includes(cat)) buckets.Learning += amt;
       else if (['Entertainment', 'Travel', 'Personal Care', 'Gifts'].includes(cat)) buckets.Fun += amt;
     }
     const savingsAccounts = accounts.filter(a => a.type === 'savings');
     buckets.Savings = savingsAccounts.reduce((s, a) => s + parseFloat(a.balance), 0);
+
+    const investmentAccounts = accounts.filter(a => a.type === 'investment');
+    buckets.Investments += investmentAccounts.reduce((s, a) => s + parseFloat(a.balance), 0);
 
     const bucketTotal = Object.values(buckets).reduce((s, v) => s + v, 0);
     return Object.entries(buckets).map(([name, amount]) => ({

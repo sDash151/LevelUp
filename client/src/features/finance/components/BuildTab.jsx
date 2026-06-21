@@ -55,12 +55,19 @@ export default function BuildTab() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <KPICard icon="📊" label="Total Assets" value={kpis.totalAssets?.current} change={kpis.totalAssets?.change} color="#10B981" currency={currency} index={0} />
         <KPICard icon="💹" label="Savings Rate" value={`${kpis.savingsRate?.current || 0}%`} change={kpis.savingsRate?.change} color="#22C55E" index={1} />
-        <KPICard icon="📈" label="Investment Value" value={kpis.investmentValue?.current} color="#F59E0B" currency={currency} index={2} />
-        <KPICard icon="🎯" label="Opportunity Fund" value={kpis.opportunityFund?.current} color="#3B82F6" currency={currency} index={3} />
+        <KPICard icon="📈" label="Investment Value" value={kpis.investmentValue?.current} change={kpis.investmentValue?.change} color="#F59E0B" currency={currency} index={2} />
+        <KPICard icon="🎯" label="Opportunity Fund" value={kpis.opportunityFund?.current} change={kpis.opportunityFund?.change} color="#3B82F6" currency={currency} index={3} />
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="rounded-2xl p-4 flex flex-col items-center justify-center" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-          <span className="text-xs font-medium mb-2" style={{ color: 'var(--th-text-secondary)' }}>Wealth Score</span>
-          <ScoreGauge score={kpis.wealthScore?.score || 0} label={kpis.wealthScore?.label} size={80} strokeWidth={7} />
+          className="relative overflow-hidden rounded-[16px] p-6 pb-12 flex flex-col bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02)] min-h-[160px]" style={{ border: '1px solid #F3F4F6' }}>
+          <div className="flex items-center gap-2.5">
+            <span className="w-7 h-7 rounded-[8px] flex items-center justify-center text-[13px] flex-shrink-0 bg-orange-50 text-orange-500">
+              🛡️
+            </span>
+            <span className="text-[11px] font-bold text-gray-700 leading-tight">Wealth Score</span>
+          </div>
+          <div className="flex-1 flex flex-col items-center justify-center mt-3">
+            <ScoreGauge score={kpis.wealthScore?.score || 0} label={kpis.wealthScore?.label || "Excellent"} size={60} strokeWidth={5} />
+          </div>
         </motion.div>
       </div>
 

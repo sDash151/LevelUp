@@ -121,6 +121,28 @@ class FinanceRepository {
     });
   }
 
+  async getDetailedMoodAnalytics(userId, startDate, endDate) {
+    // Group by Mood and Category
+    const byCategory = await prisma.transaction.groupBy({
+      by: ['mood', 'category'],
+      where: { userId, type: 'EXPENSE', date: { gte: startDate, lte: endDate }, mood: { not: null } },
+      _sum: { amount: true },
+      _count: true,
+      orderBy: { _sum: { amount: 'desc' } }
+    });
+
+    // Group by Mood and Merchant
+    const byMerchant = await prisma.transaction.groupBy({
+      by: ['mood', 'merchant'],
+      where: { userId, type: 'EXPENSE', date: { gte: startDate, lte: endDate }, mood: { not: null }, merchant: { not: null } },
+      _sum: { amount: true },
+      _count: true,
+      orderBy: { _sum: { amount: 'desc' } }
+    });
+
+    return { byCategory, byMerchant };
+  }
+
   async getWeeklyAggregates(userId, startDate, endDate) {
     const txns = await prisma.transaction.findMany({
       where: { userId, date: { gte: startDate, lte: endDate } },

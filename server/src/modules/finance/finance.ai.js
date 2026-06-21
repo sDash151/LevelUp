@@ -40,11 +40,12 @@ INPUT: "${text}"
 Return a JSON object with these fields:
 {
   "amount": <number - the monetary amount>,
-  "category": <string - one of: "Food & Dining", "Shopping", "Transport", "Health & Fitness", "Learning", "Entertainment", "Bills & Utilities", "Groceries", "Investments", "Salary", "Freelance", "Interest", "Travel", "Rent", "Insurance", "Gifts", "Personal Care", "Other">,
+  "category": <string - one of: "Food & Dining", "Groceries", "Rent & Mortgage", "Transport", "Fuel", "Shopping", "Subscriptions", "Health & Fitness", "Education", "Entertainment", "Bills & Utilities", "Travel", "Personal Care", "Family & Kids", "Pets", "Gifts & Donations", "Insurance", "Taxes", "Debt Payment", "Other Expense", "Salary", "Freelance", "Investments", "Business", "Gifts Received", "Refunds", "Side Hustle", "Other Income">,
   "merchant": <string or null - the store/brand/service name if mentioned>,
   "type": <"INCOME" or "EXPENSE" - determine from context>,
   "necessityLevel": <"ESSENTIAL", "COMFORTABLE", "LUXURY", or "WASTEFUL" - judge from context>,
-  "tags": <array of relevant tags like ["lunch", "office"] or ["subscription", "monthly"]>,
+  "mood": <"NECESSARY", "HAPPY", "REGRET", or "NEUTRAL" - judge from context. For uber/taxi, it's usually NEUTRAL or NECESSARY>,
+  "tags": <array of short strings describing the transaction, max 2 items>,
   "paymentMethod": <"UPI", "Cash", "Card", "Bank", or null - if mentioned>,
   "description": <string - a clean one-line description of the transaction>
 }

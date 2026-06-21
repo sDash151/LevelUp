@@ -17,11 +17,12 @@ const CURRENCY_CONFIG = {
 
 export function formatCurrency(amount, currency = 'INR', compact = false) {
   const config = CURRENCY_CONFIG[currency] || CURRENCY_CONFIG.INR;
+  const isWhole = Number(amount) % 1 === 0;
   const opts = {
     style: 'currency',
     currency: config.code,
-    minimumFractionDigits: compact && Math.abs(amount) >= 1000 ? 0 : 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: isWhole ? 0 : 2,
+    maximumFractionDigits: isWhole ? 0 : 2,
   };
   if (compact && Math.abs(amount) >= 100000) {
     opts.notation = 'compact';
@@ -114,45 +115,69 @@ export function getScoreColor(score) {
 // ═══ Category Constants ═══
 
 export const CATEGORY_ICONS = {
+  // Expense Categories
   'Food & Dining': '🍔',
-  'Shopping': '🛍️',
+  'Groceries': '🛒',
+  'Rent & Mortgage': '🏠',
   'Transport': '🚗',
+  'Fuel': '⛽',
+  'Shopping': '🛍️',
+  'Subscriptions': '📱',
   'Health & Fitness': '💪',
-  'Learning': '📚',
+  'Education': '🎓',
   'Entertainment': '🎬',
   'Bills & Utilities': '💡',
-  'Groceries': '🛒',
-  'Investments': '📈',
-  'Salary': '💰',
-  'Freelance': '💼',
-  'Interest': '🏦',
   'Travel': '✈️',
-  'Rent': '🏠',
-  'Insurance': '🛡️',
-  'Gifts': '🎁',
   'Personal Care': '💇',
-  'Other': '📦',
+  'Family & Kids': '👨‍👩‍👧',
+  'Pets': '🐾',
+  'Gifts & Donations': '🎁',
+  'Insurance': '🛡️',
+  'Taxes': '🧾',
+  'Debt Payment': '💳',
+  'Other Expense': '📦',
+  
+  // Income Categories
+  'Salary': '💰',
+  'Freelance': '💻',
+  'Investments': '📈',
+  'Business': '🏢',
+  'Gifts Received': '🎁',
+  'Refunds': '💳',
+  'Side Hustle': '🚀',
+  'Other Income': '💵',
 };
 
 export const CATEGORY_COLORS = {
   'Food & Dining': '#F59E0B',
-  'Shopping': '#EC4899',
+  'Groceries': '#14B8A6',
+  'Rent & Mortgage': '#A855F7',
   'Transport': '#3B82F6',
+  'Fuel': '#EF4444',
+  'Shopping': '#EC4899',
+  'Subscriptions': '#8B5CF6',
   'Health & Fitness': '#10B981',
-  'Learning': '#8B5CF6',
+  'Education': '#6366F1',
   'Entertainment': '#F97316',
   'Bills & Utilities': '#6366F1',
-  'Groceries': '#14B8A6',
-  'Investments': '#22C55E',
-  'Salary': '#22C55E',
-  'Freelance': '#F59E0B',
-  'Interest': '#3B82F6',
   'Travel': '#0EA5E9',
-  'Rent': '#A855F7',
-  'Insurance': '#6366F1',
-  'Gifts': '#F472B6',
   'Personal Care': '#FB923C',
-  'Other': '#9CA3AF',
+  'Family & Kids': '#F472B6',
+  'Pets': '#D97706',
+  'Gifts & Donations': '#EC4899',
+  'Insurance': '#6366F1',
+  'Taxes': '#EF4444',
+  'Debt Payment': '#EF4444',
+  'Other Expense': '#9CA3AF',
+  
+  'Salary': '#22C55E',
+  'Freelance': '#0EA5E9',
+  'Investments': '#22C55E',
+  'Business': '#F59E0B',
+  'Gifts Received': '#F472B6',
+  'Refunds': '#14B8A6',
+  'Side Hustle': '#8B5CF6',
+  'Other Income': '#9CA3AF',
 };
 
 export const MOOD_LABELS = {

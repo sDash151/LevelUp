@@ -1,95 +1,159 @@
 import { prisma } from '../../config/database.js';
 
 class AnalyticsRepository {
-  async getOverview(userId) {
-    const now = new Date();
-    const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay()); weekStart.setHours(0,0,0,0);
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const thirtyDaysAgo = new Date(now); thirtyDaysAgo.setDate(now.getDate() - 30);
-
-    const [
-      totalHabits, habitsCompletedToday, habitsCompletedWeek,
-      activeGoals, completedGoals,
-      reflectionsThisMonth,
-      dsaSolved, dsaTotal,
-      jobsActive, jobsTotal,
-      projectsActive,
-      workoutsThisWeek, totalWorkoutMinutes,
-      monthlyIncome, monthlyExpense,
-    ] = await Promise.all([
-      prisma.habit.count({ where: { userId, isArchived: false } }),
-      prisma.habitLog.count({ where: { userId, completedAt: new Date(now.toISOString().split('T')[0]) } }),
-      prisma.habitLog.count({ where: { userId, completedAt: { gte: weekStart } } }),
-      prisma.goal.count({ where: { userId, status: 'IN_PROGRESS' } }),
-      prisma.goal.count({ where: { userId, status: 'COMPLETED' } }),
-      prisma.reflection.count({ where: { userId, date: { gte: monthStart } } }),
-      prisma.dsaProblem.count({ where: { userId, status: 'SOLVED' } }),
-      prisma.dsaProblem.count({ where: { userId } }),
-      prisma.jobApplication.count({ where: { userId, status: { in: ['APPLIED', 'PHONE_SCREEN', 'INTERVIEW'] } } }),
-      prisma.jobApplication.count({ where: { userId } }),
-      prisma.project.count({ where: { userId, status: 'IN_PROGRESS' } }),
-      prisma.workout.count({ where: { userId, date: { gte: weekStart } } }),
-      prisma.workout.aggregate({ where: { userId, date: { gte: monthStart } }, _sum: { duration: true } }),
-      prisma.transaction.aggregate({ where: { userId, type: 'INCOME', date: { gte: monthStart } }, _sum: { amount: true } }),
-      prisma.transaction.aggregate({ where: { userId, type: 'EXPENSE', date: { gte: monthStart } }, _sum: { amount: true } }),
-    ]);
-
-    return {
-      habits: { total: totalHabits, completedToday: habitsCompletedToday, completedThisWeek: habitsCompletedWeek },
-      goals: { active: activeGoals, completed: completedGoals },
-      reflections: { thisMonth: reflectionsThisMonth },
-      dsa: { solved: dsaSolved, total: dsaTotal },
-      jobs: { active: jobsActive, total: jobsTotal },
-      projects: { active: projectsActive },
-      fitness: { workoutsThisWeek, totalMinutesThisMonth: totalWorkoutMinutes._sum.duration || 0 },
-      finance: {
-        monthlyIncome: Number(monthlyIncome._sum.amount) || 0,
-        monthlyExpense: Number(monthlyExpense._sum.amount) || 0,
-        savings: (Number(monthlyIncome._sum.amount) || 0) - (Number(monthlyExpense._sum.amount) || 0),
-      },
-    };
+  async upsertSnapshot(userId, data) {
+    try {
+      return await prisma.analyticsSnapshot.upsert({
+        where: { 
+          userId_snapshotDate: { 
+            userId, 
+            snapshotDate: data.snapshotDate 
+          } 
+        },
+        update: { ...data },
+        create: { userId, ...data },
+      });
+    } catch (error) {
+      console.error('Error upserting snapshot:', error);
+      return null;
+    }
   }
 
-  async getHabitTrends(userId, days = 30) {
-    const since = new Date(); since.setDate(since.getDate() - days);
-    const logs = await prisma.habitLog.findMany({
-      where: { userId, completedAt: { gte: since } },
-      select: { completedAt: true },
-      orderBy: { completedAt: 'asc' },
-    });
-    const totalHabits = await prisma.habit.count({ where: { userId, isArchived: false } });
-    const grouped = {};
-    logs.forEach((l) => {
-      const key = l.completedAt.toISOString().split('T')[0];
-      grouped[key] = (grouped[key] || 0) + 1;
-    });
-    return Array.from({ length: days }, (_, i) => {
-      const d = new Date(since); d.setDate(d.getDate() + i + 1);
-      const key = d.toISOString().split('T')[0];
-      const count = grouped[key] || 0;
-      return { date: key, completed: count, total: totalHabits, rate: totalHabits ? Math.round((count / totalHabits) * 100) : 0 };
-    });
+  async getSnapshots(userId, days = 30) {
+    try {
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - days);
+      const cutoffStr = cutoff.toISOString().split('T')[0];
+      
+      return await prisma.analyticsSnapshot.findMany({
+        where: { userId, snapshotDate: { gte: cutoffStr } },
+        orderBy: { snapshotDate: 'asc' },
+      });
+    } catch (error) {
+      console.error('Error getting snapshots:', error);
+      return [];
+    }
   }
 
-  async getWeeklyActivity(userId) {
-    const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - 6); weekStart.setHours(0,0,0,0);
-    const [habitLogs, workouts, dsaProblems, reflections] = await Promise.all([
-      prisma.habitLog.findMany({ where: { userId, completedAt: { gte: weekStart } }, select: { completedAt: true } }),
-      prisma.workout.findMany({ where: { userId, date: { gte: weekStart } }, select: { date: true, duration: true } }),
-      prisma.dsaProblem.findMany({ where: { userId, createdAt: { gte: weekStart } }, select: { createdAt: true } }),
-      prisma.reflection.findMany({ where: { userId, date: { gte: weekStart } }, select: { date: true } }),
-    ]);
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(weekStart); d.setDate(d.getDate() + i);
-      const key = d.toISOString().split('T')[0];
-      return {
-        date: key, day: d.toLocaleDateString('en-US', { weekday: 'short' }),
-        habits: habitLogs.filter((l) => l.completedAt.toISOString().split('T')[0] === key).length,
-        workoutMins: workouts.filter((w) => w.date.toISOString().split('T')[0] === key).reduce((s, w) => s + (w.duration || 0), 0),
-        dsaProblems: dsaProblems.filter((p) => p.createdAt.toISOString().split('T')[0] === key).length,
-        reflections: reflections.filter((r) => r.date.toISOString().split('T')[0] === key).length,
-      };
-    });
+  async getLatestSnapshot(userId) {
+    try {
+      return await prisma.analyticsSnapshot.findFirst({
+        where: { userId },
+        orderBy: { snapshotDate: 'desc' },
+      });
+    } catch (error) {
+      console.error('Error getting latest snapshot:', error);
+      return null;
+    }
+  }
+
+  async getPreviousSnapshot(userId, beforeDate) {
+    try {
+      return await prisma.analyticsSnapshot.findFirst({
+        where: { userId, snapshotDate: { lt: beforeDate } },
+        orderBy: { snapshotDate: 'desc' },
+      });
+    } catch (error) {
+      console.error('Error getting previous snapshot:', error);
+      return null;
+    }
+  }
+
+  async getWeeklySnapshots(userId) {
+    return this.getSnapshots(userId, 7);
+  }
+
+  async getMonthlySnapshots(userId) {
+    return this.getSnapshots(userId, 30);
+  }
+
+  async getActiveUserIds() {
+    try {
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - 7); // Users active in last 7 days
+      
+      const users = await prisma.user.findMany({
+        where: { isOnboarded: true, updatedAt: { gte: cutoff } },
+        select: { id: true },
+      });
+      return users.map(u => u.id);
+    } catch (error) {
+      console.error('Error getting active user IDs:', error);
+      return [];
+    }
+  }
+
+  async getAIInsight(userId, type) {
+    try {
+      return await prisma.aIAnalyticsInsight.findFirst({
+        where: { userId, type },
+        orderBy: { createdAt: 'desc' },
+      });
+    } catch (error) {
+      console.error('Error getting AI insight:', error);
+      return null;
+    }
+  }
+
+  async createAIInsight(userId, type, content) {
+    try {
+      return await prisma.aIAnalyticsInsight.create({
+        data: { userId, type, content },
+      });
+    } catch (error) {
+      console.error('Error creating AI insight:', error);
+      return null;
+    }
+  }
+
+  async getDailyXpEarned(userId, date) {
+    try {
+      // Basic approximation for now
+      return 0;
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  async getDailyTasksCompleted(userId, date) {
+    try {
+      const targetDate = new Date(date);
+      const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0));
+      const endOfDay = new Date(targetDate.setHours(23, 59, 59, 999));
+
+      const [habits, workouts, dsa, reflections] = await Promise.all([
+        prisma.habitLog.count({
+          where: { userId, completedAt: { gte: startOfDay, lte: endOfDay } }
+        }),
+        prisma.workoutSession.count({
+          where: { userId, date: { gte: startOfDay, lte: endOfDay } }
+        }),
+        prisma.dsaUserProgress.count({
+          where: { userId, solvedAt: { gte: startOfDay, lte: endOfDay } }
+        }),
+        prisma.reflection.count({
+          where: { userId, date: { gte: startOfDay, lte: endOfDay } }
+        })
+      ]);
+
+      return habits + workouts + dsa + reflections;
+    } catch (error) {
+      console.error('Error getting daily tasks completed:', error);
+      return 0;
+    }
+  }
+
+  async getProjectStats(userId) {
+    try {
+      const [total, shipped] = await Promise.all([
+        prisma.project.count({ where: { userId } }),
+        prisma.project.count({ where: { userId, status: 'SHIPPED' } }),
+      ]);
+      return { total, shipped };
+    } catch (error) {
+      console.error('Error getting project stats:', error);
+      return { total: 0, shipped: 0 };
+    }
   }
 }
 

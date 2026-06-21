@@ -134,11 +134,12 @@ class ProjectsService {
 
   // ── GitHub Integration ──
 
-  async getGithubAuthUrl(state) {
+  async getGithubAuthUrl(frontendState) {
     const clientId = env.GITHUB_CLIENT_ID;
     const redirectUri = env.GITHUB_CALLBACK_URL;
     const scope = 'repo read:user user:email';
-    return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${encodeURIComponent(state)}`;
+    const combinedState = `projects:${frontendState || ''}`;
+    return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${encodeURIComponent(combinedState)}`;
   }
 
   async connectGithub(userId, code) {

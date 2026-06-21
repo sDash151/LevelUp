@@ -1,56 +1,120 @@
 import { z } from 'zod';
 
-export const createWorkoutSchema = z.object({
+export const logWorkoutSchema = z.object({
   body: z.object({
-    type: z.enum(['STRENGTH', 'CARDIO', 'FLEXIBILITY', 'SPORTS', 'YOGA', 'HIIT', 'OTHER']),
-    name: z.string().min(1, 'Name is required').max(200),
-    duration: z.number().int().min(1, 'Duration is required').max(600),
-    caloriesBurned: z.number().int().min(0).optional(),
+    name: z.string().min(1).max(100),
+    type: z.enum(['push', 'pull', 'legs', 'strength', 'hiit', 'swimming', 'calisthenics', 'cardio', 'yoga', 'mobility', 'sports']),
+    muscleGroups: z.array(z.string()).optional(),
+    duration: z.number().int().min(1).max(600),
     notes: z.string().max(1000).optional(),
+    date: z.string().optional(),
+    planDayId: z.string().optional(),
     exercises: z.array(z.object({
-      name: z.string().min(1).max(100),
-      sets: z.number().int().min(1).optional(),
-      reps: z.number().int().min(1).optional(),
-      weight: z.number().min(0).optional(),
-      duration: z.number().int().min(0).optional(),
-    })).default([]),
-    date: z.string().refine((d) => !isNaN(Date.parse(d)), 'Invalid date'),
+      name: z.string().min(1),
+      muscleGroup: z.string().optional(),
+      notes: z.string().optional(),
+      sets: z.array(z.object({
+        setNumber: z.number().int().optional(),
+        reps: z.number().int().min(0).max(10000).optional(),
+        weight: z.number().min(0).max(1000).optional(),
+        duration: z.number().min(0).max(10000).optional(),
+        distance: z.number().min(0).max(10000).optional(),
+        isWarmup: z.boolean().optional().default(false),
+      })).min(1),
+    })).optional().default([]),
   }),
 });
 
-export const updateWorkoutSchema = z.object({
+export const smartParseSchema = z.object({
   body: z.object({
-    type: z.enum(['STRENGTH', 'CARDIO', 'FLEXIBILITY', 'SPORTS', 'YOGA', 'HIIT', 'OTHER']).optional(),
-    name: z.string().min(1).max(200).optional(),
-    duration: z.number().int().min(1).max(600).optional(),
-    caloriesBurned: z.number().int().min(0).optional(),
-    notes: z.string().max(1000).optional(),
-    exercises: z.array(z.object({
-      name: z.string().min(1).max(100),
-      sets: z.number().int().min(1).optional(),
-      reps: z.number().int().min(1).optional(),
-      weight: z.number().min(0).optional(),
-      duration: z.number().int().min(0).optional(),
-    })).optional(),
+    text: z.string().min(5).max(2000),
   }),
-  params: z.object({ id: z.string().min(1) }),
 });
 
-export const logFitnessSchema = z.object({
+export const logFoodSchema = z.object({
   body: z.object({
-    date: z.string().refine((d) => !isNaN(Date.parse(d)), 'Invalid date'),
-    weight: z.number().positive().optional(),
-    steps: z.number().int().min(0).optional(),
-    water: z.number().min(0).optional(),
-    sleep: z.number().min(0).max(24).optional(),
+    mealType: z.enum(['breakfast', 'lunch', 'pre_workout', 'dinner', 'snacks']),
+    foodItems: z.array(z.object({
+      name: z.string().min(1),
+      quantity: z.string().optional(),
+      calories: z.number().min(0),
+      protein: z.number().min(0),
+      carbs: z.number().min(0),
+      fats: z.number().min(0),
+      fiber: z.number().min(0).optional(),
+      sugar: z.number().min(0).optional(),
+      sodium: z.number().min(0).optional(),
+    })).min(1),
+    date: z.string().optional(),
+    time: z.string().optional(),
     notes: z.string().max(500).optional(),
   }),
 });
 
-export const listWorkoutsSchema = z.object({
-  query: z.object({
-    type: z.enum(['STRENGTH', 'CARDIO', 'FLEXIBILITY', 'SPORTS', 'YOGA', 'HIIT', 'OTHER']).optional(),
-    page: z.coerce.number().int().min(1).default(1),
-    limit: z.coerce.number().int().min(1).max(50).default(20),
+export const logWaterSchema = z.object({
+  body: z.object({
+    amount: z.number().min(-5).max(5).refine(val => val !== 0, { message: "Amount cannot be zero" }),
+    date: z.string().optional(),
+  }),
+});
+
+export const logMetricSchema = z.object({
+  body: z.object({
+    weight: z.number().min(20).max(300).optional(),
+    bodyFat: z.number().min(1).max(60).optional(),
+    muscleMass: z.number().min(10).max(200).optional(),
+    date: z.string().optional(),
+    notes: z.string().max(500).optional(),
+  }).refine(data => data.weight || data.bodyFat || data.muscleMass, {
+    message: 'At least one metric (weight, bodyFat, or muscleMass) is required',
+  }),
+});
+
+export const logMeasurementSchema = z.object({
+  body: z.object({
+    chest: z.number().min(30).max(200).optional(),
+    waist: z.number().min(30).max(200).optional(),
+    arms: z.number().min(10).max(80).optional(),
+    thighs: z.number().min(20).max(120).optional(),
+    date: z.string().optional(),
+  }).refine(data => data.chest || data.waist || data.arms || data.thighs, {
+    message: 'At least one measurement is required',
+  }),
+});
+
+export const profileSchema = z.object({
+  body: z.object({
+    height: z.number().min(50).max(300).optional(),
+    weight: z.number().min(20).max(300).optional(),
+    bodyFat: z.number().min(1).max(60).optional(),
+    goal: z.enum(['strength', 'hypertrophy', 'cutting', 'endurance', 'general']).optional(),
+    trainingDays: z.number().int().min(1).max(7).optional(),
+    splitType: z.enum(['push_pull_legs', 'upper_lower', 'full_body', 'bro_split']).optional(),
+    experienceLevel: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
+    dailyCalorieGoal: z.number().int().min(500).max(10000).optional(),
+    dailyProteinGoal: z.number().int().min(10).max(500).optional(),
+    dailyCarbsGoal: z.number().int().min(10).max(1000).optional(),
+    dailyFatsGoal: z.number().int().min(10).max(500).optional(),
+    dailyWaterGoal: z.number().min(0.5).max(10).optional(),
+  }),
+});
+
+export const milestoneSchema = z.object({
+  body: z.object({
+    title: z.string().min(1).max(200),
+    type: z.enum(['weight', 'lift', 'body_fat', 'endurance']),
+    targetValue: z.number().optional(),
+    currentValue: z.number().optional(),
+  }),
+});
+
+export const uploadPhotoSchema = z.object({
+  body: z.object({
+    publicId: z.string().optional(),
+    secureUrl: z.string().optional(),
+    url: z.string().optional(),
+    base64String: z.string().optional(),
+    caption: z.string().max(500).optional(),
+    date: z.string().optional(),
   }),
 });

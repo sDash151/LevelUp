@@ -67,7 +67,7 @@ function IntelligenceKpiCards({ data, projects }) {
   
   const missingCounts = {};
   withIntel.forEach(p => p.intelligence?.missingSkills?.forEach(s => missingCounts[s] = (missingCounts[s] || 0) + 1));
-  const biggestGaps = Object.entries(missingCounts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(e => e[0]);
+  const biggestGaps = Object.entries(missingCounts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(e => e[0]);
   if(biggestGaps.length === 0) biggestGaps.push('Testing', 'CI/CD');
 
   return (
@@ -127,8 +127,8 @@ function IntelligenceKpiCards({ data, projects }) {
             <AlertTriangle className="w-3.5 h-3.5 text-orange-500" />
             <span className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>Biggest Gap</span>
           </div>
-          <div className="space-y-0.5">
-            {biggestGaps.map(g => <p key={g} className="text-[11px] font-semibold" style={{ color: 'var(--th-text)' }}>{g}</p>)}
+          <div className="space-y-1.5 pr-12">
+            {biggestGaps.map(g => <p key={g} className="text-[11px] font-semibold line-clamp-2 leading-tight" title={g} style={{ color: 'var(--th-text)' }}>{g}</p>)}
           </div>
         </div>
         <div className="absolute right-4 top-1/2 -translate-y-1/2">
@@ -637,7 +637,7 @@ function SuggestedUpgrades({ projects }) {
       </div>
       <div className="space-y-2 mb-4">
         {upgrades.map((u, i) => (
-          <div key={`${u.project}-${i}`} className="flex items-center justify-between p-3 rounded-xl cursor-pointer hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors" style={{ background: 'var(--th-bg-secondary)' }}>
+          <div key={`${u.project}-${i}`} className="flex items-center justify-between p-3 rounded-xl cursor-pointer transition-colors hover:scale-[1.01]" style={{ background: 'var(--th-highlight)', border: '1px solid var(--th-border)', boxShadow: 'var(--th-shadow)' }}>
             <div className="flex items-center gap-3">
               <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${u.color}15` }}>
                 <div className="w-3 h-3 rounded-full" style={{ background: u.color }} />

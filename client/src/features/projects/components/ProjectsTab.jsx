@@ -156,7 +156,7 @@ export default function ProjectsTab({ onNewProject }) {
             <button
               onClick={handleGithubConnect}
               className="flex items-center gap-3 p-4 rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-sm text-left group"
-              style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}
+              style={{ background: 'var(--th-bg)', border: '1px solid var(--th-border)' }}
             >
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
@@ -176,7 +176,7 @@ export default function ProjectsTab({ onNewProject }) {
             <button
               onClick={onNewProject}
               className="flex items-center gap-3 p-4 rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-sm text-left group"
-              style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}
+              style={{ background: 'var(--th-bg)', border: '1px solid var(--th-border)' }}
             >
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"

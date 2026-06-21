@@ -24,6 +24,16 @@ model User {
   resetTokenExpiry DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
+  isOnboarded      Boolean   @default(false)
+  jobTitle         String?
+  dreamRole        String?
+  targetIncome     Decimal?
+  primaryFocus     String?   // fitness, finance, career
+  baseCurrency     Currency  @default(INR)
+  monthlyBudget    Decimal?
+  codingLanguage   String?   // python, cpp, java, javascript
+  githubUrl        String?
+  portfolioUrl     String?
 
   totalXp         Int      @default(0)
   level            Int      @default(1)
@@ -41,13 +51,38 @@ model User {
   dsaPathProgress   DsaPathProgress[]
   dsaUnlockedPaths  DsaUnlockedPath[]
   dsaHeatmap        DsaHeatmap[]
-  jobApplications   JobApplication[]
-  projects          Project[]
-  githubConnection  GithubConnection?
-  transactions      Transaction[]
-  workouts          Workout[]
-  fitnessLogs       FitnessLog[]
-  focusSessions     FocusSession[]
+  jobApplications    JobApplication[]
+  projects           Project[]
+  githubConnection   GithubConnection?
+  transactions       Transaction[]
+  focusSessions      FocusSession[]
+
+  // ── Fitness relations ──
+  fitnessProfile     FitnessProfile?
+  workoutPlans       WorkoutPlan[]
+  workoutSessions    WorkoutSession[]
+  workoutMemories    WorkoutMemory[]
+  mealLogs           MealLog[]
+  waterLogs          WaterLog[]
+  bodyMetrics        BodyMetric[]
+  bodyMeasurements   BodyMeasurement[]
+  progressPhotos     ProgressPhoto[]
+  fitnessMilestones  FitnessMilestone[]
+  fitnessInsights    FitnessInsight[]
+
+  // ── Finance relations ──
+  financeAccounts        FinanceAccount[]
+  financeCategories      FinanceCategory[]
+  budgets                Budget[]
+  financeGoals           FinanceGoal[]
+  subscriptions          Subscription[]
+  debts                  Debt[]
+  insurances             Insurance[]
+  bills                  Bill[]
+  moneyStreaks           MoneyStreak[]
+  monthlyReflections     MonthlyReflection[]
+  aiFinanceInsights      AIFinanceInsight[]
+  weeklyFinanceChallenges WeeklyFinanceChallenge[]
 
   @@map("users")
 }
@@ -611,66 +646,552 @@ model JobProjectMatch {
   @@map("job_project_matches")
 }
 
-// ==================== FINANCE TRACKER ====================
-
-model Transaction {
-  id          String          @id @default(cuid())
-  userId      String
-  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type        TransactionType
-  amount      Decimal         @db.Decimal(12, 2)
-  category    String
-  description String?
-  date        DateTime        @db.Date
-  isRecurring Boolean         @default(false)
-  createdAt   DateTime        @default(now())
-
-  @@index([userId])
-  @@index([date])
-  @@index([type])
-  @@map("transactions")
-}
+// ==================== FINANCE MODULE ====================
 
 enum TransactionType {
   INCOME
   EXPENSE
+  TRANSFER
 }
 
-// ==================== FITNESS TRACKER ====================
+enum NecessityLevel {
+  ESSENTIAL
+  COMFORTABLE
+  LUXURY
+  WASTEFUL
+}
 
-model Workout {
-  id             String   @id @default(cuid())
-  userId         String
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type           String
-  name           String
-  duration       Int
-  caloriesBurned Int?
-  notes          String?
-  exercises      Json     @default("[]")
-  date           DateTime @db.Date
-  createdAt      DateTime @default(now())
+enum MoodType {
+  NECESSARY
+  HAPPY
+  REGRET
+  NEUTRAL
+}
+
+enum FinanceGoalType {
+  EMERGENCY
+  ASSET
+  TRAVEL
+  EDUCATION
+  INVESTMENT
+  OPPORTUNITY
+  CUSTOM
+}
+
+enum SubscriptionCycle {
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+}
+
+enum InsuranceStatus {
+  ACTIVE
+  EXPIRING_SOON
+  EXPIRED
+  LAPSED
+}
+
+enum DebtStatus {
+  ACTIVE
+  PAID_OFF
+  DEFAULTED
+}
+
+enum BillStatus {
+  UPCOMING
+  PAID
+  OVERDUE
+}
+
+enum Currency {
+  INR
+  USD
+  EUR
+  GBP
+  JPY
+  AUD
+  CAD
+}
+
+model Transaction {
+  id                       String           @id @default(cuid())
+  userId                   String
+  user                     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId                String?
+  account                  FinanceAccount?  @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  type                     TransactionType
+  amount                   Decimal          @db.Decimal(12, 2)
+  category                 String
+  description              String?
+  merchant                 String?
+  paymentMethod            String?
+  necessityLevel           NecessityLevel?
+  mood                     MoodType?
+  tags                     String[]         @default([])
+  note                     String?
+  date                     DateTime         @db.Date
+  isRecurring              Boolean          @default(false)
+  isSubscriptionCandidate  Boolean          @default(false)
+  createdAt                DateTime         @default(now())
 
   @@index([userId])
   @@index([date])
-  @@map("workouts")
+  @@index([type])
+  @@index([category])
+  @@index([merchant])
+  @@map("transactions")
 }
 
-model FitnessLog {
+model FinanceAccount {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  type            String        // cash, savings, investment, debt
+  balance         Decimal       @db.Decimal(12, 2) @default(0)
+  institution     String?
+  icon            String?
+  color           String?
+  isDefault       Boolean       @default(false)
+  includeInNetWorth Boolean     @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  transactions    Transaction[]
+
+  @@index([userId])
+  @@map("finance_accounts")
+}
+
+model FinanceCategory {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  date      DateTime @db.Date
-  weight    Float?
-  steps     Int?
-  water     Float?
-  sleep     Float?
-  notes     String?
+  name      String
+  icon      String?
+  color     String?
+  type      String   // income, expense
+  isSystem  Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  @@unique([userId, date])
+  budgets   Budget[]
+
+  @@unique([userId, name, type])
   @@index([userId])
-  @@map("fitness_logs")
+  @@map("finance_categories")
+}
+
+model Budget {
+  id            String          @id @default(cuid())
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId    String
+  category      FinanceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  monthlyLimit  Decimal         @db.Decimal(12, 2)
+  month         String          // YYYY-MM
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@unique([userId, categoryId, month])
+  @@index([userId])
+  @@map("budgets")
+}
+
+model FinanceGoal {
+  id            String           @id @default(cuid())
+  userId        String
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  goalType      FinanceGoalType  @default(CUSTOM)
+  targetAmount  Decimal          @db.Decimal(12, 2)
+  currentAmount Decimal          @db.Decimal(12, 2) @default(0)
+  deadline      DateTime?
+  icon          String?
+  color         String?
+  priority      String           @default("MEDIUM")
+  isCompleted   Boolean          @default(false)
+  completedAt   DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@index([userId])
+  @@map("finance_goals")
+}
+
+model Subscription {
+  id              String             @id @default(cuid())
+  userId          String
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merchant        String
+  amount          Decimal            @db.Decimal(12, 2)
+  cycle           SubscriptionCycle  @default(MONTHLY)
+  nextRenewal     DateTime?
+  status          SubscriptionStatus @default(ACTIVE)
+  category        String?
+  isDetected      Boolean            @default(false)
+  lastChargeDate  DateTime?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@index([userId])
+  @@map("subscriptions")
+}
+
+model Debt {
+  id             String     @id @default(cuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title          String
+  type           String     // loan, credit_card, emi
+  totalAmount    Decimal    @db.Decimal(12, 2)
+  paidAmount     Decimal    @db.Decimal(12, 2) @default(0)
+  monthlyEmi     Decimal    @db.Decimal(12, 2) @default(0)
+  interestRate   Float      @default(0)
+  dueDay         Int        @default(1) // day of month
+  status         DebtStatus @default(ACTIVE)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([userId])
+  @@map("debts")
+}
+
+model Insurance {
+  id           String          @id @default(cuid())
+  userId       String
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         String          // health, term, vehicle, accident
+  provider     String
+  policyNumber String?
+  premium      Decimal         @db.Decimal(12, 2)
+  cycle        SubscriptionCycle @default(YEARLY)
+  expiryDate   DateTime
+  status       InsuranceStatus @default(ACTIVE)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([userId])
+  @@map("insurances")
+}
+
+model Bill {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  amount      Decimal    @db.Decimal(12, 2)
+  dueDate     DateTime
+  category    String?
+  isRecurring Boolean    @default(false)
+  cycle       SubscriptionCycle?
+  status      BillStatus @default(UPCOMING)
+  paidAt      DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([userId])
+  @@map("bills")
+}
+
+model MoneyStreak {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  streakType    String   // no_spend, savings, budget, logging
+  currentStreak Int      @default(0)
+  bestStreak    Int      @default(0)
+  lastUpdated   DateTime @default(now())
+
+  @@unique([userId, streakType])
+  @@index([userId])
+  @@map("money_streaks")
+}
+
+model MonthlyReflection {
+  id                   String   @id @default(cuid())
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  month                String   // YYYY-MM
+  whatWentWell          String?
+  unnecessarySpending  String?
+  improvementPlan      String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@unique([userId, month])
+  @@index([userId])
+  @@map("monthly_reflections")
+}
+
+model AIFinanceInsight {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // cfo, leak, savings, growth, weekly_challenge, wealth_plan, risk
+  content   Json
+  priority  String   @default("medium") // high, medium, low
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([type])
+  @@map("ai_finance_insights")
+}
+
+model WeeklyFinanceChallenge {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  xpReward    Int       @default(50)
+  target      Int       @default(1)
+  progress    Int       @default(0)
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+  weekStart   DateTime
+  weekEnd     DateTime
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([weekStart])
+  @@map("weekly_finance_challenges")
+}
+
+// ==================== FITNESS MODULE ====================
+
+model ExerciseCatalog {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  muscleGroup String   // chest, back, legs, shoulders, arms, core, full_body
+  category    String   // compound, isolation, cardio, flexibility, plyometric
+  metValue    Float    @default(5.0)
+  isCompound  Boolean  @default(false)
+  defaultUnit String   @default("kg") // kg, lbs, bodyweight, minutes
+  createdAt   DateTime @default(now())
+
+  @@index([muscleGroup])
+  @@index([category])
+  @@map("exercise_catalog")
+}
+
+model FitnessProfile {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  height           Float?   // cm
+  weight           Float?   // kg
+  bodyFat          Float?   // percentage
+  goal             String   @default("general") // strength, hypertrophy, cutting, endurance, general
+  trainingDays     Int      @default(5)
+  splitType        String   @default("push_pull_legs")
+  experienceLevel  String   @default("intermediate")
+  dietType         String?  // vegan, vegetarian, keto, paleo, standard
+  dailyCalorieGoal Int?     @default(2100)
+  dailyProteinGoal Int?     @default(150)
+  dailyCarbsGoal   Int?     @default(250)
+  dailyFatsGoal    Int?     @default(70)
+  dailyWaterGoal   Float?   @default(3.0) // liters
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("fitness_profiles")
+}
+
+model WorkoutPlan {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String   // "Strength Building Phase"
+  phase      String   // strength_building, hypertrophy, cutting, recovery
+  weekNumber Int      @default(1)
+  totalWeeks Int      @default(8)
+  isActive   Boolean  @default(true)
+  schedule   Json     // [{day: 'monday', type: 'Push Day', muscleGroups: [...], exercises: [...]}]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+  @@map("workout_plans")
+}
+
+model WorkoutSession {
+  id             String        @id @default(cuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String        // "Push Day", "HIIT Cardio"
+  type           String        // strength, cardio, hiit, yoga, mobility, sports
+  muscleGroups   String[]      // ["chest", "shoulders", "triceps"]
+  duration       Int           // minutes
+  caloriesBurned Int           @default(0)
+  totalVolume    Float         @default(0) // total kg lifted
+  notes          String?
+  date           DateTime
+  completedAt    DateTime?
+  planDayId      String?       // which plan day this fulfills
+  exercises      ExerciseLog[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([date])
+  @@index([userId, date])
+  @@map("workout_sessions")
+}
+
+model ExerciseLog {
+  id          String         @id @default(cuid())
+  sessionId   String
+  session     WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  name        String         // "Bench Press"
+  muscleGroup String         // "chest"
+  sets        Json           // [{setNumber: 1, reps: 12, weight: 70, isWarmup: false}]
+  totalVolume Float          @default(0)
+  bestSet     Json?          // {reps: 8, weight: 80}
+  notes       String?
+  orderIndex  Int            @default(0)
+  createdAt   DateTime       @default(now())
+
+  @@index([sessionId])
+  @@map("exercise_logs")
+}
+
+model WorkoutMemory {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exerciseName    String
+  lastWeight      Float
+  lastReps        Int
+  lastDate        DateTime
+  bestWeight      Float
+  bestReps        Int
+  bestDate        DateTime
+  suggestedWeight Float?
+  suggestedReps   Int?
+  updatedAt       DateTime @updatedAt
+
+  @@unique([userId, exerciseName])
+  @@index([userId])
+  @@map("workout_memories")
+}
+
+model MealLog {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mealType      String   // breakfast, lunch, pre_workout, dinner, snacks
+  foodItems     Json     // [{name, calories, protein, carbs, fats, quantity}]
+  totalCalories Int      @default(0)
+  totalProtein  Float    @default(0)
+  totalCarbs    Float    @default(0)
+  totalFats     Float    @default(0)
+  totalFiber    Float?   @default(0)
+  totalSugar    Float?   @default(0)
+  totalSodium   Float?   @default(0)
+  date          DateTime
+  time          String?  // "8:30 AM"
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, date])
+  @@index([date])
+  @@map("meal_logs")
+}
+
+model WaterLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount    Float    // liters
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("water_logs")
+}
+
+model BodyMetric {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weight     Float?   // kg
+  bodyFat    Float?   // percentage
+  muscleMass Float?   // kg
+  date       DateTime
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, date])
+  @@map("body_metrics")
+}
+
+model BodyMeasurement {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chest     Float?   // cm
+  waist     Float?   // cm
+  arms      Float?   // cm
+  thighs    Float?   // cm
+  date      DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("body_measurements")
+}
+
+model ProgressPhoto {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  publicId  String   // Cloudinary public ID
+  secureUrl String   // Cloudinary secure URL
+  caption   String?
+  date      DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("progress_photos")
+}
+
+model FitnessMilestone {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String    // "Weight below 75 kg"
+  type         String    // weight, lift, body_fat, endurance
+  targetValue  Float?
+  currentValue Float?
+  isAchieved   Boolean   @default(false)
+  achievedAt   DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([userId])
+  @@map("fitness_milestones")
+}
+
+model FitnessInsight {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String   // overview, nutrition, progress, plan
+  content     Json     // {observations: [], weaknesses: [], recommendations: []}
+  generatedAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([type])
+  @@map("fitness_insights")
 }
 // ==================== FOCUS SESSIONS ====================
 

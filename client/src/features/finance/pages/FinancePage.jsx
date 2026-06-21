@@ -1,55 +1,135 @@
-import { useState } from 'react';
-import { motion } from 'motion/react';
-import { Plus, Wallet } from 'lucide-react';
-import { AnimatedPage, EmptyState } from '@/design-system/components';
-import { useTransactions, useFinanceSummary, useCreateTransaction, useDeleteTransaction } from '../hooks/useFinance';
-import { FinanceSummary } from '../components/FinanceSummary';
-import { TransactionCard } from '../components/TransactionCard';
-import { TransactionForm } from '../components/TransactionForm';
+import { lazy, Suspense, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import { LayoutDashboard, CreditCard, TrendingUp, Shield, Brain, Plus, Sparkles } from 'lucide-react';
+import { AnimatedPage } from '@/design-system/components';
 import clsx from 'clsx';
 
-const FILTERS = [null, 'INCOME', 'EXPENSE'];
+const OverviewTab = lazy(() => import('../components/OverviewTab'));
+const SpendTab = lazy(() => import('../components/SpendTab'));
+const BuildTab = lazy(() => import('../components/BuildTab'));
+const ProtectTab = lazy(() => import('../components/ProtectTab'));
+const IntelligenceTab = lazy(() => import('../components/IntelligenceTab'));
+
+const TABS = [
+  { key: 'overview', label: 'Overview', icon: LayoutDashboard },
+  { key: 'spend', label: 'Spend', icon: CreditCard },
+  { key: 'build', label: 'Build', icon: TrendingUp },
+  { key: 'protect', label: 'Protect', icon: Shield },
+  { key: 'intelligence', label: 'Intelligence', icon: Brain },
+];
+
+const TAB_TITLES = {
+  overview: { title: 'Financial Overview', subtitle: 'Your complete money picture at a glance' },
+  spend: { title: 'Spending', subtitle: 'Track, analyze & optimize every rupee you spend' },
+  build: { title: 'Wealth Building', subtitle: 'Grow your wealth with goals, savings & investments' },
+  protect: { title: 'Financial Protection', subtitle: 'Bills, debts, subscriptions & insurance at a glance' },
+  intelligence: { title: 'AI Intelligence', subtitle: 'AI-powered financial insights & coaching' },
+};
+
+const TAB_COLORS = {
+  overview: 'linear-gradient(135deg, #6366F1, #4F46E5)',
+  spend: 'linear-gradient(135deg, #EC4899, #DB2777)',
+  build: 'linear-gradient(135deg, #10B981, #059669)',
+  protect: 'linear-gradient(135deg, #F59E0B, #D97706)',
+  intelligence: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
+};
+
+function TabSkeleton() {
+  return (
+    <div className="space-y-4 animate-pulse">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="h-28 rounded-2xl" style={{ background: 'var(--th-card)' }} />
+        ))}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="h-72 rounded-2xl" style={{ background: 'var(--th-card)' }} />
+        <div className="h-72 rounded-2xl" style={{ background: 'var(--th-card)' }} />
+      </div>
+    </div>
+  );
+}
 
 export default function FinancePage() {
-  const [typeFilter, setTypeFilter] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const { data: transactions = [] } = useTransactions(typeFilter ? { type: typeFilter } : {});
-  const { data: summary } = useFinanceSummary();
-  const createTx = useCreateTransaction();
-  const deleteTx = useDeleteTransaction();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'overview';
+  const setTab = (key) => setSearchParams({ tab: key }, { replace: true });
+  const [showTransactionForm, setShowTransactionForm] = useState(false);
+
+  const tabInfo = TAB_TITLES[activeTab] || TAB_TITLES.overview;
+
+  const renderTab = () => {
+    const formProps = { showTransactionForm, setShowTransactionForm };
+    switch (activeTab) {
+      case 'overview': return <OverviewTab {...formProps} />;
+      case 'spend': return <SpendTab {...formProps} />;
+      case 'build': return <BuildTab {...formProps} />;
+      case 'protect': return <ProtectTab {...formProps} />;
+      case 'intelligence': return <IntelligenceTab {...formProps} />;
+      default: return <OverviewTab {...formProps} />;
+    }
+  };
 
   return (
     <AnimatedPage>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Finance</h1>
-        <p className="text-sm text-zinc-500 mt-1">Track your income & expenses</p>
-      </div>
-
-      <FinanceSummary summary={summary} />
-
-      <div className="flex gap-2 mb-6">
-        {FILTERS.map((f) => (
-          <button key={f || 'all'} onClick={() => setTypeFilter(f)} className={clsx('px-3 py-1.5 rounded-lg text-xs font-medium transition-all', typeFilter === f ? 'bg-accent text-white' : 'bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08]')}>{f || 'All'}</button>
-        ))}
-      </div>
-
-      {transactions.length === 0 ? (
-        <EmptyState icon={Wallet} title="No transactions" description="Start tracking your money" action={{ children: 'Add Transaction', onClick: () => setShowForm(true) }} />
-      ) : (
-        <div className="space-y-3">
-          {transactions.map((tx, i) => (
-            <motion.div key={tx.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
-              <TransactionCard tx={tx} onDelete={(id) => deleteTx.mutate(id)} />
-            </motion.div>
-          ))}
+      <div className="space-y-5">
+        {/* ── Header ── */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl lg:text-2xl font-bold" style={{ color: 'var(--th-text)' }}>{tabInfo.title}</h1>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--th-text-secondary)' }}>{tabInfo.subtitle}</p>
+          </div>
+          <button
+            onClick={() => setShowTransactionForm(true)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+            style={{ background: TAB_COLORS[activeTab] || TAB_COLORS.overview }}
+          >
+            {activeTab === 'intelligence' ? <Sparkles className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+            {activeTab === 'intelligence' ? 'Ask AI CFO' : 'Log Transaction'}
+          </button>
         </div>
-      )}
 
-      <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowForm(true)} className="fixed bottom-24 lg:bottom-8 right-6 w-14 h-14 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white flex items-center justify-center shadow-glow-accent z-40">
-        <Plus className="w-6 h-6" />
-      </motion.button>
+        {/* ── Tab Bar ── */}
+        <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1">
+          {TABS.map(tab => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setTab(tab.key)}
+                className={clsx(
+                  'flex items-center gap-2 px-4 py-2 text-sm whitespace-nowrap transition-all rounded-lg relative',
+                  isActive ? 'font-semibold shadow-sm' : 'font-medium hover:bg-black/5 dark:hover:bg-white/5'
+                )}
+                style={{
+                  color: isActive ? '#fff' : 'var(--th-text-secondary)',
+                  background: isActive ? TAB_COLORS[tab.key] : 'transparent',
+                }}
+              >
+                <Icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
 
-      <TransactionForm isOpen={showForm} onClose={() => setShowForm(false)} onSubmit={(data) => createTx.mutate(data)} />
+        {/* ── Tab Content ── */}
+        <Suspense fallback={<TabSkeleton />}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              {renderTab()}
+            </motion.div>
+          </AnimatePresence>
+        </Suspense>
+      </div>
     </AnimatedPage>
   );
 }

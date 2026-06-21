@@ -5,9 +5,11 @@ import { SideNav } from './SideNav';
 import { MobileNav } from './MobileNav';
 import { ThemeToggle } from '@/design-system/components/ThemeToggle';
 import { PageSkeleton } from '@/design-system/components/PageSkeleton';
+import { useUser } from '@/features/auth/hooks/useAuth';
 
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  useUser(); // Fetches full profile & syncs with Zustand
 
   return (
     <div className="flex min-h-screen page-bg">

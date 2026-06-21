@@ -11,12 +11,12 @@ import clsx from 'clsx';
 
 /* ─── Design tokens (matches reference mock) ─── */
 const STATUS = {
-  IDEA: { bg: 'bg-slate-100', text: 'text-slate-500', label: 'Idea' },
-  PLANNING: { bg: 'bg-blue-50', text: 'text-blue-600', label: 'Planning' },
-  BUILDING: { bg: 'bg-amber-50', text: 'text-amber-600', label: 'Building' },
-  TESTING: { bg: 'bg-violet-50', text: 'text-violet-600', label: 'Testing' },
-  SHIPPED: { bg: 'bg-emerald-50', text: 'text-emerald-600', label: 'Shipped' },
-  ARCHIVED: { bg: 'bg-slate-100', text: 'text-slate-500', label: 'Archived' },
+  IDEA: { bg: 'bg-slate-500/10', text: 'text-slate-500', label: 'Idea' },
+  PLANNING: { bg: 'bg-blue-500/10', text: 'text-blue-500', label: 'Planning' },
+  BUILDING: { bg: 'bg-amber-500/10', text: 'text-amber-500', label: 'Building' },
+  TESTING: { bg: 'bg-violet-500/10', text: 'text-violet-500', label: 'Testing' },
+  SHIPPED: { bg: 'bg-emerald-500/10', text: 'text-emerald-500', label: 'Shipped' },
+  ARCHIVED: { bg: 'bg-slate-500/10', text: 'text-slate-500', label: 'Archived' },
 };
 
 const COLORS = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e'];
@@ -222,7 +222,7 @@ function ContinueBuildingCard({ projects, stats }) {
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <h3 className="text-[14px] font-bold" style={{ color: 'var(--th-text)' }}>Continue Building</h3>
-        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-semibold whitespace-nowrap">
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-semibold whitespace-nowrap">
           You&apos;re in the zone! 🔥
         </span>
       </div>
@@ -251,16 +251,16 @@ function ContinueBuildingCard({ projects, stats }) {
             {d.stack.map(s => (
               <span
                 key={s}
-                className="text-[10px] px-2 py-0.5 rounded-md font-medium border"
-                style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text-secondary)', borderColor: 'var(--th-border)' }}
+                className="text-[10px] px-2 py-0.5 rounded-md font-medium border border-transparent dark:border-white/5 bg-black/5 dark:bg-white/5"
+                style={{ color: 'var(--th-text-secondary)' }}
               >
                 {s}
               </span>
             ))}
             {d.stackExtra > 0 && (
               <span
-                className="text-[10px] px-2 py-0.5 rounded-md font-medium border"
-                style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text-dim)', borderColor: 'var(--th-border)' }}
+                className="text-[10px] px-2 py-0.5 rounded-md font-medium border border-transparent dark:border-white/5 bg-black/5 dark:bg-white/5"
+                style={{ color: 'var(--th-text-dim)' }}
               >
                 +{d.stackExtra}
               </span>
@@ -280,7 +280,7 @@ function ContinueBuildingCard({ projects, stats }) {
               <p className="text-[10px] mb-1" style={{ color: 'var(--th-text-dim)' }}>Progress</p>
               <div className="flex items-center gap-2">
                 <span className="text-[12px] font-bold shrink-0" style={{ color: 'var(--th-text)' }}>{d.progress}%</span>
-                <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-bg-secondary)' }}>
+                <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-black/10 dark:bg-white/10">
                   <div className="h-full rounded-full transition-all" style={{ width: `${d.progress}%`, background: d.color }} />
                 </div>
               </div>
@@ -309,7 +309,7 @@ function ContinueBuildingCard({ projects, stats }) {
                 {d.nextTask.subtitle}
               </p>
               <div className="flex items-center gap-1.5 mt-1.5">
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-violet-50 text-violet-600 font-semibold capitalize">
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-violet-500/10 text-violet-500 font-semibold capitalize">
                   {d.nextTask.tag}
                 </span>
                 <span className="text-[9px]" style={{ color: 'var(--th-text-dim)' }}>{d.nextTask.date}</span>
@@ -328,7 +328,7 @@ function ContinueBuildingCard({ projects, stats }) {
                 {d.blocker.desc}
               </p>
               {d.blocker.priority !== 'Low' && (
-                <span className="inline-block text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-50 text-red-500 mt-2 capitalize">
+                <span className="inline-block text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-500/10 text-red-500 mt-2 capitalize">
                   {d.blocker.priority}
                 </span>
               )}
@@ -340,7 +340,7 @@ function ContinueBuildingCard({ projects, stats }) {
       {/* AI Recommendation footer */}
       <div
         className="mt-4 flex items-center justify-between gap-3 rounded-xl px-4 py-3"
-        style={{ background: 'rgba(var(--th-primary-rgb), 0.07)', border: '1px solid rgba(var(--th-primary-rgb), 0.12)' }}
+        style={{ background: 'rgba(var(--th-primary-rgb), 0.05)', border: '1px solid rgba(var(--th-primary-rgb), 0.1)' }}
       >
         <div className="flex items-center gap-2 min-w-0">
           <Sparkles className="w-4 h-4 shrink-0" style={{ color: 'var(--th-primary)' }} />
@@ -406,7 +406,7 @@ function GitHubActivityCard({ projects, githubRepos, stats }) {
           <button 
             onClick={() => syncMutation.mutate()}
             disabled={syncMutation.isPending}
-            className="text-[10px] font-medium px-2 py-0.5 rounded bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 transition-colors disabled:opacity-50"
+            className="text-[10px] font-medium px-2 py-0.5 rounded bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors disabled:opacity-50"
             style={{ color: 'var(--th-text-dim)' }}
           >
             {syncMutation.isPending ? 'Syncing...' : 'Sync'}
@@ -464,21 +464,21 @@ function AIBuildInsightsCard({ projects }) {
   
   (projects || []).forEach(p => {
     if (p.intelligence?.scalabilityScore < 60 || p.intelligence?.architectureScore < 60) {
-      insights.push({ icon: AlertTriangle, title: 'Bottleneck Detected', desc: `${p.title} architecture needs review`, badge: 'High', badgeBg: '#fef2f2', badgeColor: '#ef4444', iconColor: '#ef4444' });
+      insights.push({ icon: AlertTriangle, title: 'Bottleneck Detected', desc: `${p.title} architecture needs review`, badge: 'High', badgeBg: 'rgba(239, 68, 68, 0.05)', badgeColor: '#ef4444', iconColor: '#ef4444', itemBg: 'rgba(239, 68, 68, 0.03)', border: 'rgba(239, 68, 68, 0.08)' });
     }
     if (p.intelligence?.missingSkills?.length > 0) {
-      insights.push({ icon: Zap, title: 'Next Suggested Feature', desc: `Learn ${p.intelligence.missingSkills[0]} for ${p.title}`, badge: 'New', badgeBg: '#ecfdf5', badgeColor: '#10b981', iconColor: '#10b981' });
+      insights.push({ icon: Zap, title: 'Next Suggested Feature', desc: `Learn ${p.intelligence.missingSkills[0]} for ${p.title}`, badge: 'New', badgeBg: 'rgba(16, 185, 129, 0.05)', badgeColor: '#10b981', iconColor: '#10b981', itemBg: 'rgba(16, 185, 129, 0.03)', border: 'rgba(16, 185, 129, 0.08)' });
     }
     if (p.intelligence?.weaknesses?.length > 0) {
-      insights.push({ icon: Code2, title: 'Architecture Suggestion', desc: `Improve ${p.title}: ${p.intelligence.weaknesses[0]}`, badge: 'Improve', badgeBg: '#eff6ff', badgeColor: '#3b82f6', iconColor: '#3b82f6' });
+      insights.push({ icon: Code2, title: 'Architecture Suggestion', desc: `Improve ${p.title}: ${p.intelligence.weaknesses[0]}`, badge: 'Improve', badgeBg: 'rgba(59, 130, 246, 0.05)', badgeColor: '#3b82f6', iconColor: '#3b82f6', itemBg: 'rgba(59, 130, 246, 0.03)', border: 'rgba(59, 130, 246, 0.08)' });
     }
   });
 
   if (insights.length === 0) {
     if (!projects || projects.length === 0) {
-       insights.push({ icon: AlertTriangle, title: 'No Projects Found', desc: 'Create a project to get AI insights', badge: 'High', badgeBg: '#fef2f2', badgeColor: '#ef4444', iconColor: '#ef4444' });
+       insights.push({ icon: AlertTriangle, title: 'No Projects Found', desc: 'Create a project to get AI insights', badge: 'High', badgeBg: 'rgba(239, 68, 68, 0.05)', badgeColor: '#ef4444', iconColor: '#ef4444', itemBg: 'rgba(239, 68, 68, 0.03)', border: 'rgba(239, 68, 68, 0.08)' });
     } else {
-       insights.push({ icon: Sparkles, title: 'Analysis Required', desc: 'Click on a project and run AI Analysis to unlock insights.', badge: 'Action', badgeBg: '#fef2f2', badgeColor: '#ef4444', iconColor: '#ef4444' });
+       insights.push({ icon: Sparkles, title: 'Analysis Required', desc: 'Click on a project and run AI Analysis to unlock insights.', badge: 'Action', badgeBg: 'rgba(99, 102, 241, 0.05)', badgeColor: '#6366f1', iconColor: '#6366f1', itemBg: 'rgba(99, 102, 241, 0.03)', border: 'rgba(99, 102, 241, 0.08)' });
     }
   }
 
@@ -496,8 +496,8 @@ function AIBuildInsightsCard({ projects }) {
         {displayInsights.map((item, idx) => (
           <div
             key={idx}
-            className="flex items-start gap-2.5 p-2.5 rounded-xl"
-            style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}
+            className="flex items-start gap-2.5 p-2.5 rounded-xl border"
+            style={{ background: item.itemBg, borderColor: item.border || 'transparent' }}
           >
             <item.icon className="w-4 h-4 shrink-0 mt-0.5" style={{ color: item.iconColor }} />
             <div className="flex-1 min-w-0">
@@ -517,7 +517,7 @@ function AIBuildInsightsCard({ projects }) {
       <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: '1px solid var(--th-border)' }}>
         <span className="text-[10px] font-medium" style={{ color: 'var(--th-text-dim)' }}>AI Confidence</span>
         <div className="flex items-center gap-2">
-          <div className="w-[72px] h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-bg-secondary)' }}>
+          <div className="w-[72px] h-1.5 rounded-full overflow-hidden bg-black/10 dark:bg-white/10">
             <div className="h-full rounded-full transition-all" style={{ width: `${confidence}%`, background: 'var(--th-primary)' }} />
           </div>
           <span className="text-[11px] font-bold" style={{ color: 'var(--th-primary)' }}>{confidence}%</span>
@@ -540,8 +540,7 @@ function MyProjectsPreview({ projects }) {
         <div className="flex items-center gap-2">
           <button 
             onClick={() => setSearchParams({ tab: 'projects' }, { replace: true })}
-            className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition-colors hover:bg-black/5 dark:hover:bg-white/5"
-            style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text-secondary)', borderColor: 'var(--th-border)' }}
+            className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition-colors bg-black/5 dark:bg-white/5 border-transparent dark:border-white/5"
           >
             All Projects <ChevronDown className="w-3 h-3" />
           </button>
@@ -584,9 +583,9 @@ function MyProjectsPreview({ projects }) {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04 }}
-                onClick={() => setSearchParams({ tab: 'pipeline', id: p.id }, { replace: true })}
-                className="rounded-xl p-3.5 border cursor-pointer hover:-translate-y-0.5 transition-all"
-                style={{ background: 'var(--th-bg-secondary)', borderColor: 'var(--th-border)', boxShadow: 'var(--th-shadow)' }}
+                onClick={() => setLocation(`/projects/${p.id}`)}
+                className="group relative rounded-xl p-4 transition-all hover:scale-[1.01] cursor-pointer"
+                style={{ background: 'var(--th-highlight)', border: '1px solid var(--th-border)', boxShadow: 'var(--th-shadow)' }}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div

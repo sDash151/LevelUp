@@ -1,13 +1,12 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/shared/stores/authStore';
 import { AppLayout } from '@/design-system/layouts/AppLayout';
 import { Loader2 } from 'lucide-react';
 
 // Lazy-loaded pages
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
-const SignupPage = lazy(() => import('@/features/auth/pages/SignupPage'));
-const ForgotPasswordPage = lazy(() => import('@/features/auth/pages/ForgotPasswordPage'));
+const OnboardingPage = lazy(() => import('@/features/auth/pages/OnboardingPage'));
 const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'));
 const HabitsPage = lazy(() => import('@/features/habits/pages/HabitsPage'));
 const GoalsPage = lazy(() => import('@/features/goals/pages/GoalsPage'));
@@ -30,9 +29,22 @@ function LoadingFallback() {
   );
 }
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children, allowUnonboarded = false }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const user = useAuthStore((s) => s.user);
+  
   if (!isAuthenticated) return <Navigate to="/login" replace />;
+  
+  // If they are authenticated but not onboarded, and trying to access a protected route (not onboarding)
+  if (!allowUnonboarded && user && !user.isOnboarded) {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  // If they ARE onboarded and try to access onboarding page
+  if (allowUnonboarded && user && user.isOnboarded) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return children;
 }
 
@@ -48,8 +60,16 @@ export function AppRouter() {
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-        <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
-        <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
+
+        {/* Semi-protected onboarding route */}
+        <Route 
+          path="/onboarding" 
+          element={
+            <ProtectedRoute allowUnonboarded={true}>
+              <OnboardingPage />
+            </ProtectedRoute>
+          } 
+        />
 
         {/* Protected routes inside AppLayout */}
         <Route

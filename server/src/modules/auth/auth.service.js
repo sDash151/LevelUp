@@ -32,6 +32,37 @@ class AuthService {
     return { user: safeUser, ...tokens };
   }
 
+  /** Authenticate a user with GitHub */
+  async githubLogin(code) {
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+    // 1. Exchange code for access token
+    const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, code })
+    });
+    const tokenData = await tokenRes.json();
+    if (!tokenData.access_token) throw new UnauthorizedError('Failed to get GitHub access token');
+
+    const accessToken = tokenData.access_token;
+
+    // 2. Fetch user profile
+    const userRes = await fetch('https://api.github.com/user', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const profile = await userRes.json();
+    if (!profile.id) throw new UnauthorizedError('Failed to fetch GitHub profile');
+
+    // 3. Upsert user and connection
+    const user = await authRepository.upsertGithubUser(profile, accessToken);
+
+    // 4. Generate tokens
+    const tokens = await this._generateAndSaveTokens(user);
+    return { user, ...tokens };
+  }
+
   /** Refresh access + refresh tokens using a valid refresh token */
   async refreshTokens(refreshToken) {
     if (!refreshToken) throw new UnauthorizedError('No refresh token provided');

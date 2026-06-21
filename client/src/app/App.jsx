@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { Providers } from './Providers';
 import { AppRouter } from './Router';
 import { ErrorBoundary } from './ErrorBoundary';
@@ -20,6 +21,7 @@ export function App() {
         <OfflineBanner />
         <AppRouter />
         <PWAInstallPrompt />
+        <Toaster position="bottom-center" />
       </Providers>
     </ErrorBoundary>
   );

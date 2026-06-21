@@ -8,15 +8,68 @@ class AuthRepository {
   async findById(id) {
     return prisma.user.findUnique({
       where: { id },
-      select: { id: true, name: true, email: true, avatar: true, googleId: true, createdAt: true, updatedAt: true },
+      select: { 
+        id: true, name: true, email: true, avatar: true, googleId: true, 
+        createdAt: true, updatedAt: true, isOnboarded: true, primaryFocus: true,
+        jobTitle: true, dreamRole: true, baseCurrency: true, targetIncome: true,
+        totalXp: true, level: true
+      },
     });
   }
 
   async create(data) {
     return prisma.user.create({
       data,
-      select: { id: true, name: true, email: true, avatar: true, createdAt: true },
+      select: { id: true, name: true, email: true, avatar: true, isOnboarded: true, createdAt: true },
     });
+  }
+
+  async findByGithubId(githubId) {
+    const conn = await prisma.githubConnection.findUnique({
+      where: { githubId },
+      include: { user: true }
+    });
+    return conn?.user;
+  }
+
+  async upsertGithubUser(profile, accessToken) {
+    const email = profile.email || `${profile.login}@github.com`;
+    
+    // Check if user exists by email
+    let user = await prisma.user.findUnique({ where: { email } });
+    
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          name: profile.name || profile.login,
+          email: email,
+          avatar: profile.avatar_url,
+          isOnboarded: false,
+        }
+      });
+    }
+
+    // Upsert the GitHub connection
+    await prisma.githubConnection.upsert({
+      where: { githubId: String(profile.id) },
+      update: {
+        username: profile.login,
+        avatar: profile.avatar_url,
+        email: email,
+        accessToken: accessToken, // In prod, encrypt this!
+        lastSyncedAt: new Date()
+      },
+      create: {
+        userId: user.id,
+        githubId: String(profile.id),
+        username: profile.login,
+        avatar: profile.avatar_url,
+        email: email,
+        accessToken: accessToken,
+      }
+    });
+
+    return user;
   }
 
   async updatePassword(id, passwordHash) {

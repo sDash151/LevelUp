@@ -155,10 +155,10 @@ export default function ProjectsPage() {
             )}
             style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}
           >
-            <div className="relative w-7 h-7 rounded-full overflow-hidden shrink-0 flex items-center justify-center" style={{ background: 'var(--th-bg-secondary)' }}>
+            <div className="relative w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'var(--th-bg-secondary)' }}>
               <Github className="w-4 h-4" style={{ color: 'var(--th-text)' }} />
               {isGithubConnected && (
-                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 border border-white" />
+                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 border-2" style={{ borderColor: 'var(--th-card-solid)' }} />
               )}
             </div>
             <div className="hidden sm:block text-left">

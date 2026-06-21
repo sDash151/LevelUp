@@ -1,63 +1,199 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getWorkouts, createWorkout, deleteWorkout, getFitnessStats, logDailyFitness, getFitnessHistory } from '../api';
-import { useToast } from '@/design-system/components';
+import * as fitnessApi from '../api';
 
-const MOCK_WORKOUTS = [
-  { id: '1', type: 'STRENGTH', name: 'Upper Body Push', duration: 55, caloriesBurned: 320, notes: 'Bench press PR: 80kg', exercises: [{ name: 'Bench Press', sets: 4, reps: 8, weight: 80 }, { name: 'Overhead Press', sets: 3, reps: 10, weight: 40 }, { name: 'Tricep Dips', sets: 3, reps: 12 }], date: new Date().toISOString() },
-  { id: '2', type: 'CARDIO', name: 'Morning Run', duration: 35, caloriesBurned: 380, notes: '5K in 28 mins', exercises: [{ name: 'Running', duration: 35 }], date: new Date(Date.now() - 86400000).toISOString() },
-  { id: '3', type: 'YOGA', name: 'Flexibility Flow', duration: 40, caloriesBurned: 150, notes: 'Focus on hip openers', exercises: [], date: new Date(Date.now() - 2 * 86400000).toISOString() },
-  { id: '4', type: 'HIIT', name: 'Full Body HIIT', duration: 25, caloriesBurned: 290, notes: 'Tabata style', exercises: [{ name: 'Burpees', sets: 4, reps: 15 }, { name: 'Mountain Climbers', sets: 4, reps: 20 }, { name: 'Jump Squats', sets: 4, reps: 12 }], date: new Date(Date.now() - 3 * 86400000).toISOString() },
-  { id: '5', type: 'STRENGTH', name: 'Leg Day', duration: 60, caloriesBurned: 400, notes: 'Squat day!', exercises: [{ name: 'Squats', sets: 5, reps: 5, weight: 100 }, { name: 'Leg Press', sets: 4, reps: 10, weight: 150 }, { name: 'Calf Raises', sets: 4, reps: 15, weight: 60 }], date: new Date(Date.now() - 4 * 86400000).toISOString() },
-];
+// ═══ Overview ═══
+export function useFitnessOverview() {
+  return useQuery({ queryKey: ['fitness', 'overview'], queryFn: fitnessApi.getOverview, staleTime: 2 * 60 * 1000 });
+}
 
-const MOCK_STATS = { totalWorkouts: 42, thisWeek: 4, totalMinutes: 2100, byType: [{ type: 'STRENGTH', _count: { id: 20 } }, { type: 'CARDIO', _count: { id: 12 } }, { type: 'HIIT', _count: { id: 6 } }, { type: 'YOGA', _count: { id: 4 } }] };
+export function useAIOverviewInsight() {
+  return useQuery({ queryKey: ['fitness', 'overview', 'ai-insight'], queryFn: fitnessApi.getAIOverviewInsight, staleTime: 60 * 60 * 1000 });
+}
 
-const MOCK_HISTORY = Array.from({ length: 14 }, (_, i) => ({
-  date: new Date(Date.now() - (13 - i) * 86400000).toISOString(),
-  weight: 72 + Math.random() * 2 - 1,
-  steps: Math.floor(5000 + Math.random() * 8000),
-  water: 2 + Math.random() * 2,
-  sleep: 6 + Math.random() * 2.5,
-}));
+// ═══ Plan ═══
+export function useFitnessPlan() {
+  return useQuery({ queryKey: ['fitness', 'plan'], queryFn: fitnessApi.getPlan, staleTime: 5 * 60 * 1000 });
+}
 
-export function useWorkouts(type) {
-  return useQuery({
-    queryKey: ['fitness', 'workouts', type],
-    queryFn: async () => { const res = await getWorkouts({ type }); return res.data ?? MOCK_WORKOUTS.filter((w) => !type || w.type === type); },
-    placeholderData: MOCK_WORKOUTS.filter((w) => !type || w.type === type),
+export function useWorkoutMemory() {
+  return useQuery({ queryKey: ['fitness', 'plan', 'memory'], queryFn: fitnessApi.getWorkoutMemory, staleTime: 5 * 60 * 1000 });
+}
+
+export function useTopLifts() {
+  return useQuery({ queryKey: ['fitness', 'plan', 'top-lifts'], queryFn: fitnessApi.getTopLiftsProgress, staleTime: 5 * 60 * 1000 });
+}
+
+export function usePlanInsights() {
+  return useQuery({ queryKey: ['fitness', 'plan', 'insights'], queryFn: fitnessApi.getPlanInsights, staleTime: 5 * 60 * 1000 });
+}
+
+export function useOptimizePlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.optimizePlan,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness', 'plan'] }),
   });
 }
 
-export function useFitnessStats() {
+// ═══ Workouts ═══
+export function useWorkoutStats() {
+  return useQuery({ queryKey: ['fitness', 'workouts', 'stats'], queryFn: fitnessApi.getWorkoutStats, staleTime: 2 * 60 * 1000 });
+}
+
+export function useWorkoutHistory(filters = {}) {
+  const queryParams = { ...filters };
+  
+  if (queryParams.timeframe) {
+    const now = new Date();
+    if (queryParams.timeframe === 'this_week') {
+      const start = new Date(now);
+      start.setDate(now.getDate() - now.getDay());
+      queryParams.startDate = start.toISOString();
+    } else if (queryParams.timeframe === 'this_month') {
+      const start = new Date(now.getFullYear(), now.getMonth(), 1);
+      queryParams.startDate = start.toISOString();
+    } else if (queryParams.timeframe === 'this_year') {
+      const start = new Date(now.getFullYear(), 0, 1);
+      queryParams.startDate = start.toISOString();
+    }
+    delete queryParams.timeframe;
+  }
+
   return useQuery({
-    queryKey: ['fitness', 'stats'],
-    queryFn: async () => { const res = await getFitnessStats(); return res.data?.stats ?? MOCK_STATS; },
-    placeholderData: MOCK_STATS,
+    queryKey: ['fitness', 'workouts', filters],
+    queryFn: () => fitnessApi.getWorkoutHistory(queryParams),
+    staleTime: 2 * 60 * 1000,
   });
 }
 
-export function useFitnessHistory() {
-  return useQuery({
-    queryKey: ['fitness', 'history'],
-    queryFn: async () => { const res = await getFitnessHistory(30); return res.data?.history ?? MOCK_HISTORY; },
-    placeholderData: MOCK_HISTORY,
+export function useLogWorkout() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.logWorkout,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
   });
 }
 
-export function useCreateWorkout() {
-  const qc = useQueryClient();
-  const toast = useToast();
-  return useMutation({ mutationFn: createWorkout, onSuccess: () => { qc.invalidateQueries({ queryKey: ['fitness'] }); toast.success('Workout logged!'); }, onError: () => toast.error('Failed to log workout') });
+export function useSmartParseWorkout() {
+  return useMutation({ mutationFn: fitnessApi.smartParseWorkout });
 }
 
-export function useDeleteWorkout() {
+export function useConfirmSmartLog() {
   const qc = useQueryClient();
-  const toast = useToast();
-  return useMutation({ mutationFn: deleteWorkout, onSuccess: () => { qc.invalidateQueries({ queryKey: ['fitness'] }); toast.success('Workout deleted'); } });
+  return useMutation({
+    mutationFn: fitnessApi.confirmSmartLog,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
 }
 
-export function useLogDaily() {
+// ═══ Nutrition ═══
+export function useNutrition(date) {
+  return useQuery({
+    queryKey: ['fitness', 'nutrition', date],
+    queryFn: () => fitnessApi.getNutrition(date),
+    staleTime: 2 * 60 * 1000,
+  });
+}
+
+export function useAINutritionInsight(date) {
+  return useQuery({
+    queryKey: ['fitness', 'nutrition', 'ai-insight', date],
+    queryFn: () => fitnessApi.getAINutritionInsight(date),
+    staleTime: 60 * 60 * 1000, // 1 hour cache
+    enabled: false, // Only fetch when manually triggered
+  });
+}
+
+export function useLogFood() {
   const qc = useQueryClient();
-  const toast = useToast();
-  return useMutation({ mutationFn: logDailyFitness, onSuccess: () => { qc.invalidateQueries({ queryKey: ['fitness'] }); toast.success('Daily log saved!'); } });
+  return useMutation({
+    mutationFn: fitnessApi.logFood,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useDeleteFood() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.deleteMealLog,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useSmartParseFood() {
+  return useMutation({ mutationFn: fitnessApi.smartParseFood });
+}
+
+export function useLogWater() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.logWater,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+    onError: (err) => {
+      console.error('Failed to log water:', err);
+    }
+  });
+}
+
+// ═══ Progress ═══
+export function useProgress(range) {
+  return useQuery({
+    queryKey: ['fitness', 'progress', range],
+    queryFn: () => fitnessApi.getProgress(range),
+    staleTime: 2 * 60 * 1000,
+  });
+}
+
+export function useLogBodyMetric() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.logBodyMetric,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useLogMeasurement() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.logMeasurement,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useUploadPhoto() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.uploadPhoto,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness', 'progress'] }),
+  });
+}
+
+export function useAIProgressInsight() {
+  return useQuery({ queryKey: ['fitness', 'progress', 'ai-insight'], queryFn: fitnessApi.getAIProgressInsight, staleTime: 60 * 60 * 1000 });
+}
+
+// ═══ Profile ═══
+export function useFitnessProfile() {
+  return useQuery({ queryKey: ['fitness', 'profile'], queryFn: fitnessApi.getProfile, staleTime: 10 * 60 * 1000 });
+}
+
+export function useUpdateProfile() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.updateProfile,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+// ═══ Milestones ═══
+export function useMilestones() {
+  return useQuery({ queryKey: ['fitness', 'milestones'], queryFn: fitnessApi.getMilestones, staleTime: 5 * 60 * 1000 });
+}
+
+export function useCreateMilestone() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.createMilestone,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
 }

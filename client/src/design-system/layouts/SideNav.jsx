@@ -7,7 +7,7 @@ import {
   ChevronRight, Workflow,
 } from 'lucide-react';
 import { useAuthStore } from '@/shared/stores/authStore';
-import { ThemeToggle } from '@/design-system/components/ThemeToggle';
+import { ThemeToggle, Avatar } from '@/design-system/components';
 import clsx from 'clsx';
 
 const navGroups = [
@@ -140,9 +140,13 @@ export function SideNav({ collapsed, onToggleCollapse }) {
       {/* User profile */}
       <NavLink to="/profile" className={clsx("mb-2", collapsed ? "mx-auto" : "mx-3")}>
         <div className={clsx("flex items-center gap-3 py-2.5 rounded-xl transition-colors group", collapsed ? "justify-center" : "px-3")} style={{ '--hover-bg': 'var(--th-highlight)' }}>
-          <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0" style={{ background: 'linear-gradient(135deg, var(--th-primary), var(--th-primary-dark))', color: '#08080d' }}>
-            {user?.name?.[0]?.toUpperCase() || 'U'}
-          </div>
+          <Avatar 
+            src={user?.avatar} 
+            name={user?.name} 
+            size="sm" 
+            glow={false} 
+            bordered={false} 
+          />
           {!collapsed && (
             <>
               <div className="flex-1 min-w-0">

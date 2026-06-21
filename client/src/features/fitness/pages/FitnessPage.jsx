@@ -1,55 +1,149 @@
-import { useState } from 'react';
-import { motion } from 'motion/react';
-import { Plus, Dumbbell } from 'lucide-react';
-import { AnimatedPage, EmptyState } from '@/design-system/components';
-import { useWorkouts, useFitnessStats, useCreateWorkout, useDeleteWorkout } from '../hooks/useFitness';
-import { FitnessStatsGrid } from '../components/FitnessStatsGrid';
-import { WorkoutCard } from '../components/WorkoutCard';
-import { WorkoutForm } from '../components/WorkoutForm';
+import { lazy, Suspense, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import { Dumbbell, ClipboardList, History, Apple, TrendingUp, Plus, ChevronDown, Sparkles } from 'lucide-react';
+import { AnimatedPage } from '@/design-system/components';
 import clsx from 'clsx';
 
-const TYPE_FILTERS = [null, 'STRENGTH', 'CARDIO', 'HIIT', 'YOGA'];
+const OverviewTab = lazy(() => import('../components/OverviewTab'));
+const MyPlanTab = lazy(() => import('../components/MyPlanTab'));
+const WorkoutsTab = lazy(() => import('../components/WorkoutsTab'));
+const NutritionTab = lazy(() => import('../components/NutritionTab'));
+const ProgressTab = lazy(() => import('../components/ProgressTab'));
+
+const TABS = [
+  { key: 'overview', label: 'Overview', icon: Dumbbell },
+  { key: 'plan', label: 'My Plan', icon: ClipboardList },
+  { key: 'workouts', label: 'Workouts', icon: History },
+  { key: 'nutrition', label: 'Nutrition', icon: Apple },
+  { key: 'progress', label: 'Progress', icon: TrendingUp },
+];
+
+const TAB_TITLES = {
+  overview: { title: 'Fitness Overview', subtitle: 'Your complete fitness, nutrition & progress at a glance' },
+  plan: { title: 'My Plan', subtitle: 'Your personalized workout plan powered by AI' },
+  workouts: { title: 'Workouts', subtitle: 'Track, review & improve every workout you do' },
+  nutrition: { title: 'Nutrition', subtitle: 'Track your nutrition, hit your macros & fuel your goals' },
+  progress: { title: 'Progress', subtitle: 'Track your transformation and celebrate every win' },
+};
+
+const ACTION_BUTTONS = {
+  overview: { label: 'Log Workout', icon: Plus },
+  plan: { label: 'Log Workout', icon: Plus },
+  workouts: { label: 'Log Workout', icon: Plus },
+  nutrition: { label: 'Log Food', icon: Plus },
+  progress: { label: 'Log Measurement', icon: Plus },
+};
+
+function TabSkeleton() {
+  return (
+    <div className="space-y-4 animate-pulse">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        {[1, 2, 3, 4, 5].map(i => (
+          <div key={i} className="h-28 rounded-2xl" style={{ background: 'var(--th-card)' }} />
+        ))}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="h-64 rounded-2xl" style={{ background: 'var(--th-card)' }} />
+        <div className="h-64 rounded-2xl" style={{ background: 'var(--th-card)' }} />
+      </div>
+    </div>
+  );
+}
 
 export default function FitnessPage() {
-  const [typeFilter, setTypeFilter] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const { data: workouts = [] } = useWorkouts(typeFilter);
-  const { data: stats } = useFitnessStats();
-  const createWorkout = useCreateWorkout();
-  const deleteWorkout = useDeleteWorkout();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'overview';
+  const setTab = (key) => setSearchParams({ tab: key }, { replace: true });
+  const [showWorkoutForm, setShowWorkoutForm] = useState(false);
+  const [showFoodForm, setShowFoodForm] = useState(false);
+  const [showMetricForm, setShowMetricForm] = useState(false);
+
+  const tabInfo = TAB_TITLES[activeTab] || TAB_TITLES.overview;
+  const actionBtn = ACTION_BUTTONS[activeTab] || ACTION_BUTTONS.overview;
+
+  const handleAction = () => {
+    if (activeTab === 'nutrition') setShowFoodForm(true);
+    else if (activeTab === 'progress') setShowMetricForm(true);
+    else setShowWorkoutForm(true);
+  };
+
+  const renderTab = () => {
+    const formProps = {
+      showWorkoutForm, setShowWorkoutForm,
+      showFoodForm, setShowFoodForm,
+      showMetricForm, setShowMetricForm,
+    };
+    switch (activeTab) {
+      case 'overview': return <OverviewTab {...formProps} />;
+      case 'plan': return <MyPlanTab {...formProps} />;
+      case 'workouts': return <WorkoutsTab {...formProps} />;
+      case 'nutrition': return <NutritionTab {...formProps} />;
+      case 'progress': return <ProgressTab {...formProps} />;
+      default: return <OverviewTab {...formProps} />;
+    }
+  };
 
   return (
     <AnimatedPage>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Fitness</h1>
-        <p className="text-sm text-zinc-500 mt-1">Track your workouts & body metrics</p>
-      </div>
-
-      <FitnessStatsGrid stats={stats} />
-
-      <div className="flex gap-2 overflow-x-auto hide-scrollbar mb-6 pb-1">
-        {TYPE_FILTERS.map((f) => (
-          <button key={f || 'all'} onClick={() => setTypeFilter(f)} className={clsx('px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all', typeFilter === f ? 'bg-accent text-white' : 'bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08]')}>{f || 'All'}</button>
-        ))}
-      </div>
-
-      {workouts.length === 0 ? (
-        <EmptyState icon={Dumbbell} title="No workouts logged" description="Start tracking your fitness journey" action={{ children: 'Log Workout', onClick: () => setShowForm(true) }} />
-      ) : (
-        <div className="space-y-3">
-          {workouts.map((w, i) => (
-            <motion.div key={w.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-              <WorkoutCard workout={w} onDelete={(id) => deleteWorkout.mutate(id)} />
-            </motion.div>
-          ))}
+      <div className="space-y-5">
+        {/* ── Header ── */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl lg:text-2xl font-bold" style={{ color: 'var(--th-text)' }}>{tabInfo.title}</h1>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--th-text-secondary)' }}>{tabInfo.subtitle}</p>
+          </div>
+          <button
+            onClick={handleAction}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+            style={{ background: 'linear-gradient(135deg, #E8A23A, #D4891A)' }}
+          >
+            <actionBtn.icon className="w-4 h-4" />
+            {actionBtn.label}
+            <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+          </button>
         </div>
-      )}
 
-      <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowForm(true)} className="fixed bottom-24 lg:bottom-8 right-6 w-14 h-14 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white flex items-center justify-center shadow-glow-accent z-40">
-        <Plus className="w-6 h-6" />
-      </motion.button>
+        {/* ── Tab Bar ── */}
+        <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1">
+          {TABS.map(tab => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setTab(tab.key)}
+                className={clsx(
+                  'flex items-center gap-2 px-4 py-2 text-sm whitespace-nowrap transition-all rounded-lg',
+                  isActive ? 'font-semibold shadow-sm' : 'font-medium hover:bg-black/5 dark:hover:bg-white/5'
+                )}
+                style={{ 
+                  color: isActive ? '#fff' : 'var(--th-text-secondary)',
+                  background: isActive ? 'var(--th-primary)' : 'transparent',
+                }}
+              >
+                <Icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
 
-      <WorkoutForm isOpen={showForm} onClose={() => setShowForm(false)} onSubmit={(data) => createWorkout.mutate(data)} />
+        {/* ── Tab Content ── */}
+        <Suspense fallback={<TabSkeleton />}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              {renderTab()}
+            </motion.div>
+          </AnimatePresence>
+        </Suspense>
+      </div>
     </AnimatedPage>
   );
 }

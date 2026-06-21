@@ -9,7 +9,8 @@ export function Select({
   options = [], 
   placeholder = 'Select...', 
   className,
-  disabled = false
+  disabled = false,
+  size = 'sm'
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
@@ -34,14 +35,17 @@ export function Select({
         type="button"
         disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full gap-2 px-3 py-1.5 rounded-lg border transition-colors outline-none disabled:opacity-50"
+        className={clsx(
+          "flex items-center justify-between w-full gap-2 border transition-colors outline-none disabled:opacity-50",
+          size === 'lg' ? 'px-4 py-3 rounded-xl' : 'px-3 py-1.5 rounded-lg'
+        )}
         style={{
           background: 'var(--th-card)',
           borderColor: isOpen ? 'var(--th-primary)' : 'var(--th-border)',
           color: selectedOption ? 'var(--th-text)' : 'var(--th-text-dim)'
         }}
       >
-        <span className="text-[11px] font-semibold truncate">
+        <span className={clsx("font-semibold truncate", size === 'lg' ? 'text-sm' : 'text-[11px]')}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <ChevronDown 

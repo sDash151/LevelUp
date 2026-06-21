@@ -11,16 +11,72 @@ const COOKIE_OPTIONS = {
   path: '/',
 };
 
-export const signup = asyncHandler(async (req, res) => {
-  const { user, accessToken, refreshToken } = await authService.signup(req.body);
-  res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-  created(res, { user, accessToken }, 'Account created successfully');
+import { prisma } from '../../config/database.js';
+
+export const githubAuth = asyncHandler(async (req, res) => {
+  const clientId = process.env.GITHUB_CLIENT_ID;
+  const redirectUri = env.GITHUB_CALLBACK_URL;
+  const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=read:user user:email`;
+  res.redirect(githubUrl);
 });
 
-export const login = asyncHandler(async (req, res) => {
-  const { user, accessToken, refreshToken } = await authService.login(req.body);
-  res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-  success(res, { user, accessToken }, 'Logged in successfully');
+export const githubCallback = asyncHandler(async (req, res) => {
+  const { code, state } = req.query;
+  if (!code) return res.redirect('http://localhost:5173/login?error=no_code');
+
+  // If this was initiated from the Projects page, redirect back there with the code and original state
+  if (state && state.startsWith('projects:')) {
+    const originalState = state.split('projects:')[1];
+    return res.redirect(`http://localhost:5173/projects?code=${code}&state=${originalState}`);
+  }
+
+  // Otherwise, handle as a Login
+  try {
+    const { user, accessToken, refreshToken } = await authService.githubLogin(code);
+    res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
+    res.redirect(`http://localhost:5173/login?token=${accessToken}&onboarded=${user.isOnboarded}`);
+  } catch (error) {
+    res.redirect('http://localhost:5173/login?error=auth_failed');
+  }
+});
+
+export const onboardUser = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const data = req.body;
+
+  // 1. Update User Profile
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      jobTitle: data.jobTitle,
+      dreamRole: data.dreamRole,
+      targetIncome: data.targetIncome,
+      primaryFocus: data.primaryFocus,
+      baseCurrency: data.baseCurrency || 'USD',
+      isOnboarded: true,
+      totalXp: { increment: 50 }, // Give 50 XP for onboarding!
+    }
+  });
+
+  // 2. Upsert Fitness Profile
+  await prisma.fitnessProfile.upsert({
+    where: { userId },
+    update: {
+      height: data.height,
+      weight: data.weight,
+      goal: data.goal,
+      experienceLevel: data.experienceLevel
+    },
+    create: {
+      userId,
+      height: data.height,
+      weight: data.weight,
+      goal: data.goal || 'general',
+      experienceLevel: data.experienceLevel || 'beginner'
+    }
+  });
+
+  success(res, null, 'Onboarding complete! +50 XP');
 });
 
 export const refresh = asyncHandler(async (req, res) => {
@@ -35,11 +91,6 @@ export const logout = asyncHandler(async (req, res) => {
   await authService.logout(token);
   res.clearCookie('refreshToken', { path: '/' });
   success(res, null, 'Logged out successfully');
-});
-
-export const forgotPassword = asyncHandler(async (req, res) => {
-  await authService.forgotPassword(req.body.email);
-  success(res, null, 'If an account exists with this email, a reset link has been sent');
 });
 
 export const getMe = asyncHandler(async (req, res) => {

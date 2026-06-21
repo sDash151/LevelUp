@@ -42,6 +42,18 @@ function formatDate(d) {
   return new Date(d).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+const DRAG_MIME_JOB = 'application/x-levelup-pipeline-job';
+
+function parseDragPayload(event) {
+  try {
+    const raw = event.dataTransfer.getData(DRAG_MIME_JOB);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 /* ═══════════════════════════════════════════
    KPI STAT CARD
    ═══════════════════════════════════════════ */
@@ -71,12 +83,24 @@ function KpiCard({ icon, label, value, change, changeLabel, color = 'var(--th-pr
 /* ═══════════════════════════════════════════
    PIPELINE CARD (mini job card inside column)
    ═══════════════════════════════════════════ */
-function PipelineCard({ job, onClick }) {
+function PipelineCard({ job, onClick, onDragStart, isMoving }) {
   const rounds = Array.isArray(job.interviewRounds) ? job.interviewRounds : [];
   const latestRound = rounds[rounds.length - 1];
   return (
-    <div onClick={() => onClick(job)} className="rounded-xl p-3 mb-2 cursor-pointer transition-all hover:scale-[1.01]"
+    <div 
+      draggable={!isMoving}
+      onDragStart={onDragStart}
+      onClick={() => onClick(job)} 
+      className={clsx(
+        "relative rounded-xl p-3 mb-2 cursor-pointer transition-all hover:scale-[1.01]",
+        isMoving && "opacity-50 pointer-events-none"
+      )}
       style={{ background: 'var(--th-bg)', border: '1px solid var(--th-border)' }}>
+      {isMoving && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-white/60 dark:bg-black/40">
+          <div className="w-4 h-4 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
       <div className="flex items-start gap-2">
         <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
           style={{ background: 'var(--th-highlight)', color: 'var(--th-text)' }}>
@@ -102,7 +126,28 @@ function PipelineCard({ job, onClick }) {
 /* ═══════════════════════════════════════════
    PIPELINE COLUMN
    ═══════════════════════════════════════════ */
-function PipelineColumn({ stage, jobs, onCardClick, onAddClick }) {
+function PipelineColumn({ stage, jobs, onCardClick, onAddClick, onMoveJob, dragOverStage, setDragOverStage, movingJobId }) {
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    const payload = parseDragPayload(e);
+    if (!payload || payload.fromStage === stage.key) return;
+    setDragOverStage(stage.key);
+  };
+  
+  const handleDragLeave = (e) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverStage(prev => (prev === stage.key ? null : prev));
+    }
+  };
+  
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOverStage(null);
+    const payload = parseDragPayload(e);
+    if (!payload || payload.fromStage === stage.key) return;
+    onMoveJob(payload.jobId, stage.key);
+  };
+
   return (
     <div className="flex-1 min-w-[180px]">
       <div className="flex items-center gap-2 mb-3 px-1">
@@ -113,8 +158,32 @@ function PipelineColumn({ stage, jobs, onCardClick, onAddClick }) {
           {jobs.length}
         </span>
       </div>
-      <div className="space-y-0 max-h-[320px] overflow-y-auto overflow-x-hidden scrollbar-hide">
-        {jobs.map(j => <PipelineCard key={j.id} job={j} onClick={onCardClick} />)}
+      <div 
+        className={clsx(
+          "space-y-0 max-h-[320px] overflow-y-auto overflow-x-hidden scrollbar-hide p-1 -mx-1 min-h-[100px] rounded-lg transition-all duration-200",
+          dragOverStage === stage.key && "ring-2 border-dashed"
+        )}
+        style={{
+          borderColor: stage.color,
+          backgroundColor: dragOverStage === stage.key ? `${stage.color}10` : 'transparent',
+        }}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {jobs.map(j => (
+          <PipelineCard 
+            key={j.id} 
+            job={j} 
+            onClick={onCardClick} 
+            isMoving={movingJobId === j.id}
+            onDragStart={(e) => {
+              const fromStage = j.status === 'PHONE_SCREEN' ? 'INTERVIEW' : j.status;
+              e.dataTransfer.setData(DRAG_MIME_JOB, JSON.stringify({ jobId: j.id, fromStage }));
+              e.dataTransfer.effectAllowed = 'move';
+            }}
+          />
+        ))}
       </div>
       <button onClick={onAddClick}
         className="flex items-center justify-center gap-1 w-full py-2 mt-2 rounded-xl text-[11px] font-medium cursor-pointer hover:opacity-80 transition-opacity"
@@ -282,11 +351,25 @@ export default function JobsPage() {
   const [tablePage, setTablePage] = useState(1);
   const [jobToEdit, setJobToEdit] = useState(null);
 
+  const [movingJobId, setMovingJobId] = useState(null);
+  const [dragOverStage, setDragOverStage] = useState(null);
+
   const { data: allJobs = [], isLoading } = useJobs({ limit: 50 });
   const { data: stats } = useJobStats();
   const { data: selectedJob, refetch: refetchJob } = useJob(selectedJobId);
   const createJob = useCreateJob();
   const updateJob = useUpdateJob();
+
+  const handleMoveJob = async (jobId, newStage) => {
+    setMovingJobId(jobId);
+    try {
+      await updateJob.mutateAsync({ id: jobId, data: { status: newStage } });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setMovingJobId(null);
+    }
+  };
 
   const handleAddClick = () => {
     setJobToEdit(null);
@@ -376,11 +459,23 @@ export default function JobsPage() {
           <div className="flex-1 min-w-0">
             {/* Application Pipeline */}
             <div className="rounded-2xl p-4 mb-5" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-              <h3 className="text-[14px] font-semibold mb-4" style={{ color: 'var(--th-text)' }}>Application Pipeline</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>Application Pipeline</h3>
+                <span className="text-[10px] hidden sm:block" style={{ color: 'var(--th-text-dim)' }}>Drag and drop to move stages</span>
+              </div>
               <div className="flex gap-3 overflow-x-auto scrollbar-hide">
                 {PIPELINE_STAGES.map(stage => (
-                  <PipelineColumn key={stage.key} stage={stage} jobs={pipelineJobs[stage.key] || []}
-                    onCardClick={handleCardClick} onAddClick={handleAddClick} />
+                  <PipelineColumn 
+                    key={stage.key} 
+                    stage={stage} 
+                    jobs={pipelineJobs[stage.key] || []}
+                    onCardClick={handleCardClick} 
+                    onAddClick={handleAddClick} 
+                    onMoveJob={handleMoveJob}
+                    dragOverStage={dragOverStage}
+                    setDragOverStage={setDragOverStage}
+                    movingJobId={movingJobId}
+                  />
                 ))}
               </div>
             </div>
@@ -517,12 +612,22 @@ export default function JobsPage() {
 
         {/* Pipeline (horizontal scroll) */}
         <div className="mb-4">
-          <h3 className="text-[14px] font-semibold mb-3" style={{ color: 'var(--th-text)' }}>Application Pipeline</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>Application Pipeline</h3>
+          </div>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {PIPELINE_STAGES.map(stage => (
               <div key={stage.key} className="min-w-[200px] shrink-0">
-                <PipelineColumn stage={stage} jobs={pipelineJobs[stage.key] || []}
-                  onCardClick={handleCardClick} onAddClick={handleAddClick} />
+                <PipelineColumn 
+                  stage={stage} 
+                  jobs={pipelineJobs[stage.key] || []}
+                  onCardClick={handleCardClick} 
+                  onAddClick={handleAddClick} 
+                  onMoveJob={handleMoveJob}
+                  dragOverStage={dragOverStage}
+                  setDragOverStage={setDragOverStage}
+                  movingJobId={movingJobId}
+                />
               </div>
             ))}
           </div>

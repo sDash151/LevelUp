@@ -1,51 +1,355 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getTransactions, createTransaction, deleteTransaction, getFinanceSummary } from '../api';
-import { useToast } from '@/design-system/components';
+import * as financeApi from '../api';
 
-const MOCK_TXS = [
-  { id: '1', type: 'INCOME', amount: 85000, category: 'Salary', description: 'Monthly salary', date: new Date().toISOString(), isRecurring: true },
-  { id: '2', type: 'EXPENSE', amount: 15000, category: 'Rent', description: 'Monthly rent', date: new Date().toISOString(), isRecurring: true },
-  { id: '3', type: 'EXPENSE', amount: 4500, category: 'Food', description: 'Groceries & dining', date: new Date(Date.now() - 86400000).toISOString(), isRecurring: false },
-  { id: '4', type: 'EXPENSE', amount: 2000, category: 'Transport', description: 'Uber rides', date: new Date(Date.now() - 2 * 86400000).toISOString(), isRecurring: false },
-  { id: '5', type: 'EXPENSE', amount: 999, category: 'Subscriptions', description: 'Netflix + Spotify', date: new Date(Date.now() - 3 * 86400000).toISOString(), isRecurring: true },
-  { id: '6', type: 'INCOME', amount: 12000, category: 'Freelance', description: 'UI design project', date: new Date(Date.now() - 5 * 86400000).toISOString(), isRecurring: false },
-  { id: '7', type: 'EXPENSE', amount: 3500, category: 'Shopping', description: 'New headphones', date: new Date(Date.now() - 7 * 86400000).toISOString(), isRecurring: false },
-  { id: '8', type: 'EXPENSE', amount: 1500, category: 'Health', description: 'Gym membership', date: new Date(Date.now() - 10 * 86400000).toISOString(), isRecurring: true },
-];
+const STALE_2MIN = 2 * 60 * 1000;
+const STALE_5MIN = 5 * 60 * 1000;
 
-const MOCK_SUMMARY = {
-  monthlyIncome: 97000, monthlyExpense: 27499, savings: 69501,
-  byCategory: [
-    { category: 'Rent', amount: 15000 }, { category: 'Food', amount: 4500 },
-    { category: 'Shopping', amount: 3500 }, { category: 'Transport', amount: 2000 },
-    { category: 'Health', amount: 1500 }, { category: 'Subscriptions', amount: 999 },
-  ],
-};
+// ═══ Tab Data Hooks ═══
+
+export function useFinanceOverview() {
+  return useQuery({
+    queryKey: ['finance', 'overview'],
+    queryFn: financeApi.getOverview,
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useSpendData() {
+  return useQuery({
+    queryKey: ['finance', 'spend'],
+    queryFn: financeApi.getSpendData,
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useBuildData() {
+  return useQuery({
+    queryKey: ['finance', 'build'],
+    queryFn: financeApi.getBuildData,
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useProtectData() {
+  return useQuery({
+    queryKey: ['finance', 'protect'],
+    queryFn: financeApi.getProtectData,
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useIntelligenceData() {
+  return useQuery({
+    queryKey: ['finance', 'intelligence'],
+    queryFn: financeApi.getIntelligenceData,
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
+  });
+}
+
+// ═══ Transaction Hooks ═══
 
 export function useTransactions(filters = {}) {
   return useQuery({
     queryKey: ['finance', 'transactions', filters],
-    queryFn: async () => { const res = await getTransactions(filters); return res.data ?? MOCK_TXS; },
-    placeholderData: MOCK_TXS,
-  });
-}
-
-export function useFinanceSummary() {
-  return useQuery({
-    queryKey: ['finance', 'summary'],
-    queryFn: async () => { const res = await getFinanceSummary(); return res.data?.summary ?? MOCK_SUMMARY; },
-    placeholderData: MOCK_SUMMARY,
+    queryFn: () => financeApi.getTransactions(filters),
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
   });
 }
 
 export function useCreateTransaction() {
   const qc = useQueryClient();
-  const toast = useToast();
-  return useMutation({ mutationFn: createTransaction, onSuccess: () => { qc.invalidateQueries({ queryKey: ['finance'] }); toast.success('Transaction added!'); }, onError: () => toast.error('Failed to add') });
+  return useMutation({
+    mutationFn: financeApi.createTransaction,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+export function useUpdateTransaction() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => financeApi.updateTransaction(id, data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
 }
 
 export function useDeleteTransaction() {
   const qc = useQueryClient();
-  const toast = useToast();
-  return useMutation({ mutationFn: deleteTransaction, onSuccess: () => { qc.invalidateQueries({ queryKey: ['finance'] }); toast.success('Transaction deleted'); } });
+  return useMutation({
+    mutationFn: financeApi.deleteTransaction,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+export function useAILogTransaction() {
+  return useMutation({
+    mutationFn: financeApi.aiLogTransaction,
+  });
+}
+
+// ═══ Account Hooks ═══
+
+export function useAccounts() {
+  return useQuery({
+    queryKey: ['finance', 'accounts'],
+    queryFn: financeApi.getAccounts,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useCreateAccount() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.createAccount,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+// ═══ Budget Hooks ═══
+
+export function useBudgets(month) {
+  return useQuery({
+    queryKey: ['finance', 'budgets', month],
+    queryFn: () => financeApi.getBudgets(month),
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useCreateBudget() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.createBudget,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+// ═══ Goal Hooks ═══
+
+export function useGoals() {
+  return useQuery({
+    queryKey: ['finance', 'goals'],
+    queryFn: financeApi.getGoals,
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useCreateGoal() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.createGoal,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+export function useUpdateGoal() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => financeApi.updateGoal(id, data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+export function useContributeToGoal() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, amount }) => financeApi.contributeToGoal(id, amount),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+// ═══ Subscription Hooks ═══
+
+export function useSubscriptions() {
+  return useQuery({
+    queryKey: ['finance', 'subscriptions'],
+    queryFn: financeApi.getSubscriptions,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useCreateSubscription() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.createSubscription,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+export function useDeleteSubscription() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.deleteSubscription,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+// ═══ Debt Hooks ═══
+
+export function useDebts() {
+  return useQuery({
+    queryKey: ['finance', 'debts'],
+    queryFn: financeApi.getDebts,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useCreateDebt() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.createDebt,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+// ═══ Bill Hooks ═══
+
+export function useBills() {
+  return useQuery({
+    queryKey: ['finance', 'bills'],
+    queryFn: financeApi.getBills,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useCreateBill() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.createBill,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+export function usePayBill() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.payBill,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+// ═══ Insurance Hooks ═══
+
+export function useInsurance() {
+  return useQuery({
+    queryKey: ['finance', 'insurance'],
+    queryFn: financeApi.getInsurance,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useCreateInsurance() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.createInsurance,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+// ═══ Streaks ═══
+
+export function useStreaks() {
+  return useQuery({
+    queryKey: ['finance', 'streaks'],
+    queryFn: financeApi.getStreaks,
+    staleTime: STALE_2MIN,
+    select: (res) => res.data,
+  });
+}
+
+// ═══ Categories ═══
+
+export function useCategories() {
+  return useQuery({
+    queryKey: ['finance', 'categories'],
+    queryFn: financeApi.getCategories,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+// ═══ Reflections ═══
+
+export function useCreateReflection() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.createReflection,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
+// ═══ AI Intelligence Hooks ═══
+
+export function useCFOInsight() {
+  return useQuery({
+    queryKey: ['finance', 'ai', 'cfo'],
+    queryFn: financeApi.getCFOInsight,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useSpendPersonality() {
+  return useQuery({
+    queryKey: ['finance', 'ai', 'personality'],
+    queryFn: financeApi.getSpendPersonality,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useLeakAnalysis() {
+  return useQuery({
+    queryKey: ['finance', 'ai', 'leaks'],
+    queryFn: financeApi.getLeakAnalysis,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useSavingsOpportunities() {
+  return useQuery({
+    queryKey: ['finance', 'ai', 'savings'],
+    queryFn: financeApi.getSavingsOpportunities,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useWeeklyChallenges() {
+  return useQuery({
+    queryKey: ['finance', 'ai', 'challenges'],
+    queryFn: financeApi.getWeeklyChallenges,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useWealthPlan() {
+  return useQuery({
+    queryKey: ['finance', 'ai', 'wealthPlan'],
+    queryFn: financeApi.getWealthPlan,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
+}
+
+export function useRiskAlerts() {
+  return useQuery({
+    queryKey: ['finance', 'ai', 'riskAlerts'],
+    queryFn: financeApi.getRiskAlerts,
+    staleTime: STALE_5MIN,
+    select: (res) => res.data,
+  });
 }

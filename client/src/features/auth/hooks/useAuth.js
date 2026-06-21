@@ -67,10 +67,15 @@ export function useLogout() {
 
 export function useUser() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const updateUser = useAuthStore((s) => s.updateUser);
 
   return useQuery({
     queryKey: ['user', 'me'],
-    queryFn: () => getMe().then((r) => r.data.user),
+    queryFn: async () => {
+      const user = await getMe().then((r) => r.data.user);
+      updateUser(user);
+      return user;
+    },
     enabled: isAuthenticated,
     staleTime: 10 * 60 * 1000,
   });

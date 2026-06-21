@@ -378,13 +378,30 @@ class FinanceRepository {
     if (!goal) return null;
     const newAmount = parseFloat(goal.currentAmount) + amount;
     const isCompleted = newAmount >= parseFloat(goal.targetAmount);
-    return prisma.financeGoal.update({
-      where: { id },
-      data: {
-        currentAmount: newAmount,
-        isCompleted,
-        completedAt: isCompleted ? new Date() : null,
-      },
+    
+    return prisma.$transaction(async (tx) => {
+      const updatedGoal = await tx.financeGoal.update({
+        where: { id },
+        data: {
+          currentAmount: newAmount,
+          isCompleted,
+          completedAt: isCompleted ? new Date() : null,
+        },
+      });
+
+      await tx.transaction.create({
+        data: {
+          userId: goal.userId,
+          type: 'TRANSFER',
+          amount,
+          category: 'Savings & Investments',
+          merchant: goal.title,
+          description: `Contribution to ${goal.title}`,
+          date: new Date(),
+        }
+      });
+
+      return updatedGoal;
     });
   }
 

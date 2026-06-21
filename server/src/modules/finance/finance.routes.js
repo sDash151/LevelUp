@@ -53,6 +53,7 @@ router.get('/goals', controller.getGoals);
 router.post('/goals', validate(createGoalSchema), controller.createGoal);
 router.put('/goals/:id', validate(updateGoalSchema), controller.updateGoal);
 router.post('/goals/:id/contribute', validate(contributeGoalSchema), controller.contributeToGoal);
+router.delete('/goals/:id', validate(idParamSchema), controller.deleteGoal);
 
 // ═══ Subscriptions ═══
 router.get('/subscriptions', controller.getSubscriptions);
@@ -91,5 +92,6 @@ router.get('/ai/savings-opportunities', controller.getSavingsOpportunities);
 router.get('/ai/weekly-challenges', controller.getWeeklyChallenges);
 router.get('/ai/wealth-plan', controller.getWealthPlan);
 router.get('/ai/risk-alerts', controller.getRiskAlerts);
+router.post('/ai/chat', controller.aiChat);
 
 export default router;

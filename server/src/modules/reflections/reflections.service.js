@@ -81,6 +81,27 @@ class ReflectionsService {
     const lastMonthlyCount = lastMonth.length;
     const monthlyCountChange = lastMonthlyCount > 0 ? Math.round(((monthlyCount - lastMonthlyCount) / lastMonthlyCount) * 100) : (monthlyCount > 0 ? 100 : 0);
 
+    // --- Intelligence Stats ---
+    let productiveDays = 0;
+    let burnoutDays = 0;
+    let lowFocusDays = 0;
+
+    thisMonth.forEach(r => {
+      const tags = (r.tags || []).map(t => t.toLowerCase());
+      
+      if (r.mood >= 4 || tags.includes('productive') || tags.includes('focused') || tags.includes('motivated')) {
+        productiveDays++;
+      }
+      
+      if (r.mood <= 2 && r.mood !== null || tags.includes('burnout') || tags.includes('exhausted') || tags.includes('overwhelmed') || tags.includes('tired') || tags.includes('stressed')) {
+        burnoutDays++;
+      }
+      
+      if (tags.includes('distracted') || tags.includes('unfocused') || tags.includes('procrastinated') || tags.includes('lazy') || tags.includes('anxious')) {
+        lowFocusDays++;
+      }
+    });
+
     // --- Calendar Days ---
     const daysInMonth = monthEnd.getDate();
     const reflectionDates = new Set(thisMonth.map(r => r.date.toISOString().split('T')[0]));
@@ -161,6 +182,7 @@ class ReflectionsService {
       avgMood, avgMoodChange, moodLabel,
       growthScore, growthScoreChange, growthLabel,
       monthlyCount, monthlyCountChange,
+      productiveDays, burnoutDays, lowFocusDays,
       calendarDays,
       topEmotions,
       topTags,

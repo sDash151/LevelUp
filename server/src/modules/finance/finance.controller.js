@@ -136,6 +136,11 @@ export const contributeToGoal = asyncHandler(async (req, res) => {
   success(res, goal);
 });
 
+export const deleteGoal = asyncHandler(async (req, res) => {
+  await financeService.deleteGoal(req.user.id, req.params.id);
+  success(res, null, 'Goal deleted');
+});
+
 // ══════════════════════════════════════════════
 // SUBSCRIPTIONS
 // ══════════════════════════════════════════════
@@ -275,5 +280,11 @@ export const getWealthPlan = asyncHandler(async (req, res) => {
 
 export const getRiskAlerts = asyncHandler(async (req, res) => {
   const data = await financeService.getRiskAlerts(req.user.id);
+  success(res, data);
+});
+
+export const aiChat = asyncHandler(async (req, res) => {
+  const { message } = req.body;
+  const data = await financeService.aiChat(req.user.id, message);
   success(res, data);
 });

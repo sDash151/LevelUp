@@ -1,10 +1,10 @@
 import { analyticsService } from './analytics.service.js';
 import { success } from '../../shared/utils/response.js';
-import { asyncHandler } from '../../shared/middleware/asyncHandler.js';
+import { asyncHandler } from '../../shared/utils/asyncHandler.js';
 
 export const getFullAnalytics = asyncHandler(async (req, res) => {
   const data = await analyticsService.getFullAnalytics(req.user.id);
-  res.json(success('Analytics retrieved successfully', data));
+  success(res, data, 'Analytics retrieved successfully');
 });
 
 export const getOverview = asyncHandler(async (req, res) => {
@@ -21,4 +21,9 @@ export const getHabitTrends = asyncHandler(async (req, res) => {
 export const getWeeklyActivity = asyncHandler(async (req, res) => {
   const activity = await analyticsService.getWeeklyActivity(req.user.id);
   success(res, { activity });
+});
+
+export const getDetailedROIReport = asyncHandler(async (req, res) => {
+  const data = await analyticsService.getDetailedROIReport(req.user.id);
+  success(res, data);
 });

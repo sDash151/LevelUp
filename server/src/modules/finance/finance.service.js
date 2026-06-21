@@ -785,6 +785,7 @@ class FinanceService {
     if (data.deadline) data.deadline = new Date(data.deadline);
     return financeRepository.updateGoal(id, data);
   }
+  async deleteGoal(userId, id) { return financeRepository.deleteGoal(id); }
   async contributeToGoal(userId, id, amount) {
     const goal = await financeRepository.contributeToGoal(id, amount);
     if (goal) {
@@ -939,12 +940,17 @@ class FinanceService {
   _buildContributionCalendar(transactions) {
     const days = {};
     for (const t of transactions) {
-      if (t.type !== 'INCOME') continue;
-      const key = new Date(t.date).toISOString().split('T')[0];
-      days[key] = (days[key] || 0) + parseFloat(t.amount);
+      if (t.type === 'TRANSFER' && (t.category === 'Savings & Investments' || t.category === 'Investment' || t.category === 'Savings' || t.category === 'Goal Contribution')) {
+        const key = new Date(t.date).toISOString().split('T')[0];
+        if (!days[key]) days[key] = { amount: 0, details: [] };
+        days[key].amount += parseFloat(t.amount);
+        days[key].details.push(t.merchant || 'Savings');
+      }
     }
-    return Object.entries(days).map(([date, amount]) => ({
-      date, amount: Math.round(amount * 100) / 100,
+    return Object.entries(days).map(([date, data]) => ({
+      date, 
+      amount: Math.round(data.amount * 100) / 100,
+      label: Array.from(new Set(data.details)).join(' & '),
     })).sort((a, b) => a.date.localeCompare(b.date));
   }
 
@@ -958,6 +964,28 @@ class FinanceService {
     const expectedProgress = totalDays > 0 ? (elapsedDays / totalDays) * 100 : 100;
     const actualProgress = parseFloat(goal.targetAmount) > 0 ? (parseFloat(goal.currentAmount) / parseFloat(goal.targetAmount)) * 100 : 0;
     return actualProgress >= expectedProgress * 0.8;
+  }
+
+  async aiChat(userId, message) {
+    const [overview, spend, goals] = await Promise.all([
+      this.getOverview(userId),
+      this.getSpendData(userId),
+      financeRepository.getGoals(userId)
+    ]);
+    
+    // simplify context to avoid massive token payload
+    const miniContext = {
+      income: overview.cashFlow?.income || 0,
+      expenses: overview.cashFlow?.expenses || 0,
+      savings: overview.cashFlow?.savings || 0,
+      netWorth: overview.kpis?.netWorth?.current || 0,
+      freedomScore: overview.kpis?.freedomScore || 0,
+      budgetHealth: spend.kpis?.budgetHealth?.score || 0,
+      spendingBreakdown: spend.spendingBreakdown || [],
+      goals: goals?.map(g => ({ title: g.title, target: g.targetAmount, current: g.currentAmount })) || [],
+    };
+    const response = await financeAI.chat(miniContext, message);
+    return { response };
   }
 }
 

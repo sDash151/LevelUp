@@ -92,6 +92,42 @@ Rules:
   }
 
   // ══════════════════════════════════════════════
+  // DETAILED ROI REPORT
+  // ══════════════════════════════════════════════
+
+  async generateDetailedROIReport(roiData) {
+    const prompt = `You are a world-class life coach, financial advisor, and personal growth analyst. Write a highly personalized, deeply insightful, and beautifully formatted markdown report analyzing the user's "Life ROI" (Return on Investment) across their various life domains.
+
+Here is their raw data:
+${JSON.stringify(roiData, null, 2)}
+
+Write a compelling, multi-paragraph markdown report that includes:
+1.  **Executive Summary**: A punchy 2-sentence summary of their overall life investment efficiency.
+2.  **Top Performing Investment**: Highlight the area (Fitness, Career, Finance, or Learning) where they are getting the best ROI. Explain *why* the data shows this. Use numbers.
+3.  **Capital Sink / Optimization Opportunity**: Identify where they are spending the most (either time or money) with the lowest proportionate return. Provide a concrete, 1-paragraph strategy on how to pivot or optimize this investment.
+4.  **The Hidden Multiplier**: Reveal a hidden synergy between two of their areas (e.g., "Your consistency in learning is clearly bleeding into your career prospects").
+
+Formatting Rules:
+- Output raw markdown text (not JSON).
+- Do not use markdown code block syntax (like \`\`\`markdown) in your response, just return the raw text.
+- Use bolding, bullet points, and headers to make it highly readable and scannable.
+- Be direct, slightly analytical, and extremely encouraging.`;
+
+    if (!this.client) return null;
+    try {
+      const response = await this.client.models.generateContent({
+        model: this.model,
+        contents: prompt,
+        config: { temperature: 0.4 }, // non-JSON text response
+      });
+      return response.text;
+    } catch (error) {
+      console.error('AnalyticsAI ROI Report error:', error.message);
+      return null;
+    }
+  }
+
+  // ══════════════════════════════════════════════
   // PREDICTION EXPLANATIONS
   // ══════════════════════════════════════════════
 

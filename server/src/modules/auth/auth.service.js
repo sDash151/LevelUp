@@ -115,7 +115,10 @@ class AuthService {
   async _generateAndSaveTokens(user) {
     const payload = { id: user.id, email: user.email };
     const accessToken = generateAccessToken(payload);
-    const refreshToken = generateRefreshToken(payload);
+    
+    // Add unique jti (JWT ID) to ensure refresh tokens generated in the exact same second are unique
+    const refreshPayload = { ...payload, jti: crypto.randomUUID() };
+    const refreshToken = generateRefreshToken(refreshPayload);
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     await authRepository.saveRefreshToken(user.id, refreshToken, expiresAt);

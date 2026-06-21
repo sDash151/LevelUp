@@ -360,6 +360,27 @@ Only include genuine risks. Order by severity (high first). Max 5 alerts.`;
       recurringCount,
     };
   }
+  async chat(context, message) {
+    const prompt = `You are an AI Chief Financial Officer for a personal finance app.
+The user is talking to you via a chat interface. Keep your answers concise, actionable, and conversational.
+
+USER FINANCIAL CONTEXT:
+${JSON.stringify(context, null, 2)}
+
+Instructions:
+- The context includes the user's total income, expenses, savings, budget health, spending breakdown (categories), and goals.
+- If the user asks where they are spending their money, read the "spendingBreakdown" array and list the top categories.
+- If the user asks about goals, read the "goals" array.
+- Do NOT say you don't have the data if it is present in the context above.
+
+USER MESSAGE:
+"${message}"
+
+Respond directly to the user's message as an expert AI CFO. Use Markdown formatting. Return a JSON object with a single field "response" containing your string reply.
+{ "response": "<your markdown formatted reply>" }`;
+    const res = await this._generate(prompt);
+    return res?.response || "I'm sorry, I'm having trouble analyzing your finances right now. Please try again.";
+  }
 }
 
 export const financeAI = new FinanceAI();

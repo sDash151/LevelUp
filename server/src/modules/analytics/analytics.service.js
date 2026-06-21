@@ -8,12 +8,16 @@ import { fitnessService } from '../fitness/fitness.service.js';
 import { dsaService } from '../dsa/dsa.service.js';
 import { jobsRepository } from '../jobs/jobs.repository.js';
 import { reflectionsService } from '../reflections/reflections.service.js';
+import { goalsService } from '../goals/goals.service.js';
 import { prisma } from '../../config/database.js';
 
 class AnalyticsService {
   async getFullAnalytics(userId) {
-    const [hero, radar, crossModule, trends, roi, intelligence] = await Promise.all([
-      this.getHeroMetrics(userId),
+    // 1. Calculate and Upsert the latest snapshot first
+    const hero = await this.getHeroMetrics(userId);
+
+    // 2. Safely fetch everything else concurrently now that the DB is up to date
+    const [radar, crossModule, trends, roi, intelligence] = await Promise.all([
       this.getLifeRadar(userId),
       this.getCrossModulePerformance(userId),
       this.getTrends(userId),
@@ -128,12 +132,19 @@ class AnalyticsService {
     if (isCacheStale) {
       // Build data payload for AI
       const prev = await analyticsRepository.getPreviousSnapshot(userId, todayStr);
+      
+      const changes = prev ? {
+        mind: Math.round(scores.mind - prev.mindScore),
+        body: Math.round(scores.body - prev.bodyScore),
+        career: Math.round(scores.career - prev.careerScore),
+        money: Math.round(scores.money - prev.moneyScore),
+        discipline: Math.round(scores.discipline - prev.disciplineScore),
+        reflection: Math.round(scores.reflection - prev.reflectionScore)
+      } : {};
+
       const payload = {
-        currentScores: scores,
-        previousScores: prev ? {
-          mind: prev.mindScore, body: prev.bodyScore, career: prev.careerScore, 
-          money: prev.moneyScore, discipline: prev.disciplineScore, reflection: prev.reflectionScore
-        } : null
+        scores,
+        changes
       };
       
       const newInsights = await analyticsAI.generateQuickInsights(payload);
@@ -166,10 +177,10 @@ class AnalyticsService {
     return [
       { id: 'habits', name: 'Habits', score: habitData?.weeklyPct || 0, label: 'Consistency', change: 12 },
       { id: 'fitness', name: 'Fitness', score: analyticsScoring.calculateBodyScore(fitnessData), label: 'Performance', change: 18 },
-      { id: 'finance', name: 'Finance', score: financeData?.freedomScore || 0, label: 'Freedom Score', change: -5 },
+      { id: 'finance', name: 'Finance', score: financeData?.kpis?.freedomScore?.score || 0, label: 'Freedom Score', change: -5 },
       { id: 'dsa', name: 'DSA', score: dsaData?.readinessPct || 0, label: 'Progress', change: 8 },
       { id: 'career', name: 'Career', score: analyticsScoring.calculateCareerScore(jobData, {total:0, shipped:0}, {}), label: 'Job Readiness', change: 4 },
-      { id: 'reflections', name: 'Reflections', score: refData?.monthlyPct || 0, label: 'Monthly', change: 15 }
+      { id: 'reflections', name: 'Reflections', score: refData?.growthScore || 0, label: 'Monthly Growth', change: 15 }
     ];
   }
 
@@ -194,11 +205,11 @@ class AnalyticsService {
 
     const streaks = [
       { name: 'Habits', current: habits?.currentStreak || 0, best: habits?.bestStreak || 0 },
-      { name: 'Fitness', current: fitness?.streak || 0, best: fitness?.streak || 0 },
-      { name: 'Savings', current: finance?.savingsStreak || 0, best: finance?.savingsStreak || 0 },
-      { name: 'DSA Practice', current: dsa?.streak || 0, best: dsa?.streak || 0 },
-      { name: 'Job Prep', current: jobs?.streak || 0, best: jobs?.streak || 0 },
-      { name: 'Reflections', current: reflections?.streak || 0, best: reflections?.streak || 0 }
+      { name: 'Fitness', current: fitness?.streak?.current || 0, best: fitness?.streak?.best || 0 },
+      { name: 'Savings', current: finance?.savingsStreak?.current || 0, best: finance?.savingsStreak?.best || 0 },
+      { name: 'DSA Practice', current: dsa?.streak || 0, best: dsa?.bestStreak || 0 },
+      { name: 'Job Prep', current: jobs?.streak || 0, best: jobs?.bestStreak || 0 },
+      { name: 'Reflections', current: reflections?.streak || 0, best: reflections?.bestStreak || 0 }
     ].map(s => ({
       ...s,
       status: s.current > 20 ? 'Excellent' : s.current > 10 ? 'Strong' : s.current > 3 ? 'Good' : 'At Risk'
@@ -207,20 +218,76 @@ class AnalyticsService {
     return { roi, streaks };
   }
 
+  async getDetailedROIReport(userId) {
+    let reportInsight = await analyticsRepository.getAIInsight(userId, 'ROI_REPORT');
+    const isCacheStale = !reportInsight || (Date.now() - reportInsight.createdAt.getTime() > 24 * 60 * 60 * 1000);
+
+    if (isCacheStale || !reportInsight.content) {
+      // Fetch raw ROI metrics
+      const { roi } = await this.getLifeROIAndStreaks(userId);
+      
+      // Generate new AI report
+      const newReportText = await analyticsAI.generateDetailedROIReport(roi);
+      
+      if (newReportText) {
+        // Cache it
+        reportInsight = await analyticsRepository.createAIInsight(userId, 'ROI_REPORT', { markdown: newReportText });
+      }
+    }
+
+    return {
+      report: reportInsight?.content?.markdown || "Could not generate ROI report at this time. Please try again later."
+    };
+  }
+
   async getIntelligence(userId) {
     const [refStats, moodHistory] = await Promise.all([
       reflectionsService.getStats(userId).catch(() => ({})),
       reflectionsService.getMoodHistory(userId, 30).catch(() => [])
     ]);
 
+    // 1. Finance Prediction (Emergency Fund)
+    const savings = await prisma.transaction.aggregate({
+      where: { userId, type: 'TRANSFER', OR: [{ category: { contains: 'Savings', mode: 'insensitive' } }, { category: { contains: 'Investment', mode: 'insensitive' } }] },
+      _sum: { amount: true }
+    });
+    const totalSaved = parseFloat(savings._sum.amount || 0);
+    const financeTarget = 10000;
+    const financeProgress = Math.min(Math.round((totalSaved / financeTarget) * 100), 100);
+    const financeDays = financeProgress >= 100 ? 0 : Math.round(((financeTarget - totalSaved) / 500) * 30);
+
+    // 2. DSA Prediction
+    const dsaSolved = await prisma.dsaUserProgress.count({ where: { userId, status: 'SOLVED' } });
+    const dsaTarget = 450;
+    const dsaProgress = Math.min(Math.round((dsaSolved / dsaTarget) * 100), 100);
+    const dsaDays = dsaProgress >= 100 ? 0 : Math.round(((dsaTarget - dsaSolved) / 3) * 7);
+
+    // 3. Career Readiness
+    const jobsCount = await prisma.jobApplication.count({ where: { userId } });
+    const careerTarget = 50;
+    const careerProgress = Math.min(Math.round((jobsCount / careerTarget) * 100), 100);
+    const careerDays = careerProgress >= 100 ? 0 : Math.round(((careerTarget - jobsCount) / 2) * 7);
+
+    // 4. Fitness Goal
+    const workouts = await prisma.workoutSession.count({ where: { userId } });
+    const workoutTarget = 100;
+    const fitnessProgress = Math.min(Math.round((workouts / workoutTarget) * 100), 100);
+    const fitnessDays = fitnessProgress >= 100 ? 0 : Math.round(((workoutTarget - workouts) / 3) * 7);
+
+    // 5. Discipline/Habits
+    const habitsCount = await prisma.habitLog.count({ where: { userId } });
+    const habitsTarget = 200;
+    const habitsProgress = Math.min(Math.round((habitsCount / habitsTarget) * 100), 100);
+    const habitsDays = habitsProgress >= 100 ? 0 : Math.round(((habitsTarget - habitsCount) / 5) * 7);
+
     // Deterministic predictions base
     const basePredictions = [
-      { title: "Emergency Fund", targetDays: 74, progress: 68 },
-      { title: "DSA A2Z Completion", targetDays: 91, progress: 58 },
-      { title: "Fitness Goal", targetDays: 48, progress: 72 },
-      { title: "Job Readiness", targetDays: 32, progress: 80 },
-      { title: "50 Books Goal", targetDays: 142, progress: 35 }
-    ];
+      { title: "Emergency Fund", targetDays: financeDays || 90, progress: financeProgress || 2 },
+      { title: "DSA A2Z Completion", targetDays: dsaDays || 120, progress: dsaProgress || 2 },
+      { title: "Job Readiness", targetDays: careerDays || 60, progress: careerProgress || 2 },
+      { title: "Fitness Goal", targetDays: fitnessDays || 180, progress: fitnessProgress || 2 },
+      { title: "Discipline Mastery", targetDays: habitsDays || 90, progress: habitsProgress || 2 }
+    ].sort((a,b) => b.progress - a.progress);
 
     let predictions = await analyticsRepository.getAIInsight(userId, 'PREDICTIONS');
     const isCacheStale = !predictions || (Date.now() - predictions.createdAt.getTime() > 24*60*60*1000);

@@ -91,13 +91,17 @@ class AnalyticsScoring {
    */
   calculateBodyScore(fitnessData = {}) {
     const thisWeek = fitnessData.thisWeek || {};
-    const workoutConsistency = this._clamp((this._safe(thisWeek.count) / 5) * 100);
+    const target = this._safe(thisWeek.target) || 5;
+    const workoutConsistency = this._clamp((this._safe(thisWeek.completed) / target) * 100);
 
     const streak = this._safe(fitnessData.streak);
     const streakFactor = this._clamp(Math.min(streak / 7, 1) * 100);
 
     const nutrition = fitnessData.nutritionSummary || {};
-    const nutritionAdherence = this._clamp(this._safe(nutrition.adherencePct ?? nutrition.score));
+    let nutritionAdherence = 0;
+    if (nutrition.calories && nutrition.calories.goal > 0) {
+      nutritionAdherence = this._clamp((nutrition.calories.consumed / nutrition.calories.goal) * 100);
+    }
 
     return this._clamp(
       workoutConsistency * 0.4 +
@@ -156,12 +160,8 @@ class AnalyticsScoring {
 
   // ───────── 5. Money Score ─────────
 
-  /**
-   * Directly uses the finance freedom score (already 0-100).
-   * @param {object} financeData – { freedomScore }
-   */
   calculateMoneyScore(financeData = {}) {
-    return this._clamp(this._safe(financeData.freedomScore));
+    return this._clamp(this._safe(financeData.kpis?.freedomScore?.score));
   }
 
   // ───────── 6. Discipline Score ─────────

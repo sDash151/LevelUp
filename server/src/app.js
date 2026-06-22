@@ -13,6 +13,9 @@ import { initAnalyticsCron } from './modules/analytics/analytics.snapshot.cron.j
 
 const app = express();
 
+// Trust reverse proxy (required for Render & rate limiter)
+app.set('trust proxy', 1);
+
 // ── Security ──────────────────────────────────
 app.use(helmet());
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));

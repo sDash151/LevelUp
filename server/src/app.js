@@ -28,6 +28,8 @@ app.use(defaultLimiter);
 
 // ── Request logging ───────────────────────────
 app.use((req, res, next) => {
+  if (req.originalUrl === '/api/v1/health' || req.originalUrl === '/health') return next();
+  
   const start = Date.now();
   res.on('finish', () => {
     const duration = Date.now() - start;

@@ -22,21 +22,23 @@ export const githubAuth = asyncHandler(async (req, res) => {
 
 export const githubCallback = asyncHandler(async (req, res) => {
   const { code, state } = req.query;
-  if (!code) return res.redirect('http://localhost:5173/login?error=no_code');
+  const clientUrl = env.CORS_ORIGIN;
+  
+  if (!code) return res.redirect(`${clientUrl}/login?error=no_code`);
 
   // If this was initiated from the Projects page, redirect back there with the code and original state
   if (state && state.startsWith('projects:')) {
     const originalState = state.split('projects:')[1];
-    return res.redirect(`http://localhost:5173/projects?code=${code}&state=${originalState}`);
+    return res.redirect(`${clientUrl}/projects?code=${code}&state=${originalState}`);
   }
 
   // Otherwise, handle as a Login
   try {
     const { user, accessToken, refreshToken } = await authService.githubLogin(code);
     res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-    res.redirect(`http://localhost:5173/login?token=${accessToken}&onboarded=${user.isOnboarded}`);
+    res.redirect(`${clientUrl}/login?token=${accessToken}&onboarded=${user.isOnboarded}`);
   } catch (error) {
-    res.redirect('http://localhost:5173/login?error=auth_failed');
+    res.redirect(`${clientUrl}/login?error=auth_failed`);
   }
 });
 

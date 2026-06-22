@@ -1,203 +1,132 @@
-# 🚀 LevelUp — Your Life Operating System
+# 🚀 LevelUp — Premium Life OS
 
-A **premium production-ready PWA** for tracking and leveling up every dimension of your life.
-
-![Stack](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
-![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
-![Node](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+<p align="center">
+  <em>The ultimate, full-stack, AI-powered Life Operating System for ambitious developers and professionals.</em>
+</p>
 
 ---
 
-## ✨ Features
+## 📖 Overview
 
-| Module | Description |
-|--------|-------------|
-| 📊 **Dashboard** | Unified overview of all life metrics at a glance |
-| ✅ **Habits** | Daily habit tracker with streaks, categories, and completion heatmap |
-| 🎯 **Goals** | Weekly/monthly goals with milestones and progress tracking |
-| 📝 **Reflections** | Daily/weekly journaling with mood tracking and trend charts |
-| 💻 **DSA Tracker** | Coding problem tracker with difficulty, topics, and platforms |
-| 💼 **Job Tracker** | Job application pipeline with 7-stage status tracking |
-| 📁 **Projects** | Side project manager with tech stack, GitHub/live links |
-| 💰 **Finance** | Income/expense tracker with category breakdown and savings rate |
-| 🏋️ **Fitness** | Workout logger with exercises, daily metrics (weight/steps/sleep) |
-| 📈 **Analytics** | Cross-domain charts — habit trends, weekly activity, finance summary |
-| ⚡ **Insights** | AI-style smart insights across all 8 life domains |
-| 👤 **Profile** | Account settings, preferences, and security |
+**LevelUp** is not just an application; it is a **Premium Life Operating System**. Built specifically for ambitious individuals, it completely eliminates the need for fragmented productivity apps. Instead of juggling a dozen different trackers for your habits, job applications, coding practice, finances, and fitness, LevelUp centralizes your entire life into a single, beautiful, glassmorphic Command Center.
 
-## 🛠 Tech Stack
+Powered by the **Google Gemini AI API**, LevelUp acts as your personal coach—dynamically generating habit routines, acting as an AI Chief Financial Officer, and offering intelligent insights to prevent developer burnout.
+
+---
+
+## ✨ Core Modules & Features
+
+### 💻 The Developer Engine
+*   **DSA Tracker:** Track your Data Structures and Algorithms mastery. Includes a Spaced-Repetition Revision Queue, Pattern Mastery analytics, Weak Area detection, and a Company-specific preparation mode.
+*   **Job Pipeline:** A fully functional, responsive Kanban board to track job and internship applications from 'Applied' to 'Offer'. Features a massive CRM drawer to log recruiter contacts, interview notes, and negotiation status.
+*   **Projects Workspace:** A Jira-style pipeline integrated with GitHub. Track your real-time commit history, log technical 'Learnings' to avoid repeating bugs, and use the AI Intelligence tab for architectural advice.
+
+### 🌱 Personal Growth
+*   **AI Habit Planner:** Uses Google Gemini to dynamically generate customized, step-by-step daily habit routines based on your ultimate life goals. Includes a GitHub-style annual contribution heatmap.
+*   **Goals & Milestones:** Break massive long-term goals down into actionable milestones mapped across a comprehensive Monthly Goals timeline view.
+*   **Reflections:** A digital journal featuring a dynamic Mood Chart and AI sentiment analysis that reads your entries to detect signs of burnout or imposter syndrome.
+
+### 🏋️ Holistic Health & Lifestyle
+*   **Fitness Engine:** Essentially MyFitnessPal + Hevy built-in. Track macro-nutrition, log strength training volume, monitor muscle group balance, and securely upload physique progress photos to the cloud.
+*   **Finance & AI CFO:** Log daily transactions and track emotional spending. Features an **AI CFO Chat Modal** where you can ask your AI financial advisor to optimize your budget in natural language.
+
+### 📊 Global Analytics
+*   **Life Radar & Cross-Module Performance:** Visualizes your performance across all modules to calculate your true 'Life ROI'. It correlates data (e.g., how your sleep affects your coding success) to give you a holistic view of your productivity.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+LevelUp is a highly scalable, robust MERN/PERN stack application deployed with a microservices-inspired client/server separation.
 
 ### Frontend
-- **React** (JavaScript, Vite 6)
-- **Tailwind CSS v4** (CSS-first config)
-- **Framer Motion** (animations)
-- **React Router v6** (routing)
-- **Zustand** (state management)
-- **TanStack Query** (server state)
-- **Recharts** (charts/graphs)
-- **Lucide Icons**
-- **PWA** (service workers, offline support, installable)
+*   **Framework:** React 18, Vite
+*   **Styling:** Tailwind CSS, custom glassmorphism design system
+*   **State Management:** Zustand
+*   **Animations & Data Viz:** Framer Motion, Recharts
+*   **PWA:** Fully configured as a Progressive Web App for native mobile installation
 
 ### Backend
-- **Node.js + Express**
-- **PostgreSQL + Prisma ORM**
-- **JWT Authentication** (access + refresh tokens)
-- **Zod** (validation)
-- **Helmet, CORS, Compression** (security)
+*   **Framework:** Node.js, Express.js
+*   **Security:** Helmet, `express-rate-limit`, HttpOnly JSON Web Tokens (JWT) for secure session management.
+*   **Database:** PostgreSQL (hosted on NeonDB)
+*   **ORM:** Prisma ORM for bulletproof end-to-end type safety
 
-### Infrastructure
-- **Docker + Docker Compose** (full stack deployment)
-- **Nginx** (static serving, API proxy, gzip, caching)
+### External APIs
+*   **Google Gemini API:** Powers the AI Habit Planner, AI CFO, and Reflection insights.
+*   **GitHub OAuth:** Secure, frictionless, one-click authentication.
+*   **Cloudinary API:** Secure cloud storage for fitness progress photos.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Getting Started (Local Development)
 
 ### Prerequisites
-- Node.js 20+
-- PostgreSQL 16+
+*   Node.js (v18+)
+*   A PostgreSQL Database URL
+*   API Keys for Google Gemini, GitHub OAuth, and Cloudinary.
 
-### 1. Clone & Install
-
+### 1. Clone the repository
 ```bash
-git clone <your-repo-url>
-cd LevelUP
+git clone https://github.com/sDash151/LevelUp.git
+cd LevelUp
+```
 
-# Server
+### 2. Setup the Backend
+Navigate to the server directory:
+```bash
 cd server
-npm install
-cp .env.example .env  # Configure your database URL
-
-# Client
-cd ../client
 npm install
 ```
 
-### 2. Database Setup
+Create a `.env` file in the `server` directory and configure the following variables:
+```env
+NODE_ENV=development
+PORT=5000
+DATABASE_URL="your_postgresql_connection_string"
 
+# JWT Secrets (Generate random hex strings)
+JWT_SECRET="your_jwt_secret"
+JWT_REFRESH_SECRET="your_refresh_secret"
+JWT_ACCESS_EXPIRY=15m
+JWT_REFRESH_EXPIRY=7d
+
+# Cross-Origin
+CORS_ORIGIN=http://localhost:5173
+
+# External APIs
+GEMINI_API_KEY="your_gemini_key"
+GITHUB_CLIENT_ID="your_github_client_id"
+GITHUB_CLIENT_SECRET="your_github_client_secret"
+GITHUB_CALLBACK_URL="http://localhost:5000/api/v1/auth/github/callback"
+CLOUDINARY_CLOUD_NAME="your_cloud_name"
+CLOUDINARY_API_KEY="your_cloudinary_api_key"
+CLOUDINARY_API_SECRET="your_cloudinary_api_secret"
+```
+
+Initialize the database and start the server:
 ```bash
-cd server
-npx prisma migrate dev --name init
 npx prisma generate
+npx prisma db push
+npm run dev
 ```
 
-### 3. Run Development
-
+### 3. Setup the Frontend
+Open a new terminal and navigate to the client directory:
 ```bash
-# Terminal 1 — Server
-cd server
-npm run dev
-
-# Terminal 2 — Client
 cd client
+npm install
 npm run dev
 ```
 
-### 4. Docker (Production)
-
-```bash
-docker compose up --build -d
-```
-
-Access at `http://localhost`
+The frontend will run on `http://localhost:5173`. The Vite proxy is already configured to route `/api` requests to `http://localhost:5000`.
 
 ---
 
-## 📁 Project Structure
+## 👨‍💻 Author
 
-```
-LevelUP/
-├── client/                         # React Frontend
-│   ├── src/
-│   │   ├── app/                    # App root, Router, ErrorBoundary, PWA
-│   │   ├── design-system/          # Components, layouts, theme
-│   │   │   ├── components/         # Button, Card, Input, Modal, Badge, etc.
-│   │   │   └── layouts/            # AppLayout, SideNav, MobileNav
-│   │   ├── features/               # Feature modules
-│   │   │   ├── auth/               # Login, Signup, ForgotPassword
-│   │   │   ├── dashboard/          # Dashboard overview
-│   │   │   ├── habits/             # Habit tracker
-│   │   │   ├── goals/              # Goal tracker
-│   │   │   ├── reflections/        # Journal & mood
-│   │   │   ├── dsa/                # DSA problem tracker
-│   │   │   ├── jobs/               # Job application pipeline
-│   │   │   ├── projects/           # Project manager
-│   │   │   ├── finance/            # Income/expense tracker
-│   │   │   ├── fitness/            # Workout logger
-│   │   │   ├── analytics/          # Cross-domain analytics
-│   │   │   ├── insights/           # Smart insights
-│   │   │   └── profile/            # Settings & account
-│   │   └── shared/                 # Stores, utils, hooks
-│   ├── Dockerfile
-│   └── nginx.conf
-│
-├── server/                         # Express Backend
-│   ├── src/
-│   │   ├── config/                 # Database, env
-│   │   ├── modules/                # Feature modules (modular monolith)
-│   │   │   ├── auth/               # JWT auth, OAuth
-│   │   │   ├── habits/             # Habit CRUD
-│   │   │   ├── goals/              # Goal CRUD
-│   │   │   ├── dashboard/          # Aggregated stats
-│   │   │   ├── reflections/        # Reflection CRUD
-│   │   │   ├── dsa/                # DSA problem CRUD
-│   │   │   ├── jobs/               # Job application CRUD
-│   │   │   ├── projects/           # Project CRUD
-│   │   │   ├── finance/            # Transaction CRUD
-│   │   │   ├── fitness/            # Workout + daily log CRUD
-│   │   │   ├── analytics/          # Cross-module analytics
-│   │   │   └── insights/           # Smart insights engine
-│   │   ├── routes/                 # Route aggregator
-│   │   └── shared/                 # Middlewares, errors, utils
-│   ├── prisma/
-│   │   └── schema.prisma
-│   └── Dockerfile
-│
-└── docker-compose.yml
-```
+**Sourav Dash Adhikari**
+*   MCA Graduate, Atria Institute of Technology, Bangalore
+*   MERN Stack Fast Track Program, AccioJob Bangalore
 
----
-
-## 🏗 Architecture
-
-```
-Client (React)  →  Nginx (proxy)  →  Express API  →  PostgreSQL
-     ↑                                    ↑
-  Zustand                            Prisma ORM
-  TanStack Query                     Zod Validation
-  Framer Motion                      JWT Auth
-```
-
-**Server Module Pattern:**
-```
-Route → Controller → Service → Repository → Prisma
-```
-
-Every module follows this exact 5-file structure:
-- `*.validation.js` — Zod schemas
-- `*.repository.js` — Database queries
-- `*.service.js` — Business logic + ownership
-- `*.controller.js` — HTTP handlers
-- `*.routes.js` — Express routes
-
----
-
-## 📊 Build Stats
-
-| Metric | Value |
-|--------|-------|
-| Total Modules | 2,866 |
-| Build Time | 6.66s |
-| Errors | 0 |
-| Code-Split Pages | 14 chunks |
-| PWA Precache | 49 entries |
-| CSS Bundle | 50.53 KB (9.19 KB gzip) |
-| Total Bundle | ~1,080 KB |
-
----
-
-## 📄 License
-
-MIT
+*LevelUp was built as a passion project to solve the fragmentation of modern productivity tools, proving the capability of full-stack AI integration.*

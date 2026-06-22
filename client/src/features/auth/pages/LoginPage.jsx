@@ -59,7 +59,10 @@ export default function LoginPage() {
   }, [location, navigate, setAuth]);
 
   const handleGithubLogin = () => {
-    const apiUrl = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000/api/v1`;
+    // If VITE_API_URL is missing, default to /api/v1 (which uses Vercel proxy in prod)
+    // If we are locally testing on localhost, point directly to the backend port.
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname.startsWith('192.168');
+    const apiUrl = import.meta.env.VITE_API_URL || (isLocal ? `http://${window.location.hostname}:5000/api/v1` : '/api/v1');
     window.location.href = `${apiUrl}/auth/github`;
   };
 

@@ -44,6 +44,10 @@ app.use((req, res, next) => {
 // ── Routes ────────────────────────────────────
 app.use('/api/v1', routes);
 
+app.get('/', (req, res) => {
+  res.status(200).send('LevelUp API is running!');
+});
+
 // ── 404 handler ───────────────────────────────
 app.use((_req, _res, next) => {
   next(new NotFoundError('Route'));

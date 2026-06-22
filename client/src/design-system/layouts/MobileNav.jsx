@@ -17,7 +17,7 @@ export function MobileNav() {
 
   return (
     <nav
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 safe-bottom transition-colors duration-300"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 pb-[env(safe-area-inset-bottom)] transition-colors duration-300"
       style={{ background: 'var(--th-nav-bg)', backdropFilter: 'blur(20px) saturate(180%)', borderTop: '1px solid var(--th-border)' }}
     >
 

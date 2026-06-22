@@ -34,23 +34,37 @@ export function PWAInstallPrompt() {
     <AnimatePresence>
       {showBanner && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
+          initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-20 lg:bottom-4 left-4 right-4 z-[60] max-w-sm mx-auto"
+          exit={{ y: -100, opacity: 0 }}
+          className="fixed top-4 left-4 right-4 z-[300] max-w-sm mx-auto"
         >
-          <div className="glass-strong rounded-2xl p-4 flex items-center gap-3 shadow-2xl">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center shrink-0">
-              <Download className="w-5 h-5 text-white" />
+          <div 
+            className="rounded-2xl p-4 flex items-center gap-3 shadow-2xl"
+            style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}
+          >
+            <div 
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: 'var(--th-primary)' }}
+            >
+              <Download className="w-5 h-5" style={{ color: '#08080d' }} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white">Install LevelUp</p>
-              <p className="text-[10px] text-zinc-400">Add to home screen for the best experience</p>
+              <p className="text-sm font-semibold" style={{ color: 'var(--th-text)' }}>Install LevelUp</p>
+              <p className="text-[10px]" style={{ color: 'var(--th-text-secondary)' }}>Add to home screen for the best experience</p>
             </div>
-            <button onClick={handleInstall} className="px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:bg-accent-hover transition-colors shrink-0">
+            <button 
+              onClick={handleInstall} 
+              className="px-3 py-1.5 rounded-lg text-xs font-medium transition-opacity hover:opacity-80 shrink-0"
+              style={{ background: 'var(--th-text)', color: 'var(--th-bg)' }}
+            >
               Install
             </button>
-            <button onClick={handleDismiss} className="p-1 text-zinc-500 hover:text-white transition-colors shrink-0">
+            <button 
+              onClick={handleDismiss} 
+              className="p-1 transition-colors shrink-0 hover:opacity-80"
+              style={{ color: 'var(--th-text-dim)' }}
+            >
               <X className="w-4 h-4" />
             </button>
           </div>

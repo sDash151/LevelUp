@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      includeAssets: ['pwa-192x192.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'LevelUp — Premium Life OS',
         short_name: 'LevelUp',
@@ -72,7 +72,8 @@ export default defineConfig({
         ],
       },
       devOptions: {
-        enabled: false,
+        enabled: true,
+        type: 'module',
       },
     }),
   ],

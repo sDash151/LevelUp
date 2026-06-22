@@ -122,8 +122,12 @@ export function ProjectForm({ isOpen, onClose, initialData }) {
                 style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}
               >
                 <Github className="w-8 h-8 mb-3" style={{ color: 'var(--th-text)' }} />
-                <p className="text-sm font-semibold mb-1" style={{ color: 'var(--th-text)' }}>Connect GitHub Repo</p>
-                <p className="text-[11px]" style={{ color: 'var(--th-text-secondary)' }}>Import from your existing repositories.</p>
+                <p className="text-sm font-semibold mb-1" style={{ color: 'var(--th-text)' }}>
+                  {isConnected ? 'Import GitHub Repo' : 'Connect GitHub Repo'}
+                </p>
+                <p className="text-[11px]" style={{ color: 'var(--th-text-secondary)' }}>
+                  {isConnected ? 'Import from your existing repositories.' : 'Link your account and sync your repos.'}
+                </p>
               </button>
 
               <button

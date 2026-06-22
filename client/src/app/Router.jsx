@@ -19,6 +19,7 @@ const FitnessPage = lazy(() => import('@/features/fitness/pages/FitnessPage'));
 const AnalyticsPage = lazy(() => import('@/features/analytics/pages/AnalyticsPage'));
 const InsightsPage = lazy(() => import('@/features/insights/pages/InsightsPage'));
 const ProfilePage = lazy(() => import('@/features/profile/pages/ProfilePage'));
+const MobileMenuPage = lazy(() => import('@/features/dashboard/pages/MobileMenuPage'));
 const NotFoundPage = lazy(() => import('@/app/NotFoundPage'));
 
 function LoadingFallback() {
@@ -91,6 +92,7 @@ export function AppRouter() {
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/insights" element={<InsightsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/menu" element={<MobileMenuPage />} />
         </Route>
 
         {/* Redirects & 404 */}

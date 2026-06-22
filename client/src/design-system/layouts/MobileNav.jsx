@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { LayoutDashboard, CheckCircle2, Target, BarChart3, User } from 'lucide-react';
+import { LayoutDashboard, CheckCircle2, Dumbbell, Wallet, LayoutGrid } from 'lucide-react';
 
 const tabs = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Home' },
   { to: '/habits', icon: CheckCircle2, label: 'Habits' },
-  { to: '/goals', icon: Target, label: 'Goals' },
-  { to: '/analytics', icon: BarChart3, label: 'Track' },
-  { to: '/profile', icon: User, label: 'Profile' },
+  { to: '/fitness', icon: Dumbbell, label: 'Fitness' },
+  { to: '/finance', icon: Wallet, label: 'Finance' },
+  { to: '/menu', icon: LayoutGrid, label: 'Menu' },
 ];
 
 export function MobileNav() {

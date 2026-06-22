@@ -10,7 +10,7 @@ const REVISION_INTERVALS = [1, 3, 7, 14, 30]; // days
 class DsaService {
   // ── Dashboard ──
   async getDashboard(userId) {
-    const [solvedCount, streak, paths, pathProgress, patternMastery, revisionQueue, activePath, topicMastery] =
+    const [solvedCount, streak, paths, pathProgress, patternMastery, revisionQueue, activePath, topicMastery, difficultyBreakdown] =
       await Promise.all([
         dsaRepository.getUserSolvedCount(userId),
         dsaRepository.getStreak(userId),
@@ -20,6 +20,7 @@ class DsaService {
         dsaRepository.getRevisionQueue(userId, 5),
         dsaRepository.getActivePath(userId),
         dsaRepository.getWeakTopics(userId, 5),
+        dsaRepository.getUserSolvedByDifficulty(userId),
       ]);
 
     const totalProblems = paths.reduce((s, p) => s + p.totalProblems, 0);
@@ -28,6 +29,9 @@ class DsaService {
 
     return {
       totalSolved: solvedCount,
+      easySolved: difficultyBreakdown.Easy || 0,
+      mediumSolved: difficultyBreakdown.Medium || 0,
+      hardSolved: difficultyBreakdown.Hard || 0,
       pathCount: paths.filter(p => p.tier === 1).length,
       streak: streak.current,
       bestStreak: streak.best,

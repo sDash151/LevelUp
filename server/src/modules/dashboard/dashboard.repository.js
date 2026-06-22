@@ -63,7 +63,6 @@ class DashboardRepository {
     const habits = await prisma.habit.findMany({
       where: { userId, isArchived: false },
       orderBy: { createdAt: 'asc' },
-      take: 5,
     });
     if (!habits.length) return [];
 

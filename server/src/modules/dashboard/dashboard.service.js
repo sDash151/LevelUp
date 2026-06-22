@@ -40,8 +40,10 @@ class DashboardService {
     }));
 
     // XP level calculation (1000 XP per level)
-    const xpForNextLevel = userXp.level * 1000;
-    const xpProgress = Math.min(Math.round((userXp.totalXp / xpForNextLevel) * 100), 100);
+    const correctLevel = Math.floor(userXp.totalXp / 1000) + 1;
+    const xpForNextLevel = correctLevel * 1000;
+    const currentLevelXp = userXp.totalXp % 1000;
+    const xpProgress = Math.round((currentLevelXp / 1000) * 100);
 
     // Format focus time
     const focusHours = Math.floor(focusStats.focusTimeToday / 60);
@@ -61,7 +63,7 @@ class DashboardService {
       focusSparkline: focusStats.focusSparkline,
       completionSparkline,
       totalXp: userXp.totalXp,
-      level: userXp.level,
+      level: correctLevel,
       xpForNextLevel,
       xpProgress,
 

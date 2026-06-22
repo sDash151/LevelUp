@@ -10,6 +10,8 @@ router.get('/stats', controller.getStats);
 router.get('/rich-stats', controller.getRichStats);
 router.get('/calendar-stats', controller.getCalendarStats);
 router.get('/ai/insight', controller.getAiInsight);
+router.post('/ai/planner', controller.planHabits);
+router.post('/bulk', controller.bulkCreate);
 router.get('/:id', controller.getOne);
 router.post('/', validate(createHabitSchema), controller.create);
 router.put('/:id', validate(updateHabitSchema), controller.update);

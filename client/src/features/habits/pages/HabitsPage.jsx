@@ -11,6 +11,7 @@ import { useHabitRichStats, useToggleHabit, useDeleteHabit, useCreateHabit, useU
 import { HabitForm } from '../components/HabitForm';
 import { HabitsCalendarView } from '../components/HabitsCalendarView';
 import { AIHabitInsight } from '../components/AIHabitInsight';
+import { AIHabitPlannerModal } from '../components/AIHabitPlannerModal';
 import clsx from 'clsx';
 
 /* ─── Constants ─── */
@@ -297,6 +298,7 @@ export default function HabitsPage() {
   const [filter, setFilter] = useState('all');
   const [view, setView] = useState('list'); // 'list' | 'calendar'
   const [showForm, setShowForm] = useState(false);
+  const [showPlanner, setShowPlanner] = useState(false);
   const [editingHabit, setEditingHabit] = useState(null);
 
   const habits = stats?.habits ?? [];
@@ -605,12 +607,20 @@ export default function HabitsPage() {
                 <CalendarDays className="w-3.5 h-3.5" /> Calendar
               </button>
             </div>
-            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-              onClick={() => { setEditingHabit(null); setShowForm(true); }}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all"
-              style={{ background: 'var(--th-primary)', color: '#08080d' }}>
-              <Plus className="w-4 h-4" /> Add Habit
-            </motion.button>
+            <div className="flex items-center gap-2">
+              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                onClick={() => setShowPlanner(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all shadow-sm"
+                style={{ background: 'color-mix(in srgb, var(--th-primary) 15%, transparent)', color: 'var(--th-primary)', border: '1px solid color-mix(in srgb, var(--th-primary) 30%, transparent)' }}>
+                <span className="text-[14px]">✨</span> AI Planner
+              </motion.button>
+              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                onClick={() => { setEditingHabit(null); setShowForm(true); }}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all"
+                style={{ background: 'var(--th-primary)', color: '#08080d' }}>
+                <Plus className="w-4 h-4" /> Add Habit
+              </motion.button>
+            </div>
           </div>
         </div>
 
@@ -781,6 +791,10 @@ export default function HabitsPage() {
         onClose={() => { setShowForm(false); setEditingHabit(null); }}
         habit={editingHabit}
         onSubmit={handleSubmit}
+      />
+      <AIHabitPlannerModal
+        isOpen={showPlanner}
+        onClose={() => setShowPlanner(false)}
       />
     </AnimatedPage>
   );

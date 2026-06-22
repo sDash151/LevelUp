@@ -34,6 +34,7 @@ router.post('/learnings/extract', c.extractLearnings);
 
 // ── Task routes (non-parameterised project id) ──────────────────────────────
 router.patch('/tasks/:taskId', validate(updateTaskSchema), c.updateTask);
+router.delete('/tasks/:taskId', c.deleteTask);
 
 // ── Parameterised project routes ─────────────────────────────────────────────
 router.get('/:id', c.getOne);

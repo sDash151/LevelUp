@@ -25,6 +25,10 @@ class HabitsService {
     return habitsRepository.create(userId, data);
   }
 
+  async bulkCreateHabits(userId, habitsData) {
+    return habitsRepository.bulkCreate(userId, habitsData);
+  }
+
   async updateHabit(userId, habitId, data) {
     const habit = await habitsRepository.findById(habitId);
     if (!habit) throw new NotFoundError('Habit');

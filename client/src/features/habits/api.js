@@ -11,3 +11,5 @@ export const getHabitRichStats = () => api.get('/habits/rich-stats').then((r) =>
 export const getHabitCalendarStats = (year, month, selectedDate) =>
   api.get('/habits/calendar-stats', { params: { year, month, selectedDate } }).then((r) => r.data);
 export const getAiInsight = (force = false) => api.get('/habits/ai/insight', { params: force ? { force: true } : {} }).then((r) => r.data);
+export const planAIHabits = (goal) => api.post('/habits/ai/planner', { goal }).then((r) => r.data);
+export const bulkCreateHabits = (habits) => api.post('/habits/bulk', { habits }).then((r) => r.data);

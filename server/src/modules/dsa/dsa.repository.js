@@ -118,11 +118,15 @@ class DsaRepository {
   }
 
   async getUserSolvedByDifficulty(userId) {
-    return prisma.dsaUserProgress.groupBy({
-      by: ['status'],
+    const solved = await prisma.dsaUserProgress.findMany({
       where: { userId, status: 'SOLVED' },
-      _count: true,
+      include: { problem: { select: { difficulty: true } } },
     });
+    const counts = { Easy: 0, Medium: 0, Hard: 0 };
+    for (const s of solved) {
+      if (s.problem && s.problem.difficulty) counts[s.problem.difficulty]++;
+    }
+    return counts;
   }
 
   // ── Path Progress ──

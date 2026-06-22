@@ -109,9 +109,16 @@ class ProjectsService {
 
   async updateTask(userId, taskId, data) {
     const task = await projectsRepository.findTaskById(taskId);
-    if (!task) throw new NotFoundError('Task');
-    if (task.project.userId !== userId) throw new UnauthorizedError('Not your project');
+    if (!task) throw new NotFoundError('Task not found');
+    if (task.project.userId !== userId) throw new UnauthorizedError('Access denied');
     return projectsRepository.updateTask(taskId, data);
+  }
+
+  async deleteTask(userId, taskId) {
+    const task = await projectsRepository.findTaskById(taskId);
+    if (!task) throw new NotFoundError('Task not found');
+    if (task.project.userId !== userId) throw new UnauthorizedError('Access denied');
+    return projectsRepository.deleteTask(taskId);
   }
 
   // ── Learnings ──

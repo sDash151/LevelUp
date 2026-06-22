@@ -52,6 +52,32 @@ Return ONLY the JSON object, with no markdown formatting.`;
 
     return await this._generate(prompt);
   }
+  async generateHabitPlan(goal) {
+    if (!goal) return null;
+
+    const prompt = `You are an expert behavioral psychologist and productivity coach.
+The user wants to achieve this major goal: "${goal}"
+
+Suggest 3 to 5 highly effective, specific, and actionable habits that will help them reach this goal.
+Return EXACTLY a JSON object with the following schema:
+{
+  "habits": [
+    {
+      "name": "Actionable Habit Name (max 40 chars)",
+      "description": "Short explanation of why this helps (max 60 chars)",
+      "category": "Must be exactly one of: general, mindfulness, fitness, learning, career, health",
+      "color": "Must be exactly one of: #6366f1, #8b5cf6, #06b6d4, #10b981, #f59e0b, #ef4444, #ec4899, #f97316",
+      "frequency": "Must be exactly one of: DAILY, WEEKLY, MONTHLY",
+      "icon": "A lucide-react icon name in lowercase (e.g. book, dumbbell, brain, target, code, pen-tool)"
+    }
+  ]
+}
+
+Return ONLY the JSON object, with no markdown formatting. Ensure you provide diverse categories and colors if applicable.`;
+
+    const res = await this._generate(prompt);
+    return res?.habits || [];
+  }
 }
 
 export const habitsAI = new HabitsAI();

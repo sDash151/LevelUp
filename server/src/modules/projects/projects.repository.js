@@ -95,7 +95,7 @@ class ProjectsRepository {
   // ==================== STATS & PIPELINE ====================
 
   async getStats(userId) {
-    const [byStatus, total, tasksDone, totalLearnings] = await Promise.all([
+    const [byStatus, total, tasksDone, totalLearnings, projectsWithMetrics] = await Promise.all([
       prisma.project.groupBy({
         by: ['status'],
         where: { userId },
@@ -108,9 +108,20 @@ class ProjectsRepository {
       prisma.projectLearning.count({
         where: { project: { userId } },
       }),
+      prisma.project.findMany({
+        where: { userId },
+        select: { metrics: { select: { commitCount: true } } }
+      }),
     ]);
 
-    return { total, byStatus, tasksDone, totalLearnings };
+    let totalCommits = 0;
+    for (const p of projectsWithMetrics) {
+      if (p.metrics?.commitCount) {
+        totalCommits += p.metrics.commitCount;
+      }
+    }
+
+    return { total, byStatus, tasksDone, totalLearnings, github: { totalCommits } };
   }
 
   async getPipeline(userId) {
@@ -198,6 +209,12 @@ class ProjectsRepository {
     if (data.dueDate === null) processed.dueDate = null;
     if (data.status === 'done') processed.completedAt = new Date();
     return prisma.projectTask.update({ where: { id: taskId }, data: processed });
+  }
+
+  async deleteTask(taskId) {
+    return prisma.projectTask.delete({
+      where: { id: taskId },
+    });
   }
 
   // ==================== LEARNINGS ====================

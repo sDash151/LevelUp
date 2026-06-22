@@ -7,10 +7,11 @@ import {
   SlidersHorizontal, ChevronDown, Settings, Lightbulb, ClipboardList,
   Hammer, FlaskConical, Rocket, X, FolderKanban, BarChart3, FileText,
   Check, Circle, AlertTriangle, Flame, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Plus, Briefcase, Target,
-  GripVertical, Loader2, PenLine,
+  GripVertical, Loader2, PenLine, Trash2,
 } from 'lucide-react';
-import { usePipeline, useMovePipelineProject, useBuildSuggestions, useGenerateBuildSuggestions, useCreateTask, useAnalyzeProject } from '../hooks/useProjects';
+import { usePipeline, useMovePipelineProject, useBuildSuggestions, useGenerateBuildSuggestions, useCreateTask, useAnalyzeProject, useUpdateTask, useDeleteTask } from '../hooks/useProjects';
 import clsx from 'clsx';
+import { Modal } from '../../../design-system/components/Modal';
 
 const card = 'rounded-2xl shadow-sm';
 const cardStyle = { background: 'var(--th-card-solid)', border: '1px solid var(--th-border)', boxShadow: 'var(--th-shadow)' };
@@ -525,9 +526,21 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving, onEditP
   const { data: suggestionsData, isFetching } = useBuildSuggestions(project?.id);
   const generateSuggestions = useGenerateBuildSuggestions();
   const createTask = useCreateTask();
+  const updateTask = useUpdateTask();
+  const deleteTask = useDeleteTask();
   const analyze = useAnalyzeProject();
   const [createdTasks, setCreatedTasks] = useState(new Set());
+  const [newTaskText, setNewTaskText] = useState('');
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editTaskTitle, setEditTaskTitle] = useState('');
+  const [taskToDelete, setTaskToDelete] = useState(null);
   const aiTasks = suggestionsData?.data?.suggestions || [];
+
+  const handleSaveEdit = async (taskId) => {
+    if (!editTaskTitle.trim()) return;
+    await updateTask.mutateAsync({ taskId, data: { title: editTaskTitle.trim() } });
+    setEditingTaskId(null);
+  };
 
   const handleCreateTask = async (task) => {
     if (createdTasks.has(task.title)) return;
@@ -703,125 +716,294 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving, onEditP
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <div>
-            <div className="flex items-center gap-1.5 mb-2">
-              <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--th-primary)' }} />
-              <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>AI Builder</p>
-            </div>
-            <div className="space-y-2">
-              {isFetching && aiTasks.length === 0 ? (
-                <div className="text-[10px] text-center py-4 italic" style={{ color: 'var(--th-text-dim)' }}>Consulting AI Architect...</div>
-              ) : aiTasks.map((task, i) => (
-                <label key={i} className={clsx("flex items-start gap-2 p-2 rounded-lg cursor-pointer transition-opacity", createdTasks.has(task.title) && "opacity-50")} style={{ background: 'var(--th-bg-secondary)' }}>
-                  <input 
-                    type="checkbox" 
-                    className="mt-0.5 rounded" 
-                    checked={createdTasks.has(task.title)} 
-                    onChange={() => handleCreateTask(task)} 
-                    disabled={createdTasks.has(task.title) || createTask.isPending} 
-                  />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-semibold leading-relaxed" style={{ color: 'var(--th-text)' }}>{task.title}</span>
-                    <span className="text-[9px] leading-relaxed" style={{ color: 'var(--th-text-secondary)' }}>{task.description}</span>
-                  </div>
-                </label>
-              ))}
-            </div>
-            <button 
-              onClick={() => generateSuggestions.mutate(project.id)} 
-              disabled={isFetching || generateSuggestions.isPending} 
-              className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg transition-colors hover:opacity-90 disabled:opacity-50"
-              style={{ background: 'rgba(var(--th-primary-rgb), 0.1)', color: 'var(--th-primary)' }}>
-              {isFetching || generateSuggestions.isPending ? 'Generating...' : 'Generate More Ideas'}
-            </button>
-          </div>
-
-          <div className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
-            <div className="flex items-center gap-1.5 mb-2">
-              <Briefcase className="w-3.5 h-3.5" style={{ color: 'var(--th-primary)' }} />
-              <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>AI Analysis Feedback</p>
-            </div>
-            {improvements.length > 0 ? (
-              <>
-                <p className="text-[9px] mb-1.5" style={{ color: 'var(--th-text-dim)' }}>Key Takeaways & Gaps</p>
-                {improvements.map((imp, i) => (
-                  <div key={i} className="flex items-start gap-1.5 mb-1.5">
-                    {imp.priority === 'High'
-                      ? <ArrowDown className="w-3 h-3 text-red-500 shrink-0 mt-0.5" />
-                      : <ArrowUp className="w-3 h-3 text-emerald-500 shrink-0 mt-0.5" />}
-                    <span className="text-[10px] flex-1 leading-tight" style={{ color: 'var(--th-text-secondary)' }}>{imp.text}</span>
-                  </div>
-                ))}
-              </>
-            ) : (
-              <div className="flex flex-col gap-2 py-2">
-                <p className="text-[10px] text-center italic" style={{ color: 'var(--th-text-dim)' }}>Run Project Analysis to see strengths and gaps.</p>
+          {tab === 'ai' && (
+            <>
+              <div>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--th-primary)' }} />
+                  <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>AI Builder</p>
+                </div>
+                <div className="space-y-2">
+                  {isFetching && aiTasks.length === 0 ? (
+                    <div className="text-[10px] text-center py-4 italic" style={{ color: 'var(--th-text-dim)' }}>Consulting AI Architect...</div>
+                  ) : aiTasks.map((task, i) => (
+                    <label key={i} className={clsx("flex items-start gap-2 p-2 rounded-lg cursor-pointer transition-opacity", createdTasks.has(task.title) && "opacity-50")} style={{ background: 'var(--th-bg-secondary)' }}>
+                      <input 
+                        type="checkbox" 
+                        className="mt-0.5 rounded" 
+                        checked={createdTasks.has(task.title)} 
+                        onChange={() => handleCreateTask(task)} 
+                        disabled={createdTasks.has(task.title) || createTask.isPending} 
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-semibold leading-relaxed" style={{ color: 'var(--th-text)' }}>{task.title}</span>
+                        <span className="text-[9px] leading-relaxed" style={{ color: 'var(--th-text-secondary)' }}>{task.description}</span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
                 <button 
-                  onClick={() => analyze.mutate({ projectId: project.id })} 
-                  disabled={analyze.isPending}
-                  className="w-full text-[10px] font-semibold py-1.5 rounded-lg shadow transition-all hover:opacity-90 disabled:opacity-50 active:scale-[0.98]"
-                  style={{ background: 'var(--th-primary)', color: '#fff' }}>
-                  {analyze.isPending ? 'Analyzing...' : 'Run Analysis'}
+                  onClick={() => generateSuggestions.mutate(project.id)} 
+                  disabled={isFetching || generateSuggestions.isPending} 
+                  className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg transition-colors hover:opacity-90 disabled:opacity-50"
+                  style={{ background: 'rgba(var(--th-primary-rgb), 0.1)', color: 'var(--th-primary)' }}>
+                  {isFetching || generateSuggestions.isPending ? 'Generating...' : 'Generate More Ideas'}
                 </button>
               </div>
-            )}
-            {improvements.length > 0 && (
-              <button 
-                onClick={() => analyze.mutate({ projectId: project.id })} 
-                disabled={analyze.isPending}
-                className="w-full mt-2 text-[10px] font-semibold py-1.5 rounded-lg transition-colors hover:opacity-90 disabled:opacity-50"
-                style={{ background: 'rgba(var(--th-primary-rgb), 0.1)', color: 'var(--th-primary)' }}>
-                {analyze.isPending ? 'Analyzing...' : 'Re-Analyze'}
-              </button>
-            )}
-          </div>
 
-          <div className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
-            <div className="flex items-center gap-1.5 mb-3">
-              <Target className="w-3.5 h-3.5" style={{ color: 'var(--th-primary)' }} />
-              <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>AI Portfolio Review</p>
-            </div>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="relative w-14 h-14 shrink-0">
-                <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-                  <circle cx="18" cy="18" r={scoreRingR} fill="none" stroke="var(--th-border)" strokeWidth="3" />
-                  <circle cx="18" cy="18" r={scoreRingR} fill="none" stroke="#10b981" strokeWidth="3"
-                    strokeDasharray={`${scoreRingLen} ${scoreRingC - scoreRingLen}`} strokeLinecap="round" />
-                </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold tabular-nums" style={{ color: 'var(--th-text)' }}>
-                  {score.toFixed(1)}
-                </span>
-              </div>
-              <div>
-                <p className="text-[11px] font-bold tabular-nums" style={{ color: 'var(--th-text)' }}>{score.toFixed(1)}/10</p>
-                <p className="text-[9px]" style={{ color: 'var(--th-text-dim)' }}>Great progress! Keep building.</p>
-              </div>
-            </div>
-            <div className="space-y-2 mb-3">
-              {metrics.map(m => (
-                <div key={m.label}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] font-semibold" style={{ color: 'var(--th-text-dim)' }}>{m.label}</span>
-                    <span className="text-[9px] font-bold" style={{ color: 'var(--th-text)' }}>{m.value.toFixed(1)}</span>
+              <div className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Briefcase className="w-3.5 h-3.5" style={{ color: 'var(--th-primary)' }} />
+                  <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>AI Analysis Feedback</p>
+                </div>
+                {improvements.length > 0 ? (
+                  <>
+                    <p className="text-[9px] mb-1.5" style={{ color: 'var(--th-text-dim)' }}>Key Takeaways & Gaps</p>
+                    {improvements.map((imp, i) => (
+                      <div key={i} className="flex items-start gap-1.5 mb-1.5">
+                        {imp.priority === 'High'
+                          ? <ArrowDown className="w-3 h-3 text-red-500 shrink-0 mt-0.5" />
+                          : <ArrowUp className="w-3 h-3 text-emerald-500 shrink-0 mt-0.5" />}
+                        <span className="text-[10px] flex-1 leading-tight" style={{ color: 'var(--th-text-secondary)' }}>{imp.text}</span>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-2 py-2">
+                    <p className="text-[10px] text-center italic" style={{ color: 'var(--th-text-dim)' }}>Run Project Analysis to see strengths and gaps.</p>
+                    <button 
+                      onClick={() => analyze.mutate({ projectId: project.id })} 
+                      disabled={analyze.isPending}
+                      className="w-full text-[10px] font-semibold py-1.5 rounded-lg shadow transition-all hover:opacity-90 disabled:opacity-50 active:scale-[0.98]"
+                      style={{ background: 'var(--th-primary)', color: '#fff' }}>
+                      {analyze.isPending ? 'Analyzing...' : 'Run Analysis'}
+                    </button>
                   </div>
-                  <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--th-border)' }}>
-                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${(m.value / 10) * 100}%` }} />
+                )}
+                {improvements.length > 0 && (
+                  <button 
+                    onClick={() => analyze.mutate({ projectId: project.id })} 
+                    disabled={analyze.isPending}
+                    className="w-full mt-2 text-[10px] font-semibold py-1.5 rounded-lg transition-colors hover:opacity-90 disabled:opacity-50"
+                    style={{ background: 'rgba(var(--th-primary-rgb), 0.1)', color: 'var(--th-primary)' }}>
+                    {analyze.isPending ? 'Analyzing...' : 'Re-Analyze'}
+                  </button>
+                )}
+              </div>
+
+              <div className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Target className="w-3.5 h-3.5" style={{ color: 'var(--th-primary)' }} />
+                  <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>AI Portfolio Review</p>
+                </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="relative w-14 h-14 shrink-0">
+                    <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                      <circle cx="18" cy="18" r={scoreRingR} fill="none" stroke="var(--th-border)" strokeWidth="3" />
+                      <circle cx="18" cy="18" r={scoreRingR} fill="none" stroke="#10b981" strokeWidth="3"
+                        strokeDasharray={`${scoreRingLen} ${scoreRingC - scoreRingLen}`} strokeLinecap="round" />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold tabular-nums" style={{ color: 'var(--th-text)' }}>
+                      {score.toFixed(1)}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold tabular-nums" style={{ color: 'var(--th-text)' }}>{score.toFixed(1)}/10</p>
+                    <p className="text-[9px]" style={{ color: 'var(--th-text-dim)' }}>Great progress! Keep building.</p>
                   </div>
                 </div>
-              ))}
+                <div className="space-y-2 mb-3">
+                  {metrics.map(m => (
+                    <div key={m.label}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[9px] font-semibold" style={{ color: 'var(--th-text-dim)' }}>{m.label}</span>
+                        <span className="text-[9px] font-bold" style={{ color: 'var(--th-text)' }}>{m.value.toFixed(1)}</span>
+                      </div>
+                      <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--th-border)' }}>
+                        <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${(m.value / 10) * 100}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button 
+                  onClick={() => analyze.mutate({ projectId: project.id })}
+                  disabled={analyze.isPending}
+                  className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg text-white transition-colors hover:opacity-90 disabled:opacity-50"
+                  style={{ background: 'var(--th-primary)' }}>
+                  {analyze.isPending ? 'Analyzing Project...' : 'Improve with AI'}
+                </button>
+              </div>
+            </>
+          )}
+
+          {tab === 'folder' && (
+            <div className="flex flex-col gap-4">
+              <div>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <FolderKanban className="w-3.5 h-3.5" style={{ color: 'var(--th-primary)' }} />
+                  <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>Task Manager</p>
+                </div>
+                
+                <form 
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    if (!newTaskText.trim()) return;
+                    await createTask.mutateAsync({ projectId: project.id, data: { title: newTaskText.trim() } });
+                    setNewTaskText('');
+                  }}
+                  className="flex gap-2 mb-4"
+                >
+                  <input
+                    type="text"
+                    placeholder="Add a new task..."
+                    value={newTaskText}
+                    onChange={(e) => setNewTaskText(e.target.value)}
+                    className="flex-1 px-3 py-2 text-[11px] rounded-lg outline-none"
+                    style={{ background: 'var(--th-input)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }}
+                  />
+                  <button 
+                    type="submit"
+                    disabled={!newTaskText.trim() || createTask.isPending}
+                    className="px-3 py-2 rounded-lg transition-colors hover:opacity-80 flex items-center justify-center shrink-0"
+                    style={{ background: 'var(--th-primary)', color: '#08080d' }}
+                  >
+                    {createTask.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+                  </button>
+                </form>
+
+                <div className="space-y-1.5">
+                  {(project.tasks || []).length === 0 ? (
+                    <p className="text-[10px] text-center italic py-4" style={{ color: 'var(--th-text-dim)' }}>No tasks added yet.</p>
+                  ) : (
+                    (project.tasks || []).map(task => (
+                      <div 
+                        key={task.id} 
+                        className={clsx(
+                          "flex items-start gap-2.5 p-2.5 rounded-lg transition-opacity group",
+                          task.status === 'done' && "opacity-50"
+                        )}
+                        style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}
+                      >
+                        <input
+                          type="checkbox"
+                          className="mt-1 rounded cursor-pointer shrink-0"
+                          checked={task.status === 'done'}
+                          onChange={() => updateTask.mutate({ 
+                            taskId: task.id, 
+                            data: { status: task.status === 'done' ? 'todo' : 'done' } 
+                          })}
+                          disabled={updateTask.isPending}
+                        />
+                        
+                        <div className="flex flex-col min-w-0 flex-1 mt-0.5">
+                          {editingTaskId === task.id ? (
+                            <form onSubmit={(e) => { e.preventDefault(); handleSaveEdit(task.id); }} className="flex gap-1.5">
+                              <input
+                                type="text"
+                                autoFocus
+                                value={editTaskTitle}
+                                onChange={(e) => setEditTaskTitle(e.target.value)}
+                                onBlur={() => handleSaveEdit(task.id)}
+                                className="flex-1 px-2 py-1 text-[11px] rounded outline-none"
+                                style={{ background: 'var(--th-input)', border: '1px solid var(--th-primary)', color: 'var(--th-text)' }}
+                              />
+                            </form>
+                          ) : (
+                            <>
+                              <span 
+                                className={clsx("text-[11px] font-medium leading-snug break-words", task.status === 'done' && "line-through")}
+                                style={{ color: 'var(--th-text)' }}
+                              >
+                                {task.title}
+                              </span>
+                              {task.description && (
+                                <span className="text-[9px] mt-0.5 break-words" style={{ color: 'var(--th-text-secondary)' }}>
+                                  {task.description}
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </div>
+
+                        {/* Actions (visible on hover) */}
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (editingTaskId === task.id) {
+                                handleSaveEdit(task.id);
+                              } else {
+                                setEditingTaskId(task.id);
+                                setEditTaskTitle(task.title);
+                              }
+                            }}
+                            className="p-1 rounded hover:bg-black/10 transition-colors"
+                            style={{ color: 'var(--th-text-dim)' }}
+                          >
+                            {editingTaskId === task.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <PenLine className="w-3.5 h-3.5" />}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setTaskToDelete(task);
+                            }}
+                            disabled={deleteTask.isPending}
+                            className="p-1 rounded hover:bg-black/10 transition-colors"
+                            style={{ color: 'var(--th-text-dim)' }}
+                          >
+                            <Trash2 className="w-3.5 h-3.5 hover:text-red-500 transition-colors" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
-            <button 
-              onClick={() => analyze.mutate({ projectId: project.id })}
-              disabled={analyze.isPending}
-              className="w-full mt-2 text-[10px] font-semibold py-2 rounded-lg text-white transition-colors hover:opacity-90 disabled:opacity-50"
-              style={{ background: 'var(--th-primary)' }}>
-              {analyze.isPending ? 'Analyzing Project...' : 'Improve with AI'}
-            </button>
-          </div>
+          )}
         </div>
           </motion.div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={!!taskToDelete}
+        onClose={() => setTaskToDelete(null)}
+        title="Delete Task?"
+        size="sm"
+      >
+        <div className="flex flex-col gap-4">
+          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--th-text)' }}>
+            Are you sure you want to delete <span className="font-semibold">"{taskToDelete?.title}"</span>? This action cannot be undone.
+          </p>
+          <div className="flex justify-end gap-2 mt-2">
+            <button
+              onClick={() => setTaskToDelete(null)}
+              className="px-4 py-2 text-[11px] font-semibold rounded-xl transition-colors hover:bg-black/10"
+              style={{ color: 'var(--th-text)' }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={async () => {
+                if (taskToDelete) {
+                  await deleteTask.mutateAsync(taskToDelete.id);
+                  setTaskToDelete(null);
+                }
+              }}
+              disabled={deleteTask.isPending}
+              className="px-4 py-2 text-[11px] font-semibold rounded-xl transition-colors hover:bg-red-600 disabled:opacity-50"
+              style={{ background: 'var(--th-danger, #ef4444)', color: '#fff' }}
+            >
+              {deleteTask.isPending ? 'Deleting...' : 'Delete Task'}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
     </AnimatePresence>,
     document.body
   );

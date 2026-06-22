@@ -22,6 +22,11 @@ export const update = asyncHandler(async (req, res) => {
   success(res, { habit }, 'Habit updated');
 });
 
+export const bulkCreate = asyncHandler(async (req, res) => {
+  const habits = await habitsService.bulkCreateHabits(req.user.id, req.body.habits);
+  created(res, { habits }, `${habits.length} habits created successfully`);
+});
+
 export const remove = asyncHandler(async (req, res) => {
   await habitsService.deleteHabit(req.user.id, req.params.id);
   success(res, null, 'Habit deleted');
@@ -82,4 +87,18 @@ export const getAiInsight = asyncHandler(async (req, res) => {
   aiInsightCache.set(userId, { data: insight, timestamp: Date.now() });
 
   success(res, { insight }, 'AI Insight generated successfully');
+});
+
+export const planHabits = asyncHandler(async (req, res) => {
+  const { goal } = req.body;
+  if (!goal) return res.status(400).json({ success: false, error: 'Goal is required' });
+
+  const { habitsAI } = await import('./habits.ai.js');
+  const plan = await habitsAI.generateHabitPlan(goal);
+  
+  if (!plan) {
+    return res.status(500).json({ success: false, error: 'Failed to generate habit plan' });
+  }
+
+  success(res, { plan }, 'Habit plan generated successfully');
 });

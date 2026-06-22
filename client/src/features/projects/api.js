@@ -19,8 +19,9 @@ export const getIntelligence = () => api.get('/projects/intelligence').then(r =>
 export const getProjectMetrics = (id) => api.get(`/projects/${id}/metrics`).then(r => r.data);
 export const getProjectLearnings = (id, params) => api.get(`/projects/${id}/learnings`, { params }).then(r => r.data);
 export const createProjectLearning = (id, data) => api.post(`/projects/${id}/learnings`, data).then(r => r.data);
-export const createProjectTask = (id, data) => api.post(`/projects/${id}/tasks`, data).then(r => r.data);
+export const createProjectTask = (projectId, data) => api.post(`/projects/${projectId}/tasks`, data).then(r => r.data);
 export const updateProjectTask = (taskId, data) => api.patch(`/projects/tasks/${taskId}`, data).then(r => r.data);
+export const deleteProjectTask = (taskId) => api.delete(`/projects/tasks/${taskId}`).then(r => r.data);
 
 // ── GitHub ─────────────────────────────────────────────────────
 export const getGithubLoginUrl = (state) => api.get('/projects/github/login', { params: { state } }).then(r => r.data.data.url);

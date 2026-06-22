@@ -68,6 +68,11 @@ export const updateTask = asyncHandler(async (req, res) => {
   success(res, { task }, 'Task updated');
 });
 
+export const deleteTask = asyncHandler(async (req, res) => {
+  await projectsService.deleteTask(req.user.id, req.params.taskId);
+  success(res, null, 'Task deleted');
+});
+
 // ==================== LEARNINGS ====================
 
 export const getLearnings = asyncHandler(async (req, res) => {

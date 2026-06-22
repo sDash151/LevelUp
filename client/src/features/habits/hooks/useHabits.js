@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getHabits, getHabitRichStats, createHabit, updateHabit, toggleHabitComplete, deleteHabit, getHabitCalendarStats, getAiInsight } from '../api';
+import { getHabits, getHabitRichStats, createHabit, updateHabit, toggleHabitComplete, deleteHabit, getHabitCalendarStats, getAiInsight, planAIHabits, bulkCreateHabits } from '../api';
 import { useToast } from '@/design-system/components';
 
 export function useHabitCalendarStats(year, month, selectedDate) {
@@ -143,6 +143,28 @@ export function useHabitAiInsight() {
       return res.data?.insight ?? res?.insight ?? null;
     },
     staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function usePlanAIHabits() {
+  const toast = useToast();
+  return useMutation({
+    mutationFn: planAIHabits,
+    onError: () => toast.error('Failed to generate habit plan. Please try again.'),
+  });
+}
+
+export function useBulkCreateHabits() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  return useMutation({
+    mutationFn: bulkCreateHabits,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['habits'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard', 'summary'] });
+      toast.success(`${data.data?.habits?.length || 'Habits'} created successfully!`);
+    },
+    onError: () => toast.error('Failed to add habits'),
   });
 }
 

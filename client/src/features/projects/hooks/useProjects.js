@@ -15,6 +15,7 @@ import {
   createProjectLearning,
   createProjectTask,
   updateProjectTask,
+  deleteProjectTask,
   getGithubRepos,
   analyzeProject,
   syncJobProjects,
@@ -195,6 +196,14 @@ export function useUpdateTask() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ taskId, data }) => updateProjectTask(taskId, data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
+  });
+}
+
+export function useDeleteTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: deleteProjectTask,
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['projects'] }); },
   });
 }

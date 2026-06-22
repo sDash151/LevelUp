@@ -25,6 +25,19 @@ class HabitsRepository {
     return prisma.habit.create({ data: { ...data, userId } });
   }
 
+  async bulkCreate(userId, habitsData) {
+    const dataWithUserId = habitsData.map(h => ({ ...h, userId }));
+    await prisma.habit.createMany({
+      data: dataWithUserId,
+    });
+    // return newly created habits
+    return prisma.habit.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: habitsData.length
+    });
+  }
+
   async update(id, data) {
     return prisma.habit.update({ where: { id }, data });
   }

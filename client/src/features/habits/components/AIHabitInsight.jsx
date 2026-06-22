@@ -18,7 +18,35 @@ export function AIHabitInsight() {
     );
   }
 
-  if (error || !insight) return null;
+  if (error || !insight) {
+    return (
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="rounded-2xl p-5 mb-8 shadow-sm flex items-center justify-between" 
+        style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-red-500/10">
+            <Target className="w-4 h-4 text-red-500" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-[var(--th-text)]">AI Copilot Offline</h2>
+            <p className="text-[12px] text-[var(--th-text-secondary)]">Could not fetch your habit insight.</p>
+          </div>
+        </div>
+        <button 
+          onClick={() => regenerate.mutate()}
+          disabled={regenerate.isPending}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide transition-all hover:opacity-80 disabled:opacity-50"
+          style={{ background: 'var(--th-highlight)', color: 'var(--th-text-muted)' }}
+        >
+          <RefreshCw className={`w-3 h-3 ${regenerate.isPending ? 'animate-spin' : ''}`} />
+          Retry
+        </button>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div 

@@ -12,6 +12,15 @@ export class ErrorBoundary extends Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('[ErrorBoundary]', error, errorInfo);
+    
+    // If a chunk fails to load (due to a new deployment replacing old hashed files),
+    // automatically hard reload the browser to fetch the new index.html and chunks.
+    if (
+      error.message?.includes('Failed to fetch dynamically imported module') ||
+      error.name === 'ChunkLoadError'
+    ) {
+      window.location.reload(true);
+    }
   }
 
   render() {

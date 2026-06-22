@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   Sparkles, Plus, Bell, Github,
 } from 'lucide-react';
-import { AnimatedPage } from '@/design-system/components';
+import { AnimatedPage, useToast } from '@/design-system/components';
 import { useProjectStats, useGithubRepos } from '../hooks/useProjects';
 import { ProjectForm } from '../components/ProjectForm';
 import clsx from 'clsx';
@@ -44,8 +44,10 @@ function TabSkeleton() {
 
 export default function ProjectsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get('tab') || 'overview';
   const [formState, setFormState] = useState({ isOpen: false, data: null });
+  const toast = useToast();
+
+  const activeTab = searchParams.get('tab') || 'overview';
 
   const { data: statsData } = useProjectStats();
   const { data: githubData } = useGithubRepos();
@@ -80,6 +82,12 @@ export default function ProjectsPage() {
           window.location.reload();
         }).catch(err => {
           console.error(err);
+          const msg = err.response?.data?.message || 'Could not connect to GitHub.';
+          toast.show({
+            title: 'Connection Failed',
+            message: err.response?.status === 409 ? 'This GitHub account is already connected to another LevelUp account.' : msg,
+            type: 'error'
+          });
           searchParams.delete('code');
           searchParams.delete('state');
           setSearchParams(searchParams, { replace: true });

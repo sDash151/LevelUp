@@ -166,7 +166,7 @@ export default function ProjectsPage() {
                 {isGithubConnected ? 'GitHub Connected' : 'Connect GitHub'}
               </p>
               <p className="text-[10px] leading-tight" style={{ color: 'var(--th-text-dim)' }}>
-                {isGithubConnected ? `${githubRepos.length || 12} Repos` : 'Sync your repos'}
+                {isGithubConnected ? `${githubRepos.length} Repos` : 'Sync your repos'}
               </p>
             </div>
           </button>

@@ -52,10 +52,25 @@ export function ProjectForm({ isOpen, onClose, initialData }) {
   const updateProject = useUpdateProject();
   const { data: githubData } = useGithubRepos();
   const repos = githubData?.data?.repos || githubData?.repos || [];
-  const isConnected = repos.length > 0;
+  const isConnected = repos.length > 0 || !!githubData?.data?.connection || !!githubData?.connection;
 
   const handleClose = () => {
     onClose();
+  };
+
+  const handleConnectClick = async () => {
+    if (isConnected) {
+      setStep('github');
+    } else {
+      try {
+        const state = crypto.randomUUID();
+        sessionStorage.setItem('github_oauth_state', state);
+        const url = await getGithubLoginUrl(state);
+        if (url) window.location.href = url;
+      } catch (err) {
+        console.error(err);
+      }
+    }
   };
 
   const handleSubmit = (e) => {
@@ -102,7 +117,7 @@ export function ProjectForm({ isOpen, onClose, initialData }) {
 
             <div className="grid grid-cols-2 gap-4">
               <button
-                onClick={() => isConnected ? setStep('github') : (window.location.href = getGithubLoginUrl())}
+                onClick={handleConnectClick}
                 className="p-6 rounded-2xl text-left transition-all hover:-translate-y-1"
                 style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}
               >
@@ -132,7 +147,33 @@ export function ProjectForm({ isOpen, onClose, initialData }) {
             </div>
 
             <div className="space-y-2 max-h-[400px] overflow-y-auto hide-scrollbar">
-              {repos.length === 0 && <p className="text-sm italic py-8 text-center" style={{ color: 'var(--th-text-dim)' }}>No repositories found.</p>}
+              {repos.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <Github className="w-10 h-10 mb-4 opacity-50" style={{ color: 'var(--th-text-dim)' }} />
+                  <h3 className="text-[14px] font-bold mb-1" style={{ color: 'var(--th-text)' }}>No Repositories Found</h3>
+                  <p className="text-[12px] mb-5 max-w-[250px]" style={{ color: 'var(--th-text-secondary)' }}>
+                    We couldn't find any public repositories on your connected GitHub account.
+                  </p>
+                  <div className="flex flex-col gap-2 w-full max-w-[200px]">
+                    <a
+                      href="https://github.com/new"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2.5 rounded-xl text-[12px] font-bold transition-all text-center"
+                      style={{ background: 'var(--th-primary)', color: '#fff' }}
+                    >
+                      Create on GitHub
+                    </a>
+                    <button
+                      onClick={() => setStep('manual')}
+                      className="w-full py-2.5 rounded-xl text-[12px] font-bold transition-all"
+                      style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text)', border: '1px solid var(--th-border)' }}
+                    >
+                      Create Manually
+                    </button>
+                  </div>
+                </div>
+              )}
               {repos.map(repo => (
                 <button key={repo.id} onClick={() => handleGithubImport(repo)}
                   className="w-full p-4 rounded-xl text-left flex items-center gap-3 transition-all hover:-translate-y-0.5"

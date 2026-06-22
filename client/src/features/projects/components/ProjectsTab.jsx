@@ -4,7 +4,7 @@ import {
   Search, LayoutGrid, List, Github, PenLine, ArrowRight,
   Package, ChevronDown, FolderOpen,
 } from 'lucide-react';
-import { useProjects } from '../hooks/useProjects';
+import { useProjects, useGithubRepos } from '../hooks/useProjects';
 import { getGithubLoginUrl } from '../api';
 import { ProjectCard } from './ProjectCard';
 import { Select } from '../../../design-system/components/Select';
@@ -32,6 +32,9 @@ export default function ProjectsTab({ onNewProject }) {
 
   const { data: projectsData } = useProjects({});
   const allProjects = projectsData?.data || [];
+  const { data: githubData } = useGithubRepos();
+  const githubRepos = githubData?.data?.repos || githubData?.repos || [];
+  const isConnected = githubRepos.length > 0 || !!githubData?.data?.connection || !!githubData?.connection;
 
   let projects = [...allProjects];
   if (filter === 'BUILDING' || filter === 'SHIPPED' || filter === 'ARCHIVED') {
@@ -58,6 +61,10 @@ export default function ProjectsTab({ onNewProject }) {
   const totalArchived = allProjects.filter(p => p.status === 'ARCHIVED').length;
 
   const handleGithubConnect = async () => {
+    if (isConnected) {
+      onNewProject(); // Just open the modal
+      return;
+    }
     try {
       const state = crypto.randomUUID();
       sessionStorage.setItem('github_oauth_state', state);
@@ -165,7 +172,9 @@ export default function ProjectsTab({ onNewProject }) {
                 <Github className="w-5 h-5" style={{ color: 'var(--th-text)' }} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[12px] font-bold" style={{ color: 'var(--th-text)' }}>Connect GitHub Repo</p>
+                <p className="text-[12px] font-bold" style={{ color: 'var(--th-text)' }}>
+                  {isConnected ? 'Import GitHub Repo' : 'Connect GitHub Repo'}
+                </p>
                 <p className="text-[10px] mt-0.5" style={{ color: 'var(--th-text-dim)' }}>
                   Import from your existing repositories
                 </p>

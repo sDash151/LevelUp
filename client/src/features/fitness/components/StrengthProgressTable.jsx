@@ -6,9 +6,9 @@ export default function StrengthProgressTable({ data = [] }) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-1.5">
           <h3 className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>Strength Progress</h3>
-          <Info className="w-3.5 h-3.5 text-gray-400" />
+          <Info className="w-3.5 h-3.5 text-[var(--th-text-dim)]" />
         </div>
-        <button className="flex items-center gap-1 text-[10px] font-semibold text-gray-500 hover:text-gray-700 transition">
+        <button className="flex items-center gap-1 text-[10px] font-semibold text-[var(--th-text-secondary)] hover:text-[var(--th-text)] transition">
           View All <ChevronDown className="w-3 h-3" />
         </button>
       </div>
@@ -33,7 +33,7 @@ export default function StrengthProgressTable({ data = [] }) {
                 const isBetter = row.progress >= 0;
                 const formattedProg = typeof row.progress === 'number' ? row.progress.toFixed(1) : row.progress;
                 return (
-                  <tr key={i} className="border-t border-gray-50 dark:border-gray-800">
+                  <tr key={i} className="border-t border-[var(--th-border)] dark:border-[var(--th-border)]">
                     <td className="py-3.5 font-bold" style={{ color: 'var(--th-text)' }}>{row.exercise}</td>
                     <td className="py-3.5 text-center font-medium" style={{ color: 'var(--th-text-secondary)' }}>{row.lastRecord}</td>
                     <td className="py-3.5 text-center font-medium" style={{ color: 'var(--th-text-secondary)' }}>{row.bestRecord}</td>

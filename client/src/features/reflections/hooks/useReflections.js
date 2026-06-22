@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getReflections, createReflection, updateReflection, deleteReflection, getMoodHistory, getReflectionStats } from '../api';
+import { getReflections, createReflection, updateReflection, deleteReflection, getMoodHistory, getReflectionStats, getAiInsight } from '../api';
 import { useToast } from '@/design-system/components';
 
 export function useReflections(type, page = 1, limit = 20) {
@@ -69,5 +69,32 @@ export function useMoodHistory() {
       return res.data?.history ?? res?.history ?? [];
     },
     placeholderData: [],
+  });
+}
+
+export function useAiInsight() {
+  return useQuery({
+    queryKey: ['reflections', 'ai-insight'],
+    queryFn: async () => {
+      const res = await getAiInsight();
+      return res.data?.insight ?? res?.insight ?? null;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useRegenerateAiInsight() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  return useMutation({
+    mutationFn: () => getAiInsight(true),
+    onSuccess: (data) => {
+      const newInsight = data.data?.insight ?? data?.insight;
+      if (newInsight) {
+        queryClient.setQueryData(['reflections', 'ai-insight'], newInsight);
+      }
+      toast.success('AI Insight regenerated successfully!');
+    },
+    onError: () => toast.error('Failed to regenerate AI insight'),
   });
 }

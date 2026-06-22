@@ -30,7 +30,7 @@ export default function BodyProgressCard({ data }) {
     <div className="rounded-2xl p-5 h-full flex flex-col" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold" style={{ color: 'var(--th-text)' }}>Body Progress</h3>
-        <div className="flex items-center gap-1 text-[10px] text-gray-400 font-medium">
+        <div className="flex items-center gap-1 text-[10px] text-[var(--th-text-dim)] font-medium">
           This Month <span className="text-[8px]">▼</span>
         </div>
       </div>
@@ -40,7 +40,7 @@ export default function BodyProgressCard({ data }) {
           <div key={item.label}>
             <p className="text-[10px] mb-0.5" style={{ color: 'var(--th-text-secondary)' }}>{item.label}</p>
             <p className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>
-              {item.value} <span className="text-[10px] font-medium text-gray-400">{item.unit}</span>
+              {item.value} <span className="text-[10px] font-medium text-[var(--th-text-dim)]">{item.unit}</span>
             </p>
             <p className={`text-[10px] font-semibold ${item.isPositive ? 'text-emerald-500' : 'text-emerald-500'}`}>
               ↑ +{item.change} {item.unit}
@@ -64,7 +64,7 @@ export default function BodyProgressCard({ data }) {
             <Area type="monotone" dataKey="value" stroke="#10B981" strokeWidth={2} fillOpacity={1} fill="url(#colorWeight)" />
             
             {/* Custom badge for last data point */}
-            <ReferenceDot x="Jun 20" y={72.4} r={4} fill="#10B981" stroke="#fff" strokeWidth={2} />
+            <ReferenceDot x="Jun 20" y={72.4} r={4} fill="#10B981" stroke="var(--th-bg)" strokeWidth={2} />
           </AreaChart>
         </ResponsiveContainer>
         <div className="absolute top-2 right-4 bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">

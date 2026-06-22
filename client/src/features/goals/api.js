@@ -7,3 +7,5 @@ export const updateGoal = (id, data) => api.put(`/goals/${id}`, data).then((r) =
 export const deleteGoal = (id) => api.delete(`/goals/${id}`).then((r) => r.data);
 export const toggleMilestone = (goalId, milestoneId) => api.put(`/goals/${goalId}/milestones/${milestoneId}`).then((r) => r.data);
 export const getGoalStats = (type) => api.get('/goals/stats', { params: type ? { type } : {} }).then((r) => r.data);
+export const generateMilestonesAI = (data) => api.post('/goals/ai/generate-milestones', data).then((r) => r.data);
+export const getAiInsight = (force = false) => api.get('/goals/ai/insight', { params: force ? { force: true } : {} }).then((r) => r.data);

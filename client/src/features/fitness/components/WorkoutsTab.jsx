@@ -30,13 +30,13 @@ export default function WorkoutsTab({ showWorkoutForm, setShowWorkoutForm }) {
       {/* Search / Filter */}
       <div className="flex flex-wrap items-center gap-4 mt-8 mb-6">
         <div className="relative flex-1 min-w-[200px] max-w-[320px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--th-text-dim)]" />
           <input
             type="text"
             placeholder="Search workouts..."
             value={filters.search}
             onChange={e => setFilters(f => ({ ...f, search: e.target.value, page: 1 }))}
-            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm font-medium outline-none bg-white border border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all shadow-sm"
+            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm font-medium outline-none bg-[var(--th-card)] border border-[var(--th-border)] text-[var(--th-text)] placeholder:text-[var(--th-text-dim)] focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all shadow-sm"
           />
         </div>
         
@@ -88,7 +88,7 @@ export default function WorkoutsTab({ showWorkoutForm, setShowWorkoutForm }) {
         </div>
 
         <div className="flex-1 flex justify-end">
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 transition-colors shadow-sm">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-[var(--th-card)] border border-[var(--th-border)] text-[var(--th-text-secondary)] hover:bg-[var(--th-bg-secondary)] transition-colors shadow-sm">
             <Filter className="w-3.5 h-3.5" /> Filter
           </button>
         </div>

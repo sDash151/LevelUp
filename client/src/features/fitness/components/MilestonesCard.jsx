@@ -23,7 +23,7 @@ export default function MilestonesCard({ milestones = [] }) {
           <Trophy className="w-4 h-4" style={{ color: 'var(--th-primary)' }} />
           <h3 className="text-sm font-semibold" style={{ color: 'var(--th-text)' }}>Milestones</h3>
         </div>
-        <button onClick={() => setShowAdd(!showAdd)} className="p-1 rounded-lg hover:bg-black/5">
+        <button onClick={() => setShowAdd(!showAdd)} className="p-1 rounded-lg hover:opacity-80">
           <Plus className="w-4 h-4" style={{ color: 'var(--th-text-secondary)' }} />
         </button>
       </div>

@@ -40,7 +40,7 @@ export default function WeeklyProgressChart({ data }) {
         <h3 className="text-sm font-semibold" style={{ color: 'var(--th-text)' }}>Weekly Progress</h3>
         <div className="flex items-center gap-3 text-[10px]">
           <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" /> This Week</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-gray-200 dark:bg-gray-700" /> Last Week</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[var(--th-bg-secondary)] dark:bg-[var(--th-bg-secondary)]" /> Last Week</span>
         </div>
       </div>
 
@@ -50,13 +50,13 @@ export default function WeeklyProgressChart({ data }) {
           <div key={s.label} className="flex-1 flex items-center">
             <div className="flex-1">
               <p className="text-[10px] mb-1" style={{ color: 'var(--th-text-secondary)' }}>{s.label}</p>
-              <p className="text-[15px] font-extrabold leading-tight mb-1" style={{ color: 'var(--th-text)' }}>{s.value} <span className="text-[10px] font-semibold text-gray-400">{s.prefix}</span></p>
+              <p className="text-[15px] font-extrabold leading-tight mb-1" style={{ color: 'var(--th-text)' }}>{s.value} <span className="text-[10px] font-semibold text-[var(--th-text-dim)]">{s.prefix}</span></p>
               <p className={`text-[10px] font-semibold ${s.change >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
                 {s.change >= 0 ? '↑ ' : '↓ '}{Math.abs(s.change)} {s.prefix}
               </p>
             </div>
             {i < statCards.length - 1 && (
-              <div className="w-px h-14 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-700 to-transparent mx-2 sm:mx-4 opacity-70" />
+              <div className="w-px h-14 bg-gradient-to-b from-transparent  dark: to-transparent mx-2 sm:mx-4 opacity-70" />
             )}
           </div>
         ))}
@@ -68,8 +68,8 @@ export default function WeeklyProgressChart({ data }) {
             <XAxis dataKey="day" axisLine={{ stroke: 'var(--th-border)' }} tickLine={false} tick={{ fill: 'var(--th-text-dim)', fontSize: 10, fontWeight: 500 }} dy={10} />
             <YAxis hide />
             <Tooltip content={<CustomTooltip />} cursor={false} />
-            <Bar dataKey="thisWeek" name="This Week" fill="#10B981" radius={[2, 2, 0, 0]} barSize={10} />
-            <Bar dataKey="lastWeek" name="Last Week" fill="#E5E7EB" radius={[2, 2, 0, 0]} barSize={10} />
+            <Bar dataKey="thisWeek" name="This Week" fill="var(--th-primary)" radius={[2, 2, 0, 0]} barSize={10} />
+            <Bar dataKey="lastWeek" name="Last Week" fill="var(--th-border)" radius={[2, 2, 0, 0]} barSize={10} />
           </BarChart>
         </ResponsiveContainer>
         

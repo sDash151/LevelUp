@@ -75,10 +75,10 @@ export default function BodyWeightTrend({ data = [], range = '3M' }) {
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>Body Weight Trend</h3>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition hover:bg-black/5 dark:hover:bg-white/5" style={{ color: 'var(--th-text-secondary)', border: '1px solid var(--th-border)' }}>
+          <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition hover:opacity-80 dark:hover:bg-[var(--th-card)]/5" style={{ color: 'var(--th-text-secondary)', border: '1px solid var(--th-border)' }}>
             Weight (kg) <ChevronDown className="w-3.5 h-3.5" />
           </button>
-          <button onClick={() => setShowModal(true)} className="flex items-center gap-1 text-[10px] font-semibold text-gray-500 hover:text-gray-700 transition">
+          <button onClick={() => setShowModal(true)} className="flex items-center gap-1 text-[10px] font-semibold text-[var(--th-text-secondary)] hover:text-[var(--th-text)] transition">
             View History <ChevronDown className="w-3 h-3" />
           </button>
         </div>
@@ -118,7 +118,7 @@ export default function BodyWeightTrend({ data = [], range = '3M' }) {
                   domain={['dataMin - 2', 'dataMax + 2']} 
                 />
                 <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#10B981', strokeWidth: 1, strokeDasharray: '4 4' }} />
-                <Area type="monotone" dataKey="Weight" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorWeight)" activeDot={{ r: 6, fill: '#10B981', stroke: '#fff', strokeWidth: 2 }} dot={{ r: 3, fill: '#10B981', strokeWidth: 0 }} />
+                <Area type="monotone" dataKey="Weight" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorWeight)" activeDot={{ r: 6, fill: '#10B981', stroke: 'var(--th-bg)', strokeWidth: 2 }} dot={{ r: 3, fill: '#10B981', strokeWidth: 0 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -126,18 +126,18 @@ export default function BodyWeightTrend({ data = [], range = '3M' }) {
           <div className="grid grid-cols-3 gap-4 pt-6 mt-4" style={{ borderTop: '1px solid var(--th-border)' }}>
             <div className="text-center border-r" style={{ borderColor: 'var(--th-border)' }}>
               <p className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>{firstEntry?.Weight?.toFixed(1)} <span className="text-[10px] font-medium opacity-60">kg</span></p>
-              <p className="text-[10px] font-medium text-gray-400 mt-0.5">{rangeLabel} Ago</p>
+              <p className="text-[10px] font-medium text-[var(--th-text-dim)] mt-0.5">{rangeLabel} Ago</p>
             </div>
             <div className="text-center border-r" style={{ borderColor: 'var(--th-border)' }}>
               <p className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>{lastEntry?.Weight?.toFixed(1)} <span className="text-[10px] font-medium opacity-60">kg</span></p>
-              <p className="text-[10px] font-medium text-gray-400 mt-0.5">Current</p>
+              <p className="text-[10px] font-medium text-[var(--th-text-dim)] mt-0.5">Current</p>
             </div>
             <div className="text-center">
               <p className={`text-sm font-bold flex items-center justify-center gap-0.5 ${isBetter ? 'text-emerald-500' : 'text-red-500'}`}>
                 {isBetter ? <ArrowDown className="w-3.5 h-3.5" /> : <ArrowUp className="w-3.5 h-3.5" />}
                 {Math.abs(change).toFixed(1)} <span className="text-[10px] font-medium opacity-70">kg</span>
               </p>
-              <p className="text-[10px] font-medium text-gray-400 mt-0.5">Change</p>
+              <p className="text-[10px] font-medium text-[var(--th-text-dim)] mt-0.5">Change</p>
             </div>
           </div>
         </>
@@ -181,7 +181,7 @@ export default function BodyWeightTrend({ data = [], range = '3M' }) {
                   </thead>
                   <tbody className="divide-y" style={{ divideColor: 'var(--th-border)' }}>
                     {[...data].reverse().map((m, idx) => (
-                      <tr key={idx} className="transition-colors hover:bg-black/5 dark:hover:bg-white/5">
+                      <tr key={idx} className="transition-colors hover:opacity-80 dark:hover:bg-[var(--th-card)]/5">
                         <td className="px-4 py-3 font-medium whitespace-nowrap" style={{ color: 'var(--th-text)' }}>
                           {new Date(m.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                         </td>

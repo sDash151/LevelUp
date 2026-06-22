@@ -38,3 +38,37 @@ export const getStats = asyncHandler(async (req, res) => {
   const stats = await reflectionsService.getStats(req.user.id);
   success(res, stats);
 });
+
+// ==================== AI ENDPOINTS ====================
+
+const aiInsightCache = new Map();
+
+export const getAiInsight = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const force = req.query.force === 'true';
+
+  // Check cache: Valid for 12 hours
+  const cached = aiInsightCache.get(userId);
+  if (!force && cached && (Date.now() - cached.timestamp < 12 * 60 * 60 * 1000)) {
+    return success(res, { insight: cached.data }, 'AI Insight retrieved from cache');
+  }
+
+  const result = await reflectionsService.getReflections(userId, null, 1, 7); // Last 7 reflections
+  const reflections = result.data;
+  
+  if (!reflections || reflections.length === 0) {
+    return res.status(400).json({ success: false, error: 'Not enough data for AI insight' });
+  }
+
+  const { reflectionsAI } = await import('./reflections.ai.js');
+  const insight = await reflectionsAI.generateInsight(reflections);
+
+  if (!insight) {
+    return res.status(500).json({ success: false, error: 'Failed to generate AI insight' });
+  }
+
+  // Save to cache
+  aiInsightCache.set(userId, { data: insight, timestamp: Date.now() });
+
+  success(res, { insight }, 'AI Insight generated successfully');
+});

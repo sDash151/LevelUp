@@ -14,7 +14,7 @@ export default function TodaySummaryBar({ data }) {
             <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-[11px] font-bold text-emerald-600">Great work today!</p>
-              <p className="text-[10px] text-gray-500 font-medium">You've completed your workout and logged your nutrition.</p>
+              <p className="text-[10px] text-[var(--th-text-secondary)] font-medium">You've completed your workout and logged your nutrition.</p>
             </div>
           </div>
         </div>
@@ -28,7 +28,7 @@ export default function TodaySummaryBar({ data }) {
               <Dumbbell className="w-3.5 h-3.5 text-indigo-500" />
             </div>
             <div>
-              <p className="text-[9px] font-semibold text-gray-400">Workout</p>
+              <p className="text-[9px] font-semibold text-[var(--th-text-dim)]">Workout</p>
               <p className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>{workout.name}</p>
               <p className="text-[9px] font-semibold text-emerald-500">{workout.completed ? 'Completed' : 'Planned'}</p>
             </div>
@@ -40,8 +40,8 @@ export default function TodaySummaryBar({ data }) {
             <Flame className="w-3.5 h-3.5 text-rose-500" />
           </div>
           <div>
-            <p className="text-[9px] font-semibold text-gray-400">Calories Burned</p>
-            <p className="text-[13px] font-bold" style={{ color: 'var(--th-text)' }}>{calories} <span className="text-[9px] text-gray-400">kcal</span></p>
+            <p className="text-[9px] font-semibold text-[var(--th-text-dim)]">Calories Burned</p>
+            <p className="text-[13px] font-bold" style={{ color: 'var(--th-text)' }}>{calories} <span className="text-[9px] text-[var(--th-text-dim)]">kcal</span></p>
           </div>
         </div>
 
@@ -50,8 +50,8 @@ export default function TodaySummaryBar({ data }) {
             <Dumbbell className="w-3.5 h-3.5 text-purple-500" />
           </div>
           <div>
-            <p className="text-[9px] font-semibold text-gray-400">Volume</p>
-            <p className="text-[13px] font-bold" style={{ color: 'var(--th-text)' }}>{(volume || 0).toLocaleString()} <span className="text-[9px] text-gray-400">kg</span></p>
+            <p className="text-[9px] font-semibold text-[var(--th-text-dim)]">Volume</p>
+            <p className="text-[13px] font-bold" style={{ color: 'var(--th-text)' }}>{(volume || 0).toLocaleString()} <span className="text-[9px] text-[var(--th-text-dim)]">kg</span></p>
           </div>
         </div>
 
@@ -60,14 +60,14 @@ export default function TodaySummaryBar({ data }) {
             <Egg className="w-3.5 h-3.5 text-emerald-500" />
           </div>
           <div>
-            <p className="text-[9px] font-semibold text-gray-400">Protein</p>
-            <p className="text-[13px] font-bold" style={{ color: 'var(--th-text)' }}>{protein?.consumed || protein} <span className="text-[9px] text-gray-400">g</span></p>
-            {protein?.goal && <p className="text-[8px] font-medium text-gray-400">{Math.round((protein.consumed / protein.goal)*100)}% goal</p>}
+            <p className="text-[9px] font-semibold text-[var(--th-text-dim)]">Protein</p>
+            <p className="text-[13px] font-bold" style={{ color: 'var(--th-text)' }}>{protein?.consumed || protein} <span className="text-[9px] text-[var(--th-text-dim)]">g</span></p>
+            {protein?.goal && <p className="text-[8px] font-medium text-[var(--th-text-dim)]">{Math.round((protein.consumed / protein.goal)*100)}% goal</p>}
           </div>
         </div>
 
-        <div className="pl-4 border-l border-gray-100 dark:border-gray-800 text-center flex flex-col items-center">
-          <p className="text-[9px] font-semibold text-gray-400 mb-1">Daily Score</p>
+        <div className="pl-4 border-l border-[var(--th-border)] dark:border-[var(--th-border)] text-center flex flex-col items-center">
+          <p className="text-[9px] font-semibold text-[var(--th-text-dim)] mb-1">Daily Score</p>
           <div className="flex flex-col items-center justify-center">
             <span className="text-xl font-extrabold text-amber-500 leading-none">{score}</span>
             <span className="text-[9px] font-bold text-amber-600 mt-1">Excellent</span>

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   Plus, Target, ChevronLeft, ChevronRight, TrendingUp, TrendingDown,
   CheckCircle2, AlertTriangle, Circle, MoreVertical, Filter, ArrowRight,
@@ -11,6 +11,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import clsx from 'clsx';
+import { useToggleMilestone } from '../hooks/useGoals';
 
 /* ═══════════════════════════════════════════════════════
    CONSTANTS
@@ -247,8 +248,11 @@ function CategoryFilters({ active, onChange }) {
 
 /* ═══════════════════════════════════════════════════════
    4. GOALS TABLE WITH MILESTONE COLUMNS
+/* ═══════════════════════════════════════════════════════
+   MONTHLY GOAL ROW (Desktop)
    ═══════════════════════════════════════════════════════ */
-function MonthlyGoalRow({ goal, onEdit, onDelete }) {
+function MonthlyGoalRow({ goal, onToggle, onEdit, onDelete }) {
+  const [expanded, setExpanded] = useState(false);
   const status = getGoalStatus(goal);
   const cat = goal.category ?? 'PERSONAL';
   const CatIcon = CATEGORY_ICONS[cat] ?? Star;
@@ -257,8 +261,11 @@ function MonthlyGoalRow({ goal, onEdit, onDelete }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
+    <>
     <motion.tr initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-      className="group" style={{ borderBottom: '1px solid var(--th-border)' }}>
+      onClick={() => setExpanded(!expanded)}
+      className="group transition-colors cursor-pointer hover:bg-[var(--th-highlight)]" 
+      style={{ borderBottom: expanded ? 'none' : '1px solid var(--th-border)' }}>
       {/* Goal */}
       <td className="py-3.5 pl-5 pr-3">
         <div className="flex items-center gap-3">
@@ -313,7 +320,7 @@ function MonthlyGoalRow({ goal, onEdit, onDelete }) {
       <td className="py-3.5 pr-3"><StatusBadge status={status} /></td>
       {/* Actions */}
       <td className="py-3.5 pr-5">
-        <div className="relative">
+        <div className="relative" onClick={e => e.stopPropagation()}>
           <button onClick={() => setMenuOpen(!menuOpen)} className="p-1.5 rounded-lg hover:bg-[var(--th-highlight)]">
             <MoreVertical className="w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
           </button>
@@ -334,11 +341,48 @@ function MonthlyGoalRow({ goal, onEdit, onDelete }) {
         </div>
       </td>
     </motion.tr>
+    <AnimatePresence>
+      {expanded && (
+        <tr style={{ borderBottom: '1px solid var(--th-border)' }}>
+          <td colSpan={7} className="px-5 pb-5 pt-0">
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+              <div className="pl-14 pr-4 space-y-2.5">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-dim)' }}>Milestones</h4>
+                {(!goal.milestones || goal.milestones.length === 0) ? (
+                  <p className="text-[12px] italic" style={{ color: 'var(--th-text-muted)' }}>No milestones for this goal.</p>
+                ) : (
+                  goal.milestones.map((m, i) => (
+                    <div key={m.id || i} className="flex items-start gap-3">
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); onToggle?.(goal.id, m.id); }}
+                        className="w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-all hover:opacity-80"
+                        style={{
+                          background: m.isCompleted ? 'var(--th-primary)' : 'transparent',
+                          border: m.isCompleted ? 'none' : '1.5px solid var(--th-text-dim)'
+                        }}
+                      >
+                        {m.isCompleted && <CheckCircle2 className="w-3 h-3 text-[#08080d]" />}
+                      </button>
+                      <span className={clsx('text-[13px] font-medium transition-all leading-tight', m.isCompleted && 'line-through opacity-50')}
+                        style={{ color: 'var(--th-text-secondary)' }}>
+                        {m.title}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </motion.div>
+          </td>
+        </tr>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
 
 /* Mobile goal card for monthly */
-function MonthlyGoalCardMobile({ goal, onEdit, onDelete }) {
+function MonthlyGoalCardMobile({ goal, onToggle, onEdit, onDelete }) {
+  const [expanded, setExpanded] = useState(false);
   const status = getGoalStatus(goal);
   const cat = goal.category ?? 'PERSONAL';
   const CatIcon = CATEGORY_ICONS[cat] ?? Star;
@@ -347,7 +391,10 @@ function MonthlyGoalCardMobile({ goal, onEdit, onDelete }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="rounded-xl p-4" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+      onClick={() => setExpanded(!expanded)}
+      className="rounded-xl p-4 transition-colors cursor-pointer hover:bg-[var(--th-highlight)]" 
+      style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: catColor + '18' }}>
@@ -390,7 +437,39 @@ function MonthlyGoalCardMobile({ goal, onEdit, onDelete }) {
           })}
         </div>
       </div>
-    </div>
+      {/* Milestones Dropdown */}
+      <AnimatePresence>
+        {expanded && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+            <div className="pt-4 mt-3 space-y-2.5" style={{ borderTop: '1px solid var(--th-border)' }}>
+              <h4 className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-dim)' }}>Milestones</h4>
+              {(!goal.milestones || goal.milestones.length === 0) ? (
+                <p className="text-[12px] italic" style={{ color: 'var(--th-text-muted)' }}>No milestones for this goal.</p>
+              ) : (
+                goal.milestones.map((m, i) => (
+                  <div key={m.id || i} className="flex items-start gap-3">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); onToggle?.(goal.id, m.id); }}
+                      className="w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-all hover:opacity-80"
+                      style={{
+                        background: m.isCompleted ? 'var(--th-primary)' : 'transparent',
+                        border: m.isCompleted ? 'none' : '1.5px solid var(--th-text-dim)'
+                      }}
+                    >
+                      {m.isCompleted && <CheckCircle2 className="w-3 h-3 text-[#08080d]" />}
+                    </button>
+                    <span className={clsx('text-[12px] font-medium transition-all leading-tight', m.isCompleted && 'line-through opacity-50')}
+                      style={{ color: 'var(--th-text-secondary)' }}>
+                      {m.title}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
@@ -767,6 +846,7 @@ export default function MonthlyGoalsView({
   goals, stats, isLoading, categoryFilter, setCategoryFilter,
   onShowForm, onEdit, onDelete,
 }) {
+  const toggleMilestone = useToggleMilestone();
   const s = stats ?? {};
   const filteredGoals = useMemo(() => {
     if (categoryFilter === 'ALL') return goals;
@@ -858,7 +938,7 @@ export default function MonthlyGoalsView({
                       <p className="text-[13px]" style={{ color: 'var(--th-text-muted)' }}>No monthly goals found</p>
                     </td></tr>
                   ) : filteredGoals.map(goal => (
-                    <MonthlyGoalRow key={goal.id} goal={goal} onEdit={onEdit} onDelete={onDelete} />
+                    <MonthlyGoalRow key={goal.id} goal={goal} onToggle={(gId, mId) => toggleMilestone.mutate({ goalId: gId, milestoneId: mId })} onEdit={onEdit} onDelete={onDelete} />
                   ))}
                 </tbody>
               </table>
@@ -936,8 +1016,10 @@ export default function MonthlyGoalsView({
                 <button onClick={onShowForm} className="mt-3 px-4 py-2 rounded-xl text-[12px] font-semibold"
                   style={{ background: 'var(--th-primary)', color: '#08080d' }}>Create Goal</button>
               </div>
-            ) : filteredGoals.map(goal => (
-              <MonthlyGoalCardMobile key={goal.id} goal={goal} onEdit={onEdit} onDelete={onDelete} />
+            ) : filteredGoals.map((goal, i) => (
+              <motion.div key={goal.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="relative">
+                <MonthlyGoalCardMobile key={goal.id} goal={goal} onToggle={(gId, mId) => toggleMilestone.mutate({ goalId: gId, milestoneId: mId })} onEdit={onEdit} onDelete={onDelete} />
+              </motion.div>
             ))}
           </div>
         </div>

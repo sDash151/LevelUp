@@ -10,6 +10,7 @@ import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useHabitRichStats, useToggleHabit, useDeleteHabit, useCreateHabit, useUpdateHabit } from '../hooks/useHabits';
 import { HabitForm } from '../components/HabitForm';
 import { HabitsCalendarView } from '../components/HabitsCalendarView';
+import { AIHabitInsight } from '../components/AIHabitInsight';
 import clsx from 'clsx';
 
 /* ─── Constants ─── */
@@ -380,6 +381,9 @@ export default function HabitsPage() {
           </div>
         )}
 
+        {/* AI Insight */}
+        {view === 'list' && <AIHabitInsight />}
+
         {/* Calendar view */}
         {view === 'calendar' && (
           <HabitsCalendarView onNavigate={navigate} />
@@ -659,6 +663,9 @@ export default function HabitsPage() {
         {/* Main content: habits list + sidebar */}
         <div className="flex gap-5">
           <div className="flex-1 min-w-0">
+            {/* AI Insight */}
+            <AIHabitInsight />
+            
             {/* Category filter + Filter */}
             <div className="flex items-center gap-3 mb-4">
               <CategoryFilters />

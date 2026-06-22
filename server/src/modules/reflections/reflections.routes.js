@@ -8,6 +8,7 @@ const router = Router();
 router.get('/', validate(listReflectionsSchema), controller.getAll);
 router.get('/stats', controller.getStats);
 router.get('/mood-history', controller.getMoodHistory);
+router.get('/ai/insight', controller.getAiInsight);
 router.get('/:id', controller.getOne);
 router.post('/', validate(createReflectionSchema), controller.create);
 router.put('/:id', validate(updateReflectionSchema), controller.update);

@@ -3,7 +3,7 @@ import { useLogWater } from '../hooks/useFitness';
 
 function MugMeasurement({ consumed, goal, pct }) {
   return (
-    <div className="relative w-24 h-28 rounded-2xl overflow-hidden border-4 border-blue-100 flex-shrink-0 drop-shadow-sm" style={{ background: '#F8FAFC' }}>
+    <div className="relative w-24 h-28 rounded-2xl overflow-hidden border-4 border-blue-100 flex-shrink-0 drop-shadow-sm" style={{ background: 'var(--th-bg-secondary)' }}>
       <div className="absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out" style={{ height: `${pct}%`, background: 'rgba(59,130,246,0.15)' }}>
         <div className="absolute inset-0 bg-gradient-to-t from-blue-500/40 to-transparent" />
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-400/40 rounded-full blur-[1px]" />

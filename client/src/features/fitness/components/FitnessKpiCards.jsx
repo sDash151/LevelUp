@@ -72,7 +72,7 @@ export default function FitnessKpiCards({ overview }) {
           <span className="text-xs font-semibold" style={{ color: 'var(--th-text-secondary)' }}>days</span>
         </div>
         <p className="text-[10px] mt-1 font-semibold text-amber-600">Best: {bestStreak} days 🏆</p>
-        <p className="text-[9px] mt-1 text-gray-400 leading-tight pr-6 relative z-10">
+        <p className="text-[9px] mt-1 text-[var(--th-text-dim)] leading-tight pr-6 relative z-10">
           {bestStreak > streak ? `${bestStreak - streak} days away from your best streak` : 'You are on your best streak!'}
         </p>
         <div className="absolute right-0 bottom-0 text-[60px] opacity-20 -mr-2 -mb-2 z-0 filter drop-shadow-md">
@@ -93,14 +93,14 @@ export default function FitnessKpiCards({ overview }) {
         </div>
         <div className="flex items-baseline gap-1.5 mt-1">
           <span className="text-3xl font-extrabold" style={{ color: 'var(--th-text)' }}>{completedSessions}</span>
-          <span className="text-lg font-bold text-gray-400">/ {targetSessions}</span>
+          <span className="text-lg font-bold text-[var(--th-text-dim)]">/ {targetSessions}</span>
         </div>
-        <p className="text-[10px] mt-1 text-gray-500 font-medium">Sessions</p>
+        <p className="text-[10px] mt-1 text-[var(--th-text-secondary)] font-medium">Sessions</p>
         <div className="mt-4">
-          <div className="w-full h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden mb-1.5">
+          <div className="w-full h-1.5 rounded-full bg-[var(--th-bg-secondary)] dark:bg-[var(--th-bg-secondary)] overflow-hidden mb-1.5">
             <div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(100, sessionPct)}%` }} />
           </div>
-          <p className="text-[9px] text-gray-500">{sessionPct}% of weekly target</p>
+          <p className="text-[9px] text-[var(--th-text-secondary)]">{sessionPct}% of weekly target</p>
         </div>
       </motion.div>
 
@@ -117,11 +117,11 @@ export default function FitnessKpiCards({ overview }) {
         </div>
         <div className="flex items-baseline gap-1.5 mt-1">
           <span className="text-2xl font-extrabold" style={{ color: 'var(--th-text)' }}>{vol.toLocaleString()}</span>
-          <span className="text-[10px] font-semibold text-gray-400">kg</span>
+          <span className="text-[10px] font-semibold text-[var(--th-text-dim)]">kg</span>
         </div>
         <Sparkline data={sparklines.volume} color="#8B5CF6" />
         <p className="text-[10px] mt-2 font-semibold text-emerald-500">
-          ↑ {volChange >= 0 ? '+' : ''}{volChange}% <span className="text-gray-400 font-medium">vs last week</span>
+          ↑ {volChange >= 0 ? '+' : ''}{volChange}% <span className="text-[var(--th-text-dim)] font-medium">vs last week</span>
         </p>
       </motion.div>
 
@@ -138,11 +138,11 @@ export default function FitnessKpiCards({ overview }) {
         </div>
         <div className="flex items-baseline gap-1.5 mt-1">
           <span className="text-2xl font-extrabold" style={{ color: 'var(--th-text)' }}>{cal.toLocaleString()}</span>
-          <span className="text-[10px] font-semibold text-gray-400">kcal</span>
+          <span className="text-[10px] font-semibold text-[var(--th-text-dim)]">kcal</span>
         </div>
         <Sparkline data={sparklines.calories} color="#EF4444" />
         <p className="text-[10px] mt-2 font-semibold text-emerald-500">
-          ↑ {calChange >= 0 ? '+' : ''}{calChange}% <span className="text-gray-400 font-medium">vs last week</span>
+          ↑ {calChange >= 0 ? '+' : ''}{calChange}% <span className="text-[var(--th-text-dim)] font-medium">vs last week</span>
         </p>
       </motion.div>
 
@@ -159,11 +159,11 @@ export default function FitnessKpiCards({ overview }) {
         </div>
         <div className="flex items-baseline gap-1.5 mt-1">
           <span className="text-2xl font-extrabold" style={{ color: 'var(--th-text)' }}>{active.toLocaleString()}</span>
-          <span className="text-[10px] font-semibold text-gray-400">mins</span>
+          <span className="text-[10px] font-semibold text-[var(--th-text-dim)]">mins</span>
         </div>
         <Sparkline data={sparklines.active} color="#F59E0B" />
         <p className="text-[10px] mt-2 font-semibold text-emerald-500">
-          ↑ {activeChange >= 0 ? '+' : ''}{activeChange}% <span className="text-gray-400 font-medium">vs last week</span>
+          ↑ {activeChange >= 0 ? '+' : ''}{activeChange}% <span className="text-[var(--th-text-dim)] font-medium">vs last week</span>
         </p>
       </motion.div>
     </div>

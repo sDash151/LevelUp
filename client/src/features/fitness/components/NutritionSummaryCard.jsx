@@ -28,7 +28,7 @@ export default function NutritionSummaryCard({ data }) {
           <Apple className="w-3.5 h-3.5 text-rose-500" />
           <h3 className="text-sm font-semibold" style={{ color: 'var(--th-text)' }}>Nutrition Summary</h3>
         </div>
-        <div className="flex items-center gap-1 text-[10px] text-gray-400 font-medium">
+        <div className="flex items-center gap-1 text-[10px] text-[var(--th-text-dim)] font-medium">
           Today <span className="text-[8px]">▼</span>
         </div>
       </div>
@@ -46,7 +46,7 @@ export default function NutritionSummaryCard({ data }) {
           <div className="absolute inset-0 flex flex-col items-center justify-center pt-0.5">
             <span className="text-2xl font-bold leading-none mb-1" style={{ color: 'var(--th-text)' }}>{(calories?.consumed || 0).toLocaleString()}</span>
             <span className="text-[11px] font-medium leading-none mb-1" style={{ color: 'var(--th-text-secondary)' }}>/ {(calories?.goal || 2100).toLocaleString()}</span>
-            <span className="text-[10px] text-gray-400 leading-none">kcal</span>
+            <span className="text-[10px] text-[var(--th-text-dim)] leading-none">kcal</span>
           </div>
         </div>
 
@@ -57,10 +57,10 @@ export default function NutritionSummaryCard({ data }) {
                 <span className="font-semibold" style={{ color: 'var(--th-text-secondary)' }}>{m.label}</span>
                 <span className="font-bold">
                   <span className={m.textColor}>{m.consumed}</span>
-                  <span className="text-gray-400">/{m.goal}g</span>
+                  <span className="text-[var(--th-text-dim)]">/{m.goal}g</span>
                 </span>
               </div>
-              <div className="h-1.5 rounded-full overflow-hidden bg-black/5 dark:bg-white/5">
+              <div className="h-1.5 rounded-full overflow-hidden bg-[var(--th-bg-secondary)] dark:bg-[var(--th-card)]/5">
                 <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (m.consumed / m.goal) * 100)}%`, background: m.color }} />
               </div>
             </div>

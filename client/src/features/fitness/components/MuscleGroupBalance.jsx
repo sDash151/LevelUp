@@ -44,7 +44,7 @@ export default function MuscleGroupBalance({ data }) {
               <div key={g.name} className="flex items-center gap-2 text-[10px] font-medium">
                 <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
                 <span className="w-14 truncate" style={{ color: 'var(--th-text-secondary)' }}>{g.name}</span>
-                <div className="flex-1 h-1.5 rounded-full bg-black/5 dark:bg-white/5 overflow-hidden">
+                <div className="flex-1 h-1.5 rounded-full bg-[var(--th-bg-secondary)] dark:bg-[var(--th-card)]/5 overflow-hidden">
                   <div className="h-full rounded-full transition-all" style={{ width: `${(g.percentage / maxPercentage) * 100}%`, background: color }} />
                 </div>
                 <span className="font-bold w-6 text-right shrink-0" style={{ color: 'var(--th-text)' }}>{g.percentage}%</span>

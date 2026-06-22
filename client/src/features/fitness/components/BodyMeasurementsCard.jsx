@@ -7,7 +7,7 @@ const MeasurementSparkline = ({ data, dataKey, color }) => {
   if (!data || data.length === 0) {
     return (
       <div className="w-[40px] h-[15px] ml-4 flex items-center justify-center">
-        <div className="w-full h-[1px] bg-gray-200 dark:bg-gray-800" />
+        <div className="w-full h-[1px] bg-[var(--th-bg-secondary)] dark:bg-[var(--th-bg-secondary)]" />
       </div>
     );
   }
@@ -60,9 +60,9 @@ export default function BodyMeasurementsCard({ data, range = '3M' }) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-1.5">
           <h3 className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>Body Measurements</h3>
-          <Info className="w-3.5 h-3.5 text-gray-400" />
+          <Info className="w-3.5 h-3.5 text-[var(--th-text-dim)]" />
         </div>
-        <span className="text-[10px] font-semibold text-gray-500">{rangeLabel}</span>
+        <span className="text-[10px] font-semibold text-[var(--th-text-secondary)]">{rangeLabel}</span>
       </div>
       <div className="flex-1 flex flex-col items-center justify-center">
         <p className="text-xs" style={{ color: 'var(--th-text-secondary)' }}>Log measurements to track your progress</p>
@@ -85,9 +85,9 @@ export default function BodyMeasurementsCard({ data, range = '3M' }) {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-1.5">
             <h3 className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>Body Measurements</h3>
-            <Info className="w-3.5 h-3.5 text-gray-400" />
+            <Info className="w-3.5 h-3.5 text-[var(--th-text-dim)]" />
           </div>
-          <span className="text-[10px] font-semibold text-gray-500">{rangeLabel}</span>
+          <span className="text-[10px] font-semibold text-[var(--th-text-secondary)]">{rangeLabel}</span>
         </div>
 
         <div className="space-y-4 flex-1">
@@ -115,7 +115,7 @@ export default function BodyMeasurementsCard({ data, range = '3M' }) {
                         {changeAbs} {m.unit}
                       </span>
                     ) : (
-                      <span className="text-[10px] font-medium text-gray-400">--</span>
+                      <span className="text-[10px] font-medium text-[var(--th-text-dim)]">--</span>
                     )}
                   </div>
 
@@ -128,7 +128,7 @@ export default function BodyMeasurementsCard({ data, range = '3M' }) {
 
         <button 
           onClick={() => setShowModal(true)}
-          className="w-full mt-6 py-2 rounded-xl text-[11px] font-bold text-violet-600 bg-violet-50 hover:bg-violet-100 transition-colors dark:bg-violet-500/10 dark:hover:bg-violet-500/20"
+          className="w-full mt-6 py-2 rounded-xl text-[11px] font-bold text-violet-500 bg-violet-500/10 hover:bg-violet-100 transition-colors dark:bg-violet-500/10 dark:hover:bg-violet-500/20"
         >
           View All Measurements
         </button>
@@ -176,7 +176,7 @@ export default function BodyMeasurementsCard({ data, range = '3M' }) {
                       </thead>
                       <tbody>
                         {[...data.history].reverse().map((log, idx) => (
-                          <tr key={idx} style={{ borderBottom: '1px solid var(--th-border)' }} className="transition-colors hover:bg-black/5 dark:hover:bg-white/5">
+                          <tr key={idx} style={{ borderBottom: '1px solid var(--th-border)' }} className="transition-colors hover:opacity-80 dark:hover:bg-[var(--th-card)]/5">
                             <td className="py-3 px-4 text-xs font-semibold" style={{ color: 'var(--th-text)' }}>
                               {new Date(log.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                             </td>

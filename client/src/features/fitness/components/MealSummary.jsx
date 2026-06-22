@@ -90,7 +90,7 @@ export default function MealSummary({ meals = [], onAddMeal }) {
           {selectedMeal?.items?.length > 0 ? (
             <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
               {selectedMeal.items.map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 rounded-xl transition-colors hover:bg-black/5 dark:hover:bg-white/5" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
+                <div key={idx} className="flex items-center justify-between p-3 rounded-xl transition-colors hover:opacity-80 dark:hover:bg-[var(--th-card)]/5" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-bold truncate pr-4" style={{ color: 'var(--th-text)' }}>{item.name || 'Food Item'}</p>
                     <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--th-text-muted)' }}>{item.quantity || '1 serving'} • {item.calories || 0} kcal</p>

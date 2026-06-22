@@ -21,7 +21,7 @@ export function FitnessStatsGrid({ stats }) {
           </div>
           <div>
             <p className="stat-number text-lg font-bold text-white">{item.value}</p>
-            <p className="text-[10px] text-zinc-500">{item.label}</p>
+            <p className="text-[10px] text-[var(--th-text-secondary)]">{item.label}</p>
           </div>
         </Card>
       ))}

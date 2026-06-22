@@ -20,7 +20,7 @@ export default function PerformanceHighlights({ data }) {
           <Trophy className="w-4 h-4 text-amber-500" />
           <h3 className="text-sm font-semibold" style={{ color: 'var(--th-text)' }}>Performance Highlights</h3>
         </div>
-        <div className="flex items-center gap-1 text-[10px] text-gray-400 font-medium">
+        <div className="flex items-center gap-1 text-[10px] text-[var(--th-text-dim)] font-medium">
           This Month <span className="text-[8px]">▼</span>
         </div>
       </div>
@@ -36,7 +36,7 @@ export default function PerformanceHighlights({ data }) {
                 <p className="text-[10px] font-semibold" style={{ color: 'var(--th-text-secondary)' }}>{item.label}</p>
                 <p className="text-[11px] font-bold truncate mt-0.5" style={{ color: 'var(--th-text)' }}>{item.title ? `${item.title} - ` : ''}{item.value}</p>
               </div>
-              <span className="text-[10px] flex-shrink-0 font-medium text-gray-400">{formatDate(item.date)}</span>
+              <span className="text-[10px] flex-shrink-0 font-medium text-[var(--th-text-dim)]">{formatDate(item.date)}</span>
             </div>
           );
         })}

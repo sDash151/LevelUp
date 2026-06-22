@@ -10,6 +10,7 @@ import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useGoals, useGoalStats, useToggleMilestone, useCreateGoal, useUpdateGoal, useDeleteGoal } from '../hooks/useGoals';
 import { GoalForm } from '../components/GoalForm';
 import MonthlyGoalsView from '../components/MonthlyGoalsView';
+import { AIGoalInsight } from '../components/AIGoalInsight';
 import clsx from 'clsx';
 
 /* ═══════════════════════════════════════════════════════
@@ -319,6 +320,7 @@ function MotivationBoost() {
 
 /* ─── Goal Table Row (Desktop) ─── */
 function GoalTableRow({ goal, onToggle, onEdit, onDelete }) {
+  const [expanded, setExpanded] = useState(false);
   const status = getGoalStatus(goal);
   const streak = getGoalStreak(goal);
   const cat = goal.category ?? 'PERSONAL';
@@ -327,10 +329,13 @@ function GoalTableRow({ goal, onToggle, onEdit, onDelete }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
+    <>
     <motion.tr initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-      className="group transition-colors" style={{ borderBottom: '1px solid var(--th-border)' }}>
+      onClick={() => setExpanded(!expanded)}
+      className="group transition-colors cursor-pointer hover:bg-[var(--th-highlight)]" 
+      style={{ borderBottom: expanded ? 'none' : '1px solid var(--th-border)' }}>
       {/* Status dot + Category icon + Goal info */}
-      <td className="py-3.5 pl-5 pr-4">
+      <td className="py-3.5 pl-5 pr-4 max-w-[200px] md:max-w-[300px] xl:max-w-[400px]">
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full shrink-0"
             style={{ background: status === 'completed' ? '#10b981' : status === 'on_track' ? '#E8B94A' : status === 'needs_attention' ? '#f97316' : 'var(--th-text-dim)' }} />
@@ -372,7 +377,7 @@ function GoalTableRow({ goal, onToggle, onEdit, onDelete }) {
       </td>
       {/* Actions */}
       <td className="py-3.5 pr-5">
-        <div className="relative">
+        <div className="relative" onClick={e => e.stopPropagation()}>
           <button onClick={() => setMenuOpen(!menuOpen)} className="p-1.5 rounded-lg transition-all hover:bg-[var(--th-highlight)]">
             <MoreVertical className="w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
           </button>
@@ -397,11 +402,48 @@ function GoalTableRow({ goal, onToggle, onEdit, onDelete }) {
         </div>
       </td>
     </motion.tr>
+    <AnimatePresence>
+      {expanded && (
+        <tr style={{ borderBottom: '1px solid var(--th-border)' }}>
+          <td colSpan={6} className="px-5 pb-5 pt-0">
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+              <div className="pl-14 pr-4 space-y-2.5">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-dim)' }}>Milestones</h4>
+                {(!goal.milestones || goal.milestones.length === 0) ? (
+                  <p className="text-[12px] italic" style={{ color: 'var(--th-text-muted)' }}>No milestones for this goal.</p>
+                ) : (
+                  goal.milestones.map((m, i) => (
+                    <div key={m.id || i} className="flex items-start gap-3">
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); onToggle?.(goal.id, m.id); }}
+                        className="w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-all hover:opacity-80"
+                        style={{
+                          background: m.isCompleted ? 'var(--th-primary)' : 'transparent',
+                          border: m.isCompleted ? 'none' : '1.5px solid var(--th-text-dim)'
+                        }}
+                      >
+                        {m.isCompleted && <CheckCircle2 className="w-3 h-3 text-[#08080d]" />}
+                      </button>
+                      <span className={clsx('text-[13px] font-medium transition-all leading-tight', m.isCompleted && 'line-through opacity-50')}
+                        style={{ color: 'var(--th-text-secondary)' }}>
+                        {m.title}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </motion.div>
+          </td>
+        </tr>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
 
 /* ─── Goal Card (Mobile) ─── */
-function GoalCardMobile({ goal, onEdit, onDelete }) {
+function GoalCardMobile({ goal, onToggle, onEdit, onDelete }) {
+  const [expanded, setExpanded] = useState(false);
   const status = getGoalStatus(goal);
   const streak = getGoalStreak(goal);
   const cat = goal.category ?? 'PERSONAL';
@@ -411,7 +453,9 @@ function GoalCardMobile({ goal, onEdit, onDelete }) {
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl p-4" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+      onClick={() => setExpanded(!expanded)}
+      className="rounded-xl p-4 transition-colors cursor-pointer hover:bg-[var(--th-highlight)]" 
+      style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: catColor + '18' }}>
@@ -422,7 +466,7 @@ function GoalCardMobile({ goal, onEdit, onDelete }) {
             <p className="text-[11px] truncate" style={{ color: 'var(--th-text-dim)' }}>{goal.description || ''}</p>
           </div>
         </div>
-        <div className="relative ml-2 shrink-0">
+        <div className="relative ml-2 shrink-0" onClick={e => e.stopPropagation()}>
           <button onClick={() => setMenuOpen(!menuOpen)} className="p-1 rounded-md" style={{ color: 'var(--th-text-dim)' }}>
             <MoreVertical className="w-4 h-4" />
           </button>
@@ -468,6 +512,39 @@ function GoalCardMobile({ goal, onEdit, onDelete }) {
         {/* Status */}
         <StatusBadge status={status} />
       </div>
+
+      {/* Milestones Dropdown */}
+      <AnimatePresence>
+        {expanded && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+            <div className="pt-4 mt-3 space-y-2.5" style={{ borderTop: '1px solid var(--th-border)' }}>
+              <h4 className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-dim)' }}>Milestones</h4>
+              {(!goal.milestones || goal.milestones.length === 0) ? (
+                <p className="text-[12px] italic" style={{ color: 'var(--th-text-muted)' }}>No milestones for this goal.</p>
+              ) : (
+                goal.milestones.map((m, i) => (
+                  <div key={m.id || i} className="flex items-start gap-3">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); onToggle?.(goal.id, m.id); }}
+                      className="w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-all hover:opacity-80"
+                      style={{
+                        background: m.isCompleted ? 'var(--th-primary)' : 'transparent',
+                        border: m.isCompleted ? 'none' : '1.5px solid var(--th-text-dim)'
+                      }}
+                    >
+                      {m.isCompleted && <CheckCircle2 className="w-3 h-3 text-[#08080d]" />}
+                    </button>
+                    <span className={clsx('text-[12px] font-medium transition-all leading-tight', m.isCompleted && 'line-through opacity-50')}
+                      style={{ color: 'var(--th-text-secondary)' }}>
+                      {m.title}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -623,6 +700,8 @@ export default function GoalsPage() {
           <GoalCalendar calendarDays={calDays} />
         </div>
 
+        <AIGoalInsight />
+
         {/* Category Filters */}
         <div className="mb-4">
           <CategoryFilters active={categoryFilter} onChange={setCategoryFilter} />
@@ -653,7 +732,9 @@ export default function GoalsPage() {
             filteredGoals.map((goal, i) => (
               <motion.div key={goal.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}>
-                <GoalCardMobile goal={goal} onEdit={handleEdit} onDelete={handleDelete} />
+                <div key={goal.id} className="relative">
+                  <GoalCardMobile goal={goal} onToggle={(gId, mId) => toggleMilestone.mutate({ goalId: gId, milestoneId: mId })} onEdit={handleEdit} onDelete={handleDelete} />
+                </div>
               </motion.div>
             ))
           )}
@@ -757,6 +838,8 @@ export default function GoalsPage() {
           </div>
         </div>
 
+        <AIGoalInsight />
+
         {/* Category Filters */}
         <div className="mb-5">
           <CategoryFilters active={categoryFilter} onChange={setCategoryFilter} />
@@ -789,7 +872,7 @@ export default function GoalsPage() {
                     </td></tr>
                   ) : (
                     filteredGoals.map(goal => (
-                      <GoalTableRow key={goal.id} goal={goal} onToggle={toggleMilestone}
+                      <GoalTableRow key={goal.id} goal={goal} onToggle={(gId, mId) => toggleMilestone.mutate({ goalId: gId, milestoneId: mId })}
                         onEdit={handleEdit} onDelete={handleDelete} />
                     ))
                   )}

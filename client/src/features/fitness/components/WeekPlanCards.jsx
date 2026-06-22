@@ -28,7 +28,7 @@ export default function WeekPlanCards({ weekPlan = [] }) {
         <h3 className="text-sm font-semibold" style={{ color: 'var(--th-text)' }}>This Week's Plan</h3>
         <div className="flex gap-2">
           <button className="text-[10px] font-bold px-3 py-1.5 rounded-lg" style={{ background: 'var(--th-highlight)', color: 'var(--th-text)' }}>Week View</button>
-          <button className="text-[10px] font-bold px-3 py-1.5 rounded-lg text-gray-400 hover:text-gray-600 transition-colors">Calendar View</button>
+          <button className="text-[10px] font-bold px-3 py-1.5 rounded-lg text-[var(--th-text-dim)] hover:text-[var(--th-text-secondary)] transition-colors">Calendar View</button>
         </div>
       </div>
 

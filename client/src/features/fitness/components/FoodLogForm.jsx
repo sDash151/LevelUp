@@ -47,7 +47,7 @@ export default function FoodLogForm({ onClose, initialMealType = 'lunch', select
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(16,185,129,0.1)' }}><Apple className="w-5 h-5 text-emerald-500" /></div>
             <h2 className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>Log Food</h2>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-black/5 transition"><X className="w-5 h-5" style={{ color: 'var(--th-text-secondary)' }} /></button>
+          <button onClick={onClose} className="p-2 rounded-lg hover:opacity-80 transition"><X className="w-5 h-5" style={{ color: 'var(--th-text-secondary)' }} /></button>
         </div>
 
         {/* Mode toggle */}

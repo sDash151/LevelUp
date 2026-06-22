@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getGoals, getGoalStats, createGoal, updateGoal, deleteGoal, toggleMilestone } from '../api';
+import { getGoals, getGoalStats, createGoal, updateGoal, deleteGoal, toggleMilestone, generateMilestonesAI, getAiInsight } from '../api';
 import { useToast } from '@/design-system/components';
 
 /* ─── Fetch all goals ─── */
@@ -112,5 +112,42 @@ export function useToggleMilestone() {
       }
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['goals'] }),
+  });
+}
+
+/* ─── Generate AI Milestones ─── */
+export function useGenerateMilestonesAI() {
+  const toast = useToast();
+  return useMutation({
+    mutationFn: generateMilestonesAI,
+    onError: () => toast.error('Failed to generate AI milestones. API key might be missing or rate limit reached.', { icon: '⚠️' }),
+  });
+}
+
+/* ─── AI Insight Hooks ─── */
+export function useGoalAiInsight() {
+  return useQuery({
+    queryKey: ['goals', 'ai-insight'],
+    queryFn: async () => {
+      const res = await getAiInsight();
+      return res.data?.insight ?? res?.insight ?? null;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useRegenerateGoalAiInsight() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  return useMutation({
+    mutationFn: () => getAiInsight(true),
+    onSuccess: (data) => {
+      const newInsight = data.data?.insight ?? data?.insight;
+      if (newInsight) {
+        queryClient.setQueryData(['goals', 'ai-insight'], newInsight);
+      }
+      toast.success('Execution Copilot regenerated successfully!');
+    },
+    onError: () => toast.error('Failed to regenerate AI insight'),
   });
 }

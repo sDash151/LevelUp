@@ -53,16 +53,16 @@ export default function MuscleGroupFocus({ sessions = [] }) {
   const topGroup = chartData.length > 0 ? chartData[0] : null;
 
   return (
-    <div className="rounded-2xl p-6 bg-white shadow-sm border border-zinc-100 mt-5">
+    <div className="rounded-2xl p-6 bg-[var(--th-card)] shadow-sm border border-[var(--th-border)] mt-5">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-bold text-zinc-900">Muscle Group Focus</h3>
-        <button className="text-zinc-400 hover:text-zinc-600">
+        <h3 className="text-sm font-bold text-[var(--th-text)]">Muscle Group Focus</h3>
+        <button className="text-[var(--th-text-dim)] hover:text-[var(--th-text-secondary)]">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>
         </button>
       </div>
 
       {chartData.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-32 text-zinc-400">
+        <div className="flex flex-col items-center justify-center h-32 text-[var(--th-text-dim)]">
           <p className="text-xs font-medium">No workout data yet</p>
         </div>
       ) : (
@@ -70,8 +70,8 @@ export default function MuscleGroupFocus({ sessions = [] }) {
           <div className="relative w-32 h-32 flex-shrink-0">
             <CustomDonut data={chartData} />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-xl font-black text-zinc-900">{topGroup ? topGroup.value : 0}%</span>
-              <span className="text-[9px] font-bold text-zinc-400 mt-0.5 truncate px-2 text-center">{topGroup ? topGroup.name : 'Focus'}</span>
+              <span className="text-xl font-black text-[var(--th-text)]">{topGroup ? topGroup.value : 0}%</span>
+              <span className="text-[9px] font-bold text-[var(--th-text-dim)] mt-0.5 truncate px-2 text-center">{topGroup ? topGroup.name : 'Focus'}</span>
             </div>
           </div>
           
@@ -80,9 +80,9 @@ export default function MuscleGroupFocus({ sessions = [] }) {
               <div key={g.name} className="flex items-center justify-between text-[11px]">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: COLORS[i % COLORS.length] }} />
-                  <span className="font-bold text-zinc-500">{g.name}</span>
+                  <span className="font-bold text-[var(--th-text-secondary)]">{g.name}</span>
                 </div>
-                <span className="font-bold text-zinc-900">{g.value}%</span>
+                <span className="font-bold text-[var(--th-text)]">{g.value}%</span>
               </div>
             ))}
           </div>

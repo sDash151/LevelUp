@@ -37,3 +37,53 @@ export const getStats = asyncHandler(async (req, res) => {
   success(res, { stats });
 });
 
+// ==================== AI ENDPOINTS ====================
+
+const aiInsightCache = new Map();
+
+export const getAiInsight = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const force = req.query.force === 'true';
+
+  const cached = aiInsightCache.get(userId);
+  if (!force && cached && (Date.now() - cached.timestamp < 12 * 60 * 60 * 1000)) {
+    return success(res, { insight: cached.data }, 'AI Insight retrieved from cache');
+  }
+
+  const goals = await goalsService.getGoals(userId);
+  
+  if (!goals || goals.length === 0) {
+    return res.status(400).json({ success: false, error: 'Not enough data for AI insight' });
+  }
+
+  const { goalsAI } = await import('./goals.ai.js');
+  const insight = await goalsAI.generateInsight(goals);
+
+  if (!insight) {
+    return res.status(500).json({ success: false, error: 'Failed to generate AI insight' });
+  }
+
+  aiInsightCache.set(userId, { data: insight, timestamp: Date.now() });
+
+  success(res, { insight }, 'AI Insight generated successfully');
+});
+
+export const generateMilestones = asyncHandler(async (req, res) => {
+  const { title, description, category, type } = req.body;
+  const { goalsAI } = await import('./goals.ai.js');
+  
+  const timeframe = type === 'WEEKLY' ? '1 week' : type === 'MONTHLY' ? '1 month' : type === 'YEARLY' ? '1 year' : '1 month';
+  
+  const details = await goalsAI.generateGoalDetails({
+    title,
+    description,
+    category,
+    timeframe
+  });
+
+  if (!details) {
+    return res.status(500).json({ success: false, error: 'Failed to generate goal details' });
+  }
+
+  success(res, { details }, 'Goal details generated successfully');
+});

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Modal } from '@/design-system/components';
-import { Plus, X, Heart, Dumbbell, BookOpen, Briefcase, Star } from 'lucide-react';
+import { Plus, X, Heart, Dumbbell, BookOpen, Briefcase, Star, Sparkles, Loader2 } from 'lucide-react';
+import { useGenerateMilestonesAI } from '../hooks/useGoals';
 import clsx from 'clsx';
 
 const CATEGORIES = [
@@ -20,6 +21,7 @@ const defaultForm = () => ({
 
 export function GoalForm({ isOpen, onClose, onSubmit, goal }) {
   const [form, setForm] = useState(defaultForm());
+  const generateMilestones = useGenerateMilestonesAI();
 
   // Populate form when editing
   useEffect(() => {
@@ -37,6 +39,29 @@ export function GoalForm({ isOpen, onClose, onSubmit, goal }) {
       setForm(defaultForm());
     }
   }, [goal, isOpen]);
+
+  const handleGenerateAI = async () => {
+    if (!form.title.trim()) return;
+    try {
+      const res = await generateMilestones.mutateAsync({
+        title: form.title,
+        description: form.description,
+        category: form.category,
+        type: form.type
+      });
+      const details = res?.data?.details || res?.details;
+      if (details) {
+        setForm(f => ({
+          ...f,
+          description: details.description || f.description,
+          category: details.category || f.category,
+          milestones: details.milestones ? details.milestones.map(m => ({ title: m })) : f.milestones
+        }));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const addMilestone = () => setForm((f) => ({ ...f, milestones: [...f.milestones, { title: '' }] }));
 
@@ -61,7 +86,19 @@ export function GoalForm({ isOpen, onClose, onSubmit, goal }) {
     <Modal isOpen={isOpen} onClose={onClose} title={goal ? 'Edit Goal' : 'New Goal'} size="md">
       <div className="space-y-5">
         <div>
-          <label className="text-xs font-medium mb-2 block" style={{ color: 'var(--th-text-muted)' }}>Goal Title</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-xs font-medium block" style={{ color: 'var(--th-text-muted)' }}>Goal Title</label>
+            <button 
+              type="button" 
+              onClick={handleGenerateAI}
+              disabled={generateMilestones.isPending || !form.title.trim()}
+              className="flex items-center gap-1.5 text-[10px] font-bold px-2 py-1 rounded-md transition-all hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: 'var(--th-primary)', color: '#08080d' }}
+            >
+              {generateMilestones.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+              Auto-Breakdown
+            </button>
+          </div>
           <input
             type="text"
             placeholder="e.g., Save ₹5,000"

@@ -6,7 +6,7 @@ function CustomTooltip({ active, payload, label }) {
   return (
     <div className="rounded-xl px-4 py-3 text-xs shadow-xl" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}>
       <p className="font-semibold mb-1" style={{ color: 'var(--th-text-secondary)' }}>Week of {label}</p>
-      <p className="text-lg font-bold text-violet-600">
+      <p className="text-lg font-bold text-violet-500">
         {payload[0]?.value?.toLocaleString()} <span className="text-[10px] font-medium opacity-70">kg</span>
       </p>
       {payload[0]?.payload?.sessions && <p className="text-[10px] font-medium mt-1" style={{ color: 'var(--th-text-dim)' }}>{payload[0].payload.sessions} sessions</p>}
@@ -28,9 +28,9 @@ export default function VolumeProgressChart({ data = [] }) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-1.5">
           <h3 className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>Volume Progress</h3>
-          <Info className="w-3.5 h-3.5 text-gray-400" />
+          <Info className="w-3.5 h-3.5 text-[var(--th-text-dim)]" />
         </div>
-        <button className="flex items-center gap-1 text-[10px] font-semibold text-gray-500 hover:text-gray-700 transition">
+        <button className="flex items-center gap-1 text-[10px] font-semibold text-[var(--th-text-secondary)] hover:text-[var(--th-text)] transition">
           Last 30 Days <ChevronDown className="w-3 h-3" />
         </button>
       </div>

@@ -11,6 +11,7 @@ import {
 import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useReflections, useReflectionStats, useCreateReflection, useDeleteReflection } from '../hooks/useReflections';
 import { ReflectionForm } from '../components/ReflectionForm';
+import { AIReflectionInsight } from '../components/AIReflectionInsight';
 import clsx from 'clsx';
 
 /* ═══════════════════════════════════════════════════════
@@ -356,27 +357,10 @@ function TopEmotions({ topEmotions = [] }) {
 /* ═══════════════════════════════════════════════════════
    5. AI REFLECTION INSIGHT
    ═══════════════════════════════════════════════════════ */
-function AIInsightCard() {
-  return (
-    <div className="rounded-2xl p-4" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-sm">✨</span>
-        <h3 className="text-[13px] font-semibold" style={{ color: 'var(--th-text)' }}>AI Reflection Insight</h3>
-      </div>
-      <div className="flex items-start gap-3">
-        <div className="flex-1">
-          <p className="text-[12px] leading-relaxed mb-1.5" style={{ color: 'var(--th-text-secondary)' }}>
-            You've been more consistent with reflections in the evening.
-          </p>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--th-text-secondary)' }}>
-            Your self-awareness improved <span style={{ color: '#10b981' }}>14%</span> this month.
-          </p>
-        </div>
-        <img src="/AIInsights.webp" alt="" className="w-34 h-34 object-contain shrink-0 -mr-6" />
-      </div>
-    </div>
-  );
-}
+/* ═══════════════════════════════════════════════════════
+   5. AI REFLECTION INSIGHT
+   ═══════════════════════════════════════════════════════ */
+// AIInsightCard is now imported from AIReflectionInsight.jsx
 
 /* ═══════════════════════════════════════════════════════
    6. TOP REFLECTION TAGS
@@ -604,16 +588,14 @@ export default function ReflectionsPage() {
             onNewReflection={() => { setEditingReflection(null); setShowForm(true); }} />
         </div>
 
-        {/* Mood Journey + Right Sidebar */}
-        <div className="flex gap-4 mb-5">
-          {/* Left: Mood Journey */}
-          <div className="flex-1 min-w-0">
-            <MoodJourneyChart moodJourney={s.moodJourney ?? []} />
-          </div>
-          {/* Right sidebar column */}
-          <div className="w-[260px] shrink-0">
-            <AIInsightCard />
-          </div>
+        {/* Mood Journey */}
+        <div className="mb-5">
+          <MoodJourneyChart moodJourney={s.moodJourney ?? []} />
+        </div>
+
+        {/* AI Insight (Full Width) */}
+        <div className="mb-5">
+          <AIReflectionInsight />
         </div>
 
         {/* Calendar + Emotions + Sidebar continued */}
@@ -778,7 +760,7 @@ export default function ReflectionsPage() {
         </div>
 
         {/* AI Insight */}
-        <div className="mb-4"><AIInsightCard /></div>
+        <div className="mb-4"><AIReflectionInsight /></div>
 
         {/* Tags + Prompt */}
         <div className="space-y-4 mb-4">

@@ -46,12 +46,12 @@ export default function ProgressPhotosTimeline({ photos = [] }) {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-1.5">
             <h3 className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>Progress Photos</h3>
-            <Info className="w-3.5 h-3.5 text-gray-400" />
+            <Info className="w-3.5 h-3.5 text-[var(--th-text-dim)]" />
           </div>
           <button 
             onClick={() => setShowModal(true)}
             disabled={photos.length === 0}
-            className={`flex items-center gap-1 text-[10px] font-semibold transition ${photos.length === 0 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`flex items-center gap-1 text-[10px] font-semibold transition ${photos.length === 0 ? 'text-[var(--th-text-dim)] cursor-not-allowed' : 'text-[var(--th-text-secondary)] hover:text-[var(--th-text)]'}`}
           >
             View All <ChevronDown className="w-3 h-3" />
           </button>
@@ -63,7 +63,7 @@ export default function ProgressPhotosTimeline({ photos = [] }) {
               <p className="text-xs text-center" style={{ color: 'var(--th-text-secondary)' }}>No progress photos yet. Upload your first photo to start tracking visually.</p>
               <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-2 py-2 px-4 rounded-xl text-xs font-bold text-violet-600 bg-violet-50 hover:bg-violet-100 transition-colors dark:bg-violet-500/10 dark:hover:bg-violet-500/20"
+                className="flex items-center gap-2 py-2 px-4 rounded-xl text-xs font-bold text-violet-500 bg-violet-500/10 hover:bg-violet-100 transition-colors dark:bg-violet-500/10 dark:hover:bg-violet-500/20"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Upload Photo
@@ -76,7 +76,7 @@ export default function ProgressPhotosTimeline({ photos = [] }) {
                   <div className="w-full aspect-[3/4] rounded-xl overflow-hidden shadow-sm mb-1.5" style={{ background: 'var(--th-bg-secondary)' }}>
                     <img src={photo.secureUrl} alt="Progress" className="w-full h-full object-contain transition-transform group-hover:scale-110" loading="lazy" />
                   </div>
-                  <span className="text-[10px] font-semibold text-gray-500">{new Date(photo.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                  <span className="text-[10px] font-semibold text-[var(--th-text-secondary)]">{new Date(photo.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                 </div>
               ))}
 
@@ -85,10 +85,10 @@ export default function ProgressPhotosTimeline({ photos = [] }) {
                 disabled={isUploading}
                 className="flex flex-col items-center group"
               >
-                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border-2 border-dashed border-gray-200 hover:border-violet-400 hover:bg-violet-50 transition-colors flex items-center justify-center mb-1.5 bg-gray-50">
-                  {isUploading ? <Loader2 className="w-5 h-5 animate-spin text-violet-500" /> : <Plus className="w-5 h-5 text-gray-400 group-hover:text-violet-500" />}
+                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border-2 border-dashed border-[var(--th-border)] hover:border-violet-400 hover:bg-violet-500/10 transition-colors flex items-center justify-center mb-1.5 bg-[var(--th-bg-secondary)]">
+                  {isUploading ? <Loader2 className="w-5 h-5 animate-spin text-violet-500" /> : <Plus className="w-5 h-5 text-[var(--th-text-dim)] group-hover:text-violet-500" />}
                 </div>
-                <span className="text-[10px] font-semibold text-gray-500 group-hover:text-violet-600">Add New</span>
+                <span className="text-[10px] font-semibold text-[var(--th-text-secondary)] group-hover:text-violet-500">Add New</span>
               </button>
             </div>
           )}

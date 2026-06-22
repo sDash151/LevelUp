@@ -28,7 +28,7 @@ const Sparkline = ({ data, color }) => {
       <path d={pathD} fill={`url(#grad-${color.replace('#', '')})`} />
       <polyline points={points.join(' ')} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       {data.map((d, i) => (
-        <circle key={i} cx={(i / (data.length - 1)) * w} cy={h - ((d - min) / range) * h * 0.8 - h * 0.1} r="1.5" fill="#fff" stroke={color} strokeWidth="1" />
+        <circle key={i} cx={(i / (data.length - 1)) * w} cy={h - ((d - min) / range) * h * 0.8 - h * 0.1} r="1.5" fill="var(--th-bg)" stroke={color} strokeWidth="1" />
       ))}
     </svg>
   );
@@ -47,7 +47,7 @@ export default function WorkoutKpiCards({ stats = {}, loading }) {
 
   if (loading) return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 animate-pulse">
-      {[1,2,3,4,5].map(i => <div key={i} className="h-32 rounded-2xl bg-white shadow-sm border border-zinc-100" />)}
+      {[1,2,3,4,5].map(i => <div key={i} className="h-32 rounded-2xl bg-[var(--th-card)] shadow-sm border border-[var(--th-border)]" />)}
     </div>
   );
 
@@ -57,17 +57,17 @@ export default function WorkoutKpiCards({ stats = {}, loading }) {
         const Icon = card.icon;
         return (
           <motion.div key={card.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-            className="rounded-xl overflow-hidden bg-white shadow-[0_2px_10px_rgba(0,0,0,0.04)] border border-zinc-100 pt-5 pb-0 flex flex-col justify-between">
+            className="rounded-xl overflow-hidden bg-[var(--th-card)] shadow-[0_2px_10px_rgba(0,0,0,0.04)] border border-[var(--th-border)] pt-5 pb-0 flex flex-col justify-between">
             <div className="px-5">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${card.color}15` }}>
                   <Icon className="w-3.5 h-3.5" style={{ color: card.color }} />
                 </div>
-                <span className="text-[11px] font-bold text-zinc-500">{card.label}</span>
+                <span className="text-[11px] font-bold text-[var(--th-text-secondary)]">{card.label}</span>
               </div>
-              <p className="text-[22px] font-black tracking-tight text-zinc-900 leading-none">{card.value}</p>
+              <p className="text-[22px] font-black tracking-tight text-[var(--th-text)] leading-none">{card.value}</p>
               <div className="flex items-center gap-1 mt-2">
-                <span className="text-[10px] font-semibold text-zinc-400">All time</span>
+                <span className="text-[10px] font-semibold text-[var(--th-text-dim)]">All time</span>
               </div>
               <p className="text-[9px] font-bold mt-1" style={{ color: card.color }}>{card.sub}</p>
             </div>

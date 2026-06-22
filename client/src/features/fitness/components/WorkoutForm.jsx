@@ -98,7 +98,7 @@ export default function WorkoutForm({ onClose }) {
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(232,162,58,0.1)' }}><Dumbbell className="w-5 h-5 text-[#E8A23A]" /></div>
             <h2 className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>Log Workout</h2>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-black/5 transition"><X className="w-5 h-5" style={{ color: 'var(--th-text-secondary)' }} /></button>
+          <button onClick={onClose} className="p-2 rounded-lg hover:opacity-80 transition"><X className="w-5 h-5" style={{ color: 'var(--th-text-secondary)' }} /></button>
         </div>
         <div className="flex items-center gap-2 mb-5 p-1 rounded-xl" style={{ background: 'var(--th-bg-secondary)' }}>
           {[{ key: 'quick', label: 'Quick Log', icon: Dumbbell }, { key: 'smart', label: 'Smart Log', icon: Sparkles }].map(m => (

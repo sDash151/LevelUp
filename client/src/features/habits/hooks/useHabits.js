@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getHabits, getHabitRichStats, createHabit, updateHabit, toggleHabitComplete, deleteHabit, getHabitCalendarStats } from '../api';
+import { getHabits, getHabitRichStats, createHabit, updateHabit, toggleHabitComplete, deleteHabit, getHabitCalendarStats, getAiInsight } from '../api';
 import { useToast } from '@/design-system/components';
 
 export function useHabitCalendarStats(year, month, selectedDate) {
@@ -133,5 +133,31 @@ export function useDeleteHabit() {
       queryClient.invalidateQueries({ queryKey: ['dashboard', 'summary'] });
       toast.success('Habit deleted');
     },
+  });
+}
+export function useHabitAiInsight() {
+  return useQuery({
+    queryKey: ['habits', 'ai-insight'],
+    queryFn: async () => {
+      const res = await getAiInsight();
+      return res.data?.insight ?? res?.insight ?? null;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useRegenerateHabitAiInsight() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  return useMutation({
+    mutationFn: () => getAiInsight(true),
+    onSuccess: (data) => {
+      const newInsight = data.data?.insight ?? data?.insight;
+      if (newInsight) {
+        queryClient.setQueryData(['habits', 'ai-insight'], newInsight);
+      }
+      toast.success('AI Insight regenerated successfully!');
+    },
+    onError: () => toast.error('Failed to regenerate AI insight'),
   });
 }

@@ -71,26 +71,26 @@ export default function WorkoutCalendar({ sessions = [], plan = {} }) {
   const next = () => { if (month === 12) { setMonth(1); setYear(y => y + 1); } else setMonth(m => m + 1); };
 
   return (
-    <div className="rounded-2xl p-6 flex flex-col bg-white shadow-sm border border-zinc-100">
+    <div className="rounded-2xl p-6 flex flex-col bg-[var(--th-card)] shadow-sm border border-[var(--th-border)]">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-bold text-zinc-900">Workout Calendar</h3>
-        <button className="text-zinc-400 hover:text-zinc-600">
+        <h3 className="text-sm font-bold text-[var(--th-text)]">Workout Calendar</h3>
+        <button className="text-[var(--th-text-dim)] hover:text-[var(--th-text-secondary)]">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>
         </button>
       </div>
 
       <div className="flex items-center justify-between mb-5">
-        <span className="text-[13px] font-bold text-zinc-800">{monthName} {year}</span>
+        <span className="text-[13px] font-bold text-[var(--th-text)]">{monthName} {year}</span>
         <div className="flex items-center gap-2">
-          <button onClick={prev} className="p-1 rounded hover:bg-zinc-100 text-zinc-400 hover:text-zinc-600 transition"><ChevronLeft className="w-4 h-4" /></button>
-          <button onClick={next} className="p-1 rounded hover:bg-zinc-100 text-zinc-400 hover:text-zinc-600 transition"><ChevronRight className="w-4 h-4" /></button>
+          <button onClick={prev} className="p-1 rounded hover:bg-[var(--th-bg-secondary)] text-[var(--th-text-dim)] hover:text-[var(--th-text-secondary)] transition"><ChevronLeft className="w-4 h-4" /></button>
+          <button onClick={next} className="p-1 rounded hover:bg-[var(--th-bg-secondary)] text-[var(--th-text-dim)] hover:text-[var(--th-text-secondary)] transition"><ChevronRight className="w-4 h-4" /></button>
         </div>
       </div>
 
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-1 mb-3">
         {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => (
-          <div key={i} className="text-center text-[10px] font-bold text-zinc-400">{d}</div>
+          <div key={i} className="text-center text-[10px] font-bold text-[var(--th-text-dim)]">{d}</div>
         ))}
       </div>
 
@@ -104,9 +104,9 @@ export default function WorkoutCalendar({ sessions = [], plan = {} }) {
           return (
             <div
               key={day}
-              className="relative flex flex-col items-center justify-center h-8 w-8 mx-auto rounded-full text-xs font-bold transition-colors cursor-pointer hover:bg-zinc-100"
+              className="relative flex flex-col items-center justify-center h-8 w-8 mx-auto rounded-full text-xs font-bold transition-colors cursor-pointer hover:bg-[var(--th-bg-secondary)]"
               style={{
-                color: isToday ? '#fff' : '#3f3f46',
+                color: isToday ? 'var(--th-bg)' : 'var(--th-text)',
                 background: isToday ? '#F59E0B' : 'transparent',
               }}
             >
@@ -120,11 +120,11 @@ export default function WorkoutCalendar({ sessions = [], plan = {} }) {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center justify-between mt-6 pt-5 border-t border-zinc-100">
+      <div className="flex items-center justify-between mt-6 pt-5 border-t border-[var(--th-border)]">
         {Object.entries(STATUS_COLORS).map(([key, color]) => (
           <div key={key} className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full" style={{ background: color }} />
-            <span className="text-[10px] font-bold text-zinc-500">{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+            <span className="text-[10px] font-bold text-[var(--th-text-secondary)]">{key.charAt(0).toUpperCase() + key.slice(1)}</span>
           </div>
         ))}
       </div>

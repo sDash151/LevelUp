@@ -12,5 +12,7 @@ router.post('/', validate(createGoalSchema), controller.create);
 router.put('/:id', validate(updateGoalSchema), controller.update);
 router.delete('/:id', controller.remove);
 router.put('/:id/milestones/:milestoneId', controller.toggleMilestone);
+router.post('/ai/generate-milestones', controller.generateMilestones);
+router.get('/ai/insight', controller.getAiInsight);
 
 export default router;

@@ -51,7 +51,7 @@ export default function ProjectsPage() {
   const { data: githubData } = useGithubRepos();
   const stats = statsData?.data?.stats || statsData?.stats || {};
   const githubRepos = githubData?.data?.repos || githubData?.repos || [];
-  const isGithubConnected = githubRepos.length > 0 || !!githubData?.data?.connected;
+  const isGithubConnected = githubRepos.length > 0 || !!githubData?.data?.connection || !!githubData?.connection;
 
   const hasAttemptedConnect = useRef(false);
 

@@ -16,19 +16,40 @@ import { prisma } from '../../config/database.js';
 export const githubAuth = asyncHandler(async (req, res) => {
   const clientId = process.env.GITHUB_CLIENT_ID;
   const redirectUri = env.GITHUB_CALLBACK_URL;
-  const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=read:user user:email`;
+  
+  // Capture where the request came from so we can redirect back to the correct IP/host
+  const refererHost = req.headers.referer ? new URL(req.headers.referer).origin : env.CORS_ORIGIN;
+  const state = encodeURIComponent(`origin:${refererHost}`);
+  
+  const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=read:user user:email&state=${state}`;
   res.redirect(githubUrl);
 });
 
 export const githubCallback = asyncHandler(async (req, res) => {
   const { code, state } = req.query;
-  const clientUrl = env.CORS_ORIGIN;
+  
+  // Decode state to figure out where to redirect back to
+  let clientUrl = env.CORS_ORIGIN;
+  let originalState = '';
+  
+  if (state) {
+    const decodedState = decodeURIComponent(state);
+    if (decodedState.startsWith('origin:')) {
+      clientUrl = decodedState.replace('origin:', '');
+    } else if (decodedState.startsWith('projects:')) {
+      originalState = decodedState.split('projects:')[1];
+    } else if (decodedState.includes('|')) {
+       // if we passed multiple things
+       const parts = decodedState.split('|');
+       clientUrl = parts[0];
+       originalState = parts[1];
+    }
+  }
   
   if (!code) return res.redirect(`${clientUrl}/login?error=no_code`);
 
-  // If this was initiated from the Projects page, redirect back there with the code and original state
-  if (state && state.startsWith('projects:')) {
-    const originalState = state.split('projects:')[1];
+  // If this was initiated from the Projects page
+  if (originalState) {
     return res.redirect(`${clientUrl}/projects?code=${code}&state=${originalState}`);
   }
 

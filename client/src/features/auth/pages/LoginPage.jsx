@@ -59,7 +59,7 @@ export default function LoginPage() {
   }, [location, navigate, setAuth]);
 
   const handleGithubLogin = () => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+    const apiUrl = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000/api/v1`;
     window.location.href = `${apiUrl}/auth/github`;
   };
 

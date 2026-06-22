@@ -13,14 +13,14 @@ import { usePipeline, useMovePipelineProject, useBuildSuggestions, useGenerateBu
 import clsx from 'clsx';
 
 const card = 'rounded-2xl shadow-sm';
-const cardStyle = { background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' };
+const cardStyle = { background: 'var(--th-card-solid)', border: '1px solid var(--th-border)', boxShadow: 'var(--th-shadow)' };
 
 const STAGES = [
-  { key: 'IDEA', label: 'Idea', Icon: Lightbulb, color: '#6b7280', bg: '#f9fafb' },
-  { key: 'PLANNING', label: 'Planning', Icon: ClipboardList, color: '#3b82f6', bg: '#eff6ff' },
-  { key: 'BUILDING', label: 'Building', Icon: Hammer, color: '#f59e0b', bg: '#fffbeb', highlight: true },
-  { key: 'TESTING', label: 'Testing', Icon: FlaskConical, color: '#8b5cf6', bg: '#f5f3ff' },
-  { key: 'SHIPPED', label: 'Shipped', Icon: Rocket, color: '#10b981', bg: '#ecfdf5' },
+  { key: 'IDEA', label: 'Idea', Icon: Lightbulb, color: '#6b7280', bg: 'var(--th-card)' },
+  { key: 'PLANNING', label: 'Planning', Icon: ClipboardList, color: '#3b82f6', bg: 'var(--th-card)' },
+  { key: 'BUILDING', label: 'Building', Icon: Hammer, color: '#f59e0b', bg: 'var(--th-card)', highlight: true },
+  { key: 'TESTING', label: 'Testing', Icon: FlaskConical, color: '#8b5cf6', bg: 'var(--th-card)' },
+  { key: 'SHIPPED', label: 'Shipped', Icon: Rocket, color: '#10b981', bg: 'var(--th-card)' },
 ];
 
 const DRAG_MIME = 'application/x-levelup-pipeline-project';
@@ -462,7 +462,7 @@ function PipelineCardChrome({ project, stageKey, onSelect, selected, onMoveStage
           </div>
         )}
         {isMoving && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-white/60">
+          <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl backdrop-blur-[2px]" style={{ background: 'var(--th-bg-secondary)', opacity: 0.8 }}>
             <Loader2 className="w-4 h-4 animate-spin" style={{ color: 'var(--th-primary)' }} />
           </div>
         )}
@@ -552,11 +552,11 @@ function ProjectContextDrawer({ project, onClose, onMoveStage, isMoving, onEditP
   const scoreRingLen = (score / 10) * scoreRingC;
   const statusLabel = { IDEA: 'Idea', PLANNING: 'Planning', BUILDING: 'Building', TESTING: 'Testing', SHIPPED: 'Shipped' }[project?.status] || 'Building';
   const statusCls = {
-    BUILDING: 'bg-amber-50 text-amber-600',
-    SHIPPED: 'bg-emerald-50 text-emerald-600',
-    TESTING: 'bg-violet-50 text-violet-600',
-    PLANNING: 'bg-blue-50 text-blue-600',
-  }[project?.status] || 'bg-amber-50 text-amber-600';
+    BUILDING: 'bg-amber-500/10 text-amber-500',
+    SHIPPED: 'bg-emerald-500/10 text-emerald-500',
+    TESTING: 'bg-violet-500/10 text-violet-500',
+    PLANNING: 'bg-blue-500/10 text-blue-500',
+  }[project?.status] || 'bg-amber-500/10 text-amber-500';
 
   const tabs = [
     { key: 'ai', Icon: Sparkles },
@@ -964,7 +964,7 @@ export default function PipelineTab({ onNewProject, onEditProject }) {
                     onDrop={(e) => handleColumnDrop(e, stage.key)}
                     className={clsx(
                       'flex-1 rounded-xl p-2 space-y-2 min-h-[420px] transition-all duration-200',
-                      stage.highlight && 'ring-1 ring-amber-200/50',
+                      stage.highlight && 'ring-1 ring-amber-500/30',
                       dragOverStage === stage.key && 'ring-2 ring-offset-2'
                     )}
                     style={{

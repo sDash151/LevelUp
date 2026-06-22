@@ -11,7 +11,7 @@ export default function MoodAnalyticsModal({ isOpen, onClose }) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Mood Analytics" size="lg">
-      <div className="p-5 max-h-[80vh] overflow-y-auto no-scrollbar bg-gray-50/50">
+      <div className="p-5 max-h-[80vh] overflow-y-auto no-scrollbar" style={{ background: 'var(--th-bg)' }}>
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="w-8 h-8 text-amber-500 animate-spin mb-4" />
@@ -23,9 +23,9 @@ export default function MoodAnalyticsModal({ isOpen, onClose }) {
           <div className="space-y-6">
             
             {/* Header Insight */}
-            <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm text-center">
-              <h3 className="text-[16px] font-bold text-gray-900 mb-2">Emotional ROI</h3>
-              <p className="text-[13px] text-gray-500 leading-relaxed max-w-md mx-auto">
+            <div className="p-5 rounded-2xl border shadow-sm text-center" style={{ background: 'var(--th-card)', borderColor: 'var(--th-border)' }}>
+              <h3 className="text-[16px] font-bold mb-2" style={{ color: 'var(--th-text)' }}>Emotional ROI</h3>
+              <p className="text-[13px] leading-relaxed max-w-md mx-auto" style={{ color: 'var(--th-text-secondary)' }}>
                 See exactly where your money brings you joy and where it causes regret. Use these insights to optimize your spending for happiness.
               </p>
             </div>
@@ -33,32 +33,32 @@ export default function MoodAnalyticsModal({ isOpen, onClose }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* HAPPY COLUMN */}
               <div className="space-y-5">
-                <div className="bg-gradient-to-b from-green-50 to-white p-5 rounded-2xl border border-green-100 shadow-sm">
+                <div className="p-5 rounded-2xl border shadow-sm" style={{ background: 'var(--th-card)', borderColor: 'var(--color-success)40' }}>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#10B98120', color: '#10B981' }}>
                       <Smile className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-[15px] font-bold text-green-900">Happy Spending</h4>
-                      <p className="text-[11px] font-medium text-green-600">What brings you joy</p>
+                      <h4 className="text-[15px] font-bold" style={{ color: 'var(--th-text)' }}>Happy Spending</h4>
+                      <p className="text-[11px] font-medium" style={{ color: '#10B981' }}>What brings you joy</p>
                     </div>
                   </div>
 
                   {data.HAPPY?.categories.length > 0 ? (
                     <div className="space-y-4">
                       <div>
-                        <h5 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Top Categories</h5>
+                        <h5 className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-muted)' }}>Top Categories</h5>
                         <div className="space-y-2">
                           {data.HAPPY.categories.map((c, i) => (
-                            <div key={i} className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-gray-50">
+                            <div key={i} className="flex items-center justify-between p-2.5 rounded-xl border" style={{ background: 'var(--th-card)', borderColor: 'var(--th-border)' }}>
                               <div className="flex items-center gap-2.5">
-                                <span className="w-7 h-7 flex items-center justify-center bg-gray-50 rounded-lg text-xs">{CATEGORY_ICONS[c.name] || '✨'}</span>
+                                <span className="w-7 h-7 flex items-center justify-center rounded-lg text-xs" style={{ background: 'var(--th-card-solid)' }}>{CATEGORY_ICONS[c.name] || '✨'}</span>
                                 <div>
-                                  <span className="text-[13px] font-bold text-gray-900 block">{c.name}</span>
-                                  <span className="text-[10px] text-gray-400 block">{c.count} transactions</span>
+                                  <span className="text-[13px] font-bold block" style={{ color: 'var(--th-text)' }}>{c.name}</span>
+                                  <span className="text-[10px] block" style={{ color: 'var(--th-text-secondary)' }}>{c.count} transactions</span>
                                 </div>
                               </div>
-                              <span className="text-[13px] font-bold text-green-600">{formatCurrency(c.amount, currency, true)}</span>
+                              <span className="text-[13px] font-bold" style={{ color: '#10B981' }}>{formatCurrency(c.amount, currency, true)}</span>
                             </div>
                           ))}
                         </div>
@@ -66,15 +66,15 @@ export default function MoodAnalyticsModal({ isOpen, onClose }) {
 
                       {data.HAPPY?.merchants.length > 0 && (
                         <div>
-                          <h5 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Top Merchants</h5>
+                          <h5 className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-muted)' }}>Top Merchants</h5>
                           <div className="space-y-2">
                             {data.HAPPY.merchants.map((m, i) => (
-                              <div key={i} className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-gray-50">
+                              <div key={i} className="flex items-center justify-between p-2.5 rounded-xl border" style={{ background: 'var(--th-card)', borderColor: 'var(--th-border)' }}>
                                 <div>
-                                  <span className="text-[13px] font-bold text-gray-900 block">{m.name}</span>
-                                  <span className="text-[10px] text-gray-400 block">{m.count} transactions</span>
+                                  <span className="text-[13px] font-bold block" style={{ color: 'var(--th-text)' }}>{m.name}</span>
+                                  <span className="text-[10px] block" style={{ color: 'var(--th-text-secondary)' }}>{m.count} transactions</span>
                                 </div>
-                                <span className="text-[13px] font-bold text-green-600">{formatCurrency(m.amount, currency, true)}</span>
+                                <span className="text-[13px] font-bold" style={{ color: '#10B981' }}>{formatCurrency(m.amount, currency, true)}</span>
                               </div>
                             ))}
                           </div>
@@ -89,32 +89,32 @@ export default function MoodAnalyticsModal({ isOpen, onClose }) {
 
               {/* REGRET COLUMN */}
               <div className="space-y-5">
-                <div className="bg-gradient-to-b from-red-50 to-white p-5 rounded-2xl border border-red-100 shadow-sm">
+                <div className="p-5 rounded-2xl border shadow-sm" style={{ background: 'var(--th-card)', borderColor: 'var(--color-danger)40' }}>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#EF444420', color: '#EF4444' }}>
                       <Frown className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-[15px] font-bold text-red-900">Regret Spending</h4>
-                      <p className="text-[11px] font-medium text-red-600">What drains your energy</p>
+                      <h4 className="text-[15px] font-bold" style={{ color: 'var(--th-text)' }}>Regret Spending</h4>
+                      <p className="text-[11px] font-medium" style={{ color: '#EF4444' }}>What drains your energy</p>
                     </div>
                   </div>
 
                   {data.REGRET?.categories.length > 0 ? (
                     <div className="space-y-4">
                       <div>
-                        <h5 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Top Categories</h5>
+                        <h5 className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-muted)' }}>Top Categories</h5>
                         <div className="space-y-2">
                           {data.REGRET.categories.map((c, i) => (
-                            <div key={i} className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-gray-50">
+                            <div key={i} className="flex items-center justify-between p-2.5 rounded-xl border" style={{ background: 'var(--th-card)', borderColor: 'var(--th-border)' }}>
                               <div className="flex items-center gap-2.5">
-                                <span className="w-7 h-7 flex items-center justify-center bg-gray-50 rounded-lg text-xs">{CATEGORY_ICONS[c.name] || '💸'}</span>
+                                <span className="w-7 h-7 flex items-center justify-center rounded-lg text-xs" style={{ background: 'var(--th-card-solid)' }}>{CATEGORY_ICONS[c.name] || '💸'}</span>
                                 <div>
-                                  <span className="text-[13px] font-bold text-gray-900 block">{c.name}</span>
-                                  <span className="text-[10px] text-gray-400 block">{c.count} transactions</span>
+                                  <span className="text-[13px] font-bold block" style={{ color: 'var(--th-text)' }}>{c.name}</span>
+                                  <span className="text-[10px] block" style={{ color: 'var(--th-text-secondary)' }}>{c.count} transactions</span>
                                 </div>
                               </div>
-                              <span className="text-[13px] font-bold text-red-600">{formatCurrency(c.amount, currency, true)}</span>
+                              <span className="text-[13px] font-bold" style={{ color: '#EF4444' }}>{formatCurrency(c.amount, currency, true)}</span>
                             </div>
                           ))}
                         </div>
@@ -122,15 +122,15 @@ export default function MoodAnalyticsModal({ isOpen, onClose }) {
 
                       {data.REGRET?.merchants.length > 0 && (
                         <div>
-                          <h5 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Top Merchants</h5>
+                          <h5 className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-muted)' }}>Top Merchants</h5>
                           <div className="space-y-2">
                             {data.REGRET.merchants.map((m, i) => (
-                              <div key={i} className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-gray-50">
+                              <div key={i} className="flex items-center justify-between p-2.5 rounded-xl border" style={{ background: 'var(--th-card)', borderColor: 'var(--th-border)' }}>
                                 <div>
-                                  <span className="text-[13px] font-bold text-gray-900 block">{m.name}</span>
-                                  <span className="text-[10px] text-gray-400 block">{m.count} transactions</span>
+                                  <span className="text-[13px] font-bold block" style={{ color: 'var(--th-text)' }}>{m.name}</span>
+                                  <span className="text-[10px] block" style={{ color: 'var(--th-text-secondary)' }}>{m.count} transactions</span>
                                 </div>
-                                <span className="text-[13px] font-bold text-red-600">{formatCurrency(m.amount, currency, true)}</span>
+                                <span className="text-[13px] font-bold" style={{ color: '#EF4444' }}>{formatCurrency(m.amount, currency, true)}</span>
                               </div>
                             ))}
                           </div>
@@ -146,17 +146,22 @@ export default function MoodAnalyticsModal({ isOpen, onClose }) {
 
             {/* NEUTRAL ROW (Optional/Small) */}
             {data.NEUTRAL?.categories.length > 0 && (
-              <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+              <div className="p-5 rounded-2xl border shadow-sm" style={{ background: 'var(--th-card)', borderColor: 'var(--th-border)' }}>
                  <div className="flex items-center gap-2 mb-3">
-                   <Meh className="w-4 h-4 text-gray-400" />
-                   <h4 className="text-[13px] font-bold text-gray-600">Neutral Spending</h4>
+                   <Meh className="w-4 h-4" style={{ color: 'var(--th-text-secondary)' }} />
+                   <h4 className="text-[14px] font-bold" style={{ color: 'var(--th-text)' }}>Neutral / Necessary Spending</h4>
                  </div>
                  <div className="flex flex-wrap gap-2">
                    {data.NEUTRAL.categories.slice(0, 4).map((c, i) => (
-                     <div key={i} className="px-3 py-1.5 bg-gray-50 rounded-lg text-[12px] font-medium text-gray-600 border border-gray-100">
-                       {c.name} <span className="font-bold ml-1">{formatCurrency(c.amount, currency, true)}</span>
+                     <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[11px] font-medium" style={{ background: 'var(--th-card-solid)', borderColor: 'var(--th-border)', color: 'var(--th-text)' }}>
+                       {CATEGORY_ICONS[c.name] || '🛒'} {c.name}
                      </div>
                    ))}
+                   {data.NEUTRAL.categories.length > 4 && (
+                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium" style={{ color: 'var(--th-text-muted)' }}>
+                       +{data.NEUTRAL.categories.length - 4} more
+                     </div>
+                   )}
                  </div>
               </div>
             )}

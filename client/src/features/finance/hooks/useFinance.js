@@ -182,6 +182,14 @@ export function useUpdateGoal() {
   });
 }
 
+export function useDeleteGoal() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: financeApi.deleteGoal,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['finance'] }),
+  });
+}
+
 export function useContributeToGoal() {
   const qc = useQueryClient();
   return useMutation({

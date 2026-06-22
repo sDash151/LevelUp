@@ -1,15 +1,17 @@
 import React from 'react';
-import { ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, XAxis } from 'recharts';
 import { CheckCircle, Smile, Flame, Target } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ReflectionIntelligence({ data }) {
+  const navigate = useNavigate();
   const { reflections = {}, predictions = [] } = data || {};
   const stats = reflections.stats || {};
   const moodHistory = reflections.moodTrend || [];
 
   const moodData = moodHistory.map((m, i) => ({
     name: i.toString(),
-    value: m.score // assuming score is 1-10 or 1-5
+    value: m.mood // using the 'mood' property returned from the backend
   }));
 
   if (moodData.length === 0) {
@@ -20,88 +22,89 @@ export default function ReflectionIntelligence({ data }) {
   }
 
   const statCards = [
-    { label: 'Productive Days', value: `${stats.productiveDays || 0} days`, icon: CheckCircle, color: 'text-emerald-400' },
-    { label: 'Average Mood', value: stats.averageMood || 'Neutral', icon: Smile, color: 'text-amber-400' },
-    { label: 'Burnout Days', value: `${stats.burnoutDays || 0} days`, icon: Flame, color: 'text-rose-400' },
-    { label: 'Low Focus Days', value: `${stats.lowFocusDays || 0} days`, icon: Target, color: 'text-amber-400' },
+    { label: 'Productive Days', value: `${stats.productiveDays || 0} days`, icon: CheckCircle, color: 'text-emerald-500' },
+    { label: 'Average Mood', value: stats.averageMood || 'Neutral', icon: Smile, color: 'text-amber-500' },
+    { label: 'Burnout Days', value: `${stats.burnoutDays || 0} days`, icon: Flame, color: 'text-rose-500' },
+    { label: 'Low Focus Days', value: `${stats.lowFocusDays || 0} days`, icon: Target, color: 'text-blue-500' },
   ];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       {/* Reflection Intelligence */}
-      <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl p-6 border border-slate-700/50 flex flex-col">
+      <div className="shadow-sm p-6 rounded-3xl flex flex-col" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-white">Reflection Intelligence</h2>
-          <div className="text-sm text-slate-400 bg-slate-800/50 px-3 py-1 rounded-lg cursor-pointer hover:bg-slate-700/50 transition-colors">
+          <h2 className="text-xl font-bold" style={{ color: 'var(--th-text)' }}>Reflection Intelligence</h2>
+          <div className="shadow-sm rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs font-medium cursor-pointer transition-colors hover:opacity-80" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)', color: 'var(--th-text-secondary)' }}>
             This Month ▾
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 mb-6">
           {/* Chart Area */}
-          <div className="flex-1 border border-slate-700/30 rounded-xl p-4 bg-slate-800/20">
-            <h3 className="text-sm font-medium text-slate-300 mb-4">Mood Trend</h3>
-            <div className="h-32 w-full relative">
-              <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-lg opacity-80 z-10">
-                <span>😁</span>
-                <span>😐</span>
-                <span>😞</span>
-              </div>
-              <ResponsiveContainer width="100%" height="100%" className="ml-6">
-                <AreaChart data={moodData} margin={{ top: 5, right: 0, left: 10, bottom: 5 }}>
-                  <defs>
-                    <linearGradient id="colorMood" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#60a5fa" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#60a5fa" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <Area type="monotone" dataKey="value" stroke="#60a5fa" fillOpacity={1} fill="url(#colorMood)" strokeWidth={2} />
-                </AreaChart>
-              </ResponsiveContainer>
-              <div className="flex justify-between text-[10px] text-slate-500 mt-2 ml-6">
-                <span>1 Jun</span>
-                <span>7 Jun</span>
-                <span>14 Jun</span>
-                <span>21 Jun</span>
-                <span>28 Jun</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+            <div className="border rounded-2xl p-4 flex flex-col" style={{ background: 'var(--th-card)', borderColor: '#3b82f640' }}>
+              <h3 className="text-sm font-semibold mb-4" style={{ color: 'var(--th-text)' }}>Mood Trend</h3>
+              <div className="flex-1 min-h-[140px] w-full flex relative">
+                <div className="flex flex-col justify-between items-center w-8 text-lg border-r border-blue-200/50 pr-2">
+                  <span>🤩</span>
+                  <span>😐</span>
+                  <span>😫</span>
+                </div>
+                <div className="flex-1 h-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={moodData} margin={{ top: 10, right: 0, left: 10, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="moodColor" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2} />
+                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <XAxis dataKey="name" stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
+                      <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#moodColor)" dot={{r: 3, fill: '#3b82f6', strokeWidth: 0}} activeDot={{r: 5, fill: '#2563eb'}} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Stats Pills */}
-          <div className="flex flex-col gap-3 w-full md:w-48 justify-center">
-            {statCards.map((stat, idx) => {
-              const Icon = stat.icon;
-              return (
-                <div key={idx} className="flex justify-between items-center p-3 rounded-lg bg-slate-800/40 border border-slate-700/30">
-                  <div className="flex items-center gap-2">
-                    <Icon size={14} className={stat.color} />
-                    <span className="text-xs font-medium text-slate-300">{stat.label}</span>
+            {/* Stats Pills */}
+            <div className="flex flex-col gap-3 justify-center">
+              {statCards.map((stat, idx) => {
+                const Icon = stat.icon;
+                return (
+                  <div key={idx} className="flex justify-between items-center p-3 rounded-xl border shadow-sm" style={{ background: 'var(--th-card)', borderColor: 'var(--th-border)' }}>
+                    <div className="flex items-center gap-2">
+                      <Icon size={16} className={stat.color} />
+                      <span className="text-xs font-medium" style={{ color: 'var(--th-text-secondary)' }}>{stat.label}</span>
+                    </div>
+                    <span className={`text-sm font-bold ${stat.color}`}>{stat.value}</span>
                   </div>
-                  <span className={`text-sm font-bold ${stat.color}`}>{stat.value}</span>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
 
         <div className="mt-auto text-center">
-          <button className="text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors">
+          <button 
+            onClick={() => navigate('/reflections')}
+            className="text-amber-500 hover:text-amber-600 text-sm font-semibold transition-colors"
+          >
             View All Reflections
           </button>
         </div>
       </div>
 
       {/* Prediction Engine */}
-      <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl p-6 border border-slate-700/50 flex flex-col">
+      <div className="shadow-sm p-6 rounded-3xl flex flex-col" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-white">Prediction Engine</h2>
-          <div className="text-sm text-slate-400 bg-slate-800/50 px-3 py-1 rounded-lg">
+          <h2 className="text-xl font-bold" style={{ color: 'var(--th-text)' }}>Prediction Engine</h2>
+          <div className="shadow-sm rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs font-medium cursor-pointer transition-colors hover:opacity-80" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)', color: 'var(--th-text-secondary)' }}>
             At current pace
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 mb-6 flex-1 justify-center">
+        <div className="flex flex-col gap-5 flex-1 justify-center mb-6">
           {predictions.map((pred, idx) => {
             const icons = ['💰', '💻', '💪', '💼', '📚'];
             const icon = icons[idx % icons.length];
@@ -109,27 +112,27 @@ export default function ReflectionIntelligence({ data }) {
             return (
               <div key={idx} className="group cursor-pointer">
                 <div className="flex justify-between text-sm mb-1.5">
-                  <span className="font-semibold text-slate-200 flex items-center gap-2">
+                  <span className="font-semibold flex items-center gap-2 group-hover:text-amber-600 transition-colors" style={{ color: 'var(--th-text)' }}>
                     <span>{icon}</span> {pred.title}
                   </span>
-                  <span className="text-slate-400 text-xs">
+                  <span className="text-xs" style={{ color: 'var(--th-text-secondary)' }}>
                     {pred.targetDays ? `Target in ${pred.targetDays} days` : pred.targetText || 'In Progress'}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden flex-1">
+                  <div className="h-2.5 w-full rounded-full overflow-hidden flex-1" style={{ background: 'var(--th-bg-secondary)' }}>
                     <div 
-                      className="h-full bg-emerald-400 rounded-full transition-all duration-1000"
+                      className="h-full bg-emerald-500 rounded-full transition-all duration-1000"
                       style={{ width: `${pred.progress}%` }}
                     />
                   </div>
-                  <span className="text-sm font-bold text-white w-8 text-right">{pred.progress}%</span>
+                  <span className="text-sm font-bold w-8 text-right" style={{ color: 'var(--th-text)' }}>{pred.progress}%</span>
                 </div>
                 
                 {pred.explanation && (
-                  <div className="hidden group-hover:block mt-2 p-2 bg-slate-800/80 rounded border border-slate-700 text-xs text-slate-300">
+                  <div className="hidden group-hover:block mt-2 p-2 rounded border text-xs" style={{ background: 'var(--th-card-solid)', borderColor: 'var(--th-border)', color: 'var(--th-text-secondary)' }}>
                     <p>{pred.explanation}</p>
-                    {pred.tip && <p className="text-amber-400 mt-1 italic">Tip: {pred.tip}</p>}
+                    {pred.tip && <p className="text-amber-600 mt-1 italic">Tip: {pred.tip}</p>}
                   </div>
                 )}
               </div>
@@ -138,7 +141,10 @@ export default function ReflectionIntelligence({ data }) {
         </div>
 
         <div className="mt-auto text-center">
-          <button className="text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors">
+          <button 
+            onClick={() => navigate('/insights')}
+            className="w-full py-3 text-amber-500 hover:text-amber-600 font-semibold text-sm transition-colors rounded-xl hover:bg-amber-50"
+          >
             View All Predictions
           </button>
         </div>

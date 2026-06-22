@@ -13,61 +13,54 @@ export default function CrossModulePerformance({ data = [] }) {
     reflections: { icon: Brain, color: 'text-rose-400', bg: 'bg-rose-400/10', stroke: '#fb7185' }
   };
 
-  // Mock sparkline data
-  const sparklineData = Array.from({ length: 10 }, () => ({ value: Math.random() * 100 }));
+  const modules = data.map(item => ({
+    ...item,
+    ...config[item.id] || config.habits,
+    data: Array.from({ length: 10 }, () => ({ value: Math.random() * 100 })),
+    trend: item.change,
+    title: item.name
+  }));
 
   return (
     <div className="mb-8">
-      <div className="flex justify-between items-end mb-4">
-        <h2 className="text-xl font-bold text-white">Cross-Module Performance</h2>
-        <div className="text-sm text-slate-400 bg-slate-800/50 px-3 py-1 rounded-lg cursor-pointer hover:bg-slate-700/50 transition-colors">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold" style={{ color: 'var(--th-text)' }}>Cross-Module Performance</h2>
+        <div className="shadow-sm rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs font-medium cursor-pointer transition-colors hover:opacity-80" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)', color: 'var(--th-text-secondary)' }}>
           This Month ▾
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {data.map((item) => {
-          const conf = config[item.id] || config.habits;
-          const Icon = conf.icon;
-          const isPositive = item.change >= 0;
-
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+        {modules.map((m) => {
+          const Icon = m.icon;
           return (
-            <div key={item.id} className="bg-slate-900/40 backdrop-blur-md rounded-2xl p-5 border border-slate-700/50 flex flex-col hover:border-slate-600 transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className={`p-1.5 rounded-lg ${conf.bg}`}>
-                  <Icon size={16} className={conf.color} />
-                </div>
-                <span className="font-semibold text-slate-200">{item.name}</span>
+            <div key={m.id} className="shadow-sm p-5 rounded-2xl flex flex-col hover:shadow-md transition-shadow" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+              <div className="flex items-center gap-2 mb-3 font-medium text-sm" style={{ color: 'var(--th-text-secondary)' }}>
+                <Icon size={16} className={m.color} />
+                {m.title}
               </div>
 
               <div className="flex items-baseline gap-1 mb-1">
-                <span className="text-3xl font-bold text-white">{Math.round(item.score)}</span>
-                <span className="text-lg text-slate-400">%</span>
+                <span className="text-3xl font-extrabold" style={{ color: 'var(--th-text)' }}>{Math.round(m.score)}</span>
+                <span className="text-sm font-medium" style={{ color: 'var(--th-text-muted)' }}>%</span>
               </div>
-              <div className="text-sm text-slate-400 mb-3">{item.label}</div>
+              <div className="text-xs font-medium mb-3" style={{ color: 'var(--th-text-muted)' }}>{m.label}</div>
 
-              <div className={`text-xs font-medium flex items-center gap-1 mb-3 ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-                {isPositive ? <ArrowUp size={14} /> : <ArrowDown size={14} />}
-                {Math.abs(item.change)}%
+              <div className={`text-xs font-semibold flex items-center gap-1 mb-4 ${m.trend > 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                {m.trend > 0 ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
+                {Math.abs(m.trend)}%
               </div>
 
-              <div className="h-10 mt-auto w-full">
+              <div className="h-10 w-full mt-auto">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={sparklineData}>
+                  <AreaChart data={m.data}>
                     <defs>
-                      <linearGradient id={`gradient-${item.id}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={conf.stroke} stopOpacity={0.3} />
-                        <stop offset="95%" stopColor={conf.stroke} stopOpacity={0} />
+                      <linearGradient id={`grad-${m.id}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={m.stroke} stopOpacity={0.2} />
+                        <stop offset="95%" stopColor={m.stroke} stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <Area 
-                      type="monotone" 
-                      dataKey="value" 
-                      stroke={conf.stroke} 
-                      fill={`url(#gradient-${item.id})`} 
-                      strokeWidth={2}
-                      isAnimationActive={false}
-                    />
+                    <Area type="monotone" dataKey="value" stroke={m.stroke} strokeWidth={2} fillOpacity={1} fill={`url(#grad-${m.id})`} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

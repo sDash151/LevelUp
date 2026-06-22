@@ -1,12 +1,14 @@
 import { lazy, Suspense, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { LayoutDashboard, CreditCard, TrendingUp, Shield, Brain, Plus, Sparkles, Target } from 'lucide-react';
+import { LayoutDashboard, CreditCard, TrendingUp, Shield, Brain, Plus, Sparkles, Target, PieChart } from 'lucide-react';
 import { AnimatedPage } from '@/design-system/components';
 import clsx from 'clsx';
 import BudgetModal from '../components/BudgetModal';
 import ActiveBudgetsModal from '../components/ActiveBudgetsModal';
 import { TransactionForm } from '../components/TransactionForm';
+import { ContributeModal } from '../components/ContributeModal';
+import { AICFOChatModal } from '../components/AICFOChatModal';
 
 const OverviewTab = lazy(() => import('../components/OverviewTab'));
 const SpendTab = lazy(() => import('../components/SpendTab'));
@@ -23,11 +25,11 @@ const TABS = [
 ];
 
 const TAB_TITLES = {
-  overview: { title: 'Finance Overview', subtitle: 'Your Money OS - Track, Grow & Achieve Financial Freedom' },
-  spend: { title: 'Finance Overview', subtitle: 'Your Money OS - Track, Grow & Achieve Financial Freedom' },
-  build: { title: 'Finance Overview', subtitle: 'Your Money OS - Track, Grow & Achieve Financial Freedom' },
-  protect: { title: 'Finance Overview', subtitle: 'Your Money OS - Track, Grow & Achieve Financial Freedom' },
-  intelligence: { title: 'Finance Overview', subtitle: 'Your Money OS - Track, Grow & Achieve Financial Freedom' },
+  overview: { title: 'Finance Hub 🏦', subtitle: 'Your Money OS - Track, Grow & Achieve Financial Freedom' },
+  spend: { title: 'Spend Analytics 💳', subtitle: 'Master your cash flow, optimize your budget & cut the fat.' },
+  build: { title: 'Wealth Builder 🚀', subtitle: 'Grow your net worth, hit your goals & invest in your future.' },
+  protect: { title: 'Financial Defense 🛡️', subtitle: 'Secure your assets, kill debt & bulletproof your life.' },
+  intelligence: { title: 'AI CFO Dashboard 🧠', subtitle: 'Deep insights, risk alerts & hyper-personalized financial strategies.' },
 };
 
 const TAB_COLORS = {
@@ -59,22 +61,42 @@ export default function FinancePage() {
   const activeTab = searchParams.get('tab') || 'overview';
   const setTab = (key) => setSearchParams({ tab: key }, { replace: true });
   const [showTransactionForm, setShowTransactionForm] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
   const [initialAiText, setInitialAiText] = useState('');
   const [showBudgetForm, setShowBudgetForm] = useState(false);
   const [showActiveBudgetsModal, setShowActiveBudgetsModal] = useState(false);
   const [editingBudget, setEditingBudget] = useState(null);
+  
+  const [showContributeModal, setShowContributeModal] = useState(false);
+  const [showAIChatModal, setShowAIChatModal] = useState(false);
+  const [contributeDefaultGoal, setContributeDefaultGoal] = useState(null);
 
   const tabInfo = TAB_TITLES[activeTab] || TAB_TITLES.overview;
 
   const formProps = {
     onOpenTransactionForm: (text = '') => {
+      setEditingTransaction(null);
       setInitialAiText(typeof text === 'string' ? text : '');
       setShowTransactionForm(true);
+    },
+    onEditTransaction: (txn) => {
+      if (txn.type === 'TRANSFER') {
+        setEditingTransaction(txn);
+        setShowContributeModal(true);
+      } else {
+        setEditingTransaction(txn);
+        setInitialAiText('');
+        setShowTransactionForm(true);
+      }
     },
     onOpenActiveBudgetsModal: () => setShowActiveBudgetsModal(true),
     onOpenBudgetForm: (budget = null) => {
       setEditingBudget(budget);
       setShowBudgetForm(true);
+    },
+    onOpenContributeModal: (defaultGoal = null) => {
+      setContributeDefaultGoal(defaultGoal);
+      setShowContributeModal(true);
     }
   };
 
@@ -84,7 +106,7 @@ export default function FinancePage() {
       case 'spend': return <SpendTab {...formProps} />;
       case 'build': return <BuildTab {...formProps} />;
       case 'protect': return <ProtectTab {...formProps} />;
-      case 'intelligence': return <IntelligenceTab {...formProps} />;
+      case 'intelligence': return <IntelligenceTab onOpenChat={() => setShowAIChatModal(true)} {...formProps} />;
       default: return <OverviewTab {...formProps} />;
     }
   };
@@ -102,19 +124,30 @@ export default function FinancePage() {
             {activeTab !== 'intelligence' && (
               <button
                 onClick={() => setShowActiveBudgetsModal(true)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-gray-700 bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm border shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] hover:opacity-80"
+                style={{ background: 'var(--th-card)', borderColor: 'var(--th-border)', color: 'var(--th-text)' }}
               >
-                <Target className="w-4 h-4 text-amber-500" />
+                <PieChart className="w-4 h-4 text-amber-500" />
                 Set Budget
               </button>
             )}
             <button
-              onClick={() => setShowTransactionForm(true)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white shadow-sm hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
-              style={{ background: '#F59E0B' }}
+              onClick={() => {
+                if (activeTab === 'intelligence') {
+                  setShowAIChatModal(true);
+                } else if (activeTab === 'build' || activeTab === 'protect') {
+                  setContributeDefaultGoal(null);
+                  setShowContributeModal(true);
+                } else {
+                  setEditingTransaction(null);
+                  setShowTransactionForm(true);
+                }
+              }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] hover:opacity-80"
+              style={{ background: 'var(--th-primary)', color: '#08080d' }}
             >
-              {activeTab === 'intelligence' ? <Sparkles className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-              {activeTab === 'intelligence' ? 'Ask AI CFO' : 'Add Transaction'}
+              {activeTab === 'intelligence' ? <Sparkles className="w-4 h-4" /> : (activeTab === 'build' || activeTab === 'protect') ? <Target className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {activeTab === 'intelligence' ? 'Ask AI CFO' : (activeTab === 'build' || activeTab === 'protect') ? 'Contribute to Goal' : 'Add Transaction'}
             </button>
           </div>
         </div>
@@ -133,8 +166,8 @@ export default function FinancePage() {
                   isActive ? 'font-semibold shadow-sm' : 'font-medium hover:bg-black/5 dark:hover:bg-white/5'
                 )}
                 style={{
-                  color: isActive ? '#fff' : 'var(--th-text-secondary)',
-                  background: isActive ? '#F59E0B' : 'transparent',
+                  color: isActive ? '#08080d' : 'var(--th-text-secondary)',
+                  background: isActive ? 'var(--th-primary)' : 'transparent',
                 }}
               >
                 <Icon className="w-4 h-4" />
@@ -179,9 +212,25 @@ export default function FinancePage() {
         isOpen={showTransactionForm} 
         onClose={() => {
           setShowTransactionForm(false);
-          setInitialAiText('');
-        }}
-        initialAiText={initialAiText}
+          setEditingTransaction(null);
+        }} 
+        initialAiText={initialAiText} 
+        initialData={editingTransaction}
+      />
+
+      <ContributeModal 
+        isOpen={showContributeModal} 
+        onClose={() => {
+          setShowContributeModal(false);
+          setEditingTransaction(null);
+        }} 
+        defaultGoal={contributeDefaultGoal}
+        editingTransaction={editingTransaction && editingTransaction.type === 'TRANSFER' ? editingTransaction : null}
+      />
+
+      <AICFOChatModal 
+        isOpen={showAIChatModal}
+        onClose={() => setShowAIChatModal(false)}
       />
     </AnimatedPage>
   );

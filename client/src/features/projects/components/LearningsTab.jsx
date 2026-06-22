@@ -220,15 +220,15 @@ function AIInsightsPanel({ learnings }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8 items-start">
         {/* Top Insight */}
-        <div className="p-4 sm:p-5 rounded-2xl relative overflow-hidden h-full" style={{ background: '#fffbeb', border: '1px solid #fde68a' }}>
+        <div className="p-4 sm:p-5 rounded-2xl relative overflow-hidden h-full" style={{ background: 'rgba(var(--th-primary-rgb), 0.05)', border: '1px solid rgba(var(--th-primary-rgb), 0.2)' }}>
           <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <p className="text-[12px] font-bold text-amber-900">Top Insight</p>
+            <Sparkles className="w-4 h-4" style={{ color: 'var(--th-primary)' }} />
+            <p className="text-[12px] font-bold" style={{ color: 'var(--th-primary)' }}>Top Insight</p>
           </div>
-          <p className="text-[13px] leading-relaxed text-amber-900/80 relative z-10 font-medium">
-            You're exploring a lot of <strong>{topTag}</strong> topics.<br className="hidden sm:block" /> Consider creating reusable patterns or adding them to your core stack.
+          <p className="text-[13px] leading-relaxed relative z-10 font-medium" style={{ color: 'var(--th-text)' }}>
+            You're exploring a lot of <strong style={{ color: 'var(--th-primary)' }}>{topTag}</strong> topics.<br className="hidden sm:block" /> Consider creating reusable patterns or adding them to your core stack.
           </p>
-          <Sparkles className="absolute right-4 bottom-4 w-10 h-10 text-amber-400 opacity-40" />
+          <Sparkles className="absolute right-4 bottom-4 w-10 h-10 opacity-20" style={{ color: 'var(--th-primary)' }} />
         </div>
 
         {/* Growth Areas */}
@@ -279,7 +279,7 @@ function AIInsightsPanel({ learnings }) {
           <h4 className="text-[12px] sm:text-[13px] font-bold mb-3 sm:mb-4" style={{ color: 'var(--th-text)' }}>Top Knowledge Areas</h4>
           <div className="flex flex-wrap gap-2 sm:gap-2.5">
             {knowledgeAreas.length > 0 ? knowledgeAreas.map(k => (
-              <div key={k.label} className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all hover:bg-black/[0.02]" style={{ border: '1px solid var(--th-border)', background: 'var(--th-bg-secondary)' }}>
+              <div key={k.label} className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all hover:opacity-80" style={{ border: '1px solid var(--th-border)', background: 'var(--th-bg-secondary)' }}>
                 <span className="text-[11px] font-semibold" style={{ color: 'var(--th-text)' }}>{k.label}</span>
                 <span className="text-[10px] font-bold" style={{ color: 'var(--th-text-dim)' }}>{k.count}</span>
               </div>
@@ -365,15 +365,16 @@ export default function LearningsTab() {
             onClick={() => setSubTab(t.key)}
             className={clsx(
               'pb-3 text-[13px] sm:text-[14px] font-bold transition-all relative shrink-0',
-              subTab === t.key ? 'text-amber-500' : 'text-slate-500 hover:text-slate-700'
+              subTab === t.key ? 'opacity-100' : 'hover:opacity-80'
             )}
-            style={{ color: subTab === t.key ? '#f59e0b' : 'var(--th-text-dim)' }}
+            style={{ color: subTab === t.key ? 'var(--th-primary)' : 'var(--th-text-dim)' }}
           >
             {t.label}
             {subTab === t.key && (
               <motion.div
-                layoutId="learning_tab_indicator"
-                className="absolute bottom-[-1px] left-0 right-0 h-[3px] bg-amber-500 rounded-t-full"
+                layoutId="activeTabLearnings"
+                className="absolute bottom-[-1px] left-0 right-0 h-[3px] rounded-t-full"
+                style={{ background: 'var(--th-primary)' }}
               />
             )}
           </button>

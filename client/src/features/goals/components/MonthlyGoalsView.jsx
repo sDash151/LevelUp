@@ -260,7 +260,7 @@ function MonthlyGoalRow({ goal, onEdit, onDelete }) {
     <motion.tr initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
       className="group" style={{ borderBottom: '1px solid var(--th-border)' }}>
       {/* Goal */}
-      <td className="py-3.5 pr-3">
+      <td className="py-3.5 pl-5 pr-3">
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full shrink-0"
             style={{ background: status === 'completed' ? '#10b981' : status === 'on_track' ? '#E8B94A' : status === 'needs_attention' ? '#f97316' : 'var(--th-text-dim)' }} />
@@ -312,7 +312,7 @@ function MonthlyGoalRow({ goal, onEdit, onDelete }) {
       {/* Status */}
       <td className="py-3.5 pr-3"><StatusBadge status={status} /></td>
       {/* Actions */}
-      <td className="py-3.5">
+      <td className="py-3.5 pr-5">
         <div className="relative">
           <button onClick={() => setMenuOpen(!menuOpen)} className="p-1.5 rounded-lg hover:bg-[var(--th-highlight)]">
             <MoreVertical className="w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
@@ -831,23 +831,23 @@ export default function MonthlyGoalsView({
         {/* Category Filters */}
         <CategoryFilters active={categoryFilter} onChange={setCategoryFilter} />
 
-        {/* Row 2: Goals Table + Calendar & Insights Sidebar */}
-        <div className="flex gap-4">
-          <div className="flex-1 min-w-0">
+        {/* Row 2: Goals Table */}
+        <div className="w-full">
             <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
               <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid var(--th-border)' }}>
                 <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>Your Goals This Month</h3>
               </div>
-              <table className="w-full">
-                <thead>
-                  <tr style={{ borderBottom: '1px solid var(--th-border)' }}>
-                    {['GOAL', 'PROGRESS', 'MILESTONES', 'DUE', 'STATUS', ''].map((col, i) => (
-                      <th key={col || i} className={clsx('text-left text-[11px] font-semibold uppercase px-4 py-2.5', i === 0 && 'pl-5')}
-                        style={{ color: 'var(--th-text-dim)' }}>{col}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[700px]">
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--th-border)' }}>
+                      {['GOAL', 'PROGRESS', 'MILESTONES', 'DUE', 'STATUS', ''].map((col, i) => (
+                        <th key={col || i} className={clsx('text-left text-[11px] font-semibold uppercase px-4 py-2.5', i === 0 && 'pl-5', i === 5 && 'pr-5')}
+                          style={{ color: 'var(--th-text-dim)' }}>{col}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
                   {isLoading ? (
                     Array.from({ length: 3 }).map((_, i) => (
                       <tr key={i}><td colSpan={6} className="px-5 py-4"><div className="h-8 rounded-lg animate-pulse" style={{ background: 'var(--th-highlight)' }} /></td></tr>
@@ -862,6 +862,7 @@ export default function MonthlyGoalsView({
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
             {filteredGoals.length > 0 && (
               <button onClick={onShowForm} className="flex items-center gap-1.5 mt-4 text-[13px] font-semibold" style={{ color: 'var(--th-primary)' }}>
@@ -869,11 +870,11 @@ export default function MonthlyGoalsView({
               </button>
             )}
           </div>
-          {/* Right Sidebar */}
-          <div className="w-[250px] shrink-0 space-y-4">
-            <MonthlyCalendar calendarDays={calDays} />
-            <MonthlyInsights insights={insights} />
-          </div>
+
+        {/* Row 2b: Calendar & Insights */}
+        <div className="grid grid-cols-2 gap-4">
+          <MonthlyCalendar calendarDays={calDays} />
+          <MonthlyInsights insights={insights} />
         </div>
 
         {/* Row 3: Charts */}

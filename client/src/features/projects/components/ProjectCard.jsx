@@ -2,12 +2,12 @@ import { motion } from 'motion/react';
 import { Github, ExternalLink, Globe, GitCommit, Clock, GitBranch } from 'lucide-react';
 
 const STATUS = {
-  IDEA: { bg: 'bg-orange-50', text: 'text-orange-600', bar: '#f97316', label: 'Idea' },
-  PLANNING: { bg: 'bg-blue-50', text: 'text-blue-600', bar: '#3b82f6', label: 'Planning' },
-  BUILDING: { bg: 'bg-violet-50', text: 'text-violet-600', bar: '#8b5cf6', label: 'Building' },
-  TESTING: { bg: 'bg-violet-50', text: 'text-violet-600', bar: '#8b5cf6', label: 'Testing' },
-  SHIPPED: { bg: 'bg-emerald-50', text: 'text-emerald-600', bar: '#10b981', label: 'Shipped' },
-  ARCHIVED: { bg: 'bg-slate-100', text: 'text-slate-500', bar: '#94a3b8', label: 'Archived' },
+  IDEA: { bg: 'bg-orange-500/10', text: 'text-orange-500', bar: '#f97316', label: 'Idea' },
+  PLANNING: { bg: 'bg-blue-500/10', text: 'text-blue-500', bar: '#3b82f6', label: 'Planning' },
+  BUILDING: { bg: 'bg-violet-500/10', text: 'text-violet-500', bar: '#8b5cf6', label: 'Building' },
+  TESTING: { bg: 'bg-violet-500/10', text: 'text-violet-500', bar: '#8b5cf6', label: 'Testing' },
+  SHIPPED: { bg: 'bg-emerald-500/10', text: 'text-emerald-500', bar: '#10b981', label: 'Shipped' },
+  ARCHIVED: { bg: 'bg-slate-500/10', text: 'text-slate-500', bar: '#94a3b8', label: 'Archived' },
 };
 
 const COLORS = ['#8b5cf6', '#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899', '#6366f1'];
@@ -27,9 +27,9 @@ function timeAgo(date) {
 }
 
 function scoreStyle(score) {
-  if (score >= 8) return { color: '#10b981', bg: '#ecfdf5' };
-  if (score >= 6) return { color: '#f59e0b', bg: '#fffbeb' };
-  return { color: '#ef4444', bg: '#fef2f2' };
+  if (score >= 8) return { color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' };
+  if (score >= 6) return { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)' };
+  return { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)' };
 }
 
 export function ProjectCard({ project, onClick, index = 0 }) {

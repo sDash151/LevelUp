@@ -28,7 +28,7 @@ export default function AnalyticsPage() {
   if (error) {
     return (
       <AnimatedPage className="p-6 md:p-8 max-w-7xl mx-auto min-h-screen flex items-center justify-center">
-        <div className="bg-rose-500/10 border border-rose-500/30 text-rose-400 p-6 rounded-2xl text-center max-w-md">
+        <div className="p-6 rounded-2xl text-center max-w-md border shadow-sm" style={{ background: 'var(--th-card)', borderColor: 'var(--color-danger)', color: 'var(--color-danger)' }}>
           <h2 className="text-xl font-bold mb-2">Analysis Failed</h2>
           <p className="text-sm opacity-80">We couldn't load your analytics. Please try again later.</p>
         </div>
@@ -43,14 +43,14 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 mt-2">
         <div>
-          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 flex items-center gap-2 mb-1">
-            Analytics <span className="text-slate-400 text-xl font-normal">📈</span>
+          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500 flex items-center gap-2 mb-1">
+            Analytics <span className="text-xl font-normal opacity-70">📈</span>
           </h1>
-          <p className="text-slate-400 text-sm">Understand your progress, patterns & unlock your full potential</p>
+          <p className="text-sm" style={{ color: 'var(--th-text-secondary)' }}>Understand your progress, patterns & unlock your full potential</p>
         </div>
 
         <div className="flex items-center gap-4 w-full md:w-auto">
-          <div className="bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl px-4 py-2 flex items-center gap-2 text-sm font-medium text-slate-300 w-full md:w-auto justify-center cursor-pointer hover:bg-slate-800/50 transition-colors">
+          <div className="shadow-sm rounded-xl px-4 py-2 flex items-center gap-2 text-sm font-medium w-full md:w-auto justify-center cursor-pointer transition-colors hover:opacity-80" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }}>
             <span>📅</span> Jun 1 – Jun 21, 2026 ▾
           </div>
           <button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 flex-shrink-0">

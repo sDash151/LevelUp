@@ -114,7 +114,7 @@ function IntelligenceKpiCards({ data, projects }) {
             <span className="text-[11px] font-bold" style={{ color: 'var(--th-text)' }}>Strongest Project</span>
           </div>
           <p className="text-[16px] font-bold mb-1" style={{ color: 'var(--th-text)' }}>{bestProject ? bestProject.title : 'None'}</p>
-          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-600 inline-block mb-2 border border-amber-100">Best for interviews</span>
+          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded inline-block mb-2" style={{ background: 'rgba(var(--th-primary-rgb), 0.1)', color: 'var(--th-primary)', border: '1px solid rgba(var(--th-primary-rgb), 0.2)' }}>Best for interviews</span>
         </div>
         <p className="text-[11px] font-medium relative z-10 mt-1" style={{ color: 'var(--th-text-dim)' }}>Score: <span className="font-bold text-blue-500">{bestProject ? bestProject.intelligence?.resumeScore?.toFixed(1) : 0} / 10</span></p>
         <Star className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 text-amber-100 dark:text-amber-500/10 fill-current" />
@@ -237,7 +237,8 @@ function JobMatchEngine({ projects }) {
             <button 
               onClick={handleSync}
               disabled={isPending || !jobDesc}
-              className="px-5 py-2 rounded-xl font-bold text-[13px] text-white bg-blue-500 hover:bg-blue-600 disabled:opacity-50 transition-colors"
+              className="px-5 py-2 rounded-xl font-bold text-[13px] text-white hover:opacity-90 disabled:opacity-50 transition-all"
+              style={{ background: 'var(--th-primary)' }}
             >
               {isPending ? 'Syncing...' : 'Sync'}
             </button>
@@ -246,10 +247,10 @@ function JobMatchEngine({ projects }) {
         
         <div className="flex flex-col pl-6" style={{ borderLeft: '1px solid var(--th-border)' }}>
           <div className="mb-2">
-            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-red-500/10 text-red-600 dark:bg-red-500/20 dark:text-red-400">Active Job</span>
+            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>Active Job</span>
           </div>
           <div className="flex items-center gap-3 relative">
-            <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold" style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text)', border: '1px solid var(--th-border)' }}>
               {activeTitle.charAt(0)}
             </div>
             <div className="pr-10">
@@ -270,7 +271,7 @@ function JobMatchEngine({ projects }) {
           </div>
         ) : matches.length > 0 ? (
           matches.map((m, i) => (
-            <div key={m.title + i} className="flex items-center w-full py-4 relative px-5 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors" style={{ borderTop: i === 0 ? 'none' : '1px solid var(--th-border)' }}>
+            <div key={m.title + i} className="flex items-center w-full py-4 relative px-5 transition-opacity hover:opacity-80" style={{ borderTop: i === 0 ? 'none' : '1px solid var(--th-border)' }}>
               
               {/* Left: Icon & Title */}
               <div className="flex items-center gap-4 w-[240px] shrink-0 pr-4">
@@ -403,7 +404,7 @@ function ProjectRankingMatrix({ projects }) {
         <div className="mt-4 flex justify-center shrink-0">
           <button 
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-[12px] font-bold px-4 py-2 rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/5"
+            className="text-[12px] font-bold px-4 py-2 rounded-lg transition-opacity hover:opacity-80"
             style={{ color: 'var(--th-text-dim)', border: '1px solid var(--th-border)' }}
           >
             {isExpanded ? 'View Less' : `View All (${mappedProjects.length})`}
@@ -539,26 +540,27 @@ function AskAISection() {
         <Sparkles className="w-5 h-5 text-amber-500" />
         <h3 className="text-[15px] font-bold" style={{ color: 'var(--th-text)' }}>Ask AI about your projects...</h3>
       </div>
-      <div className="relative mb-5">
+      <div className="relative mb-6">
         <input 
           value={question}
           onChange={e => setQuestion(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleAsk()}
-          placeholder="Ask anything..." 
-          className="w-full pl-5 pr-32 py-4 rounded-xl text-[14px] font-medium outline-none disabled:opacity-50"
+          placeholder="Ask anything about your projects, skills, or gaps..." 
+          className="w-full pl-5 pr-32 py-4 rounded-xl text-[14px] outline-none shadow-sm transition-shadow focus:shadow-md"
           disabled={isPending}
           style={{ background: 'var(--th-bg)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }}
         />
-        {isPending ? (
-          <div className="absolute right-[110px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-amber-300 border-t-amber-500 animate-spin pointer-events-none" />
-        ) : (
-          <Sparkles className="absolute right-[110px] top-1/2 -translate-y-1/2 w-4 h-4 text-amber-300 pointer-events-none" />
-        )}
         <button 
           onClick={() => handleAsk()}
           disabled={isPending || !question}
-          className="absolute right-2 top-2 bottom-2 px-6 rounded-lg font-bold text-white flex items-center gap-2 text-[13px] hover:opacity-90 transition-opacity bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="absolute right-2 top-2 bottom-2 px-6 rounded-lg font-bold text-white flex items-center gap-2 text-[13px] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ background: 'var(--th-primary)' }}
         >
+          {isPending ? (
+            <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+          ) : (
+            <Sparkles className="w-4 h-4 text-white" />
+          )}
           {isPending ? 'Analyzing...' : 'Analyze'} <ArrowRight className="w-4 h-4" />
         </button>
       </div>
@@ -567,7 +569,7 @@ function AskAISection() {
         <div className="mb-5 p-4 rounded-xl text-[13px] leading-relaxed whitespace-pre-wrap" style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text)' }}>
           {answer.split(/(\*\*.*?\*\*)/g).map((part, i) => {
             if (part.startsWith('**') && part.endsWith('**')) {
-              return <strong key={i} className="font-bold text-amber-600 dark:text-amber-400">{part.slice(2, -2)}</strong>;
+              return <strong key={i} className="font-bold" style={{ color: 'var(--th-primary)' }}>{part.slice(2, -2)}</strong>;
             }
             return <span key={i}>{part}</span>;
           })}
@@ -654,7 +656,8 @@ function SuggestedUpgrades({ projects }) {
       <button 
         onClick={handleApply}
         disabled={isApplying || applied || upgrades.every(u => !u.projectId)}
-        className="w-full py-2.5 rounded-xl font-bold text-white text-[13px] hover:opacity-90 transition-opacity bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-2.5 rounded-xl font-bold text-white text-[13px] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{ background: 'var(--th-primary)' }}
       >
         {isApplying ? 'Creating Tasks...' : applied ? 'Tasks Created!' : 'Apply Suggestions'}
       </button>
@@ -758,9 +761,9 @@ function PatternIntelligence({ projects }) {
         {patterns.map((p, i) => (
           <span key={p} className="text-[10px] px-2.5 py-1 rounded-full font-bold transition-all hover:scale-105 cursor-pointer"
             style={{ 
-              background: i < 3 ? '#fffbeb' : 'var(--th-bg-secondary)', 
-              color: i < 3 ? '#d97706' : 'var(--th-text-dim)',
-              border: i < 3 ? '1px solid #fde68a' : '1px solid var(--th-border)' 
+              background: i < 3 ? 'rgba(var(--th-primary-rgb), 0.05)' : 'var(--th-bg-secondary)', 
+              color: i < 3 ? 'var(--th-primary)' : 'var(--th-text-dim)',
+              border: i < 3 ? '1px solid rgba(var(--th-primary-rgb), 0.2)' : '1px solid var(--th-border)' 
             }}>
             {p}
           </span>

@@ -251,16 +251,16 @@ function ContinueBuildingCard({ projects, stats }) {
             {d.stack.map(s => (
               <span
                 key={s}
-                className="text-[10px] px-2 py-0.5 rounded-md font-medium border border-transparent dark:border-white/5 bg-black/5 dark:bg-white/5"
-                style={{ color: 'var(--th-text-secondary)' }}
+                className="text-[10px] px-2 py-0.5 rounded-md font-medium border"
+                style={{ background: 'var(--th-bg-secondary)', borderColor: 'var(--th-border)', color: 'var(--th-text-secondary)' }}
               >
                 {s}
               </span>
             ))}
             {d.stackExtra > 0 && (
               <span
-                className="text-[10px] px-2 py-0.5 rounded-md font-medium border border-transparent dark:border-white/5 bg-black/5 dark:bg-white/5"
-                style={{ color: 'var(--th-text-dim)' }}
+                className="text-[10px] px-2 py-0.5 rounded-md font-medium border"
+                style={{ background: 'var(--th-bg-secondary)', borderColor: 'var(--th-border)', color: 'var(--th-text-dim)' }}
               >
                 +{d.stackExtra}
               </span>
@@ -280,7 +280,7 @@ function ContinueBuildingCard({ projects, stats }) {
               <p className="text-[10px] mb-1" style={{ color: 'var(--th-text-dim)' }}>Progress</p>
               <div className="flex items-center gap-2">
                 <span className="text-[12px] font-bold shrink-0" style={{ color: 'var(--th-text)' }}>{d.progress}%</span>
-                <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-black/10 dark:bg-white/10">
+                <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-bg-secondary)' }}>
                   <div className="h-full rounded-full transition-all" style={{ width: `${d.progress}%`, background: d.color }} />
                 </div>
               </div>
@@ -406,8 +406,8 @@ function GitHubActivityCard({ projects, githubRepos, stats }) {
           <button 
             onClick={() => syncMutation.mutate()}
             disabled={syncMutation.isPending}
-            className="text-[10px] font-medium px-2 py-0.5 rounded bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors disabled:opacity-50"
-            style={{ color: 'var(--th-text-dim)' }}
+            className="text-[10px] font-medium px-2 py-0.5 rounded transition-opacity hover:opacity-80 disabled:opacity-50"
+            style={{ background: 'var(--th-bg-secondary)', color: 'var(--th-text-dim)' }}
           >
             {syncMutation.isPending ? 'Syncing...' : 'Sync'}
           </button>
@@ -517,7 +517,7 @@ function AIBuildInsightsCard({ projects }) {
       <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: '1px solid var(--th-border)' }}>
         <span className="text-[10px] font-medium" style={{ color: 'var(--th-text-dim)' }}>AI Confidence</span>
         <div className="flex items-center gap-2">
-          <div className="w-[72px] h-1.5 rounded-full overflow-hidden bg-black/10 dark:bg-white/10">
+          <div className="w-[72px] h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-bg-secondary)' }}>
             <div className="h-full rounded-full transition-all" style={{ width: `${confidence}%`, background: 'var(--th-primary)' }} />
           </div>
           <span className="text-[11px] font-bold" style={{ color: 'var(--th-primary)' }}>{confidence}%</span>
@@ -540,22 +540,23 @@ function MyProjectsPreview({ projects }) {
         <div className="flex items-center gap-2">
           <button 
             onClick={() => setSearchParams({ tab: 'projects' }, { replace: true })}
-            className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition-colors bg-black/5 dark:bg-white/5 border-transparent dark:border-white/5"
+            className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition-opacity hover:opacity-80"
+            style={{ background: 'var(--th-bg-secondary)', borderColor: 'var(--th-border)' }}
           >
             All Projects <ChevronDown className="w-3 h-3" />
           </button>
           <div className="flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--th-border)' }}>
             <button
               onClick={() => setViewMode('grid')}
-              className={clsx('p-1.5 transition-colors', viewMode === 'grid' ? 'bg-black/5 dark:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/5')}
-              style={{ color: viewMode === 'grid' ? 'var(--th-text)' : 'var(--th-text-dim)' }}
+              className={clsx('p-1.5 transition-opacity', viewMode === 'grid' ? 'opacity-100' : 'opacity-50 hover:opacity-80')}
+              style={{ color: 'var(--th-text)' }}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={clsx('p-1.5 transition-colors', viewMode === 'list' ? 'bg-black/5 dark:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/5')}
-              style={{ color: viewMode === 'list' ? 'var(--th-text)' : 'var(--th-text-dim)' }}
+              className={clsx('p-1.5 transition-opacity', viewMode === 'list' ? 'opacity-100' : 'opacity-50 hover:opacity-80')}
+              style={{ color: 'var(--th-text)' }}
             >
               <List className="w-3.5 h-3.5" />
             </button>

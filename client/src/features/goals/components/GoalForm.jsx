@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Modal, Input, Button } from '@/design-system/components';
+import { Modal } from '@/design-system/components';
 import { Plus, X, Heart, Dumbbell, BookOpen, Briefcase, Star } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -60,7 +60,21 @@ export function GoalForm({ isOpen, onClose, onSubmit, goal }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={goal ? 'Edit Goal' : 'New Goal'} size="md">
       <div className="space-y-5">
-        <Input label="Goal Title" value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
+        <div>
+          <label className="text-xs font-medium mb-2 block" style={{ color: 'var(--th-text-muted)' }}>Goal Title</label>
+          <input
+            type="text"
+            placeholder="e.g., Save ₹5,000"
+            value={form.title}
+            onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+            className="w-full rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
+            style={{
+              background: 'var(--th-input)',
+              border: '1px solid var(--th-border)',
+              color: 'var(--th-text)',
+            }}
+          />
+        </div>
 
         <div>
           <label className="text-xs font-medium mb-2 block" style={{ color: 'var(--th-text-muted)' }}>Description (optional)</label>
@@ -161,9 +175,15 @@ export function GoalForm({ isOpen, onClose, onSubmit, goal }) {
           </button>
         </div>
 
-        <div className="flex gap-3 pt-2">
-          <Button variant="ghost" className="flex-1" onClick={onClose}>Cancel</Button>
-          <Button className="flex-1" onClick={handleSave}>{goal ? 'Save Changes' : 'Create Goal'}</Button>
+        <div className="flex gap-3 pt-4 mt-2" style={{ borderTop: '1px solid var(--th-border)' }}>
+          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+            style={{ background: 'var(--th-highlight)', color: 'var(--th-text-secondary)' }}>
+            Cancel
+          </button>
+          <button onClick={handleSave} className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90"
+            style={{ background: 'var(--th-primary)', color: '#08080d' }}>
+            {goal ? 'Save Changes' : 'Create Goal'}
+          </button>
         </div>
       </div>
     </Modal>

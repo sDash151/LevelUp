@@ -30,7 +30,7 @@ function CardShell({ title, subtitle, action, actionLabel, children, className =
 const REVIEW_COLORS = { needs: '#3B82F6', wants: '#F59E0B', savingsInvest: '#10B981', waste: '#EF4444' };
 const IMPACT_STYLES = { high: { bg: '#EF444420', color: '#EF4444' }, medium: { bg: '#F59E0B20', color: '#F59E0B' }, low: { bg: '#10B98120', color: '#10B981' } };
 
-export default function IntelligenceTab() {
+export default function IntelligenceTab({ onOpenChat }) {
   const { data, isLoading } = useIntelligenceData();
   const { data: cfoInsight, isLoading: cfoLoading } = useCFOInsight();
   const { data: weeklyChallenges, isLoading: challengesLoading } = useWeeklyChallenges();
@@ -292,7 +292,7 @@ export default function IntelligenceTab() {
                 <p className="text-xs leading-relaxed" style={{ color: 'var(--th-text-secondary)' }}>
                   {typeof cfoInsight === 'string' ? cfoInsight : cfoInsight?.summary || 'Focus on reducing expenses and increasing savings.'}
                 </p>
-                <button className="mt-3 text-xs font-medium flex items-center gap-1" style={{ color: 'var(--th-primary)' }}>
+                <button onClick={onOpenChat} className="mt-3 text-xs font-medium flex items-center gap-1 hover:underline" style={{ color: 'var(--th-primary)' }}>
                   Chat with AI CFO <ArrowRight className="w-3 h-3" />
                 </button>
               </div>

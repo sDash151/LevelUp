@@ -30,6 +30,7 @@ export const deleteBudget = (id) => api.delete(`/finance/budgets/${id}`).then(r 
 export const getGoals = () => api.get('/finance/goals').then(r => r.data);
 export const createGoal = (data) => api.post('/finance/goals', data).then(r => r.data);
 export const updateGoal = (id, data) => api.put(`/finance/goals/${id}`, data).then(r => r.data);
+export const deleteGoal = (id) => api.delete(`/finance/goals/${id}`).then(r => r.data);
 export const contributeToGoal = (id, amount) => api.post(`/finance/goals/${id}/contribute`, { amount }).then(r => r.data);
 
 // ═══ Subscriptions ═══

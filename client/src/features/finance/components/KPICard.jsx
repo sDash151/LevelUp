@@ -22,8 +22,8 @@ export default function KPICard({ icon, label, value, subtext, change, statusLab
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.3 }}
-      className="relative overflow-hidden rounded-[16px] p-6 pb-12 flex flex-col bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02)] min-h-[160px]"
-      style={{ border: '1px solid #F3F4F6' }}
+      className="relative overflow-hidden rounded-[16px] p-6 pb-12 flex flex-col shadow-sm min-h-[160px] transition-colors"
+      style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}
     >
       {/* Top row: icon + label */}
       <div className="flex items-center gap-2.5">
@@ -32,17 +32,17 @@ export default function KPICard({ icon, label, value, subtext, change, statusLab
             {icon}
           </span>
         )}
-        <span className="text-[11px] font-bold text-gray-700 leading-tight">{label}</span>
+        <span className="text-[11px] font-bold leading-tight" style={{ color: 'var(--th-text-secondary)' }}>{label}</span>
       </div>
 
       {/* Middle Content: Value + Change grouped together */}
       <div className="mt-5 relative z-10 flex-1 flex flex-col">
         <div>
-          <span className="text-[20px] font-bold tracking-tight text-gray-900 leading-none block whitespace-nowrap overflow-hidden text-ellipsis">
+          <span className="text-[20px] font-bold tracking-tight leading-none block whitespace-nowrap overflow-hidden text-ellipsis" style={{ color: 'var(--th-text)' }}>
             {typeof value === 'number' ? formatCurrency(value, currency, false) : value}
           </span>
           {subtext && (
-            <span className="text-[11px] font-medium text-gray-400 block mt-1">{subtext}</span>
+            <span className="text-[11px] font-medium block mt-1" style={{ color: 'var(--th-text-muted)' }}>{subtext}</span>
           )}
         </div>
 
@@ -53,7 +53,7 @@ export default function KPICard({ icon, label, value, subtext, change, statusLab
               <span className="text-[11px] font-bold" style={{ color: changeColor }}>
                 {change > 0 ? '↑' : change < 0 ? '↓' : ''} {formatPercent(Math.abs(change))}
               </span>
-              <span className="text-[10px] font-medium text-gray-400">vs last month</span>
+              <span className="text-[10px] font-medium" style={{ color: 'var(--th-text-muted)' }}>vs last month</span>
             </>
           ) : statusLabel ? (
             <>

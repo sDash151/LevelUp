@@ -19,7 +19,7 @@ export default function ScoreGauge({ score = 0, label, maxScore = 100, size = 80
         <svg width={size} height={size} className="transform -rotate-90">
           <circle
             cx={size / 2} cy={size / 2} r={radius}
-            fill="none" stroke="#F3F4F6" strokeWidth={strokeWidth}
+            fill="none" stroke="var(--th-border)" strokeWidth={strokeWidth}
           />
           {/* Progress ring */}
           <motion.circle
@@ -35,14 +35,15 @@ export default function ScoreGauge({ score = 0, label, maxScore = 100, size = 80
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <motion.span
-            className="text-[24px] font-bold text-gray-900 leading-none"
+            className="text-[24px] font-bold leading-none"
+            style={{ color: 'var(--th-text)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
             {score}
           </motion.span>
-          <span className="text-[10px] font-medium text-gray-400 leading-none mt-1">/{maxScore}</span>
+          <span className="text-[10px] font-medium leading-none mt-1" style={{ color: 'var(--th-text-muted)' }}>/{maxScore}</span>
         </div>
       </div>
       {label && (

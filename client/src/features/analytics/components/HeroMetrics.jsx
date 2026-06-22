@@ -87,32 +87,31 @@ export default function HeroMetrics({ data }) {
       {metrics.map((m) => {
         const Icon = m.icon;
         return (
-          <div key={m.id} className="bg-slate-900/40 backdrop-blur-md rounded-2xl p-5 border border-slate-700/50 flex flex-col relative overflow-hidden min-w-[200px] flex-1 hover:bg-slate-800/40 transition-colors">
-            {/* Top Border Accent */}
-            <div className={`absolute top-0 left-0 right-0 h-1 border-t ${m.border}`} />
-            
-            <div className="flex items-center gap-2 mb-3">
-              <Icon size={16} className={m.color} />
-              <span className="font-semibold text-slate-200 text-sm whitespace-nowrap">{m.title}</span>
+          <div key={m.id} className="shadow-sm p-4 flex flex-col justify-between rounded-2xl min-h-[140px] min-w-[180px] flex-1 hover:shadow-md transition-shadow" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+            <div>
+              <div className="flex items-center gap-1.5 mb-1.5 font-medium text-xs" style={{ color: 'var(--th-text-secondary)' }}>
+                <Icon size={14} style={{ color: m.color }} />
+                {m.title}
+              </div>
+
+              <div className="flex items-baseline gap-1 mb-1">
+                <span className="text-2xl font-extrabold" style={{ color: 'var(--th-text)' }}>{m.value}</span>
+                {m.suffix && <span className="text-sm font-medium opacity-50" style={{ color: 'var(--th-text)' }}>{m.suffix}</span>}
+              </div>
+
+              <div className="flex items-center gap-1.5 text-[11px] font-bold" style={{ color: m.color }}>
+                <div className={`w-1.5 h-1.5 rounded-full ${m.dot}`} />
+                {m.label}
+              </div>
             </div>
 
-            <div className="flex items-baseline gap-1 mb-1">
-              <span className="text-3xl font-bold text-white">{m.value}</span>
-              {m.suffix && <span className="text-sm font-medium text-slate-400">{m.suffix}</span>}
-            </div>
-
-            <div className="flex items-center gap-2 mb-4 text-xs font-medium text-slate-400">
-              <div className={`w-1.5 h-1.5 rounded-full ${m.dot}`} />
-              {m.label}
-            </div>
-
-            <div className="h-12 w-full mt-auto">
+            <div className="h-8 w-full mt-3">
               <ResponsiveContainer width="100%" height="100%">
                 {m.chartType === 'area' ? (
                   <AreaChart data={m.data}>
                     <defs>
                       <linearGradient id={`grad-${m.id}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={m.stroke} stopOpacity={0.3} />
+                        <stop offset="5%" stopColor={m.stroke} stopOpacity={0.2} />
                         <stop offset="95%" stopColor={m.stroke} stopOpacity={0} />
                       </linearGradient>
                     </defs>

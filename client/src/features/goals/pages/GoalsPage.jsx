@@ -330,7 +330,7 @@ function GoalTableRow({ goal, onToggle, onEdit, onDelete }) {
     <motion.tr initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
       className="group transition-colors" style={{ borderBottom: '1px solid var(--th-border)' }}>
       {/* Status dot + Category icon + Goal info */}
-      <td className="py-3.5 pr-4">
+      <td className="py-3.5 pl-5 pr-4">
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full shrink-0"
             style={{ background: status === 'completed' ? '#10b981' : status === 'on_track' ? '#E8B94A' : status === 'needs_attention' ? '#f97316' : 'var(--th-text-dim)' }} />
@@ -371,7 +371,7 @@ function GoalTableRow({ goal, onToggle, onEdit, onDelete }) {
         <StatusBadge status={status} />
       </td>
       {/* Actions */}
-      <td className="py-3.5">
+      <td className="py-3.5 pr-5">
         <div className="relative">
           <button onClick={() => setMenuOpen(!menuOpen)} className="p-1.5 rounded-lg transition-all hover:bg-[var(--th-highlight)]">
             <MoreVertical className="w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
@@ -762,16 +762,15 @@ export default function GoalsPage() {
           <CategoryFilters active={categoryFilter} onChange={setCategoryFilter} />
         </div>
 
-        {/* Main content: Table + Sidebar */}
-        <div className="flex gap-4">
-          {/* Goals Table */}
-          <div className="flex-1 min-w-0">
-            <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-              <table className="w-full">
+        {/* Main content: Goals Table */}
+        <div className="w-full mb-4">
+          <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[700px]">
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--th-border)' }}>
                     {['GOAL', 'PROGRESS', 'STREAK', 'DUE', 'STATUS', ''].map((col, i) => (
-                      <th key={col || i} className={clsx('text-left text-[11px] font-semibold uppercase px-4 py-3', i === 0 && 'pl-5')}
+                      <th key={col || i} className={clsx('text-left text-[11px] font-semibold uppercase px-4 py-3', i === 0 && 'pl-5', i === 5 && 'pr-5')}
                         style={{ color: 'var(--th-text-dim)' }}>{col}</th>
                     ))}
                   </tr>
@@ -797,22 +796,21 @@ export default function GoalsPage() {
                 </tbody>
               </table>
             </div>
-
-            {/* Add New Goal link */}
-            {filteredGoals.length > 0 && (
-              <button onClick={() => setShowForm(true)}
-                className="flex items-center gap-1.5 mt-4 text-[13px] font-semibold transition-colors hover:opacity-80"
-                style={{ color: 'var(--th-primary)' }}>
-                <Plus className="w-4 h-4" /> Add New Goal
-              </button>
-            )}
           </div>
 
-          {/* Right Sidebar */}
-          <div className="w-[240px] shrink-0 space-y-4">
-            <WeeklyOverview goals={goals} />
-            <MotivationBoost />
-          </div>
+          {filteredGoals.length > 0 && (
+            <button onClick={() => { setEditingGoal(null); setShowForm(true); }}
+              className="flex items-center gap-1.5 mt-4 text-[13px] font-semibold transition-colors"
+              style={{ color: 'var(--th-primary)' }}>
+              <Plus className="w-4 h-4" /> Add New Goal
+            </button>
+          )}
+        </div>
+        
+        {/* Weekly Overview & Motivation */}
+        <div className="grid grid-cols-2 gap-4">
+          <WeeklyOverview goals={goals} />
+          <MotivationBoost />
         </div>
         </>)}
       </div>

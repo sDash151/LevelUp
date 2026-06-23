@@ -10,9 +10,8 @@ import ProgressPhotosTimeline from './ProgressPhotosTimeline';
 import MilestonesCard from './MilestonesCard';
 import NextGoalCard from './NextGoalCard';
 import AIProgressInsight from './AIProgressInsight';
-import LogMetricForm from './LogMetricForm';
 
-export default function ProgressTab({ showMetricForm, setShowMetricForm }) {
+export default function ProgressTab() {
   const [range, setRange] = useState('3M');
   const { data, isLoading } = useProgress(range);
   const { data: aiData } = useAIProgressInsight();
@@ -59,8 +58,6 @@ export default function ProgressTab({ showMetricForm, setShowMetricForm }) {
           <NextGoalCard milestones={progress.milestones} />
         </div>
       </div>
-
-      {showMetricForm && <LogMetricForm onClose={() => setShowMetricForm(false)} />}
     </div>
   );
 }

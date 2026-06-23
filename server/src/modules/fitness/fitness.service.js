@@ -860,6 +860,14 @@ class FitnessService {
     return fitnessRepository.createMilestone(userId, data);
   }
 
+  async toggleMilestone(id, isAchieved) {
+    return fitnessRepository.updateMilestone(id, { isAchieved });
+  }
+
+  async deleteMilestone(id) {
+    return fitnessRepository.deleteMilestone(id);
+  }
+
   // ══════════════════════════════════════════════
   // PRIVATE HELPERS
   // ══════════════════════════════════════════════

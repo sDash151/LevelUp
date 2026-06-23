@@ -7,14 +7,15 @@ import WaterIntakeCard from './WaterIntakeCard';
 import NutritionScoreCard from './NutritionScoreCard';
 import TopFoodSources from './TopFoodSources';
 import RecentFoods from './RecentFoods';
-import FoodLogForm from './FoodLogForm';
 import AIFitnessInsight from './AIFitnessInsight';
 import { Calendar, ChevronDown } from 'lucide-react';
+import FoodLogForm from './FoodLogForm';
 
-export default function NutritionTab({ showFoodForm, setShowFoodForm }) {
+export default function NutritionTab() {
   const today = new Date().toISOString().split('T')[0];
   const [date, setDate] = useState(today);
   const [initialMealType, setInitialMealType] = useState('lunch');
+  const [showFoodForm, setShowFoodForm] = useState(false);
   const { data, isLoading } = useNutrition(date);
   const nutrition = data?.data || data || {};
   const aiInsightQuery = useAINutritionInsight(date);

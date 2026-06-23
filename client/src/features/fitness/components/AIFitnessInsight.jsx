@@ -82,8 +82,12 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl p-6 shadow-2xl" 
-              style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}
+              className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl p-6" 
+              style={{ 
+                background: 'var(--th-card-solid)', 
+                border: '1px solid var(--th-border-hover)',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--th-highlight) inset'
+              }}
             >
               <div className="flex items-start justify-between mb-5">
                 <div className="flex items-center gap-3">
@@ -100,23 +104,24 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
                 </button>
               </div>
 
-              <div className="space-y-5">
+              <div className="space-y-6 mt-6">
                 {d.summary && (
-                  <div className="p-4 rounded-xl bg-violet-500/10">
-                    <p className="text-sm font-medium text-[var(--th-text)] leading-relaxed">{d.summary}</p>
+                  <div className="relative p-5 rounded-2xl overflow-hidden border border-violet-500/30 shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                    <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10" />
+                    <p className="relative text-sm font-medium text-[var(--th-text)] leading-relaxed">{d.summary}</p>
                   </div>
                 )}
 
                 {d.observations?.length > 0 && (
                   <div>
-                    <h4 className="text-xs font-bold text-[var(--th-text)] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                      <Target className="w-4 h-4 text-violet-500" /> Key Observations
+                    <h4 className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      <Target className="w-4 h-4" /> Key Observations
                     </h4>
-                    <ul className="space-y-2">
+                    <ul className="space-y-2.5">
                       {d.observations.map((obs, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm font-medium text-[var(--th-text-secondary)] bg-[var(--th-card)]/50 p-2.5 rounded-lg border border-violet-100">
-                          <span className="w-1.5 h-1.5 rounded-full bg-violet-500 mt-1.5 flex-shrink-0" />
-                          <span>{obs}</span>
+                        <li key={i} className="flex items-start gap-3 text-sm font-medium text-[var(--th-text-secondary)] bg-[var(--th-card)]/40 p-3 rounded-xl border border-white/5 shadow-sm">
+                          <span className="w-1.5 h-1.5 rounded-full bg-violet-500 mt-2 flex-shrink-0 shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
+                          <span className="leading-relaxed">{obs}</span>
                         </li>
                       ))}
                     </ul>
@@ -125,14 +130,14 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
 
                 {d.weaknesses?.length > 0 && (
                   <div>
-                    <h4 className="text-xs font-bold text-[var(--th-text)] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                      <AlertTriangle className="w-4 h-4 text-violet-500" /> Areas to Improve
+                    <h4 className="text-xs font-bold text-rose-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4" /> Areas to Improve
                     </h4>
-                    <ul className="space-y-2">
+                    <ul className="space-y-2.5">
                       {d.weaknesses.map((weak, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm font-medium text-[var(--th-text-secondary)] bg-[var(--th-card)]/50 p-2.5 rounded-lg border border-violet-100">
-                          <span className="w-1.5 h-1.5 rounded-full bg-violet-500 mt-1.5 flex-shrink-0" />
-                          <span>{weak}</span>
+                        <li key={i} className="flex items-start gap-3 text-sm font-medium text-[var(--th-text-secondary)] bg-[var(--th-card)]/40 p-3 rounded-xl border border-white/5 shadow-sm">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-2 flex-shrink-0 shadow-[0_0_8px_rgba(244,63,94,0.8)]" />
+                          <span className="leading-relaxed">{weak}</span>
                         </li>
                       ))}
                     </ul>
@@ -141,14 +146,16 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
 
                 {d.recommendations?.length > 0 && (
                   <div>
-                    <h4 className="text-xs font-bold text-[var(--th-text)] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                      <Check className="w-4 h-4 text-violet-500" /> Actionable Recommendations
+                    <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      <Check className="w-4 h-4" /> Actionable Recommendations
                     </h4>
-                    <ul className="space-y-2">
+                    <ul className="space-y-2.5">
                       {d.recommendations.map((rec, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm font-medium text-[var(--th-text)] bg-emerald-500/10 p-3 rounded-xl border border-emerald-100">
-                          <Check className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
-                          <span>{rec}</span>
+                        <li key={i} className="flex items-start gap-3 text-sm font-medium text-[var(--th-text)] bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/30 shadow-[0_4px_12px_rgba(16,185,129,0.05)]">
+                          <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          </div>
+                          <span className="leading-relaxed">{rec}</span>
                         </li>
                       ))}
                     </ul>

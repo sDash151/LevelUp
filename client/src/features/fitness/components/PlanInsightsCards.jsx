@@ -9,11 +9,11 @@ export default function PlanInsightsCards({ insights = {} }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 gap-3 md:gap-4 h-full">
       {cards.map(card => {
         const Icon = card.icon;
         return (
-          <div key={card.key} className="rounded-2xl p-4" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+          <div key={card.key} className="rounded-2xl p-3 md:p-4 flex flex-col justify-center" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
             <div className="flex items-center gap-2 mb-2">
               <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${card.color}15` }}>
                 <Icon className="w-3.5 h-3.5" style={{ color: card.color }} />

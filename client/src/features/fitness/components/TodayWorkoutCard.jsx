@@ -32,7 +32,7 @@ export default function TodayWorkoutCard({ workout }) {
     <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
       {/* Header Section */}
       <div className="p-6 pb-5">
-        <div className="flex items-start justify-between mb-6">
+        <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 gap-4 md:gap-0">
           <div className="flex gap-4">
             <div className="w-14 h-14 rounded-2xl flex flex-shrink-0 items-center justify-center" style={{ background: style.bg }}>
               <Icon className="w-7 h-7" style={{ color: style.color }} />
@@ -42,15 +42,15 @@ export default function TodayWorkoutCard({ workout }) {
               <h2 className="text-xl font-bold" style={{ color: 'var(--th-text)' }}>{workout.name || workout.type}</h2>
             </div>
           </div>
-          <div className="px-3 py-1.5 rounded-md" style={{ background: 'rgba(139,92,246,0.1)' }}>
+          <div className="px-3 py-1.5 rounded-md self-start md:self-auto" style={{ background: 'rgba(139,92,246,0.1)' }}>
             <span className="text-[10px] font-bold" style={{ color: '#8B5CF6' }}>
               {workout.status === 'completed' ? 'Completed' : 'Scheduled for Tomorrow'}
             </span>
           </div>
         </div>
 
-        <div className="flex items-end justify-between">
-          <div className="flex gap-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-0">
+          <div className="flex flex-wrap md:flex-nowrap gap-6 md:gap-10">
             {workout.muscleGroups?.length > 0 && (
               <div>
                 <p className="text-[10px] font-medium mb-1.5" style={{ color: 'var(--th-text-secondary)' }}>Focus</p>
@@ -77,7 +77,7 @@ export default function TodayWorkoutCard({ workout }) {
               toast.dismiss();
               navigate('/fitness?tab=workouts');
             }}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90 cursor-pointer" 
+            className="w-full md:w-auto px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90 cursor-pointer text-center" 
             style={{ background: '#8B5CF6' }}>
             View Details
           </button>

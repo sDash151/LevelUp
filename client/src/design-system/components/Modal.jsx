@@ -47,10 +47,14 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }) {
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
             className={clsx(
-              'relative w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]',
+              'relative w-full rounded-2xl overflow-hidden flex flex-col max-h-[90vh]',
               sizeMap[size]
             )}
-            style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}
+            style={{ 
+              background: 'var(--th-card-solid)', 
+              border: '1px solid var(--th-border-hover)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--th-highlight) inset'
+            }}
           >
             {/* Header */}
             {title && (

@@ -1,5 +1,5 @@
-import { Trophy, Circle, CheckCircle2, Plus } from 'lucide-react';
-import { useCreateMilestone } from '../hooks/useFitness';
+import { Trophy, Circle, CheckCircle2, Plus, Trash2 } from 'lucide-react';
+import { useCreateMilestone, useToggleMilestone, useDeleteMilestone } from '../hooks/useFitness';
 import { useState } from 'react';
 
 export default function MilestonesCard({ milestones = [] }) {
@@ -7,7 +7,10 @@ export default function MilestonesCard({ milestones = [] }) {
   const [title, setTitle] = useState('');
   const [type, setType] = useState('weight');
   const [targetValue, setTargetValue] = useState('');
+  
   const createMut = useCreateMilestone();
+  const toggleMut = useToggleMilestone();
+  const deleteMut = useDeleteMilestone();
 
   const handleAdd = () => {
     if (!title) return;
@@ -47,13 +50,24 @@ export default function MilestonesCard({ milestones = [] }) {
       ) : (
         <div className="space-y-2.5">
           {milestones.slice(0, 5).map((m, i) => (
-            <div key={i} className="flex items-center gap-2">
-              {m.isAchieved ? <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" /> : <Circle className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--th-text-dim)' }} />}
-              <div className="flex-1 min-w-0">
+            <div key={i} className="flex items-center gap-2 group">
+              <button 
+                onClick={() => toggleMut.mutate({ id: m.id, isAchieved: !m.isAchieved })}
+                disabled={toggleMut.isPending}
+                className="hover:scale-110 transition-transform focus:outline-none"
+              >
+                {m.isAchieved ? <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" /> : <Circle className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--th-text-dim)' }} />}
+              </button>
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
                 <p className={`text-xs font-medium ${m.isAchieved ? 'line-through opacity-60' : ''}`} style={{ color: 'var(--th-text)' }}>{m.title}</p>
                 {m.targetValue && <p className="text-[9px]" style={{ color: 'var(--th-text-dim)' }}>Target: {m.targetValue}</p>}
               </div>
-              {m.isAchieved && <span className="text-[9px] text-emerald-500">Achieved!</span>}
+              <button 
+                onClick={() => deleteMut.mutate(m.id)}
+                className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-lg hover:bg-red-500/10 focus:outline-none"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-red-500" />
+              </button>
             </div>
           ))}
         </div>

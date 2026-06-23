@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import * as fitnessApi from '../api';
 
 // ═══ Overview ═══
@@ -141,6 +141,7 @@ export function useProgress(range) {
     queryKey: ['fitness', 'progress', range],
     queryFn: () => fitnessApi.getProgress(range),
     staleTime: 2 * 60 * 1000,
+    placeholderData: keepPreviousData,
   });
 }
 
@@ -194,6 +195,22 @@ export function useCreateMilestone() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: fitnessApi.createMilestone,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useToggleMilestone() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, isAchieved }) => fitnessApi.toggleMilestone(id, isAchieved),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useDeleteMilestone() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => fitnessApi.deleteMilestone(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
   });
 }

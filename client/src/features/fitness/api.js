@@ -40,3 +40,5 @@ export const getAIProgressInsight = () => api.get('/fitness/progress/ai-insight'
 // ── Milestones ──
 export const getMilestones = () => api.get('/fitness/milestones').then(r => r.data);
 export const createMilestone = (data) => api.post('/fitness/milestones', data).then(r => r.data);
+export const toggleMilestone = (id, isAchieved) => api.put(`/fitness/milestones/${id}/toggle`, { isAchieved }).then(r => r.data);
+export const deleteMilestone = (id) => api.delete(`/fitness/milestones/${id}`).then(r => r.data);

@@ -31,25 +31,25 @@ export default function MyPlanTab() {
   );
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 md:space-y-5">
       <PlanKpiCards plan={plan} />
 
       <WeekPlanCards weekPlan={plan.weekPlan} />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        <div className="lg:col-span-8 flex flex-col h-full space-y-5">
+        <div className="lg:col-span-8 flex flex-col h-full space-y-4 md:space-y-5">
           <TodayWorkoutCard workout={plan.todayWorkout} />
-          <div className="flex-1 min-h-[200px]">
-            <AIFitnessInsight insight={aiInsight} onGenerate={refetchAI} isGenerating={isFetchingAI} />
+          <div className="flex-1">
+            <PlanInsightsCards insights={insights} />
           </div>
         </div>
-        <div className="lg:col-span-4 space-y-5">
+        <div className="lg:col-span-4 space-y-4 md:space-y-5">
           <WorkoutMemoryCard memories={memories} lastSession={lastSession} />
           <TopLiftsProgress lifts={lifts} />
         </div>
       </div>
 
-      <PlanInsightsCards insights={insights} />
+      <AIFitnessInsight insight={aiInsight} onGenerate={refetchAI} isGenerating={isFetchingAI} />
     </div>
   );
 }

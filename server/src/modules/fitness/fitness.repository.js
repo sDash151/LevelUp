@@ -342,6 +342,10 @@ class FitnessRepository {
     return prisma.fitnessMilestone.update({ where: { id }, data });
   }
 
+  async deleteMilestone(id) {
+    return prisma.fitnessMilestone.delete({ where: { id } });
+  }
+
   // ══════════════════════════════════════════════
   // INSIGHT
   // ══════════════════════════════════════════════

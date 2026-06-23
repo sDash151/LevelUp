@@ -153,3 +153,13 @@ export const createMilestone = asyncHandler(async (req, res) => {
   const milestone = await fitnessService.createMilestone(req.user.id, req.body);
   created(res, { milestone }, 'Milestone created!');
 });
+
+export const toggleMilestone = asyncHandler(async (req, res) => {
+  const milestone = await fitnessService.toggleMilestone(req.params.id, req.body.isAchieved);
+  success(res, { milestone }, 'Milestone updated');
+});
+
+export const deleteMilestone = asyncHandler(async (req, res) => {
+  await fitnessService.deleteMilestone(req.params.id);
+  success(res, null, 'Milestone deleted');
+});

@@ -49,5 +49,7 @@ router.get('/progress/ai-insight', controller.getAIProgressInsight);
 // ── Milestones ──
 router.get('/milestones', controller.getMilestones);
 router.post('/milestones', validate(milestoneSchema), controller.createMilestone);
+router.put('/milestones/:id/toggle', controller.toggleMilestone);
+router.delete('/milestones/:id', controller.deleteMilestone);
 
 export default router;

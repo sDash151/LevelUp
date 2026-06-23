@@ -11,12 +11,12 @@ export default function PlanKpiCards({ plan }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory pb-2 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1 md:px-0">
       {cards.map((card, i) => {
         const Icon = card.icon;
         return (
           <motion.div key={card.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-            className="rounded-2xl p-4" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+            className="rounded-2xl p-4 flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-center" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-medium" style={{ color: 'var(--th-text-secondary)' }}>{card.label}</span>
               <Icon className="w-4 h-4" style={{ color: card.color }} />

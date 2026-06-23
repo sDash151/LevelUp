@@ -10,6 +10,11 @@ const MyPlanTab = lazy(() => import('../components/MyPlanTab'));
 const WorkoutsTab = lazy(() => import('../components/WorkoutsTab'));
 const NutritionTab = lazy(() => import('../components/NutritionTab'));
 const ProgressTab = lazy(() => import('../components/ProgressTab'));
+import ActionChoiceModal from '../components/ActionChoiceModal';
+
+import WorkoutForm from '../components/WorkoutForm';
+import FoodLogForm from '../components/FoodLogForm';
+import LogMetricForm from '../components/LogMetricForm';
 
 const TABS = [
   { key: 'overview', label: 'Overview', icon: Dumbbell },
@@ -28,8 +33,8 @@ const TAB_TITLES = {
 };
 
 const ACTION_BUTTONS = {
-  overview: { label: 'Log Workout', icon: Plus },
-  plan: { label: 'Log Workout', icon: Plus },
+  overview: { label: 'Quick Log', icon: Plus },
+  plan: { label: 'Quick Log', icon: Plus },
   workouts: { label: 'Log Workout', icon: Plus },
   nutrition: { label: 'Log Food', icon: Plus },
   progress: { label: 'Log Measurement', icon: Plus },
@@ -58,6 +63,7 @@ export default function FitnessPage() {
   const [showWorkoutForm, setShowWorkoutForm] = useState(false);
   const [showFoodForm, setShowFoodForm] = useState(false);
   const [showMetricForm, setShowMetricForm] = useState(false);
+  const [showChoiceModal, setShowChoiceModal] = useState(false);
 
   const tabInfo = TAB_TITLES[activeTab] || TAB_TITLES.overview;
   const actionBtn = ACTION_BUTTONS[activeTab] || ACTION_BUTTONS.overview;
@@ -65,30 +71,26 @@ export default function FitnessPage() {
   const handleAction = () => {
     if (activeTab === 'nutrition') setShowFoodForm(true);
     else if (activeTab === 'progress') setShowMetricForm(true);
-    else setShowWorkoutForm(true);
+    else if (activeTab === 'workouts') setShowWorkoutForm(true);
+    else setShowChoiceModal(true);
   };
 
   const renderTab = () => {
-    const formProps = {
-      showWorkoutForm, setShowWorkoutForm,
-      showFoodForm, setShowFoodForm,
-      showMetricForm, setShowMetricForm,
-    };
     switch (activeTab) {
-      case 'overview': return <OverviewTab {...formProps} />;
-      case 'plan': return <MyPlanTab {...formProps} />;
-      case 'workouts': return <WorkoutsTab {...formProps} />;
-      case 'nutrition': return <NutritionTab {...formProps} />;
-      case 'progress': return <ProgressTab {...formProps} />;
-      default: return <OverviewTab {...formProps} />;
+      case 'overview': return <OverviewTab />;
+      case 'plan': return <MyPlanTab />;
+      case 'workouts': return <WorkoutsTab />;
+      case 'nutrition': return <NutritionTab />;
+      case 'progress': return <ProgressTab />;
+      default: return <OverviewTab />;
     }
   };
 
   return (
     <AnimatedPage>
       <div className="space-y-5">
-        {/* ── Header ── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* ── Desktop Header (Hidden on Mobile) ── */}
+        <div className="hidden md:flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl lg:text-2xl font-bold" style={{ color: 'var(--th-text)' }}>{tabInfo.title}</h1>
             <p className="text-sm mt-0.5" style={{ color: 'var(--th-text-secondary)' }}>{tabInfo.subtitle}</p>
@@ -104,8 +106,14 @@ export default function FitnessPage() {
           </button>
         </div>
 
-        {/* ── Tab Bar ── */}
-        <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1">
+        {/* ── Mobile Header (Hidden on Desktop) ── */}
+        <div className="md:hidden flex flex-col gap-1 mb-2 pt-2">
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--th-text)' }}>{tabInfo.title}</h1>
+          <p className="text-xs" style={{ color: 'var(--th-text-secondary)' }}>{tabInfo.subtitle}</p>
+        </div>
+
+        {/* ── Desktop Tab Bar (Hidden on Mobile) ── */}
+        <div className="hidden md:flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1">
           {TABS.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.key;
@@ -129,6 +137,51 @@ export default function FitnessPage() {
           })}
         </div>
 
+        {/* ── Mobile Sticky Tab Bar (Hidden on Desktop) ── */}
+        <div 
+          className="md:hidden sticky z-40 -mx-4 px-4 py-3 backdrop-blur-xl border-b transition-all"
+          style={{ 
+            top: 'env(safe-area-inset-top)',
+            background: 'color-mix(in srgb, var(--th-bg) 85%, transparent)',
+            borderColor: 'var(--th-border)',
+            marginBottom: '1rem'
+          }}
+        >
+          <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar">
+            {TABS.map(tab => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => setTab(tab.key)}
+                  className={clsx(
+                    'flex items-center gap-2 px-4 py-2 text-sm whitespace-nowrap transition-all rounded-full',
+                    isActive ? 'font-semibold shadow-sm' : 'font-medium hover:bg-black/5 dark:hover:bg-white/5'
+                  )}
+                  style={{ 
+                    color: isActive ? '#fff' : 'var(--th-text-secondary)',
+                    background: isActive ? 'var(--th-primary)' : 'transparent',
+                    border: isActive ? 'none' : '1px solid var(--th-border)'
+                  }}
+                >
+                  <Icon className="w-4 h-4" />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── Mobile FAB (Floating Action Button) ── */}
+        <button
+          onClick={handleAction}
+          className="md:hidden fixed bottom-[5.5rem] right-4 z-50 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-2xl transition-transform active:scale-95"
+          style={{ background: 'linear-gradient(135deg, #E8A23A, #D4891A)' }}
+        >
+          <actionBtn.icon className="w-6 h-6" />
+        </button>
+
         {/* ── Tab Content ── */}
         <Suspense fallback={<TabSkeleton />}>
           <AnimatePresence mode="wait">
@@ -142,6 +195,31 @@ export default function FitnessPage() {
               {renderTab()}
             </motion.div>
           </AnimatePresence>
+        </Suspense>
+
+        <ActionChoiceModal 
+          isOpen={showChoiceModal} 
+          onClose={() => setShowChoiceModal(false)}
+          onSelect={(choiceId) => {
+            if (choiceId === 'workout') {
+              setTab('workouts');
+              setShowWorkoutForm(true);
+            }
+            else if (choiceId === 'food') {
+              setTab('nutrition');
+              setShowFoodForm(true);
+            }
+            else if (choiceId === 'metric') {
+              setTab('progress');
+              setShowMetricForm(true);
+            }
+          }}
+        />
+
+        <Suspense fallback={null}>
+          {showWorkoutForm && <WorkoutForm onClose={() => setShowWorkoutForm(false)} />}
+          {showFoodForm && <FoodLogForm onClose={() => setShowFoodForm(false)} />}
+          {showMetricForm && <LogMetricForm onClose={() => setShowMetricForm(false)} />}
         </Suspense>
       </div>
     </AnimatedPage>

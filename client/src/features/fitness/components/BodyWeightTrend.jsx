@@ -62,12 +62,14 @@ export default function BodyWeightTrend({ data = [], range = '3M' }) {
     }
   }
 
-  // If there's STILL only 1 point, pad it backwards to the start of the range to guarantee a line
-  if (chartData.length === 1 && range !== 'ALL') {
-    chartData.unshift({
-      timestamp: startDate.getTime(),
-      Weight: chartData[0].Weight
-    });
+  // Pad backwards to the exact start of the range to ensure full X-axis span
+  if (chartData.length > 0 && range !== 'ALL') {
+    if (chartData[0].timestamp > startDate.getTime()) {
+      chartData.unshift({
+        timestamp: startDate.getTime(),
+        Weight: chartData[0].Weight
+      });
+    }
   }
 
   return (

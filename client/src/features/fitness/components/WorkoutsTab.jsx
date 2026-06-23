@@ -6,10 +6,9 @@ import WorkoutHistoryList from './WorkoutHistoryList';
 import WorkoutCalendar from './WorkoutCalendar';
 import MuscleGroupFocus from './MuscleGroupFocus';
 import ThisWeekSummary from './ThisWeekSummary';
-import WorkoutForm from './WorkoutForm';
 import { Select } from '../../../design-system/components/Select';
 
-export default function WorkoutsTab({ showWorkoutForm, setShowWorkoutForm }) {
+export default function WorkoutsTab() {
   const [filters, setFilters] = useState({ page: 1, type: '', search: '', limit: 10, muscleGroup: '', timeframe: '' });
   const { data: statsData, isLoading: statsLoading } = useWorkoutStats();
   const { data: historyData, isLoading: histLoading } = useWorkoutHistory(filters);
@@ -103,9 +102,8 @@ export default function WorkoutsTab({ showWorkoutForm, setShowWorkoutForm }) {
           <ThisWeekSummary weekStats={stats.thisWeek} targetWorkouts={targetWorkouts} />
           <MuscleGroupFocus sessions={sessions} />
         </div>
+        <div className="md:hidden h-24" />
       </div>
-
-      {showWorkoutForm && <WorkoutForm onClose={() => setShowWorkoutForm(false)} />}
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default function WeekPlanCards({ weekPlan = [] }) {
   const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
-    <div className="rounded-2xl p-5" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+    <div className="rounded-2xl p-4 md:p-5" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold" style={{ color: 'var(--th-text)' }}>This Week's Plan</h3>
         <div className="flex gap-2">
@@ -32,7 +32,7 @@ export default function WeekPlanCards({ weekPlan = [] }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-3">
+      <div className="flex md:grid md:grid-cols-7 gap-3 overflow-x-auto snap-x snap-mandatory pb-2 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1 md:px-0">
         {weekPlan.map((day, i) => {
           const statusStyle = STATUS_STYLES[day.status] || STATUS_STYLES.upcoming;
           const workoutStyle = getWorkoutStyle(day.name, day.isRest);
@@ -44,7 +44,7 @@ export default function WeekPlanCards({ weekPlan = [] }) {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.04 }}
-              className="rounded-xl p-3 flex flex-col items-center border"
+              className="rounded-xl p-3 flex flex-col items-center border flex-shrink-0 w-[95px] sm:w-[110px] md:w-auto snap-center"
               style={{ background: 'var(--th-bg)', borderColor: 'var(--th-border)' }}
             >
               <p className="text-[10px] font-medium mb-1.5" style={{ color: 'var(--th-text-secondary)' }}>{dayLabels[i]}</p>

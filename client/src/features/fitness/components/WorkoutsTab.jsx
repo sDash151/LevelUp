@@ -1,18 +1,21 @@
 import { useState } from 'react';
-import { Search, Filter, ChevronDown } from 'lucide-react';
-import { useWorkoutStats, useWorkoutHistory, useFitnessPlan } from '../hooks/useFitness';
+import { Search, Filter, ChevronDown, Dumbbell } from 'lucide-react';
+import { useWorkoutStats, useWorkoutHistory, useFitnessPlan, useWorkoutMemory } from '../hooks/useFitness';
+import WorkoutMemoryCard from './WorkoutMemoryCard';
 import WorkoutKpiCards from './WorkoutKpiCards';
 import WorkoutHistoryList from './WorkoutHistoryList';
 import WorkoutCalendar from './WorkoutCalendar';
 import MuscleGroupFocus from './MuscleGroupFocus';
 import ThisWeekSummary from './ThisWeekSummary';
+import TodayWorkoutCard from './TodayWorkoutCard';
 import { Select } from '../../../design-system/components/Select';
 
-export default function WorkoutsTab() {
+export default function WorkoutsTab({ onEditWorkout }) {
   const [filters, setFilters] = useState({ page: 1, type: '', search: '', limit: 10, muscleGroup: '', timeframe: '' });
   const { data: statsData, isLoading: statsLoading } = useWorkoutStats();
   const { data: historyData, isLoading: histLoading } = useWorkoutHistory(filters);
   const { data: planData } = useFitnessPlan();
+  const { data: memoryData } = useWorkoutMemory();
 
   const stats = statsData?.data?.stats || statsData?.stats || {};
   const sessions = historyData?.data?.sessions || historyData?.sessions || [];
@@ -21,10 +24,17 @@ export default function WorkoutsTab() {
   // The API returns weekPlan at the root of the data object
   const plan = planData?.data || planData || {};
   const targetWorkouts = plan.sessionsThisWeek?.target || null;
+  const memories = memoryData?.data?.memories || memoryData?.memories || [];
+  const lastSession = memoryData?.data?.lastSession || memoryData?.lastSession || null;
 
   return (
     <div className="space-y-6">
       <WorkoutKpiCards stats={stats} loading={statsLoading} />
+
+      {/* Today's Workout Card */}
+      {plan.todayWorkout && (
+        <TodayWorkoutCard workout={plan.todayWorkout} />
+      )}
 
       {/* Search / Filter */}
       <div className="flex flex-wrap items-center gap-4 mt-8 mb-6">
@@ -95,9 +105,10 @@ export default function WorkoutsTab() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-8">
-          <WorkoutHistoryList sessions={sessions} total={total} loading={histLoading} page={filters.page} onPageChange={p => setFilters(f => ({ ...f, page: p }))} />
+          <WorkoutHistoryList sessions={sessions} total={total} loading={histLoading} page={filters.page} onPageChange={p => setFilters(f => ({ ...f, page: p }))} onEditWorkout={onEditWorkout} />
         </div>
         <div className="lg:col-span-4 flex flex-col gap-5">
+          <WorkoutMemoryCard memories={memories} lastSession={lastSession} />
           <WorkoutCalendar sessions={sessions} plan={plan} />
           <ThisWeekSummary weekStats={stats.thisWeek} targetWorkouts={targetWorkouts} />
           <MuscleGroupFocus sessions={sessions} />

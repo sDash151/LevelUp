@@ -30,11 +30,10 @@ const CHOICES = [
   {
     id: 'plan',
     title: 'Make a Plan',
-    description: 'AI powered custom routines',
+    description: 'AI powered workout, diet & recovery',
     icon: Sparkles,
     gradient: 'from-blue-500/10 to-cyan-500/10',
     iconColor: '#3b82f6',
-    isUpcoming: true,
   },
 ];
 

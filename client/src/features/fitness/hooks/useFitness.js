@@ -7,7 +7,7 @@ export function useFitnessOverview() {
 }
 
 export function useAIOverviewInsight() {
-  return useQuery({ queryKey: ['fitness', 'overview', 'ai-insight'], queryFn: fitnessApi.getAIOverviewInsight, staleTime: 60 * 60 * 1000 });
+  return useQuery({ queryKey: ['ai-insight', 'overview'], queryFn: fitnessApi.getAIOverviewInsight, staleTime: 24 * 60 * 60 * 1000 });
 }
 
 // ═══ Plan ═══
@@ -17,6 +17,10 @@ export function useFitnessPlan() {
 
 export function useWorkoutMemory() {
   return useQuery({ queryKey: ['fitness', 'plan', 'memory'], queryFn: fitnessApi.getWorkoutMemory, staleTime: 5 * 60 * 1000 });
+}
+
+export function useExerciseCatalog() {
+  return useQuery({ queryKey: ['fitness', 'catalog', 'exercises'], queryFn: () => fitnessApi.getExerciseCatalog(), staleTime: 60 * 60 * 1000 });
 }
 
 export function useTopLifts() {
@@ -74,6 +78,22 @@ export function useLogWorkout() {
   });
 }
 
+export function useUpdateWorkout() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.updateWorkout,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useDeleteWorkout() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.deleteWorkout,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
 export function useSmartParseWorkout() {
   return useMutation({ mutationFn: fitnessApi.smartParseWorkout });
 }
@@ -97,9 +117,9 @@ export function useNutrition(date) {
 
 export function useAINutritionInsight(date) {
   return useQuery({
-    queryKey: ['fitness', 'nutrition', 'ai-insight', date],
+    queryKey: ['ai-insight', 'nutrition', date],
     queryFn: () => fitnessApi.getAINutritionInsight(date),
-    staleTime: 60 * 60 * 1000, // 1 hour cache
+    staleTime: 24 * 60 * 60 * 1000, // 24 hour cache
     enabled: false, // Only fetch when manually triggered
   });
 }
@@ -108,6 +128,14 @@ export function useLogFood() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: fitnessApi.logFood,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useUpdateFood() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.updateMealLog,
     onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
   });
 }
@@ -170,7 +198,7 @@ export function useUploadPhoto() {
 }
 
 export function useAIProgressInsight() {
-  return useQuery({ queryKey: ['fitness', 'progress', 'ai-insight'], queryFn: fitnessApi.getAIProgressInsight, staleTime: 60 * 60 * 1000 });
+  return useQuery({ queryKey: ['ai-insight', 'progress'], queryFn: fitnessApi.getAIProgressInsight, staleTime: 24 * 60 * 60 * 1000 });
 }
 
 // ═══ Profile ═══
@@ -212,5 +240,97 @@ export function useDeleteMilestone() {
   return useMutation({
     mutationFn: (id) => fitnessApi.deleteMilestone(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+// ═══ AI Master Planner ═══
+export function useActivePlans() {
+  return useQuery({ queryKey: ['fitness', 'planner', 'active'], queryFn: fitnessApi.getActivePlans, staleTime: 5 * 60 * 1000 });
+}
+
+export function usePlanHistory() {
+  return useQuery({
+    queryKey: ['fitness', 'planner', 'history'],
+    queryFn: () => api.get('/fitness/planner/history').then(res => res.data.data),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+
+
+
+export function useExerciseSwaps(params) {
+  return useQuery({ queryKey: ['fitness', 'swaps', params], queryFn: () => fitnessApi.getExerciseSwaps(params), staleTime: 5 * 60 * 1000 });
+}
+
+export function useNutritionDashboard() {
+  return useQuery({ queryKey: ['fitness', 'nutrition', 'dashboard'], queryFn: fitnessApi.getNutritionDashboard, staleTime: 5 * 60 * 1000 });
+}
+
+export function useAdherenceScore() {
+  return useQuery({ queryKey: ['fitness', 'planner', 'adherence'], queryFn: fitnessApi.getAdherenceScore, staleTime: 10 * 60 * 1000 });
+}
+
+export function useAdaptiveReview() {
+  return useQuery({ queryKey: ['fitness', 'planner', 'review'], queryFn: fitnessApi.getAdaptiveReview, staleTime: 15 * 60 * 1000 });
+}
+
+export function useGenerateWorkoutPlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.generateWorkoutPlan,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useGenerateDietPlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.generateDietPlan,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useGenerateRecoveryPlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.generateRecoveryPlan,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useGenerateTransformationPlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.generateTransformationPlan,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useParseCoachMessage() {
+  return useMutation({ mutationFn: fitnessApi.parseCoachMessage });
+}
+
+export function useGenerateFromChat() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.generateFromChat,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
+  });
+}
+
+export function useSwapMeal() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.swapMeal,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness', 'planner'] }),
+  });
+}
+
+export function useSwapExercise() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fitnessApi.swapExercise,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness', 'planner'] }),
   });
 }

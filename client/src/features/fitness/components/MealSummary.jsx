@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Coffee, Sun, Dumbbell as PreWorkout, Moon, Apple, Info, ChevronRight, Trash2, Plus } from 'lucide-react';
+import { Coffee, Sun, Dumbbell as PreWorkout, Moon, Apple, Info, ChevronRight, Trash2, Plus, Edit2 } from 'lucide-react';
 import clsx from 'clsx';
 import { useToast, Modal } from '@/design-system/components';
 import { useDeleteFood } from '../hooks/useFitness';
@@ -7,7 +7,7 @@ import { useDeleteFood } from '../hooks/useFitness';
 const MEAL_ICONS = { breakfast: Coffee, lunch: Sun, pre_workout: PreWorkout, dinner: Moon, snacks: Apple };
 const MEAL_COLORS = { breakfast: '#F59E0B', lunch: '#10B981', pre_workout: '#3B82F6', dinner: '#8B5CF6', snacks: '#EF4444' };
 
-export default function MealSummary({ meals = [], onAddMeal }) {
+export default function MealSummary({ meals = [], onAddMeal, onEditMeal }) {
   const toast = useToast();
   const delMut = useDeleteFood();
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -100,14 +100,27 @@ export default function MealSummary({ meals = [], onAddMeal }) {
                       <span>F: {item.fats || 0}g</span>
                     </div>
                   </div>
-                  <button 
-                    onClick={() => handleDelete(item.logId)}
-                    disabled={delMut.isPending}
-                    className="p-2 rounded-lg transition-colors hover:bg-red-500/10 text-red-500 shrink-0"
-                    title="Delete Entry"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button 
+                      onClick={() => {
+                        const itemsForLog = selectedMeal.items.filter(i => i.logId === item.logId);
+                        setSelectedMeal(null);
+                        onEditMeal && onEditMeal({ id: item.logId, mealType: selectedMeal.type, foodItems: itemsForLog });
+                      }}
+                      className="p-2 rounded-lg transition-colors hover:bg-[var(--th-primary)]/10 text-[var(--th-primary)]"
+                      title="Edit Entry"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(item.logId)}
+                      disabled={delMut.isPending}
+                      className="p-2 rounded-lg transition-colors hover:bg-red-500/10 text-red-500"
+                      title="Delete Entry"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

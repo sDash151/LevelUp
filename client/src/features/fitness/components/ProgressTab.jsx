@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useProgress, useAIProgressInsight } from '../hooks/useFitness';
+import { useProgress, useAIProgressInsight, useTopLifts } from '../hooks/useFitness';
+import TopLiftsProgress from './TopLiftsProgress';
 import ProgressKpiCards from './ProgressKpiCards';
 import TimeRangeFilter from './TimeRangeFilter';
 import BodyWeightTrend from './BodyWeightTrend';
@@ -14,10 +15,12 @@ import AIProgressInsight from './AIProgressInsight';
 export default function ProgressTab() {
   const [range, setRange] = useState('3M');
   const { data, isLoading } = useProgress(range);
-  const { data: aiData } = useAIProgressInsight();
+  const { data: aiData, refetch: refetchAI, isFetching: isFetchingAI } = useAIProgressInsight();
+  const { data: liftsData } = useTopLifts();
 
   const progress = data?.data || data || {};
   const aiInsight = aiData?.data?.insight || aiData?.insight || null;
+  const lifts = liftsData?.data?.lifts || liftsData?.lifts || [];
 
   if (isLoading) return (
     <div className="space-y-4 animate-pulse">
@@ -44,14 +47,15 @@ export default function ProgressTab() {
         <div className="lg:col-span-7 flex flex-col">
           <StrengthProgressTable data={progress.strengthProgress} />
         </div>
-        <div className="lg:col-span-5 flex flex-col">
+        <div className="lg:col-span-5 flex flex-col gap-6">
+          <TopLiftsProgress lifts={lifts} />
           <VolumeProgressChart data={progress.volumeProgress} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         <div className="lg:col-span-8 flex flex-col">
-          <AIProgressInsight insight={aiInsight} />
+          <AIProgressInsight insight={aiInsight} onGenerate={refetchAI} isGenerating={isFetchingAI} />
         </div>
         <div className="lg:col-span-4 flex flex-col gap-6">
           <MilestonesCard milestones={progress.milestones} />

@@ -19,6 +19,8 @@ export const optimizePlan = () => api.post('/fitness/plan/optimize').then(r => r
 export const getWorkoutStats = () => api.get('/fitness/workouts/stats').then(r => r.data);
 export const getWorkoutHistory = (params) => api.get('/fitness/workouts', { params }).then(r => r.data);
 export const logWorkout = (data) => api.post('/fitness/workouts', data).then(r => r.data);
+export const updateWorkout = ({ id, ...data }) => api.put(`/fitness/workouts/${id}`, data).then(r => r.data);
+export const deleteWorkout = (id) => api.delete(`/fitness/workouts/${id}`).then(r => r.data);
 export const smartParseWorkout = (text) => api.post('/fitness/workouts/smart-parse', { text }).then(r => r.data);
 export const confirmSmartLog = (data) => api.post('/fitness/workouts/smart-confirm', data).then(r => r.data);
 
@@ -26,6 +28,7 @@ export const confirmSmartLog = (data) => api.post('/fitness/workouts/smart-confi
 export const getNutrition = (date) => api.get('/fitness/nutrition', { params: { date } }).then(r => r.data);
 export const getAINutritionInsight = (date) => api.get('/fitness/nutrition/ai-insight', { params: { date } }).then(r => r.data);
 export const logFood = (data) => api.post('/fitness/nutrition/meals', data).then(r => r.data);
+export const updateMealLog = ({ id, ...data }) => api.put(`/fitness/nutrition/meals/${id}`, data).then(r => r.data);
 export const deleteMealLog = (id) => api.delete(`/fitness/nutrition/meals/${id}`).then(r => r.data);
 export const smartParseFood = (text) => api.post('/fitness/nutrition/meals/smart-parse', { text }).then(r => r.data);
 export const logWater = (amount) => api.post('/fitness/nutrition/water', { amount }).then(r => r.data);
@@ -42,3 +45,20 @@ export const getMilestones = () => api.get('/fitness/milestones').then(r => r.da
 export const createMilestone = (data) => api.post('/fitness/milestones', data).then(r => r.data);
 export const toggleMilestone = (id, isAchieved) => api.put(`/fitness/milestones/${id}/toggle`, { isAchieved }).then(r => r.data);
 export const deleteMilestone = (id) => api.delete(`/fitness/milestones/${id}`).then(r => r.data);
+
+// ── AI Master Planner ──
+export const generateWorkoutPlan = (data) => api.post('/fitness/planner/workout', data).then(r => r.data);
+export const generateDietPlan = (data) => api.post('/fitness/planner/diet', data).then(r => r.data);
+export const generateRecoveryPlan = (data) => api.post('/fitness/planner/recovery', data).then(r => r.data);
+export const generateTransformationPlan = (data) => api.post('/fitness/planner/transformation', data).then(r => r.data);
+export const parseCoachMessage = (data) => api.post('/fitness/planner/coach/parse', data).then(r => r.data);
+export const generateFromChat = (data) => api.post('/fitness/planner/coach/generate', data).then(r => r.data);
+export const swapMeal = (data) => api.post('/fitness/planner/swap/meal', data).then(r => r.data);
+export const swapExercise = (data) => api.post('/fitness/planner/swap/exercise', data).then(r => r.data);
+export const getAdherenceScore = () => api.get('/fitness/planner/adherence').then(r => r.data);
+export const getAdaptiveReview = () => api.get('/fitness/planner/review').then(r => r.data);
+export const getActivePlans = () => api.get('/fitness/planner/active').then(r => r.data);
+
+// ── Catalog ──
+export const getExerciseCatalog = () => api.get('/fitness/catalog/exercises').then(r => r.data);
+export const getExerciseSwaps = (params) => api.get('/fitness/catalog/swaps', { params }).then(r => r.data);

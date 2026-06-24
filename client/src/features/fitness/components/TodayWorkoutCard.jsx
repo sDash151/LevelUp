@@ -75,11 +75,11 @@ export default function TodayWorkoutCard({ workout }) {
           <button 
             onClick={() => {
               toast.dismiss();
-              navigate('/fitness?tab=workouts');
+              navigate('/fitness?tab=plan');
             }}
-            className="w-full md:w-auto px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90 cursor-pointer text-center" 
+            className="w-full md:w-auto px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90 cursor-pointer text-center shadow-md active:scale-95" 
             style={{ background: '#8B5CF6' }}>
-            View Details
+            Log from Plan
           </button>
         </div>
       </div>

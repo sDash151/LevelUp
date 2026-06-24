@@ -8,6 +8,18 @@ class FitnessRepository {
     return prisma.exerciseCatalog.findMany({ orderBy: { name: 'asc' } });
   }
 
+  async getExerciseSwaps({ muscles, equipment, exclude }) {
+    const muscleArray = Array.isArray(muscles) ? muscles : (muscles ? muscles.split(',') : []);
+    const where = { name: { not: exclude } };
+    if (muscleArray.length > 0) {
+      where.OR = [
+        { primaryMuscles: { hasSome: muscleArray } }
+      ];
+    }
+    if (equipment) where.equipmentType = equipment;
+    return prisma.exerciseCatalog.findMany({ where, take: 5, orderBy: { difficulty: 'asc' } });
+  }
+
   async findExerciseBySlug(slug) {
     return prisma.exerciseCatalog.findUnique({ where: { slug } });
   }
@@ -138,6 +150,24 @@ class FitnessRepository {
     return prisma.workoutSession.delete({ where: { id } });
   }
 
+  async updateSession(id, data) {
+    const { exercises, ...sessionData } = data;
+    return prisma.$transaction(async (tx) => {
+      // Delete old exercise logs and replace with new ones
+      if (exercises) {
+        await tx.exerciseLog.deleteMany({ where: { sessionId: id } });
+        await tx.exerciseLog.createMany({
+          data: exercises.map((e, i) => ({ sessionId: id, ...e, orderIndex: i })),
+        });
+      }
+      return tx.workoutSession.update({
+        where: { id },
+        data: sessionData,
+        include: { exercises: { orderBy: { orderIndex: 'asc' } } },
+      });
+    });
+  }
+
   // ══════════════════════════════════════════════
   // EXERCISE LOG
   // ══════════════════════════════════════════════
@@ -153,6 +183,16 @@ class FitnessRepository {
       include: { session: { select: { date: true } } },
       orderBy: { createdAt: 'desc' },
       take: limit,
+    });
+  }
+
+  async getRecentExerciseHistory(userId, weeks = 4) {
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - (weeks * 7));
+    return prisma.exerciseLog.findMany({
+      where: { session: { userId, date: { gte: cutoffDate } } },
+      include: { session: { select: { date: true } } },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -230,6 +270,14 @@ class FitnessRepository {
 
   async deleteMeal(id) {
     return prisma.mealLog.delete({ where: { id } });
+  }
+
+  async getMealById(id) {
+    return prisma.mealLog.findUnique({ where: { id } });
+  }
+
+  async updateMeal(id, data) {
+    return prisma.mealLog.update({ where: { id }, data });
   }
 
   // ══════════════════════════════════════════════

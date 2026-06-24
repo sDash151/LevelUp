@@ -1,23 +1,44 @@
 import { useState } from 'react';
 import { X, Plus, Trash2, Sparkles, Loader2, Apple } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useLogFood, useSmartParseFood } from '../hooks/useFitness';
+import { useLogFood, useUpdateFood, useSmartParseFood } from '../hooks/useFitness';
 
 const MEAL_TYPES = ['breakfast', 'lunch', 'pre_workout', 'dinner', 'snacks'];
 
-export default function FoodLogForm({ onClose, initialMealType = 'lunch', selectedDate = new Date().toISOString().split('T')[0] }) {
+export default function FoodLogForm({ onClose, initialMealType = 'lunch', selectedDate = new Date().toISOString().split('T')[0], initialData = null, editingMealId = null }) {
   const [mode, setMode] = useState('quick');
   const [smartText, setSmartText] = useState('');
   const [preview, setPreview] = useState(null);
-  const [form, setForm] = useState({
-    mealType: initialMealType,
-    date: selectedDate,
-    foodItems: [{ name: '', calories: 0, protein: 0, carbs: 0, fats: 0, quantity: '1 serving' }],
-    time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
-  });
+  
+  const getInitialForm = () => {
+    if (!initialData) return {
+      mealType: initialMealType,
+      date: selectedDate,
+      foodItems: [{ name: '', calories: 0, protein: 0, carbs: 0, fats: 0, quantity: '1 serving' }],
+      time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+    };
+    return {
+      mealType: initialData.mealType || initialMealType,
+      date: initialData.date ? new Date(initialData.date).toISOString().split('T')[0] : selectedDate,
+      foodItems: initialData.foodItems?.length > 0 ? initialData.foodItems.map(item => ({
+        name: item.name || '',
+        calories: item.calories || 0,
+        protein: item.protein || 0,
+        carbs: item.carbs || 0,
+        fats: item.fats || 0,
+        quantity: item.quantity || '1 serving',
+      })) : [{ name: '', calories: 0, protein: 0, carbs: 0, fats: 0, quantity: '1 serving' }],
+      time: initialData.time || new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+    };
+  };
+
+  const [form, setForm] = useState(getInitialForm());
 
   const logMut = useLogFood();
+  const updateMut = useUpdateFood();
   const parseMut = useSmartParseFood();
+  
+  const isPending = logMut.isPending || updateMut.isPending;
 
   const addItem = () => setForm(f => ({ ...f, foodItems: [...f.foodItems, { name: '', calories: 0, protein: 0, carbs: 0, fats: 0, quantity: '1 serving' }] }));
   const removeItem = (i) => setForm(f => ({ ...f, foodItems: f.foodItems.filter((_, j) => j !== i) }));
@@ -25,7 +46,11 @@ export default function FoodLogForm({ onClose, initialMealType = 'lunch', select
 
   const handleQuickSubmit = () => {
     if (form.foodItems.some(i => !i.name)) return;
-    logMut.mutate(form, { onSuccess: () => onClose() });
+    if (editingMealId) {
+      updateMut.mutate({ id: editingMealId, ...form }, { onSuccess: () => onClose() });
+    } else {
+      logMut.mutate(form, { onSuccess: () => onClose() });
+    }
   };
 
   const handleSmartParse = () => {
@@ -45,7 +70,7 @@ export default function FoodLogForm({ onClose, initialMealType = 'lunch', select
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(16,185,129,0.1)' }}><Apple className="w-5 h-5 text-emerald-500" /></div>
-            <h2 className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>Log Food</h2>
+            <h2 className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>{editingMealId ? 'Edit Food Log' : 'Log Food'}</h2>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg hover:opacity-80 transition"><X className="w-5 h-5" style={{ color: 'var(--th-text-secondary)' }} /></button>
         </div>
@@ -140,10 +165,10 @@ export default function FoodLogForm({ onClose, initialMealType = 'lunch', select
               </div>
             ))}
             <button onClick={addItem} className="flex items-center gap-1 text-[11px] font-medium" style={{ color: 'var(--th-primary)' }}><Plus className="w-3 h-3" /> Add Item</button>
-            <button onClick={handleQuickSubmit} disabled={logMut.isPending}
+            <button onClick={handleQuickSubmit} disabled={isPending}
               className="w-full py-2.5 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2 disabled:opacity-50"
               style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}>
-              {logMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Apple className="w-4 h-4" />} Log Food
+              {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Apple className="w-4 h-4" />} {editingMealId ? 'Update Food' : 'Log Food'}
             </button>
           </div>
         )}

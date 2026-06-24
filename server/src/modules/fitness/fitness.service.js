@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { fitnessRepository } from './fitness.repository.js';
 import { fitnessAI } from './fitness.ai.js';
 import { awardXp } from '../../shared/utils/xp.js';
@@ -54,14 +55,89 @@ class FitnessService {
     return Math.round(caloriesPerMinute * durationMins);
   }
 
-  calculateSuggestedProgression(exercise, memory) {
+  calculateSuggestedProgression(exercise, memory, recentLogs = []) {
     if (!memory) return null;
-    const isCompound = ['bench press', 'squat', 'deadlift', 'overhead press', 'barbell row', 'pull ups']
-      .some(c => exercise.toLowerCase().includes(c));
-    const increment = isCompound ? 2.5 : 1.25;
+    
+    const exName = exercise.toLowerCase();
+    const isBarbellLower = ['squat', 'deadlift', 'leg press'].some(c => exName.includes(c)) && !exName.includes('dumbbell');
+    const isBarbellUpper = ['bench press', 'overhead press', 'barbell row'].some(c => exName.includes(c)) && !exName.includes('dumbbell');
+    const isDumbbell = exName.includes('dumbbell');
+    const isBodyweight = ['pull up', 'pull-up', 'push up', 'dip', 'crunch', 'sit up', 'plank'].some(c => exName.includes(c));
+
+    let suggestedWeight = memory.lastWeight;
+    let suggestedReps = memory.lastReps;
+
+    if (memory.lastWeight === 0 && isBodyweight) {
+      suggestedReps = memory.lastReps + 1;
+      return { suggestedWeight, suggestedReps };
+    }
+
+    const maxRepThreshold = (isBarbellLower || isBarbellUpper) ? 8 : 10;
+    
+    // Group logs by calendar date to avoid multiple same-day logs counting as a streak
+    const bestSetsByDate = [];
+    for (const log of recentLogs) {
+      // Fallback to createdAt if session date is missing
+      const logDate = log.session?.date || log.createdAt || log.date;
+      if (!logDate) continue;
+      
+      const dateStr = new Date(logDate).toISOString().split('T')[0];
+      const sets = typeof log.sets === 'string' ? JSON.parse(log.sets) : log.sets;
+      const bestSet = this.getBestSet(sets) || log.bestSet;
+      if (!bestSet) continue;
+      
+      const existing = bestSetsByDate.find(x => x.date === dateStr);
+      if (existing) {
+        if ((bestSet.weight * bestSet.reps) > (existing.bestSet.weight * existing.bestSet.reps)) {
+          existing.bestSet = bestSet;
+        }
+      } else {
+        bestSetsByDate.push({ date: dateStr, bestSet });
+      }
+    }
+
+    let consecutiveSessionsHit = 0;
+    for (const { bestSet } of bestSetsByDate) {
+      if (bestSet.weight >= memory.lastWeight && bestSet.reps >= maxRepThreshold) {
+        consecutiveSessionsHit++;
+      } else {
+        break;
+      }
+    }
+
+    // Default to 1 if no history but last memory hits it
+    if (consecutiveSessionsHit === 0 && memory.lastReps >= maxRepThreshold) {
+        consecutiveSessionsHit = 1;
+    }
+
+    let shouldIncreaseWeight = false;
+    let weightIncrement = 0;
+
+    if (isBarbellLower) {
+      weightIncrement = 5;
+      shouldIncreaseWeight = memory.lastWeight < 80 ? (consecutiveSessionsHit >= 1) : (consecutiveSessionsHit >= 2);
+    } else if (isBarbellUpper) {
+      weightIncrement = 2.5;
+      shouldIncreaseWeight = memory.lastWeight < 50 ? (consecutiveSessionsHit >= 1) : (consecutiveSessionsHit >= 2);
+    } else if (isDumbbell) {
+      weightIncrement = 2.5; 
+      shouldIncreaseWeight = memory.lastWeight < 25 ? (consecutiveSessionsHit >= 1) : (consecutiveSessionsHit >= 2);
+    } else {
+      // Isolation / Machines / Cables
+      weightIncrement = 2.5;
+      shouldIncreaseWeight = memory.lastWeight < 15 ? (consecutiveSessionsHit >= 1) : (consecutiveSessionsHit >= 2);
+    }
+
+    if (shouldIncreaseWeight) {
+      suggestedWeight = Math.round((memory.lastWeight + weightIncrement) * 100) / 100;
+      suggestedReps = isBarbellLower || isBarbellUpper ? 5 : 8; // Reset reps slightly when jumping weight
+    } else {
+      suggestedReps = memory.lastReps + 1; // Double progression: just push reps
+    }
+
     return {
-      suggestedWeight: Math.round((memory.lastWeight + increment) * 100) / 100,
-      suggestedReps: memory.lastReps,
+      suggestedWeight,
+      suggestedReps,
     };
   }
 
@@ -265,6 +341,14 @@ class FitnessService {
     const recentSessions = await fitnessRepository.getRecentSessions(userId, 1);
     const lastSession = recentSessions.length > 0 ? recentSessions[0] : null;
 
+    const recentLogs = await fitnessRepository.getRecentExerciseHistory(userId, 4);
+    const historyByExercise = {};
+    for (const log of recentLogs) {
+       const name = log.name.toLowerCase();
+       if (!historyByExercise[name]) historyByExercise[name] = [];
+       historyByExercise[name].push(log);
+    }
+
     return {
       lastSession: lastSession ? {
         name: lastSession.name,
@@ -273,12 +357,23 @@ class FitnessService {
         volume: lastSession.totalVolume,
         calories: lastSession.caloriesBurned,
       } : null,
-      memories: memories.map(m => ({
-        exerciseName: m.exerciseName,
-        lastPerformance: { weight: m.lastWeight, reps: m.lastReps, date: m.lastDate },
-        bestPerformance: { weight: m.bestWeight, reps: m.bestReps, date: m.bestDate },
-        suggested: m.suggestedWeight ? { weight: m.suggestedWeight, reps: m.suggestedReps } : null,
-      }))
+      memories: memories.map(m => {
+        let suggested = null;
+        if (m.lastWeight !== null && m.lastWeight !== undefined) {
+          const exHistory = historyByExercise[m.exerciseName.toLowerCase()] || [];
+          const progression = this.calculateSuggestedProgression(m.exerciseName, { lastWeight: m.lastWeight, lastReps: m.lastReps }, exHistory);
+          if (progression) {
+            suggested = { weight: progression.suggestedWeight, reps: progression.suggestedReps };
+          }
+        }
+
+        return {
+          exerciseName: m.exerciseName,
+          lastPerformance: { weight: m.lastWeight, reps: m.lastReps, date: m.lastDate },
+          bestPerformance: { weight: m.bestWeight, reps: m.bestReps, date: m.bestDate },
+          suggested,
+        };
+      })
     };
   }
 
@@ -375,7 +470,19 @@ class FitnessService {
   }
 
   // ══════════════════════════════════════════════
-  // WORKOUTS
+  // CATALOG & SWAPS
+  // ══════════════════════════════════════════════
+  
+  async getExerciseCatalog() {
+    return fitnessRepository.getAllExercises();
+  }
+
+  async getExerciseSwaps({ muscles, equipment, exclude }) {
+    return fitnessRepository.getExerciseSwaps({ muscles, equipment, exclude });
+  }
+
+  // ══════════════════════════════════════════════
+  // PLAN & WORKOUT MEMORYS
   // ══════════════════════════════════════════════
   async getWorkoutStats(userId) {
     const [stats, prs] = await Promise.all([
@@ -515,9 +622,30 @@ class FitnessService {
     const profile = await this.getProfile(userId);
     const userWeight = profile.weight || 70;
     const exercises = (parsed.exercises || []).map(ex => {
-      const catalogEntry = catalog.find(c => c.name.toLowerCase() === ex.name?.toLowerCase());
+      let catalogEntry = catalog.find(c => c.name.toLowerCase() === ex.name?.toLowerCase());
+      
+      // Fallback: Fuzzy matching if AI generated a non-standard name
+      if (!catalogEntry && ex.name) {
+        const searchWords = ex.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 2);
+        let maxScore = 0;
+        let bestMatch = null;
+        for (const catEx of catalog) {
+          const catWords = catEx.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 2);
+          const score = searchWords.filter(w => catWords.includes(w)).length;
+          if (score > maxScore) {
+            maxScore = score;
+            bestMatch = catEx;
+          }
+        }
+        if (maxScore >= 1) { // Accept single strong word matches for parser (e.g. "bench" -> "Bench Press")
+           catalogEntry = bestMatch;
+        }
+      }
+
       return {
         ...ex,
+        name: catalogEntry?.name || ex.name, // Force standardized catalog name
+
         muscleGroup: catalogEntry?.muscleGroup || ex.muscleGroup || 'other',
         catalogMatch: catalogEntry?.name || null,
       };
@@ -655,6 +783,90 @@ class FitnessService {
     return fitnessRepository.prisma.mealLog.delete({ where: { id: logId } });
   }
 
+  async updateWorkout(userId, sessionId, data) {
+    // Verify ownership
+    const existing = await fitnessRepository.getSessionById(sessionId);
+    if (!existing || existing.userId !== userId) throw new Error('Workout not found or unauthorized');
+
+    const profile = await this.getProfile(userId);
+    const catalog = await fitnessRepository.getAllExercises();
+    const userWeight = profile.weight || 70;
+
+    // Calculate volume for each exercise
+    const exercises = (data.exercises || []).map((ex, i) => {
+      const sets = ex.sets || [];
+      const totalVolume = sets.reduce((s, set) => s + (set.isWarmup ? 0 : (set.reps || 0) * (set.weight || 0)), 0);
+      const bestSet = this.getBestSet(sets.filter(s => !s.isWarmup));
+      return { name: ex.name, muscleGroup: ex.muscleGroup || 'other', sets, totalVolume, bestSet, notes: ex.notes, orderIndex: i };
+    });
+
+    const totalVolume = exercises.reduce((s, e) => s + e.totalVolume, 0);
+    const caloriesBurned = this.calculateCalories(data.type, data.duration, userWeight, exercises, catalog);
+
+    const session = await fitnessRepository.updateSession(sessionId, {
+      name: data.name,
+      type: data.type || existing.type,
+      muscleGroups: data.muscleGroups || [...new Set(exercises.map(e => e.muscleGroup))],
+      duration: data.duration,
+      caloriesBurned,
+      totalVolume,
+      notes: data.notes,
+      date: new Date(data.date || existing.date),
+      planDayId: data.planDayId || existing.planDayId,
+      exercises,
+    });
+
+    // Update workout memories for the new exercises
+    for (const ex of exercises) {
+      if (!ex.name || ex.totalVolume === 0) continue;
+      const bestSet = ex.bestSet || {};
+      const memory = await fitnessRepository.getMemory(userId, ex.name);
+      const progression = this.calculateSuggestedProgression(ex.name, memory || { lastWeight: bestSet.weight || 0, lastReps: bestSet.reps || 0 });
+
+      await fitnessRepository.upsertMemory(userId, ex.name, {
+        lastWeight: bestSet.weight || 0,
+        lastReps: bestSet.reps || 0,
+        lastDate: new Date(),
+        bestWeight: memory ? Math.max(memory.bestWeight, bestSet.weight || 0) : (bestSet.weight || 0),
+        bestReps: memory && memory.bestWeight === (bestSet.weight || 0) ? Math.max(memory.bestReps, bestSet.reps || 0) : (bestSet.reps || 0),
+        bestDate: !memory || (bestSet.weight || 0) >= (memory.bestWeight || 0) ? new Date() : memory.bestDate,
+        suggestedWeight: progression?.suggestedWeight,
+        suggestedReps: progression?.suggestedReps,
+      });
+    }
+
+    return session;
+  }
+
+  async deleteWorkout(userId, sessionId) {
+    const existing = await fitnessRepository.getSessionById(sessionId);
+    if (!existing || existing.userId !== userId) throw new Error('Workout not found or unauthorized');
+    return fitnessRepository.deleteSession(sessionId);
+  }
+
+  async updateMealLog(userId, mealId, data) {
+    const existing = await fitnessRepository.getMealById(mealId);
+    if (!existing || existing.userId !== userId) throw new Error('Meal log not found or unauthorized');
+
+    const items = data.foodItems || existing.foodItems || [];
+    const totalCalories = items.reduce((s, i) => s + (i.calories || 0), 0);
+    const totalProtein = items.reduce((s, i) => s + (i.protein || 0), 0);
+    const totalCarbs = items.reduce((s, i) => s + (i.carbs || 0), 0);
+    const totalFats = items.reduce((s, i) => s + (i.fats || 0), 0);
+    const totalFiber = items.reduce((s, i) => s + (i.fiber || 0), 0);
+    const totalSugar = items.reduce((s, i) => s + (i.sugar || 0), 0);
+    const totalSodium = items.reduce((s, i) => s + (i.sodium || 0), 0);
+
+    return fitnessRepository.updateMeal(mealId, {
+      mealType: data.mealType || existing.mealType,
+      foodItems: items,
+      totalCalories, totalProtein, totalCarbs, totalFats, totalFiber, totalSugar, totalSodium,
+      date: new Date(data.date || existing.date),
+      time: data.time || existing.time,
+      notes: data.notes !== undefined ? data.notes : existing.notes,
+    });
+  }
+
   async smartLogFood(userId, text) {
     const parsed = await fitnessAI.parseFood(text);
     if (!parsed) return null;
@@ -774,14 +986,10 @@ class FitnessService {
   // AI INSIGHTS
   // ══════════════════════════════════════════════
   async getAIOverviewInsight(userId) {
-    // Check cache (1 hour)
-    const cached = await fitnessRepository.getLatestInsight(userId, 'overview');
-    if (cached && (new Date() - new Date(cached.generatedAt)) < 3600000) return cached.content;
-
     const overview = await this.getOverview(userId);
     const profile = await this.getProfile(userId);
 
-    const insight = await fitnessAI.generateOverviewInsight({
+    const inputPayload = {
       streak: overview.streak.current,
       sessionsThisWeek: overview.thisWeek.completed,
       targetSessions: overview.thisWeek.target,
@@ -795,19 +1003,26 @@ class FitnessService {
       proteinGoal: overview.nutritionSummary.protein.goal,
       currentWeight: overview.bodyProgress.weight.current,
       bodyFat: overview.bodyProgress.bodyFat.current,
-    });
+    };
 
-    if (insight) await fitnessRepository.createInsight(userId, 'overview', insight);
+    const inputHash = crypto.createHash('md5').update(JSON.stringify(inputPayload)).digest('hex');
+    const cached = await fitnessRepository.getLatestInsight(userId, 'overview');
+    if (cached && cached.content?.inputHash === inputHash) {
+      return { ...cached.content, isUnchanged: true };
+    }
+
+    const insight = await fitnessAI.generateOverviewInsight(inputPayload);
+    if (insight) {
+      insight.inputHash = inputHash;
+      await fitnessRepository.createInsight(userId, 'overview', insight);
+    }
     return insight;
   }
 
   async getAINutritionInsight(userId, date) {
-    const cached = await fitnessRepository.getLatestInsight(userId, 'nutrition');
-    if (cached && (new Date() - new Date(cached.generatedAt)) < 3600000) return cached.content;
-
     const dashboard = await this.getNutritionDashboard(userId, date);
 
-    const insight = await fitnessAI.generateNutritionInsight({
+    const inputPayload = {
       calories: dashboard.macros.calories,
       protein: dashboard.macros.protein,
       carbs: dashboard.macros.carbs,
@@ -815,23 +1030,30 @@ class FitnessService {
       water: dashboard.water,
       score: dashboard.nutritionScore.score,
       recentFoods: dashboard.recentFoods.map(f => f.name).slice(0, 5),
-    });
+    };
 
-    if (insight) await fitnessRepository.createInsight(userId, 'nutrition', insight);
+    const inputHash = crypto.createHash('md5').update(JSON.stringify(inputPayload)).digest('hex');
+    const cached = await fitnessRepository.getLatestInsight(userId, 'nutrition');
+    if (cached && cached.content?.inputHash === inputHash) {
+      return { ...cached.content, isUnchanged: true };
+    }
+
+    const insight = await fitnessAI.generateNutritionInsight(inputPayload);
+    if (insight) {
+      insight.inputHash = inputHash;
+      await fitnessRepository.createInsight(userId, 'nutrition', insight);
+    }
     return insight;
   }
 
   async getAIProgressInsight(userId) {
-    const cached = await fitnessRepository.getLatestInsight(userId, 'progress');
-    if (cached && (new Date() - new Date(cached.generatedAt)) < 3600000) return cached.content;
-
     const progress = await this.getProgress(userId, '3M');
     const profile = await this.getProfile(userId);
     const latestMetric = progress.kpis;
     const oldestMetric = progress.bodyWeightTrend[0];
     const latestMeas = progress.bodyMeasurements.current;
 
-    const insight = await fitnessAI.generateProgressInsight({
+    const inputPayload = {
       currentWeight: latestMetric.weight.current,
       previousWeight: oldestMetric?.weight,
       weightChange: latestMetric.weight.change,
@@ -843,9 +1065,19 @@ class FitnessService {
       chest: latestMeas?.chest, waist: latestMeas?.waist, arms: latestMeas?.arms, thighs: latestMeas?.thighs,
       strengthProgress: progress.strengthProgress.slice(0, 5),
       goals: progress.milestones.filter(m => !m.isAchieved).map(m => m.title),
-    });
+    };
 
-    if (insight) await fitnessRepository.createInsight(userId, 'progress', insight);
+    const inputHash = crypto.createHash('md5').update(JSON.stringify(inputPayload)).digest('hex');
+    const cached = await fitnessRepository.getLatestInsight(userId, 'progress');
+    if (cached && cached.content?.inputHash === inputHash) {
+      return { ...cached.content, isUnchanged: true };
+    }
+
+    const insight = await fitnessAI.generateProgressInsight(inputPayload);
+    if (insight) {
+      insight.inputHash = inputHash;
+      await fitnessRepository.createInsight(userId, 'progress', insight);
+    }
     return insight;
   }
 

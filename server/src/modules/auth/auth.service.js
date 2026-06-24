@@ -76,8 +76,8 @@ class AuthService {
 
     const stored = await authRepository.findRefreshToken(refreshToken);
     if (!stored || stored.isRevoked) {
-      // Possible token reuse attack — revoke all tokens for this user
-      if (decoded.id) await authRepository.revokeAllUserTokens(decoded.id);
+      // If a revoked token is used, just deny the refresh.
+      // We don't aggressively revoke all tokens because React StrictMode or concurrent requests often trigger false positives.
       throw new UnauthorizedError('Refresh token has been revoked');
     }
 

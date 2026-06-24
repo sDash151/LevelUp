@@ -1,9 +1,31 @@
 import { useState } from 'react';
-import { Sparkles, Check, ChevronRight, X } from 'lucide-react';
+import { Sparkles, Check, ChevronRight, X, Loader2, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function AIProgressInsight({ insight }) {
+import { useToast } from '@/design-system/components';
+
+export default function AIProgressInsight({ insight, onGenerate, isGenerating }) {
   const [showModal, setShowModal] = useState(false);
+  const toast = useToast();
+
+  const handleGenerate = async () => {
+    if (!onGenerate) return;
+    const previousSummary = insight?.summary;
+    const result = await onGenerate();
+    
+    if (result.isError || result.error) {
+      toast.error('AI Generation failed. The API rate limit may be exceeded. Please wait a minute and try again.', { icon: '⚠️', duration: 5000 });
+    } else {
+      const newSummary = result.data?.data?.insight?.summary || result.data?.summary || result.data?.data?.summary || result.data?.insight?.summary;
+      const isUnchanged = result.data?.isUnchanged || result.data?.data?.insight?.isUnchanged || result.data?.insight?.isUnchanged;
+      
+      if (isUnchanged || (previousSummary && previousSummary === newSummary)) {
+        toast.info('Insights are up to date! No new data logged since last analysis.', { icon: '✅' });
+      } else {
+        toast.success('AI Insights successfully generated!', { icon: '✨' });
+      }
+    }
+  };
 
   if (!insight) return (
     <div className="rounded-2xl p-5 h-full flex flex-col" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)', boxShadow: 'var(--th-shadow)' }}>
@@ -14,6 +36,15 @@ export default function AIProgressInsight({ insight }) {
         <h3 className="text-sm font-bold text-[var(--th-text)]">AI Progress Insight</h3>
       </div>
       <p className="text-xs text-[var(--th-text-secondary)] mb-4 font-medium leading-relaxed">Log body metrics and workouts to get AI-powered progress analysis.</p>
+      
+      <button 
+        onClick={handleGenerate}
+        disabled={isGenerating}
+        className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-white bg-violet-600 px-3 py-2.5 rounded-xl hover:bg-violet-700 transition-all w-full mt-auto shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+      >
+        {isGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+        {isGenerating ? 'Analyzing Data...' : 'Analyze My Progress'}
+      </button>
     </div>
   );
 
@@ -22,11 +53,21 @@ export default function AIProgressInsight({ insight }) {
   return (
     <>
       <div className="rounded-2xl p-5 h-full flex flex-col" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-6 h-6 rounded flex items-center justify-center bg-violet-500/10">
-            <Sparkles className="w-3.5 h-3.5 text-violet-500" />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded flex items-center justify-center bg-violet-500/10">
+              <Sparkles className="w-3.5 h-3.5 text-violet-500" />
+            </div>
+            <h3 className="text-sm font-bold text-[var(--th-text)]">AI Progress Insight</h3>
           </div>
-          <h3 className="text-sm font-bold text-[var(--th-text)]">AI Progress Insight</h3>
+          <button 
+            onClick={handleGenerate}
+            disabled={isGenerating}
+            className="p-1.5 rounded-lg hover:bg-[var(--th-border)] transition text-[var(--th-text-secondary)] disabled:opacity-50"
+            title="Refresh AI Insights"
+          >
+            <RefreshCw className={`w-4 h-4 ${isGenerating ? 'animate-spin' : ''}`} />
+          </button>
         </div>
 
         {d.summary && <p className="text-xs text-[var(--th-text-secondary)] mb-4 font-medium leading-relaxed line-clamp-3">{d.summary}</p>}

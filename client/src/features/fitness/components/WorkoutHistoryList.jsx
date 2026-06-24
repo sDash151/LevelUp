@@ -1,6 +1,7 @@
-import { Dumbbell, Activity, HeartPulse, Sparkles, Move, Trophy, ChevronRight, Clock, Flame } from 'lucide-react';
+import { Dumbbell, Activity, HeartPulse, Sparkles, Move, Trophy, ChevronRight, Clock, Flame, Edit2, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState } from 'react';
+import { useDeleteWorkout } from '../hooks/useFitness';
 
 const TYPE_CONFIG = {
   push: { color: '#ef4444', icon: Dumbbell, bg: 'var(--th-bg-secondary)' }, // Red
@@ -16,9 +17,10 @@ const TYPE_CONFIG = {
   sports: { color: '#06B6D4', icon: Trophy, bg: 'var(--th-bg-secondary)' },
 };
 
-export default function WorkoutHistoryList({ sessions = [], total = 0, loading, page = 1, onPageChange }) {
+export default function WorkoutHistoryList({ sessions = [], total = 0, loading, page = 1, onPageChange, onEditWorkout }) {
   const [expanded, setExpanded] = useState(null);
   const [expandedEx, setExpandedEx] = useState(null);
+  const delMut = useDeleteWorkout();
   const LIMIT = 10;
   const totalPages = Math.ceil(total / LIMIT);
 
@@ -157,6 +159,22 @@ export default function WorkoutHistoryList({ sessions = [], total = 0, loading, 
                       );
                     })}
                     {s.notes && <p className="text-[11px] italic mt-3 text-[var(--th-text-secondary)] bg-[var(--th-bg-secondary)] p-3 rounded-xl">📝 {s.notes}</p>}
+                    
+                    <div className="flex justify-end gap-2 mt-4 pt-4 border-t border-[var(--th-border)]">
+                      <button
+                        onClick={() => onEditWorkout && onEditWorkout(s)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors hover:bg-[var(--th-primary)]/10 text-[var(--th-primary)]"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" /> Edit
+                      </button>
+                      <button
+                        onClick={() => delMut.mutate(s.id)}
+                        disabled={delMut.isPending}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors hover:bg-red-500/10 text-red-500 disabled:opacity-50"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" /> Delete
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               )}

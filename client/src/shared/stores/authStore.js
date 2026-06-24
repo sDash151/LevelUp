@@ -22,7 +22,7 @@ export const useAuthStore = create(
     }),
     {
       name: 'levelup-auth',
-      partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated }),
+      partialize: (state) => ({ user: state.user, accessToken: state.accessToken, isAuthenticated: state.isAuthenticated }),
     }
   )
 );

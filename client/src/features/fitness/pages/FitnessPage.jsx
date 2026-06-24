@@ -15,6 +15,7 @@ import ActionChoiceModal from '../components/ActionChoiceModal';
 import WorkoutForm from '../components/WorkoutForm';
 import FoodLogForm from '../components/FoodLogForm';
 import LogMetricForm from '../components/LogMetricForm';
+const PlanWizard = lazy(() => import('../components/PlanWizard'));
 
 const TABS = [
   { key: 'overview', label: 'Overview', icon: Dumbbell },
@@ -60,27 +61,31 @@ export default function FitnessPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
   const setTab = (key) => setSearchParams({ tab: key }, { replace: true });
-  const [showWorkoutForm, setShowWorkoutForm] = useState(false);
-  const [showFoodForm, setShowFoodForm] = useState(false);
+  const [workoutFormState, setWorkoutFormState] = useState({ isOpen: false, initialData: null, editingSessionId: null });
+  const [foodFormState, setFoodFormState] = useState({ isOpen: false, initialData: null, editingMealId: null });
   const [showMetricForm, setShowMetricForm] = useState(false);
+  const [showPlanWizard, setShowPlanWizard] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
 
   const tabInfo = TAB_TITLES[activeTab] || TAB_TITLES.overview;
   const actionBtn = ACTION_BUTTONS[activeTab] || ACTION_BUTTONS.overview;
 
   const handleAction = () => {
-    if (activeTab === 'nutrition') setShowFoodForm(true);
+    if (activeTab === 'nutrition') setFoodFormState({ isOpen: true, initialData: null, editingMealId: null });
     else if (activeTab === 'progress') setShowMetricForm(true);
-    else if (activeTab === 'workouts') setShowWorkoutForm(true);
+    else if (activeTab === 'workouts') setWorkoutFormState({ isOpen: true, initialData: null, editingSessionId: null });
     else setShowChoiceModal(true);
   };
 
   const renderTab = () => {
     switch (activeTab) {
       case 'overview': return <OverviewTab />;
-      case 'plan': return <MyPlanTab />;
-      case 'workouts': return <WorkoutsTab />;
-      case 'nutrition': return <NutritionTab />;
+      case 'plan': return <MyPlanTab 
+        onLogWorkout={(data, existingSessionId) => setWorkoutFormState({ isOpen: true, initialData: data, editingSessionId: existingSessionId || null })}
+        onLogMeal={(data, existingMealId) => setFoodFormState({ isOpen: true, initialData: data, editingMealId: existingMealId || null })}
+      />;
+      case 'workouts': return <WorkoutsTab onEditWorkout={(workout) => setWorkoutFormState({ isOpen: true, initialData: workout, editingSessionId: workout.id })} />;
+      case 'nutrition': return <NutritionTab onEditMeal={(meal) => setFoodFormState({ isOpen: true, initialData: meal, editingMealId: meal.id })} />;
       case 'progress': return <ProgressTab />;
       default: return <OverviewTab />;
     }
@@ -203,23 +208,28 @@ export default function FitnessPage() {
           onSelect={(choiceId) => {
             if (choiceId === 'workout') {
               setTab('workouts');
-              setShowWorkoutForm(true);
+              setWorkoutFormState({ isOpen: true, initialData: null, editingSessionId: null });
             }
             else if (choiceId === 'food') {
               setTab('nutrition');
-              setShowFoodForm(true);
+              setFoodFormState({ isOpen: true, initialData: null, editingMealId: null });
             }
             else if (choiceId === 'metric') {
               setTab('progress');
               setShowMetricForm(true);
             }
+            else if (choiceId === 'plan') {
+              setTab('plan');
+              setShowPlanWizard(true);
+            }
           }}
         />
 
         <Suspense fallback={null}>
-          {showWorkoutForm && <WorkoutForm onClose={() => setShowWorkoutForm(false)} />}
-          {showFoodForm && <FoodLogForm onClose={() => setShowFoodForm(false)} />}
+          {workoutFormState.isOpen && <WorkoutForm onClose={() => setWorkoutFormState({ isOpen: false, initialData: null, editingSessionId: null })} initialData={workoutFormState.initialData} editingSessionId={workoutFormState.editingSessionId} />}
+          {foodFormState.isOpen && <FoodLogForm onClose={() => setFoodFormState({ isOpen: false, initialData: null, editingMealId: null })} initialData={foodFormState.initialData} editingMealId={foodFormState.editingMealId} />}
           {showMetricForm && <LogMetricForm onClose={() => setShowMetricForm(false)} />}
+          {showPlanWizard && <PlanWizard onClose={() => setShowPlanWizard(false)} onSuccess={() => setShowPlanWizard(false)} />}
         </Suspense>
       </div>
     </AnimatedPage>

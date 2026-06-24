@@ -24,7 +24,19 @@ export const getAIOverviewInsight = asyncHandler(async (req, res) => {
   success(res, { insight });
 });
 
-// ── Plan ──
+// ── Plan & Catalog ──
+
+export const getExerciseCatalog = asyncHandler(async (req, res) => {
+  const catalog = await fitnessService.getExerciseCatalog();
+  success(res, catalog);
+});
+
+export const getExerciseSwaps = asyncHandler(async (req, res) => {
+  const { muscles, equipment, exclude } = req.query;
+  const swaps = await fitnessService.getExerciseSwaps({ muscles, equipment, exclude });
+  success(res, swaps);
+});
+
 export const getPlan = asyncHandler(async (req, res) => {
   const plan = await fitnessService.getPlan(req.user.id);
   success(res, plan);
@@ -105,6 +117,21 @@ export const deleteMealLog = asyncHandler(async (req, res) => {
   success(res, null, 'Meal deleted successfully');
 });
 
+export const updateWorkout = asyncHandler(async (req, res) => {
+  const session = await fitnessService.updateWorkout(req.user.id, req.params.id, req.body);
+  success(res, { session }, 'Workout updated!');
+});
+
+export const deleteWorkout = asyncHandler(async (req, res) => {
+  await fitnessService.deleteWorkout(req.user.id, req.params.id);
+  success(res, null, 'Workout deleted successfully');
+});
+
+export const updateMealLog = asyncHandler(async (req, res) => {
+  const meal = await fitnessService.updateMealLog(req.user.id, req.params.id, req.body);
+  success(res, { meal }, 'Meal updated!');
+});
+
 export const smartLogFood = asyncHandler(async (req, res) => {
   const parsed = await fitnessService.smartLogFood(req.user.id, req.body.text);
   if (!parsed) return success(res, null, 'AI service unavailable');
@@ -163,3 +190,72 @@ export const deleteMilestone = asyncHandler(async (req, res) => {
   await fitnessService.deleteMilestone(req.params.id);
   success(res, null, 'Milestone deleted');
 });
+
+// ══════════════════════════════════════════════════════════════
+// AI MASTER PLANNER CONTROLLERS
+// ══════════════════════════════════════════════════════════════
+
+import { plannerService } from './planner.service.js';
+
+export const generateWorkoutPlan = asyncHandler(async (req, res) => {
+  const result = await plannerService.generateWorkoutPlan(req.user.id, req.body);
+  created(res, result, 'Workout plan generated');
+});
+
+export const generateDietPlan = asyncHandler(async (req, res) => {
+  const result = await plannerService.generateDietPlan(req.user.id, req.body);
+  created(res, result, 'Diet plan generated');
+});
+
+export const generateRecoveryPlan = asyncHandler(async (req, res) => {
+  const result = await plannerService.generateRecoveryPlan(req.user.id, req.body);
+  created(res, result, 'Recovery plan generated');
+});
+
+export const generateTransformationPlan = asyncHandler(async (req, res) => {
+  const result = await plannerService.generateTransformationPlan(req.user.id, req.body);
+  created(res, result, 'Transformation plan generated');
+});
+
+export const parseCoachMessage = asyncHandler(async (req, res) => {
+  const result = await plannerService.parseCoachMessage(req.user.id, req.body.text, req.body.currentConstraints);
+  success(res, result);
+});
+
+export const generateFromChat = asyncHandler(async (req, res) => {
+  const result = await plannerService.generateFromChat(req.user.id, req.body);
+  created(res, result, 'Plan generated from coach chat');
+});
+
+export const swapMeal = asyncHandler(async (req, res) => {
+  const { planId, day, mealType } = req.body;
+  const result = await plannerService.swapMeal(req.user.id, planId, day, mealType);
+  success(res, result, 'Meal swapped');
+});
+
+export const swapExercise = asyncHandler(async (req, res) => {
+  const { planId, day, exerciseIndex, targetExerciseName } = req.body;
+  const result = await plannerService.swapExercise(req.user.id, planId, day, exerciseIndex, targetExerciseName);
+  success(res, result, 'Exercise swapped');
+});
+
+export const getAdherenceScore = asyncHandler(async (req, res) => {
+  const result = await plannerService.getAdherenceScore(req.user.id);
+  success(res, result);
+});
+
+export const getAdaptiveReview = asyncHandler(async (req, res) => {
+  const result = await plannerService.getAdaptiveReview(req.user.id);
+  success(res, result);
+});
+
+export const getActivePlans = asyncHandler(async (req, res) => {
+  const result = await plannerService.getActivePlans(req.user.id);
+  success(res, result);
+});
+
+export const getPlanHistory = asyncHandler(async (req, res) => {
+  const result = await plannerService.getPlanHistory(req.user.id);
+  success(res, result);
+});
+

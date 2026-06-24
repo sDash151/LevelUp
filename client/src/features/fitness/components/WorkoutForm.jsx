@@ -1,22 +1,112 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Sparkles, Loader2, Dumbbell } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useLogWorkout, useSmartParseWorkout, useConfirmSmartLog } from '../hooks/useFitness';
+import { useLogWorkout, useUpdateWorkout, useSmartParseWorkout, useWorkoutMemory, useExerciseCatalog } from '../hooks/useFitness';
 import { Select } from '../../../design-system/components/Select';
 
 const TYPES = ['push', 'pull', 'legs', 'strength', 'hiit', 'swimming', 'calisthenics', 'cardio', 'yoga', 'mobility', 'sports'];
 const MUSCLES = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'full_body'];
 
-export default function WorkoutForm({ onClose }) {
+export default function WorkoutForm({ onClose, initialData = null, editingSessionId = null }) {
   const [mode, setMode] = useState('quick');
   const [smartText, setSmartText] = useState('');
-  const [form, setForm] = useState({
-    name: '', type: 'strength', duration: 45, notes: '', muscleGroups: [],
-    exercises: [{ name: '', muscleGroup: 'chest', metricType: 'weight_reps', sets: [{ setNumber: 1, reps: 10, weight: 0, isWarmup: false }] }],
-  });
+  
+  const getInitialForm = () => {
+    if (!initialData) return {
+      name: '', type: 'strength', duration: 45, date: new Date().toISOString().split('T')[0], notes: '', muscleGroups: [],
+      exercises: [{ name: '', muscleGroup: 'chest', metricType: 'weight_reps', sets: [{ setNumber: 1, reps: 10, weight: 0, isWarmup: false }] }],
+    };
+    return {
+      name: initialData.name || '',
+      type: initialData.type || 'strength',
+      duration: initialData.duration || 45,
+      date: initialData.date ? new Date(initialData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+      notes: initialData.notes || '',
+      muscleGroups: initialData.muscleGroups || [],
+      exercises: initialData.exercises?.length > 0 ? initialData.exercises.map(ex => {
+        const isCardio = ex.sets?.some(s => (s.duration !== undefined && s.duration > 0) || (s.distance !== undefined && s.distance > 0));
+        return {
+          name: ex.name || '',
+          muscleGroup: ex.muscleGroup || 'chest',
+          metricType: isCardio ? 'time_distance' : 'weight_reps',
+          sets: ex.sets?.map((s, i) => ({
+            setNumber: s.setNumber || i + 1,
+            reps: s.reps || 0,
+            weight: s.weight || 0,
+            duration: s.duration || 0,
+            distance: s.distance || 0,
+            isWarmup: s.isWarmup || false
+          })) || [{ setNumber: 1, reps: 10, weight: 0, isWarmup: false }]
+        };
+      }) : [{ name: '', muscleGroup: 'chest', metricType: 'weight_reps', sets: [{ setNumber: 1, reps: 10, weight: 0, isWarmup: false }] }]
+    };
+  };
+
+  const [form, setForm] = useState(getInitialForm());
+
+  const { data: memoryDataRaw } = useWorkoutMemory();
+  const memoryData = memoryDataRaw?.data?.memories || memoryDataRaw?.memories || [];
+
+  const catalogQuery = useExerciseCatalog();
+  const catalog = catalogQuery.data?.data?.catalog || [];
+
+  useEffect(() => {
+    if (memoryData.length > 0 && form.exercises.length > 0 && !editingSessionId) {
+      setForm(prev => {
+        let hasChanges = false;
+        
+        const getWords = (str) => str.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+        const isMatch = (name1, name2) => {
+          const words1 = getWords(name1);
+          const words2 = getWords(name2);
+          if (words1.length === 0 || words2.length === 0) return false;
+          const [shorter, longer] = words1.length < words2.length ? [words1, words2] : [words2, words1];
+          return shorter.every(w => longer.includes(w));
+        };
+
+        const newExercises = prev.exercises.map(ex => {
+          if (!ex.name || ex.metricType !== 'weight_reps') return ex;
+          
+          // Strict match since we now enforce catalog names
+          const mem = memoryData.find(m => m.exerciseName.toLowerCase() === ex.name.toLowerCase());
+          if (!mem) return ex;
+          
+          const targetStats = mem.suggested || mem.bestPerformance || mem.lastPerformance;
+          if (!targetStats || !targetStats.weight) return ex;
+
+          const newSets = ex.sets.map(s => {
+            if (s.weight === 0) {
+              hasChanges = true;
+              const isOverload = mem.suggested && mem.lastPerformance && mem.suggested.weight > mem.lastPerformance.weight;
+              return { 
+                ...s, 
+                weight: targetStats.weight, 
+                reps: s.reps === 0 ? (targetStats.reps || 10) : s.reps,
+                isOverload
+              };
+            }
+            return { ...s, isOverload: false };
+          });
+          return { ...ex, sets: newSets };
+        });
+        
+        return hasChanges ? { ...prev, exercises: newExercises } : prev;
+      });
+    }
+  }, [memoryData, editingSessionId]);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   const logMut = useLogWorkout();
+  const updateMut = useUpdateWorkout();
   const parseMut = useSmartParseWorkout();
+  
+  const isPending = logMut.isPending || updateMut.isPending;
 
   const addExercise = () => setForm(f => ({
     ...f, exercises: [...f.exercises, { name: '', muscleGroup: 'chest', metricType: 'weight_reps', sets: [{ setNumber: 1, reps: 10, weight: 0, isWarmup: false }] }],
@@ -52,7 +142,14 @@ export default function WorkoutForm({ onClose }) {
     ...f, exercises: f.exercises.map((e, i) => i === exIdx ? { ...e, sets: e.sets.filter((_, j) => j !== setIdx) } : e),
   }));
 
-  const handleQuickSubmit = () => { if (!form.name) return; logMut.mutate(form, { onSuccess: () => onClose() }); };
+  const handleQuickSubmit = () => { 
+    if (!form.name) return; 
+    if (editingSessionId) {
+      updateMut.mutate({ id: editingSessionId, ...form }, { onSuccess: () => onClose() });
+    } else {
+      logMut.mutate(form, { onSuccess: () => onClose() }); 
+    }
+  };
   const handleSmartParse = () => { 
     if (!smartText.trim()) return; 
     parseMut.mutate(smartText, { 
@@ -96,7 +193,7 @@ export default function WorkoutForm({ onClose }) {
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(232,162,58,0.1)' }}><Dumbbell className="w-5 h-5 text-[#E8A23A]" /></div>
-            <h2 className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>Log Workout</h2>
+            <h2 className="text-lg font-bold" style={{ color: 'var(--th-text)' }}>{editingSessionId ? 'Edit Workout' : 'Log Workout'}</h2>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg hover:opacity-80 transition"><X className="w-5 h-5" style={{ color: 'var(--th-text-secondary)' }} /></button>
         </div>
@@ -139,9 +236,15 @@ export default function WorkoutForm({ onClose }) {
                 />
               </div>
             </div>
-            <div>
-              <label className="text-[11px] font-medium mb-1 block" style={{ color: 'var(--th-text-secondary)' }}>Duration (mins)</label>
-              <input type="number" min="0" value={form.duration} onChange={e => setForm(f => ({ ...f, duration: e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0) }))} className="w-full px-3 py-2 rounded-xl text-sm outline-none" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-[11px] font-medium mb-1 block" style={{ color: 'var(--th-text-secondary)' }}>Duration (mins)</label>
+                <input type="number" min="0" value={form.duration} onChange={e => setForm(f => ({ ...f, duration: e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0) }))} className="w-full px-3 py-2 rounded-xl text-sm outline-none" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+              </div>
+              <div>
+                <label className="text-[11px] font-medium mb-1 block" style={{ color: 'var(--th-text-secondary)' }}>Date</label>
+                <input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="w-full px-3 py-2 rounded-xl text-sm outline-none" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+              </div>
             </div>
             <div>
               <div className="flex items-center justify-between mb-2">
@@ -152,7 +255,7 @@ export default function WorkoutForm({ onClose }) {
                 {form.exercises.map((ex, eIdx) => (
                   <div key={eIdx} className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
                     <div className="flex items-center gap-2 mb-2">
-                      <input type="text" value={ex.name} onChange={e => updateExercise(eIdx, 'name', e.target.value)} placeholder="Exercise name" className="flex-1 px-2 py-1.5 rounded-lg text-xs outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+                      <input list="catalog-exercises" type="text" value={ex.name} onChange={e => updateExercise(eIdx, 'name', e.target.value)} placeholder="Search exercise..." className="flex-1 px-2 py-1.5 rounded-lg text-xs outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
                       <div className="flex rounded-lg p-0.5" style={{ background: 'var(--th-bg-primary)', border: '1px solid var(--th-border)' }}>
                         <button onClick={() => updateExercise(eIdx, 'metricType', 'weight_reps')} className={`px-2 py-1 text-[10px] rounded-md transition-all ${ex.metricType === 'weight_reps' ? 'shadow-sm' : 'opacity-50'}`} style={{ background: ex.metricType === 'weight_reps' ? 'var(--th-card)' : 'transparent', color: 'var(--th-text)' }}>🏋️</button>
                         <button onClick={() => updateExercise(eIdx, 'metricType', 'time_distance')} className={`px-2 py-1 text-[10px] rounded-md transition-all ${ex.metricType === 'time_distance' ? 'shadow-sm' : 'opacity-50'}`} style={{ background: ex.metricType === 'time_distance' ? 'var(--th-card)' : 'transparent', color: 'var(--th-text)' }}>⏱️</button>
@@ -176,7 +279,10 @@ export default function WorkoutForm({ onClose }) {
                           <span className="text-[10px] text-center" style={{ color: 'var(--th-text-dim)' }}>{sIdx + 1}</span>
                           {ex.metricType === 'weight_reps' ? (
                             <>
-                              <input type="number" min="0" value={s.weight} onChange={e => updateSet(eIdx, sIdx, 'weight', e.target.value === '' ? '' : Math.max(0, parseFloat(e.target.value) || 0))} className="px-2 py-1 rounded text-[11px] outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+                              <div className="relative flex items-center">
+                                <input type="number" min="0" value={s.weight} onChange={e => updateSet(eIdx, sIdx, 'weight', e.target.value === '' ? '' : Math.max(0, parseFloat(e.target.value) || 0))} className="w-full px-2 py-1 rounded text-[11px] outline-none transition-colors" style={{ background: 'var(--th-card)', border: s.isOverload ? '1px solid #10b981' : '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+                                {s.isOverload && <div className="absolute right-1 top-1/2 -translate-y-1/2 text-emerald-500 font-bold text-[8px]" title="Progressive Overload Target">↑</div>}
+                              </div>
                               <input type="number" min="0" value={s.reps} onChange={e => updateSet(eIdx, sIdx, 'reps', e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0))} className="px-2 py-1 rounded text-[11px] outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
                             </>
                           ) : (
@@ -194,14 +300,17 @@ export default function WorkoutForm({ onClose }) {
                 ))}
               </div>
             </div>
-            <button onClick={handleQuickSubmit} disabled={logMut.isPending || !form.name}
+            <button onClick={handleQuickSubmit} disabled={isPending || !form.name}
               className="w-full py-2.5 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2 disabled:opacity-50"
               style={{ background: 'linear-gradient(135deg, #E8A23A, #D4891A)' }}>
-              {logMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Dumbbell className="w-4 h-4" />} Log Workout
+              {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Dumbbell className="w-4 h-4" />} {editingSessionId ? 'Update Workout' : 'Log Workout'}
             </button>
           </div>
         )}
       </motion.div>
+      <datalist id="catalog-exercises">
+        {catalog.map(c => <option key={c.id} value={c.name} />)}
+      </datalist>
     </div>
   );
 }

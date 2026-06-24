@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNutrition, useAINutritionInsight } from '../hooks/useFitness';
+import { useNutrition, useAINutritionInsight, useActivePlans } from '../hooks/useFitness';
 import MacroCards from './MacroCards';
 import NutrientBreakdown from './NutrientBreakdown';
 import MealSummary from './MealSummary';
@@ -10,8 +10,9 @@ import RecentFoods from './RecentFoods';
 import AIFitnessInsight from './AIFitnessInsight';
 import { Calendar, ChevronDown } from 'lucide-react';
 import FoodLogForm from './FoodLogForm';
+import { Apple } from 'lucide-react';
 
-export default function NutritionTab() {
+export default function NutritionTab({ onEditMeal }) {
   const today = new Date().toISOString().split('T')[0];
   const [date, setDate] = useState(today);
   const [initialMealType, setInitialMealType] = useState('lunch');
@@ -19,9 +20,15 @@ export default function NutritionTab() {
   const { data, isLoading } = useNutrition(date);
   const nutrition = data?.data || data || {};
   const aiInsightQuery = useAINutritionInsight(date);
+  const { data: plansData } = useActivePlans();
 
   const isToday = date === today;
   const dateLabel = isToday ? 'Today' : new Date(date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+
+  const dietPlan = plansData?.data?.diet || plansData?.diet;
+  const daysLower = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const todayNameLower = daysLower[new Date().getDay()];
+  const todayDiet = dietPlan?.mealsJson?.find(d => d.day?.toLowerCase() === todayNameLower);
 
   if (isLoading) return (
     <div className="space-y-5 animate-pulse">
@@ -63,6 +70,37 @@ export default function NutritionTab() {
         </div>
       </div>
 
+      {/* Today's Protocol Banner */}
+      {todayDiet && (
+        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2 shadow-sm">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
+              <Apple className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-0.5">Today's Protocol</p>
+              <h3 className="text-lg font-bold tracking-tight" style={{ color: 'var(--th-text)' }}>
+                {dietPlan.caloriesTarget || dietPlan.targetCalories || '?'} kcal • {todayDiet.meals?.length || 0} Meals
+              </h3>
+              <p className="text-xs font-medium text-[var(--th-text-secondary)]">
+                {dietPlan.proteinTarget || dietPlan.protein || '?'}g P • {dietPlan.carbTarget || dietPlan.carbs || '?'}g C • {dietPlan.fatTarget || dietPlan.fats || '?'}g F
+              </p>
+            </div>
+          </div>
+          <button 
+            onClick={() => {
+              const url = new URL(window.location);
+              url.searchParams.set('tab', 'plan');
+              window.history.pushState({}, '', url);
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+            className="px-5 py-2.5 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 transition-colors shadow-md active:scale-95 whitespace-nowrap"
+          >
+            Log from Plan
+          </button>
+        </div>
+      )}
+
       <MacroCards macros={nutrition.macros} />
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
@@ -80,6 +118,7 @@ export default function NutritionTab() {
               setInitialMealType(mealType);
               setShowFoodForm(true);
             }} 
+            onEditMeal={onEditMeal}
           />
           <RecentFoods foods={nutrition.recentFoods} />
         </div>

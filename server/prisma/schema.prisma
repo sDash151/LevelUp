@@ -69,6 +69,12 @@ model User {
   progressPhotos     ProgressPhoto[]
   fitnessMilestones  FitnessMilestone[]
   fitnessInsights    FitnessInsight[]
+  dietPlans          DietPlan[]
+  recoveryPlans      RecoveryPlan[]
+  planGenerationLogs PlanGenerationLog[]
+  adherenceScores    AdherenceScore[]
+  sleepLogs          SleepLog[]
+  recoveryLogs       RecoveryLog[]
 
   // ── Finance relations ──
   financeAccounts        FinanceAccount[]
@@ -980,6 +986,13 @@ model ExerciseCatalog {
   metValue    Float    @default(5.0)
   isCompound  Boolean  @default(false)
   defaultUnit String   @default("kg") // kg, lbs, bodyweight, minutes
+  equipmentType           String?   // barbell, dumbbell, machine, cable, bodyweight, bands
+  difficulty              String?   @default("intermediate") // beginner, intermediate, advanced
+  injuryContraindications String[]  @default([])  // ["lower_back", "shoulder", "knee"]
+  alternatives            String[]  @default([])  // ["Incline DB Press", "Machine Chest Press"]
+  instructions            String[]  @default([])
+  primaryMuscles          String[]  @default([])
+  secondaryMuscles        String[]  @default([])
   createdAt   DateTime @default(now())
 
   @@index([muscleGroup])
@@ -1004,6 +1017,18 @@ model FitnessProfile {
   dailyCarbsGoal   Int?     @default(250)
   dailyFatsGoal    Int?     @default(70)
   dailyWaterGoal   Float?   @default(3.0) // liters
+  // ── Planner fields ──
+  age               Int?
+  gender            String?    // male, female, other
+  budget            Int?       // monthly food budget in INR
+  foodStyle         String?    @default("hybrid") // familiar, hybrid, mixed, bodybuilding
+  cookingAbility    String?    @default("basic")  // cannot_cook, basic, full
+  mealTiming        String[]   @default(["morning", "afternoon", "evening", "night"])
+  lifestyle         String?    // student, desk_job, active_job, shift_worker
+  foodDislikes      String[]   @default([])
+  supplements       String[]   @default([])  // none, whey, creatine
+  sleepHours        Float?     @default(7)
+  accessibilityMode Boolean?   @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -1020,6 +1045,15 @@ model WorkoutPlan {
   totalWeeks Int      @default(8)
   isActive   Boolean  @default(true)
   schedule   Json     // [{day: 'monday', type: 'Push Day', muscleGroups: [...], exercises: [...]}]
+  // ── Planner fields ──
+  equipmentAvailable  String[]  @default(["full_gym"])
+  injuryFlags         String[]  @default([])
+  progressionType     String?   @default("linear") // linear, undulating, block
+  deloadWeek          Int?      // which week number is deload
+  weeklyOverloadRules Json?     // {compoundIncrement: 2.5, isolationIncrement: 1.25}
+  fitnessLevel        String?   // beginner, intermediate, advanced
+  version             Int       @default(1)
+  parentPlanId        String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -1252,4 +1286,151 @@ model AIAnalyticsInsight {
 
   @@index([userId, type])
   @@map("ai_analytics_insights")
+}
+
+// ==================== AI MASTER PLANNER ====================
+
+model DietPlan {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal                String   // fat_loss, muscle_gain, recomp, maintenance
+  caloriesTarget      Int
+  proteinTarget       Int      // grams
+  carbTarget          Int      // grams
+  fatTarget           Int      // grams
+  foodStyle           String   @default("hybrid") // familiar, hybrid, mixed, bodybuilding
+  budget              Int?     // monthly INR
+  accessibilityMode   Boolean  @default(false)
+  mealsJson           Json     // 7-day meal structure
+  groceryJson         Json?    // grocery list
+  completionLogs      Json?    // {completed[], skipped[], modified[], missed[]}
+  mealTrackingEnabled Boolean  @default(true)
+  isActive            Boolean  @default(true)
+  version             Int      @default(1)
+  parentPlanId        String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([userId])
+  @@map("diet_plans")
+}
+
+model RecoveryPlan {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sleepTarget      Float    @default(8)   // hours
+  hydrationTarget  Float    @default(3.0) // liters
+  mobilityPlan     Json?    // [{day, exercises: [{name, duration, targetArea}]}]
+  recoveryDays     String[] @default(["sunday"])
+  stressManagement Json?    // {techniques: [], dailyMindfulness: 10}
+  isActive         Boolean  @default(true)
+  version          Int      @default(1)
+  parentPlanId     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId])
+  @@map("recovery_plans")
+}
+
+model FoodCatalog {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  category          String   // indian_staple, fitness_food, easy_access, global
+  protein           Float    // per 100g
+  carbs             Float    // per 100g
+  fats              Float    // per 100g
+  calories          Int      // per 100g
+  servingSize       Float    @default(100)  // default serving grams
+  servingUnit       String   @default("g")
+  estimatedPricePerServing Float? // INR per serving
+  priceTier         String   @default("medium") // budget, medium, premium
+  availabilityScore Int      @default(8) // 1-10
+  cookingDifficulty String   @default("basic") // none, basic, full
+  dietType          String[] @default(["non_veg"]) // veg, eggetarian, non_veg, vegan
+  createdAt         DateTime @default(now())
+
+  @@index([category])
+  @@index([dietType])
+  @@map("food_catalog")
+}
+
+model FoodAlternative {
+  id                    String   @id @default(cuid())
+  sourceFoodName        String
+  alternativeFoodName   String
+  dietaryCompatibility  String[] @default([])
+  budgetTier            String   @default("medium")
+
+  @@unique([sourceFoodName, alternativeFoodName])
+  @@map("food_alternatives")
+}
+
+model PlanGenerationLog {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planType      String   // workout, diet, recovery, transformation
+  inputParams   Json
+  outputPlan    Json?
+  status        String   // success, failed, fallback
+  retryCount    Int      @default(0)
+  errorMessage  String?
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@map("plan_generation_logs")
+}
+
+model AdherenceScore {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workoutScore   Float    @default(0)
+  mealScore      Float    @default(0)
+  sleepScore     Float    @default(0)
+  hydrationScore Float    @default(0)
+  recoveryScore  Float    @default(0)
+  totalScore     Float    @default(0)
+  weekStart      DateTime
+  weekEnd        DateTime
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("adherence_scores")
+}
+
+model SleepLog {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hoursSlept Float    // actual hours slept
+  quality    String?  // good, fair, poor
+  bedTime    String?  // "23:00"
+  wakeTime   String?  // "07:00"
+  date       DateTime
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, date])
+  @@map("sleep_logs")
+}
+
+model RecoveryLog {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            String   // rest_day, mobility, stretching, meditation
+  duration        Int?     // minutes
+  exercises       Json?    // [{name, duration, targetArea}]
+  recoveryPlanId  String?
+  date            DateTime
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, date])
+  @@map("recovery_logs")
 }

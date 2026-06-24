@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sparkles, ChevronRight, Check, X, Target, Loader2, AlertTriangle } from 'lucide-react';
+import { Sparkles, ChevronRight, Check, X, Target, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useToast } from '@/design-system/components';
 
@@ -9,11 +9,20 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
 
   const handleGenerate = async () => {
     if (!onGenerate) return;
+    const previousSummary = insight?.summary;
     const result = await onGenerate();
+    
     if (result.isError || result.error) {
       toast.error('AI Generation failed. The API rate limit may be exceeded. Please wait a minute and try again.', { icon: '⚠️', duration: 5000 });
     } else {
-      toast.success('AI Insights successfully generated!', { icon: '✨' });
+      const newSummary = result.data?.data?.insight?.summary || result.data?.summary || result.data?.data?.summary || result.data?.insight?.summary;
+      const isUnchanged = result.data?.isUnchanged || result.data?.data?.insight?.isUnchanged || result.data?.insight?.isUnchanged;
+      
+      if (isUnchanged || (previousSummary && previousSummary === newSummary)) {
+        toast.info('Insights are up to date! No new data logged since last analysis.', { icon: '✅' });
+      } else {
+        toast.success('AI Insights successfully generated!', { icon: '✨' });
+      }
     }
   };
 
@@ -43,17 +52,27 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
   return (
     <>
       <div className="rounded-2xl p-5 h-full flex flex-col" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-6 h-6 rounded flex items-center justify-center bg-violet-500/10">
-            <Sparkles className="w-3.5 h-3.5 text-violet-500" />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded flex items-center justify-center bg-violet-500/10">
+              <Sparkles className="w-3.5 h-3.5 text-violet-500" />
+            </div>
+            <h3 className="text-sm font-bold text-[var(--th-text)]">AI Fitness Insight</h3>
           </div>
-          <h3 className="text-sm font-bold text-[var(--th-text)]">AI Fitness Insight</h3>
+          <button 
+            onClick={handleGenerate}
+            disabled={isGenerating}
+            className="p-1.5 rounded-lg hover:bg-[var(--th-border)] transition text-[var(--th-text-secondary)] disabled:opacity-50"
+            title="Refresh AI Insights"
+          >
+            <RefreshCw className={`w-4 h-4 ${isGenerating ? 'animate-spin' : ''}`} />
+          </button>
         </div>
 
         {d.title && <p className="text-sm font-bold text-[var(--th-text)] mb-1">{d.title}</p>}
         {d.summary && <p className="text-xs text-[var(--th-text-secondary)] mb-4 font-medium leading-relaxed">{d.summary}</p>}
 
-        {d.recommendations?.length > 0 && (
+        {Array.isArray(d.recommendations) && d.recommendations.length > 0 && (
           <div className="mb-4">
             <p className="text-[10px] font-bold text-[var(--th-text)] mb-2">Recommendations for You</p>
             <div className="space-y-2">
@@ -112,7 +131,7 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
                   </div>
                 )}
 
-                {d.observations?.length > 0 && (
+                {Array.isArray(d.observations) && d.observations.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-3 flex items-center gap-2">
                       <Target className="w-4 h-4" /> Key Observations
@@ -128,7 +147,7 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
                   </div>
                 )}
 
-                {d.weaknesses?.length > 0 && (
+                {Array.isArray(d.weaknesses) && d.weaknesses.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold text-rose-400 uppercase tracking-widest mb-3 flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4" /> Areas to Improve
@@ -144,7 +163,7 @@ export default function AIFitnessInsight({ insight, onGenerate, isGenerating, ti
                   </div>
                 )}
 
-                {d.recommendations?.length > 0 && (
+                {Array.isArray(d.recommendations) && d.recommendations.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-3 flex items-center gap-2">
                       <Check className="w-4 h-4" /> Actionable Recommendations

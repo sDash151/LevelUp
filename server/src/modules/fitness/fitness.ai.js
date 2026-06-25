@@ -113,6 +113,41 @@ Return ONLY the JSON object.`;
     }
   }
 
+  // ── AI Exercise Swap ──
+  async generateSwap(currentExerciseName, muscleGroup, dayType, reason) {
+    if (this.clients.length === 0) return null;
+    try {
+      let prompt = `You are an elite fitness coach AI. Your client needs to swap an exercise in their workout plan.
+      
+Workout Day Type: ${dayType || 'Unknown'}
+Exercise to Swap Out: ${currentExerciseName}
+Target Muscle Group: ${muscleGroup || 'Similar to the exercise above'}
+`;
+
+      if (reason) {
+        prompt += `\nCLIENT'S REASON FOR SWAPPING: "${reason}"\n`;
+        prompt += `\nCRITICAL: You MUST select an alternative exercise that solves the client's reason. Do not suggest an exercise that suffers from the same problem.\n`;
+      }
+
+      prompt += `
+Suggest EXACTLY ONE alternative exercise name that is best suited to replace it.
+Use standard fitness industry terminology (e.g., "Dumbbell Bench Press", "Leg Press", "Lat Pulldown").
+DO NOT suggest "${currentExerciseName}".
+
+Return ONLY a JSON object with this exact structure:
+{
+  "suggestedExercise": "string"
+}`;
+
+      const res = await this._generate(prompt);
+      return res?.suggestedExercise || null;
+    } catch (error) {
+      console.error('FitnessAI.generateSwap failed:', error.message);
+      return null;
+    }
+  }
+
+
   // ── Smart Food Parsing ──
   async parseFood(text) {
     if (this.clients.length === 0) return null;
@@ -343,13 +378,9 @@ Return ONLY the JSON object.`;
    * Generate a full workout plan using pre-calculated targets
    * @param {Object} params - { profile, targets, exercises, previousErrors }
    */
-  async generateWorkoutPlan({ profile, targets, exercises = [], previousErrors = null }) {
+  async generateWorkoutPlan({ profile, targets, previousErrors = null }) {
     if (this.clients.length === 0) return null;
     try {
-      const exerciseList = exercises.map(e =>
-        `${e.name} [${e.muscleGroup}] [${e.equipmentType || 'any'}] [${e.difficulty || 'intermediate'}]${e.injuryContraindications?.length ? ` AVOID IF: ${e.injuryContraindications.join(',')}` : ''}`
-      ).join('\n');
-
       const prompt = `You are an elite fitness coach building a personalized workout plan for an Indian user.
 
 USER PROFILE:
@@ -366,9 +397,6 @@ PRE-CALCULATED TARGETS (DO NOT RECALCULATE):
 - TDEE: ${targets.tdee} kcal
 - Target Calories: ${targets.targetCalories} kcal
 - Deficit/Surplus: ${targets.deficit} kcal
-
-AVAILABLE EXERCISES (use ONLY these):
-${exerciseList || 'Use standard gym exercises'}
 
 ${previousErrors ? `PREVIOUS ATTEMPT FAILED WITH THESE ERRORS — FIX THEM:\n${previousErrors.join('\n')}` : ''}
 
@@ -404,7 +432,18 @@ Return JSON:
   ]
 }`;
 
-      return await this._generate(prompt);
+      console.log(`\n\n=== [DEBUG] AI PROMPT GENERATED ===`);
+      console.log(`Sending to Gemini:`);
+      console.log(prompt);
+      console.log(`===================================\n\n`);
+
+      const generatedPlan = await this._generate(prompt);
+      
+      console.log(`\n\n=== [DEBUG] AI RAW RESPONSE ===`);
+      console.log(JSON.stringify(generatedPlan, null, 2));
+      console.log(`===================================\n\n`);
+
+      return generatedPlan;
     } catch (error) {
       console.error('FitnessAI.generateWorkoutPlan failed:', error.message);
       return null;

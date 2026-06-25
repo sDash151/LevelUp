@@ -492,7 +492,71 @@ class FitnessService {
     return fitnessRepository.getAllExercises();
   }
 
-  async getExerciseSwaps({ muscles, equipment, exclude }) {
+  async getExerciseSwaps({ userId, muscles, equipment, exclude }) {
+    const catalog = await fitnessRepository.getAllExercises();
+    
+    let availableEquipment = null;
+    if (userId) {
+      const profile = await this.getProfile(userId);
+      availableEquipment = profile.equipmentAvailable;
+    }
+
+    let candidateExercises = catalog;
+    if (availableEquipment && availableEquipment !== 'full_gym') {
+      const equipSet = new Set(Array.isArray(availableEquipment) ? availableEquipment : [availableEquipment]);
+      candidateExercises = candidateExercises.filter(ex => 
+        !ex.equipmentType || ex.equipmentType.toLowerCase() === 'bodyweight' || equipSet.has(ex.equipmentType)
+      );
+    }
+    
+    if (equipment) {
+      candidateExercises = candidateExercises.filter(ex => ex.equipmentType === equipment);
+    }
+    
+    if (muscles && muscles !== 'full_body') {
+      const muscleArray = muscles.split(',').map(m => m.trim().toLowerCase());
+      candidateExercises = candidateExercises.filter(ex => {
+        if (!ex.primaryMuscles) return false;
+        return ex.primaryMuscles.some(m => muscleArray.includes(m.toLowerCase()));
+      });
+    }
+
+    candidateExercises = candidateExercises.filter(ex => ex.name.toLowerCase() !== exclude?.toLowerCase());
+
+    if (!exclude) {
+      return candidateExercises.slice(0, 5);
+    }
+
+    try {
+      const embsPath = path.resolve(process.cwd(), 'src', 'data', 'exercise_embeddings.json');
+      if (fs.existsSync(embsPath)) {
+        const embeddings = JSON.parse(fs.readFileSync(embsPath, 'utf8'));
+        
+        let excludeVector = null;
+        const excludeEx = catalog.find(c => c.name.toLowerCase() === exclude.toLowerCase());
+        
+        if (excludeEx && embeddings[excludeEx.slug]) {
+          excludeVector = embeddings[excludeEx.slug];
+        } else {
+          excludeVector = await fitnessAI.generateEmbedding(exclude);
+        }
+
+        if (excludeVector) {
+          const scored = candidateExercises.map(ex => {
+            const vec = embeddings[ex.slug];
+            const score = vec ? cosineSimilarity(excludeVector, vec) : -1;
+            return { ...ex, score };
+          });
+          
+          scored.sort((a, b) => b.score - a.score);
+          return scored.slice(0, 5);
+        }
+      }
+    } catch (e) {
+      console.warn("Could not calculate semantic swaps:", e.message);
+    }
+
+    // Fallback to basic DB lookup if embeddings fail
     return fitnessRepository.getExerciseSwaps({ muscles, equipment, exclude });
   }
 

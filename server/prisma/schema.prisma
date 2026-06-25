@@ -1039,6 +1039,9 @@ model FitnessProfile {
   dailyFatsGoal    Int?     @default(70)
   dailyWaterGoal   Float?   @default(3.0) // liters
   // ── Planner fields ──
+  equipmentAvailable String[]   @default(["full_gym"])
+  injuryFlags        String[]   @default([])
+
   budget            Int?       // monthly food budget in INR
   foodStyle         String?    @default("hybrid") // familiar, hybrid, mixed, bodybuilding
   cookingAbility    String?    @default("basic")  // cannot_cook, basic, full

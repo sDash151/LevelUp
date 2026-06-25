@@ -33,7 +33,7 @@ export const getExerciseCatalog = asyncHandler(async (req, res) => {
 
 export const getExerciseSwaps = asyncHandler(async (req, res) => {
   const { muscles, equipment, exclude } = req.query;
-  const swaps = await fitnessService.getExerciseSwaps({ muscles, equipment, exclude });
+  const swaps = await fitnessService.getExerciseSwaps({ userId: req.user.id, muscles, equipment, exclude });
   success(res, swaps);
 });
 
@@ -234,8 +234,8 @@ export const swapMeal = asyncHandler(async (req, res) => {
 });
 
 export const swapExercise = asyncHandler(async (req, res) => {
-  const { planId, day, exerciseIndex, targetExerciseName } = req.body;
-  const result = await plannerService.swapExercise(req.user.id, planId, day, exerciseIndex, targetExerciseName);
+  const { planId, day, exerciseIndex, targetExerciseName, reason } = req.body;
+  const result = await plannerService.swapExercise(req.user.id, planId, day, exerciseIndex, targetExerciseName, reason);
   success(res, result, 'Exercise swapped');
 });
 

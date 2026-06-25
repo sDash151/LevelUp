@@ -236,6 +236,10 @@ export const swapExerciseSchema = z.object({
     day: z.string().min(1),
     exerciseIndex: z.number().int().min(0).max(20),
     targetExerciseName: z.string().optional(),
+    reason: z.string().optional(),
+  }).refine(data => data.targetExerciseName || (data.reason && data.reason.trim().length > 0), {
+    message: "A valid reason must be provided if no target exercise is specified.",
+    path: ['reason']
   }),
 });
 

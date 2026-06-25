@@ -2,10 +2,11 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Dumbbell, Apple, Moon, ChevronDown, ChevronUp, Clock, Flame,
-  RefreshCw, Loader2, Zap, Droplets, Target, TrendingUp, ChevronRight, Activity, CalendarDays, Utensils, Check, Coffee
+  RefreshCw, Loader2, Zap, Droplets, Target, TrendingUp, ChevronRight, Activity, CalendarDays, Utensils, Check, Coffee, ArrowRight
 } from 'lucide-react';
 import { useActivePlans, useSwapMeal, useSwapExercise, useAdherenceScore, useWorkoutHistory, useExerciseCatalog, useExerciseSwaps } from '../hooks/useFitness';
 import { MuscleHeatmap } from './MuscleHeatmap';
+import { useToast } from '@/design-system/components';
 
 // Sleek glowing score ring for Cockpit
 function ScoreRing({ score, size = 64, strokeWidth = 5, label, icon: Icon }) {
@@ -49,6 +50,7 @@ const MacroBadge = ({ label, value, color }) => (
 );
 
 export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
+  const toast = useToast();
   const { data: plansData, isLoading } = useActivePlans();
   const { data: adherenceData } = useAdherenceScore();
   const { data: workoutHistoryData } = useWorkoutHistory({ timeframe: 'this_week' });
@@ -87,6 +89,8 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
   const catalog = catalogData?.data || catalogData || [];
   const [guideExercise, setGuideExercise] = useState(null);
   const [swapContext, setSwapContext] = useState(null);
+  const [swapResult, setSwapResult] = useState(null);
+  const [aiSwapReason, setAiSwapReason] = useState('');
 
   const findClosestExercise = (generatedName, generatedMuscleGroup = '') => {
     if (!generatedName || !catalog || catalog.length === 0) return null;
@@ -178,27 +182,36 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
   const swapParams = useMemo(() => {
     if (!swapContext) return null;
     
-    // 1. Try to use AI's explicit muscle group
-    let exactMuscles = swapContext.muscleGroup;
+    let exactMuscles = null;
     
-    // 2. If AI didn't provide one, parse the name (Extremely robust for AI names)
+    // 1. First, always try to find the exact exercise in the catalog
+    if (catalog && catalog.length > 0) {
+      const catalogItem = catalog.find(ex => ex.name.toLowerCase() === swapContext.currentName.toLowerCase());
+      if (catalogItem && catalogItem.primaryMuscles?.length > 0) {
+        exactMuscles = catalogItem.primaryMuscles.join(',');
+      }
+    }
+    
+    // 2. If not found in catalog, try AI's explicit muscle group, mapped to DB strings
+    if (!exactMuscles && swapContext.muscleGroup) {
+      const mg = swapContext.muscleGroup.toLowerCase();
+      if (mg.includes('arm')) exactMuscles = 'biceps,triceps,forearms';
+      else if (mg.includes('back')) exactMuscles = 'lats,middle back,lower back,traps';
+      else if (mg.includes('leg')) exactMuscles = 'quadriceps,hamstrings,glutes,calves,adductors,abductors';
+      else if (mg.includes('core') || mg.includes('abs')) exactMuscles = 'abdominals';
+      else exactMuscles = mg;
+    }
+    
+    // 3. If STILL no exact muscles, parse the name robustly
     if (!exactMuscles) {
       const name = swapContext.currentName.toLowerCase();
       if (name.includes('tricep') || name.includes('extension') || name.includes('skull crusher')) exactMuscles = 'triceps';
       else if (name.includes('bicep') || name.includes('curl')) exactMuscles = 'biceps';
       else if (name.includes('chest') || name.includes('press') || name.includes('fly') || name.includes('push-up')) exactMuscles = 'chest';
-      else if (name.includes('back') || name.includes('row') || name.includes('pull') || name.includes('lat') || name.includes('chin-up')) exactMuscles = 'back';
-      else if (name.includes('leg') || name.includes('squat') || name.includes('lunge') || name.includes('calf') || name.includes('rdl') || name.includes('deadlift')) exactMuscles = 'legs';
+      else if (name.includes('back') || name.includes('row') || name.includes('pull') || name.includes('lat') || name.includes('chin-up')) exactMuscles = 'lats,middle back,lower back,traps';
+      else if (name.includes('leg') || name.includes('squat') || name.includes('lunge') || name.includes('calf') || name.includes('rdl') || name.includes('deadlift')) exactMuscles = 'quadriceps,hamstrings,glutes,calves';
       else if (name.includes('shoulder') || name.includes('raise')) exactMuscles = 'shoulders';
-      else if (name.includes('core') || name.includes('abs') || name.includes('crunch') || name.includes('plank') || name.includes('sit-up')) exactMuscles = 'core';
-    }
-    
-    // 3. If name parsing fails, fallback to fuzzy searching the catalog to find the closest match's primary muscle
-    if (!exactMuscles) {
-      const catalogItem = findClosestExercise(swapContext.currentName, swapContext.muscleGroup);
-      if (catalogItem && catalogItem.primaryMuscles?.length > 0) {
-        exactMuscles = catalogItem.primaryMuscles.join(',');
-      }
+      else if (name.includes('core') || name.includes('abs') || name.includes('crunch') || name.includes('plank') || name.includes('sit-up')) exactMuscles = 'abdominals';
     }
       
     return { muscles: exactMuscles || 'full_body', exclude: swapContext.currentName, equipment: null };
@@ -876,60 +889,112 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
 
       {/* ═══ SMART SWAP MODAL ═══ */}
       <AnimatePresence>
-        {swapContext && (
+        {(swapContext || swapResult) && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSwapContext(null)} />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => { setSwapContext(null); setSwapResult(null); }} />
             <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative w-full max-w-md bg-[var(--th-bg)] border border-[var(--th-border)] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
-              <div className="p-6 border-b border-[var(--th-border)] bg-[var(--th-card)] flex justify-between items-center">
-                <div>
-                  <h2 className="text-lg font-black flex items-center gap-2" style={{ color: 'var(--th-text)' }}><RefreshCw className="w-5 h-5 text-indigo-500" /> Smart Swap</h2>
-                  <p className="text-xs text-[var(--th-text-secondary)] mt-1">Alternatives for {swapContext.currentName}</p>
+              
+              {swapResult ? (
+                <div className="p-8 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mb-4">
+                    <Check className="w-8 h-8 text-green-500" />
+                  </div>
+                  <h3 className="text-xl font-black mb-2" style={{ color: 'var(--th-text)' }}>Swap Successful!</h3>
+                  <div className="flex items-center gap-3 w-full bg-[var(--th-card)] border border-[var(--th-border)] rounded-xl p-4 my-4">
+                    <div className="flex-1 text-sm font-medium line-through opacity-50 text-right" style={{ color: 'var(--th-text)' }}>{swapResult.old}</div>
+                    <ArrowRight className="w-5 h-5 text-indigo-500 shrink-0" />
+                    <div className="flex-1 text-sm font-bold text-green-500 text-left">{swapResult.new}</div>
+                  </div>
+                  <button 
+                    onClick={() => { setSwapContext(null); setSwapResult(null); }}
+                    className="w-full py-3 bg-indigo-500 text-white rounded-xl font-bold hover:bg-indigo-600 transition-colors"
+                  >
+                    Done
+                  </button>
                 </div>
-                <button onClick={() => setSwapContext(null)} className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
-                  <ChevronDown className="w-5 h-5 text-[var(--th-text-secondary)]" />
-                </button>
-              </div>
-              <div className="p-4 overflow-y-auto custom-scrollbar flex flex-col gap-2">
-                {swapsLoading ? (
-                  <div className="py-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>
-                ) : swaps.length > 0 ? (
-                  swaps.map(alt => (
-                    <button
-                      key={alt.id}
-                      disabled={swapExMut.isPending}
-                      onClick={() => {
-                        swapExMut.mutate({ planId: swapContext.planId, day: swapContext.day, exerciseIndex: swapContext.exerciseIndex, targetExerciseName: alt.name }, {
-                          onSuccess: () => setSwapContext(null)
-                        });
-                      }}
-                      className="flex items-center justify-between p-4 rounded-xl bg-[var(--th-card)] border border-[var(--th-border)] hover:border-indigo-500/50 hover:shadow-md transition-all text-left group"
-                    >
-                      <div>
-                        <h4 className="text-sm font-bold group-hover:text-indigo-500 transition-colors" style={{ color: 'var(--th-text)' }}>{alt.name}</h4>
-                        <div className="flex gap-2 mt-1">
-                          <span className="text-[9px] uppercase tracking-wider text-[var(--th-text-secondary)]">{alt.equipmentType || 'Bodyweight'}</span>
-                          <span className="text-[9px] uppercase tracking-wider text-[var(--th-text-secondary)] flex items-center gap-0.5"><Flame className="w-3 h-3 text-orange-500" /> {alt.difficulty}</span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:-translate-x-1 transition-all text-indigo-500" />
+              ) : (
+                <>
+                  <div className="p-6 border-b border-[var(--th-border)] bg-[var(--th-card)] flex justify-between items-center">
+                    <div>
+                      <h2 className="text-lg font-black flex items-center gap-2" style={{ color: 'var(--th-text)' }}><RefreshCw className="w-5 h-5 text-indigo-500" /> Smart Swap</h2>
+                      <p className="text-xs text-[var(--th-text-secondary)] mt-1">Alternatives for {swapContext?.currentName}</p>
+                    </div>
+                    <button onClick={() => setSwapContext(null)} className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+                      <ChevronDown className="w-5 h-5 text-[var(--th-text-secondary)]" />
                     </button>
-                  ))
-                ) : (
-                  <p className="text-sm text-center py-8 text-[var(--th-text-secondary)]">No alternatives found.</p>
-                )}
-                
-                <button
-                  disabled={swapExMut.isPending}
-                  onClick={() => {
-                    swapExMut.mutate({ planId: swapContext.planId, day: swapContext.day, exerciseIndex: swapContext.exerciseIndex }, {
-                      onSuccess: () => setSwapContext(null)
-                    });
-                  }}
-                  className="mt-4 p-4 rounded-xl border border-dashed border-indigo-500/30 text-indigo-500 font-bold text-sm hover:bg-indigo-500/5 transition-colors flex justify-center items-center gap-2"
-                >
-                  <Zap className="w-4 h-4" /> Let AI generate a custom swap
-                </button>
-              </div>
+                  </div>
+                  <div className="p-4 overflow-y-auto custom-scrollbar flex flex-col gap-2">
+                    {swapsLoading ? (
+                      <div className="py-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>
+                    ) : swaps.length > 0 ? (
+                      swaps.map(alt => (
+                        <button
+                          key={alt.id}
+                          disabled={swapExMut.isPending}
+                          onClick={() => {
+                            swapExMut.mutate({ planId: swapContext.planId, day: swapContext.day, exerciseIndex: swapContext.exerciseIndex, targetExerciseName: alt.name }, {
+                              onSuccess: (res) => {
+                                const data = res?.data?.data || res?.data;
+                                if (data?.swapped && data?.replacement) {
+                                  setSwapResult({ old: data.swapped, new: data.replacement });
+                                } else {
+                                  setSwapContext(null);
+                                  toast.success('Exercise swapped successfully!');
+                                }
+                              }
+                            });
+                          }}
+                          className="flex items-center justify-between p-4 rounded-xl bg-[var(--th-card)] border border-[var(--th-border)] hover:border-indigo-500/50 hover:shadow-md transition-all text-left group"
+                        >
+                          <div>
+                            <h4 className="text-sm font-bold group-hover:text-indigo-500 transition-colors" style={{ color: 'var(--th-text)' }}>{alt.name}</h4>
+                            <div className="flex gap-2 mt-1">
+                              <span className="text-[9px] uppercase tracking-wider text-[var(--th-text-secondary)]">{alt.equipmentType || 'Bodyweight'}</span>
+                              <span className="text-[9px] uppercase tracking-wider text-[var(--th-text-secondary)] flex items-center gap-0.5"><Flame className="w-3 h-3 text-orange-500" /> {alt.difficulty}</span>
+                            </div>
+                          </div>
+                          <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:-translate-x-1 transition-all text-indigo-500" />
+                        </button>
+                      ))
+                    ) : (
+                      <p className="text-sm text-center py-8 text-[var(--th-text-secondary)]">No alternatives found.</p>
+                    )}
+                    
+                    <div className="mt-4 border-t border-[var(--th-border)] pt-4">
+                      <input
+                        type="text"
+                        value={aiSwapReason}
+                        onChange={(e) => setAiSwapReason(e.target.value)}
+                        placeholder="Why swap? (e.g., 'Shoulder hurts', 'Bench is full')"
+                        className="w-full bg-[var(--th-bg)] border border-[var(--th-border)] rounded-xl px-3 py-3 text-sm text-[var(--th-text)] outline-none focus:border-indigo-500 mb-3"
+                      />
+                      <button
+                        disabled={swapExMut.isPending || !aiSwapReason.trim()}
+                        onClick={() => {
+                          swapExMut.mutate({ planId: swapContext.planId, day: swapContext.day, exerciseIndex: swapContext.exerciseIndex, reason: aiSwapReason }, {
+                            onSuccess: (res) => {
+                              setAiSwapReason('');
+                              const data = res?.data?.data || res?.data;
+                              if (data?.swapped && data?.replacement) {
+                                setSwapResult({ old: data.swapped, new: data.replacement });
+                              } else {
+                                setSwapContext(null);
+                                toast.success('AI successfully swapped your exercise!');
+                              }
+                            }
+                          });
+                        }}
+                        className={`w-full p-4 rounded-xl border border-dashed border-indigo-500/30 text-indigo-500 font-bold text-sm flex justify-center items-center gap-2 ${
+                          !aiSwapReason.trim() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-500/5 transition-colors'
+                        }`}
+                      >
+                        {swapExMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+                        {swapExMut.isPending ? 'Generating swap...' : 'Let AI generate a custom swap'}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </motion.div>
           </div>
         )}

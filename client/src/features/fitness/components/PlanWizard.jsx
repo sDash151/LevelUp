@@ -126,6 +126,27 @@ export default function PlanWizard({ onClose, onSuccess }) {
     timeline: '8',
   });
 
+  // Sync form state when profile data loads asynchronously
+  const profileString = JSON.stringify(profile);
+  useEffect(() => {
+    if (profile && Object.keys(profile).length > 0) {
+      setForm(prev => ({
+        ...prev,
+        weight: profile.weight || prev.weight,
+        height: profile.height || prev.height,
+        age: profile.age || prev.age,
+        gender: profile.gender || prev.gender,
+        goal: profile.goal || prev.goal,
+        experienceLevel: profile.experienceLevel || prev.experienceLevel,
+        trainingDays: profile.trainingDays || prev.trainingDays,
+        splitType: profile.splitType || prev.splitType,
+        equipmentAvailable: profile.equipmentAvailable?.length ? profile.equipmentAvailable : prev.equipmentAvailable,
+        injuryFlags: profile.injuryFlags?.length ? profile.injuryFlags : prev.injuryFlags,
+        dietType: profile.dietType || prev.dietType,
+      }));
+    }
+  }, [profileString]);
+
   const visibleSteps = getVisibleSteps(form.planType);
   const currentStep = visibleSteps[stepIdx];
   const isLast = stepIdx === visibleSteps.length - 1;
@@ -133,17 +154,29 @@ export default function PlanWizard({ onClose, onSuccess }) {
 
   const isGenerating = genWorkout.isPending || genDiet.isPending || genRecovery.isPending || genTransform.isPending;
 
-  const loadingMessages = [
-    "Analyzing Profile...",
-    "Calculating Macros...",
-    "Building Custom Workout...",
-    "Structuring Diet Plan...",
-    "Optimizing Recovery...",
-    "Validating AI Math...",
-    "Refining Details...",
-    "Double-checking Budget...",
-    "Finalizing Protocol..."
-  ];
+  const getLoadingMessages = (planType) => {
+    if (planType === 'workout') {
+      return ["Analyzing Profile...", "Building Custom Workout...", "Validating AI Math...", "Refining Details...", "Finalizing Protocol..."];
+    }
+    if (planType === 'diet') {
+      return ["Analyzing Profile...", "Calculating Macros...", "Structuring Diet Plan...", "Double-checking Budget...", "Finalizing Protocol..."];
+    }
+    if (planType === 'recovery') {
+      return ["Analyzing Profile...", "Optimizing Recovery...", "Structuring Mobility Plan...", "Finalizing Protocol..."];
+    }
+    return [
+      "Analyzing Profile...",
+      "Calculating Macros...",
+      "Building Custom Workout...",
+      "Structuring Diet Plan...",
+      "Optimizing Recovery...",
+      "Validating AI Math...",
+      "Double-checking Budget...",
+      "Finalizing Protocol..."
+    ];
+  };
+
+  const loadingMessages = getLoadingMessages(form.planType);
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
 
   useEffect(() => {

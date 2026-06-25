@@ -3,11 +3,20 @@
 // Connects: ScientificEngine → AI → Validator → DB
 // ══════════════════════════════════════════════════════════════
 
+import fs from 'fs';
+import path from 'path';
 import { prisma } from '../../config/database.js';
 import { scientificEngine } from './scientific-engine.js';
 import { fitnessAI } from './fitness.ai.js';
 import { planValidator } from './plan-validator.js';
 import { getWorkoutFallback, getDietFallback, getRecoveryFallback } from './plan-fallbacks.js';
+
+function cosineSimilarity(vecA, vecB) {
+  const dotProduct = vecA.reduce((sum, a, i) => sum + a * vecB[i], 0);
+  const magnitudeA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
+  const magnitudeB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
+  return dotProduct / (magnitudeA * magnitudeB);
+}
 
 class PlannerService {
 
@@ -24,9 +33,15 @@ class PlannerService {
     };
 
     const result = await planValidator.generateWithRetry(
-      (prevErrors) => fitnessAI.generateWorkoutPlan({
-        profile, targets, exercises, previousErrors: prevErrors,
-      }),
+      async (prevErrors) => {
+        const plan = await fitnessAI.generateWorkoutPlan({
+          profile, targets, previousErrors: prevErrors,
+        });
+        if (plan) {
+          await this._mapPlanToCatalog(plan, exercises);
+        }
+        return plan;
+      },
       (plan) => planValidator.validateWorkoutPlan(plan, constraints),
       constraints,
     );
@@ -304,7 +319,7 @@ class PlannerService {
     return { meals, swapped: mealType, day };
   }
 
-  async swapExercise(userId, planId, day, exerciseIndex, targetExerciseName) {
+  async swapExercise(userId, planId, day, exerciseIndex, targetExerciseName, reason) {
     const plan = await prisma.workoutPlan.findFirst({ where: { id: planId, userId } });
     if (!plan) throw new Error('Workout plan not found');
 
@@ -324,21 +339,64 @@ class PlannerService {
     } 
     
     if (!alt) {
-      // Find alternative from catalog
-      const alternatives = exercises.filter(e =>
-        e.muscleGroup === currentExercise.muscleGroup &&
-        e.name !== currentExercise.name
+      // Deep AI Swap
+      const suggestedName = await fitnessAI.generateSwap(
+        currentExercise.name,
+        currentExercise.muscleGroup,
+        dayObj.type,
+        reason
       );
-      if (alternatives.length > 0) {
-        alt = alternatives[Math.floor(Math.random() * alternatives.length)];
+      
+      if (suggestedName) {
+        try {
+          const embsPath = path.resolve(process.cwd(), 'src', 'data', 'exercise_embeddings.json');
+          if (fs.existsSync(embsPath)) {
+            const embeddings = JSON.parse(fs.readFileSync(embsPath, 'utf8'));
+            const userVector = await fitnessAI.generateEmbedding(suggestedName);
+            
+            if (userVector) {
+              let bestScore = -1;
+              for (const ex of exercises) {
+                if (ex.name.toLowerCase() === currentExercise.name.toLowerCase()) continue;
+                const catVec = embeddings[ex.slug];
+                if (catVec) {
+                  const score = cosineSimilarity(userVector, catVec);
+                  if (score > bestScore) {
+                    bestScore = score;
+                    alt = ex;
+                  }
+                }
+              }
+              // If it's a terrible match, drop it
+              if (bestScore < 0.5) alt = null;
+            }
+          }
+        } catch (e) {
+          console.warn("AI swap semantic match failed:", e.message);
+        }
+      }
+
+      // Fallback
+      if (!alt) {
+        const alternatives = exercises.filter(e =>
+          e.muscleGroup === currentExercise.muscleGroup &&
+          e.name !== currentExercise.name
+        );
+        if (alternatives.length > 0) {
+          alt = alternatives[Math.floor(Math.random() * alternatives.length)];
+        }
       }
     }
 
     if (alt) {
+      const newMuscleGroup = (alt.primaryMuscles && alt.primaryMuscles.length > 0) ? alt.primaryMuscles.join(',') : (alt.muscleGroup || currentExercise.muscleGroup);
+      console.log(`[AI Manual Swap] Swapping "${currentExercise.name}" -> "${alt.name}". Updated muscleGroup to "${newMuscleGroup}"`);
+      
       dayObj.exercises[exerciseIndex] = {
         ...currentExercise,
         name: alt.name,
-        equipment: alt.equipmentType,
+        muscleGroup: newMuscleGroup,
+        equipment: alt.equipmentType || currentExercise.equipment,
         notes: `Swapped from ${currentExercise.name}`,
       };
 
@@ -620,6 +678,72 @@ class PlannerService {
     } catch (err) {
       console.error('Failed to log plan generation:', err.message);
     }
+  }
+
+  async _mapPlanToCatalog(plan, allowedExercises) {
+    if (!plan.schedule) return;
+
+    let embeddings = null;
+    try {
+      const embsPath = path.resolve(process.cwd(), 'src', 'data', 'exercise_embeddings.json');
+      if (fs.existsSync(embsPath)) {
+        embeddings = JSON.parse(fs.readFileSync(embsPath, 'utf8'));
+      }
+    } catch (e) {
+      console.warn("Could not load exercise embeddings for RAG mapping.", e.message);
+      return;
+    }
+
+    if (!embeddings) return;
+
+    console.log(`\n\n=== [DEBUG] SEMANTIC RAG MAPPING STARTED ===`);
+    console.log(`Available Catalog Exercises to map against: ${allowedExercises.length}`);
+    for (const day of plan.schedule) {
+      if (day.isRest || !day.exercises) continue;
+      
+      for (const ex of day.exercises) {
+        if (!ex.name) continue;
+
+        // Generate embedding for AI's generic exercise name
+        const userVector = await fitnessAI.generateEmbedding(ex.name);
+        if (!userVector) continue;
+
+        let bestScore = -1;
+        let bestMatch = null;
+
+        // Only map to exercises that passed the strict DB filters
+        for (const catEx of allowedExercises) {
+          const catVec = embeddings[catEx.slug];
+          if (catVec) {
+            const score = cosineSimilarity(userVector, catVec);
+            if (score > bestScore) {
+              bestScore = score;
+              bestMatch = catEx;
+            }
+          }
+        }
+
+        // If we found a good semantic match, snap the AI's exercise to our catalog
+        if (bestMatch && bestScore > 0.6) {
+          console.log(`[RAG Match SUCCESS] AI: "${ex.name}" --> Catalog: "${bestMatch.name}" (Score: ${bestScore.toFixed(2)})`);
+          ex.name = bestMatch.name;
+          // Only overwrite equipment if it wasn't specified, or if we trust the catalog more
+          // The validator will check the final plan.
+          ex.equipment = bestMatch.equipmentType || ex.equipment;
+          
+          if (bestMatch.primaryMuscles && bestMatch.primaryMuscles.length > 0) {
+            ex.muscleGroup = bestMatch.primaryMuscles.join(',');
+            console.log(`  [Data Swap] Updated muscleGroup: "${ex.muscleGroup}" (from DB primaryMuscles)`);
+          } else {
+            ex.muscleGroup = bestMatch.muscleGroup || ex.muscleGroup;
+            console.log(`  [Data Swap] Kept/Updated muscleGroup: "${ex.muscleGroup}"`);
+          }
+        } else {
+          console.log(`[RAG Match FAILED] AI: "${ex.name}" --> No catalog match found > 0.6 (Best score: ${bestScore.toFixed(2)})`);
+        }
+      }
+    }
+    console.log(`============================================\n\n`);
   }
 }
 

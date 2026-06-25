@@ -187,9 +187,9 @@ export default function WorkoutForm({ onClose, initialData = null, editingSessio
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.5)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" style={{ background: 'rgba(0,0,0,0.5)' }}>
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl p-6" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}>
+        className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl p-4 sm:p-6" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}>
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(232,162,58,0.1)' }}><Dumbbell className="w-5 h-5 text-[#E8A23A]" /></div>
@@ -254,19 +254,30 @@ export default function WorkoutForm({ onClose, initialData = null, editingSessio
               <div className="space-y-3 pr-1">
                 {form.exercises.map((ex, eIdx) => (
                   <div key={eIdx} className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <input list="catalog-exercises" type="text" value={ex.name} onChange={e => updateExercise(eIdx, 'name', e.target.value)} placeholder="Search exercise..." className="flex-1 px-2 py-1.5 rounded-lg text-xs outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
-                      <div className="flex rounded-lg p-0.5" style={{ background: 'var(--th-bg-primary)', border: '1px solid var(--th-border)' }}>
-                        <button onClick={() => updateExercise(eIdx, 'metricType', 'weight_reps')} className={`px-2 py-1 text-[10px] rounded-md transition-all ${ex.metricType === 'weight_reps' ? 'shadow-sm' : 'opacity-50'}`} style={{ background: ex.metricType === 'weight_reps' ? 'var(--th-card)' : 'transparent', color: 'var(--th-text)' }}>🏋️</button>
-                        <button onClick={() => updateExercise(eIdx, 'metricType', 'time_distance')} className={`px-2 py-1 text-[10px] rounded-md transition-all ${ex.metricType === 'time_distance' ? 'shadow-sm' : 'opacity-50'}`} style={{ background: ex.metricType === 'time_distance' ? 'var(--th-card)' : 'transparent', color: 'var(--th-text)' }}>⏱️</button>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
+                      <div className="flex items-center gap-2 w-full sm:flex-1">
+                        <input list="catalog-exercises" type="text" value={ex.name} onChange={e => updateExercise(eIdx, 'name', e.target.value)} placeholder="Search exercise..." className="flex-1 px-2 py-1.5 rounded-lg text-xs outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+                        <div className="sm:hidden flex-shrink-0">
+                          {form.exercises.length > 1 && <button onClick={() => removeExercise(eIdx)} className="p-1.5"><Trash2 className="w-4 h-4 text-red-400" /></button>}
+                        </div>
                       </div>
-                      <Select
-                        value={ex.muscleGroup}
-                        onChange={v => updateExercise(eIdx, 'muscleGroup', v)}
-                        options={MUSCLES.map(m => ({ value: m, label: m.replace('_', ' ') }))}
-                        className="w-[100px]"
-                      />
-                      {form.exercises.length > 1 && <button onClick={() => removeExercise(eIdx)}><Trash2 className="w-3.5 h-3.5 text-red-400" /></button>}
+                      <div className="flex items-center gap-2 w-full sm:w-auto">
+                        <div className="flex rounded-lg p-0.5 shrink-0" style={{ background: 'var(--th-bg-primary)', border: '1px solid var(--th-border)' }}>
+                          <button onClick={() => updateExercise(eIdx, 'metricType', 'weight_reps')} className={`px-2 py-1 text-[10px] rounded-md transition-all ${ex.metricType === 'weight_reps' ? 'shadow-sm' : 'opacity-50'}`} style={{ background: ex.metricType === 'weight_reps' ? 'var(--th-card)' : 'transparent', color: 'var(--th-text)' }}>🏋️</button>
+                          <button onClick={() => updateExercise(eIdx, 'metricType', 'time_distance')} className={`px-2 py-1 text-[10px] rounded-md transition-all ${ex.metricType === 'time_distance' ? 'shadow-sm' : 'opacity-50'}`} style={{ background: ex.metricType === 'time_distance' ? 'var(--th-card)' : 'transparent', color: 'var(--th-text)' }}>⏱️</button>
+                        </div>
+                        <div className="flex-1 sm:w-auto">
+                          <Select
+                            value={ex.muscleGroup}
+                            onChange={v => updateExercise(eIdx, 'muscleGroup', v)}
+                            options={MUSCLES.map(m => ({ value: m, label: m.replace('_', ' ') }))}
+                            className="w-full sm:w-[100px]"
+                          />
+                        </div>
+                        <div className="hidden sm:block shrink-0">
+                          {form.exercises.length > 1 && <button onClick={() => removeExercise(eIdx)} className="p-1"><Trash2 className="w-3.5 h-3.5 text-red-400" /></button>}
+                        </div>
+                      </div>
                     </div>
                     <div className="space-y-1">
                       {ex.metricType === 'weight_reps' ? (
@@ -279,16 +290,16 @@ export default function WorkoutForm({ onClose, initialData = null, editingSessio
                           <span className="text-[10px] text-center" style={{ color: 'var(--th-text-dim)' }}>{sIdx + 1}</span>
                           {ex.metricType === 'weight_reps' ? (
                             <>
-                              <div className="relative flex items-center">
+                              <div className="relative flex items-center min-w-0 w-full">
                                 <input type="number" min="0" value={s.weight} onChange={e => updateSet(eIdx, sIdx, 'weight', e.target.value === '' ? '' : Math.max(0, parseFloat(e.target.value) || 0))} className="w-full px-2 py-1 rounded text-[11px] outline-none transition-colors" style={{ background: 'var(--th-card)', border: s.isOverload ? '1px solid #10b981' : '1px solid var(--th-border)', color: 'var(--th-text)' }} />
                                 {s.isOverload && <div className="absolute right-1 top-1/2 -translate-y-1/2 text-emerald-500 font-bold text-[8px]" title="Progressive Overload Target">↑</div>}
                               </div>
-                              <input type="number" min="0" value={s.reps} onChange={e => updateSet(eIdx, sIdx, 'reps', e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0))} className="px-2 py-1 rounded text-[11px] outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+                              <input type="number" min="0" value={s.reps} onChange={e => updateSet(eIdx, sIdx, 'reps', e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0))} className="w-full min-w-0 px-2 py-1 rounded text-[11px] outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
                             </>
                           ) : (
                             <>
-                              <input type="number" min="0" value={s.duration} onChange={e => updateSet(eIdx, sIdx, 'duration', e.target.value === '' ? '' : Math.max(0, parseFloat(e.target.value) || 0))} className="px-2 py-1 rounded text-[11px] outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
-                              <input type="number" min="0" value={s.distance} onChange={e => updateSet(eIdx, sIdx, 'distance', e.target.value === '' ? '' : Math.max(0, parseFloat(e.target.value) || 0))} className="px-2 py-1 rounded text-[11px] outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+                              <input type="number" min="0" value={s.duration} onChange={e => updateSet(eIdx, sIdx, 'duration', e.target.value === '' ? '' : Math.max(0, parseFloat(e.target.value) || 0))} className="w-full min-w-0 px-2 py-1 rounded text-[11px] outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+                              <input type="number" min="0" value={s.distance} onChange={e => updateSet(eIdx, sIdx, 'distance', e.target.value === '' ? '' : Math.max(0, parseFloat(e.target.value) || 0))} className="w-full min-w-0 px-2 py-1 rounded text-[11px] outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
                             </>
                           )}
                           {ex.sets.length > 1 ? <button onClick={() => removeSet(eIdx, sIdx)}><X className="w-3 h-3 text-red-400" /></button> : <span />}

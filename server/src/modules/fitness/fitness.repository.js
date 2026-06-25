@@ -61,6 +61,12 @@ class FitnessRepository {
   }
 
   async upsertProfile(userId, data) {
+    console.log(`\n\n=== [DEBUG] UPSERTING FITNESS PROFILE for User: ${userId} ===`);
+    console.log(`Equipment Selected:`, data.equipmentAvailable || ['full_gym (default)']);
+    console.log(`Injuries Flagged:`, data.injuryFlags || ['None']);
+    console.log(`Profile Data:`, JSON.stringify(data, null, 2));
+    console.log(`=================================================================\n\n`);
+
     return prisma.fitnessProfile.upsert({
       where: { userId },
       update: data,

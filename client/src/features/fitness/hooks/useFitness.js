@@ -156,9 +156,35 @@ export function useLogWater() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: fitnessApi.logWater,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['fitness'] }),
-    onError: (err) => {
+    onMutate: async ({ amount, date }) => {
+      await qc.cancelQueries({ queryKey: ['fitness', 'nutrition', date] });
+      const previousNutrition = qc.getQueryData(['fitness', 'nutrition', date]);
+      
+      if (previousNutrition) {
+        qc.setQueryData(['fitness', 'nutrition', date], old => {
+          if (!old) return old;
+          
+          const isNested = !!old.data;
+          const oldNutrition = isNested ? old.data : old;
+          
+          const newNutrition = {
+            ...oldNutrition,
+            water: {
+              ...(oldNutrition.water || {}),
+              consumed: Math.max(0, (oldNutrition.water?.consumed || 0) + amount)
+            }
+          };
+
+          return isNested ? { ...old, data: newNutrition } : newNutrition;
+        });
+      }
+      return { previousNutrition, date };
+    },
+    onError: (err, variables, context) => {
       console.error('Failed to log water:', err);
+      if (context?.previousNutrition) {
+        qc.setQueryData(['fitness', 'nutrition', context.date], context.previousNutrition);
+      }
     }
   });
 }

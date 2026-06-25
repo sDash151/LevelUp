@@ -1,5 +1,6 @@
 import { Droplets, ChevronDown, Plus, Minus } from 'lucide-react';
 import { useLogWater } from '../hooks/useFitness';
+import { useState, useRef, useEffect } from 'react';
 
 function MugMeasurement({ consumed, goal, pct }) {
   return (
@@ -20,13 +21,49 @@ function MugMeasurement({ consumed, goal, pct }) {
   );
 }
 
-export default function WaterIntakeCard({ water }) {
+export default function WaterIntakeCard({ water, selectedDate }) {
   const logWater = useLogWater();
-  const consumed = water?.consumed || 0;
+  const baseConsumed = water?.consumed || 0;
+  
+  const [localAmount, setLocalAmount] = useState(0);
+  const pendingAmountRef = useRef(0);
+  const debounceTimeoutRef = useRef(null);
+
+  const consumed = Math.max(0, baseConsumed + localAmount);
   const goal = water?.goal || 3.0;
   const pct = Math.min(100, Math.round((consumed / goal) * 100));
 
-  const handleAdd = (amount) => logWater.mutate(amount);
+  const handleAdd = (amount) => {
+    if (amount < 0 && consumed + amount < 0) return;
+    setLocalAmount(prev => prev + amount);
+    pendingAmountRef.current += amount;
+
+    if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+    
+    debounceTimeoutRef.current = setTimeout(() => {
+      const finalAmount = pendingAmountRef.current;
+      if (finalAmount !== 0) {
+        logWater.mutate({ amount: finalAmount, date: selectedDate });
+      }
+      pendingAmountRef.current = 0;
+      setLocalAmount(0);
+    }, 600);
+  };
+
+  const mutateRef = useRef(logWater.mutate);
+  mutateRef.current = logWater.mutate;
+
+  // Flush any pending water logs if the component unmounts
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current && pendingAmountRef.current !== 0) {
+        clearTimeout(debounceTimeoutRef.current);
+        const finalAmount = pendingAmountRef.current;
+        pendingAmountRef.current = 0; // CRITICAL FIX: prevent infinite loops
+        mutateRef.current({ amount: finalAmount, date: selectedDate });
+      }
+    };
+  }, [selectedDate]);
 
   return (
     <div className="rounded-3xl p-5 h-full flex flex-col justify-between" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)', boxShadow: 'var(--th-shadow)' }}>
@@ -37,7 +74,7 @@ export default function WaterIntakeCard({ water }) {
           <h3 className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>Water Intake</h3>
         </div>
         <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 cursor-pointer transition-opacity hover:opacity-80" style={{ color: 'var(--th-text-secondary)' }}>
-          Today <ChevronDown className="w-3 h-3" />
+          {selectedDate === new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0] ? 'Today' : new Date(selectedDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
         </div>
       </div>
 
@@ -59,17 +96,17 @@ export default function WaterIntakeCard({ water }) {
 
       {/* Footer: Controls */}
       <div className="flex items-center gap-3">
-        <button onClick={() => handleAdd(-0.25)} disabled={logWater.isPending || consumed <= 0}
+        <button onClick={() => handleAdd(-0.25)} disabled={consumed <= 0}
           className="flex-1 h-10 rounded-xl flex items-center justify-center gap-1 text-xs font-bold transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100"
           style={{ background: 'rgba(59,130,246,0.1)', color: '#3B82F6' }}>
           <Minus className="w-3 h-3" /> 250ml
         </button>
-        <button onClick={() => handleAdd(0.25)} disabled={logWater.isPending}
+        <button onClick={() => handleAdd(0.25)}
           className="flex-1 h-10 rounded-xl flex items-center justify-center gap-1 text-xs font-bold transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100"
           style={{ background: 'rgba(59,130,246,0.1)', color: '#3B82F6' }}>
           <Plus className="w-3 h-3" /> 250ml
         </button>
-        <button onClick={() => handleAdd(0.5)} disabled={logWater.isPending}
+        <button onClick={() => handleAdd(0.5)}
           className="flex-1 h-10 rounded-xl flex items-center justify-center gap-1 text-xs font-bold transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100"
           style={{ background: 'rgba(59,130,246,0.1)', color: '#3B82F6' }}>
           <Plus className="w-3 h-3" /> 500ml

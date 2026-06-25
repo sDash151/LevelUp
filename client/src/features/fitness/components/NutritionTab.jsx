@@ -13,7 +13,8 @@ import FoodLogForm from './FoodLogForm';
 import { Apple } from 'lucide-react';
 
 export default function NutritionTab({ onEditMeal }) {
-  const today = new Date().toISOString().split('T')[0];
+  const d = new Date();
+  const today = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
   const [date, setDate] = useState(today);
   const [initialMealType, setInitialMealType] = useState('lunch');
   const [showFoodForm, setShowFoodForm] = useState(false);
@@ -125,7 +126,7 @@ export default function NutritionTab({ onEditMeal }) {
 
         {/* Right Column */}
         <div className="flex flex-col gap-5">
-          <WaterIntakeCard water={nutrition.water} />
+          <WaterIntakeCard water={nutrition.water} selectedDate={date} />
           <NutritionScoreCard score={nutrition.nutritionScore} />
         </div>
       </div>

@@ -997,7 +997,7 @@ class FitnessService {
   }
 
   async logWater(userId, amount, date) {
-    return fitnessRepository.createWaterEntry(userId, amount);
+    return fitnessRepository.createWaterEntry(userId, amount, date);
   }
 
   // ══════════════════════════════════════════════

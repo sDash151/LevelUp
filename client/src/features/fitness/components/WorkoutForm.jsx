@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { X, Plus, Trash2, Sparkles, Loader2, Dumbbell } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLogWorkout, useUpdateWorkout, useSmartParseWorkout, useWorkoutMemory, useExerciseCatalog } from '../hooks/useFitness';
@@ -6,6 +6,70 @@ import { Select } from '../../../design-system/components/Select';
 
 const TYPES = ['push', 'pull', 'legs', 'strength', 'hiit', 'swimming', 'calisthenics', 'cardio', 'yoga', 'mobility', 'sports'];
 const MUSCLES = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'full_body'];
+
+function ExerciseCombobox({ value, onChange, catalog }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState(value);
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    setSearch(value);
+  }, [value]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsOpen(false);
+        setSearch(value); // Revert to valid value if clicked outside
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [value]);
+
+  const filtered = useMemo(() => {
+    if (!search) return catalog.slice(0, 50);
+    const lowerSearch = search.toLowerCase();
+    return catalog.filter(c => c.name.toLowerCase().includes(lowerSearch)).slice(0, 50);
+  }, [search, catalog]);
+
+  return (
+    <div className="relative flex-1 w-full" ref={wrapperRef}>
+      <input 
+        type="text" 
+        value={search}
+        onChange={e => { setSearch(e.target.value); setIsOpen(true); }}
+        onFocus={() => setIsOpen(true)}
+        placeholder="Search exercise..." 
+        className="w-full px-2 py-1.5 rounded-lg text-xs outline-none" 
+        style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} 
+      />
+      {isOpen && (
+        <div className="absolute z-[60] w-full mt-1 max-h-48 overflow-y-auto rounded-lg shadow-xl" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}>
+          {filtered.length > 0 ? (
+            filtered.map(c => (
+              <button
+                key={c.id}
+                className="w-full text-left px-3 py-2 text-xs hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                style={{ color: 'var(--th-text)' }}
+                onClick={() => {
+                  onChange(c.name);
+                  setSearch(c.name);
+                  setIsOpen(false);
+                }}
+              >
+                {c.name}
+              </button>
+            ))
+          ) : (
+            <div className="px-3 py-2 text-xs" style={{ color: 'var(--th-text-secondary)' }}>No matches found</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 export default function WorkoutForm({ onClose, initialData = null, editingSessionId = null }) {
   const [mode, setMode] = useState('quick');
@@ -48,7 +112,8 @@ export default function WorkoutForm({ onClose, initialData = null, editingSessio
   const memoryData = memoryDataRaw?.data?.memories || memoryDataRaw?.memories || [];
 
   const catalogQuery = useExerciseCatalog();
-  const catalog = catalogQuery.data?.data?.catalog || [];
+  const rawData = catalogQuery.data?.data;
+  const catalog = Array.isArray(rawData) ? rawData : (rawData?.catalog || []);
 
   useEffect(() => {
     if (memoryData.length > 0 && form.exercises.length > 0 && !editingSessionId) {
@@ -256,7 +321,17 @@ export default function WorkoutForm({ onClose, initialData = null, editingSessio
                   <div key={eIdx} className="p-3 rounded-xl" style={{ background: 'var(--th-bg-secondary)', border: '1px solid var(--th-border)' }}>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
                       <div className="flex items-center gap-2 w-full sm:flex-1">
-                        <input list="catalog-exercises" type="text" value={ex.name} onChange={e => updateExercise(eIdx, 'name', e.target.value)} placeholder="Search exercise..." className="flex-1 px-2 py-1.5 rounded-lg text-xs outline-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)', color: 'var(--th-text)' }} />
+                        <ExerciseCombobox 
+                          value={ex.name} 
+                          onChange={(val) => {
+                            updateExercise(eIdx, 'name', val);
+                            const matched = catalog.find(c => c.name === val);
+                            if (matched && matched.muscleGroup) {
+                              updateExercise(eIdx, 'muscleGroup', matched.muscleGroup);
+                            }
+                          }} 
+                          catalog={catalog} 
+                        />
                         <div className="sm:hidden flex-shrink-0">
                           {form.exercises.length > 1 && <button onClick={() => removeExercise(eIdx)} className="p-1.5"><Trash2 className="w-4 h-4 text-red-400" /></button>}
                         </div>
@@ -272,6 +347,7 @@ export default function WorkoutForm({ onClose, initialData = null, editingSessio
                             onChange={v => updateExercise(eIdx, 'muscleGroup', v)}
                             options={MUSCLES.map(m => ({ value: m, label: m.replace('_', ' ') }))}
                             className="w-full sm:w-[100px]"
+                            disabled={!!ex.name}
                           />
                         </div>
                         <div className="hidden sm:block shrink-0">
@@ -319,9 +395,6 @@ export default function WorkoutForm({ onClose, initialData = null, editingSessio
           </div>
         )}
       </motion.div>
-      <datalist id="catalog-exercises">
-        {catalog.map(c => <option key={c.id} value={c.name} />)}
-      </datalist>
     </div>
   );
 }

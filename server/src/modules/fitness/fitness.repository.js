@@ -307,8 +307,15 @@ class FitnessRepository {
   // ══════════════════════════════════════════════
   // WATER LOG (event-based)
   // ══════════════════════════════════════════════
-  async createWaterEntry(userId, amount) {
-    return prisma.waterLog.create({ data: { userId, amount } });
+  async createWaterEntry(userId, amount, dateStr) {
+    const data = { userId, amount };
+    if (dateStr) {
+      // Create a date object that matches local noon for the given date
+      const d = new Date(dateStr);
+      d.setHours(12, 0, 0, 0);
+      data.createdAt = d;
+    }
+    return prisma.waterLog.create({ data });
   }
 
   async getWaterByDate(userId, date) {

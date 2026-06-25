@@ -31,7 +31,7 @@ export const logFood = (data) => api.post('/fitness/nutrition/meals', data).then
 export const updateMealLog = ({ id, ...data }) => api.put(`/fitness/nutrition/meals/${id}`, data).then(r => r.data);
 export const deleteMealLog = (id) => api.delete(`/fitness/nutrition/meals/${id}`).then(r => r.data);
 export const smartParseFood = (text) => api.post('/fitness/nutrition/meals/smart-parse', { text }).then(r => r.data);
-export const logWater = (amount) => api.post('/fitness/nutrition/water', { amount }).then(r => r.data);
+export const logWater = (data) => api.post('/fitness/nutrition/water', data).then(r => r.data);
 
 // ── Progress ──
 export const getProgress = (range) => api.get('/fitness/progress', { params: { range } }).then(r => r.data);

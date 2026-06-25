@@ -463,3 +463,59 @@ select:focus-visible {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ============================================
+   Google Places Autocomplete Styling
+   ============================================ */
+
+.pac-container {
+  background-color: var(--th-bg-secondary);
+  border: 1px solid var(--th-border);
+  border-radius: 0.75rem; /* 12px */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  font-family: inherit;
+  margin-top: 4px;
+  padding: 4px;
+}
+
+.pac-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  color: var(--th-text-secondary);
+  border-top: none;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.pac-item:hover, .pac-item-selected {
+  background-color: var(--th-primary) !important;
+  color: white !important;
+  opacity: 0.9;
+}
+
+.pac-item-query {
+  color: var(--th-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pac-item:hover .pac-item-query, 
+.pac-item-selected .pac-item-query {
+  color: white !important;
+}
+
+.pac-icon {
+  filter: grayscale(100%) opacity(50%);
+  margin-top: 2px;
+}
+
+.pac-item:hover .pac-icon,
+.pac-item-selected .pac-icon {
+  filter: brightness(0) invert(1);
+}
+
+.pac-logo::after {
+  background-color: transparent !important;
+  opacity: 0.5;
+}

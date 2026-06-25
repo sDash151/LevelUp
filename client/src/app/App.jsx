@@ -21,7 +21,29 @@ export function App() {
         <OfflineBanner />
         <AppRouter />
         <PWAInstallPrompt />
-        <Toaster position="bottom-center" />
+        <Toaster 
+          position="bottom-center" 
+          toastOptions={{
+            style: {
+              background: 'var(--th-bg-secondary)',
+              color: 'var(--th-text)',
+              border: '1px solid var(--th-border)',
+              borderRadius: '0.75rem',
+            },
+            success: {
+              iconTheme: {
+                primary: 'var(--th-primary)',
+                secondary: 'var(--th-bg-secondary)',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: 'var(--th-bg-secondary)',
+              },
+            },
+          }}
+        />
       </Providers>
     </ErrorBoundary>
   );

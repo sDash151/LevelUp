@@ -3,7 +3,9 @@ import { motion } from 'motion/react';
 import { AnimatedPage, Card, Avatar } from '@/design-system/components';
 import { useAuthStore } from '@/shared/stores/authStore';
 import { useThemeStore } from '@/shared/stores/themeStore';
-import { Mail, LogOut, Moon, Bell, Shield, Smartphone, ChevronRight, Check } from 'lucide-react';
+import { useFitnessProfile } from '@/features/fitness/hooks/useFitness';
+import EditOnboardingProfileModal from '../components/EditOnboardingProfileModal';
+import { Mail, LogOut, Moon, Bell, Shield, Smartphone, ChevronRight, Check, User, HeartPulse, Target, Activity, Edit3, Briefcase } from 'lucide-react';
 import clsx from 'clsx';
 
 function SettingRow({ icon: Icon, label, description, children, onClick }) {
@@ -54,13 +56,19 @@ export default function ProfilePage() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const { theme, toggleTheme } = useThemeStore();
+  const { data: fitnessData } = useFitnessProfile();
+  
   const [settings, setSettings] = useState({
     notifications: true,
     compactMode: false,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fitnessProfile = fitnessData?.data?.profile || fitnessData?.profile || {};
 
   return (
     <AnimatedPage>
+      <EditOnboardingProfileModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="mb-8">
         <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--th-text)' }}>Profile & Settings</h1>
         <p className="text-sm mt-1" style={{ color: 'var(--th-text-muted)' }}>Manage your personal information and app preferences.</p>
@@ -101,6 +109,24 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Column */}
         <div className="space-y-8">
+          <section>
+            <div className="flex items-center justify-between mb-4 px-1">
+              <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--th-text-dim)' }}>App Blueprint</h3>
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="text-xs font-bold flex items-center gap-1 hover:opacity-80 transition-opacity"
+                style={{ color: 'var(--th-primary)' }}
+              >
+                <Edit3 className="w-3.5 h-3.5" /> Edit
+              </button>
+            </div>
+            <Card className="p-2 sm:p-4">
+              <SettingRow icon={Target} label="Primary Goal" description={fitnessProfile?.goal ? fitnessProfile.goal.replace('_', ' ') : 'Not set'} />
+              <SettingRow icon={Briefcase} label="Job Title" description={user?.jobTitle || 'Not set'} />
+              <SettingRow icon={HeartPulse} label="Physical Stats" description={fitnessProfile?.weight && fitnessProfile?.height ? `${fitnessProfile.weight}kg • ${fitnessProfile.height}cm` : 'Not set'} />
+            </Card>
+          </section>
+
           <section>
             <h3 className="text-xs font-bold uppercase tracking-wider mb-4 ml-1" style={{ color: 'var(--th-text-dim)' }}>App Preferences</h3>
             <Card className="p-2 sm:p-4">

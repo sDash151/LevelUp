@@ -2,8 +2,10 @@ import { GoogleGenAI } from '@google/genai';
 
 class ProjectsAI {
   constructor() {
-    const apiKey = process.env.GEMINI_API_KEY;
-    this.client = apiKey ? new GoogleGenAI({ apiKey }) : null;
+    const keyString = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
+    this.keys = keyString ? keyString.split(',').map(k => k.trim()).filter(Boolean) : [];
+    this.clients = this.keys.map(apiKey => new GoogleGenAI({ apiKey }));
+    this.currentClientIndex = 0;
     this.model = 'gemini-2.5-flash';
   }
 
@@ -12,17 +14,47 @@ class ProjectsAI {
   /**
    * Send a prompt to Gemini and parse the JSON response.
    * @param {string} prompt
+   * @param {number} retries
    * @returns {Promise<any|null>}
    */
-  async _generate(prompt) {
-    if (!this.client) return null;
-    const response = await this.client.models.generateContent({
-      model: this.model,
-      contents: prompt,
-      config: { responseMimeType: 'application/json' },
-    });
-    console.log('RAW AI RESPONSE TEXT:', response.text);
-    return JSON.parse(response.text);
+  async _generate(prompt, retries = this.clients.length) {
+    if (this.clients.length === 0) return null;
+    
+    const client = this.clients[this.currentClientIndex];
+    try {
+      const response = await client.models.generateContent({
+        model: this.model,
+        contents: prompt,
+        config: { responseMimeType: 'application/json', temperature: 0.3 },
+      });
+      console.log('RAW AI RESPONSE TEXT:', response.text);
+      return JSON.parse(response.text);
+    } catch (error) {
+      const isRateLimited = error.status === 429 || 
+                            error.message?.includes('"code":429') || 
+                            error.message?.includes('RESOURCE_EXHAUSTED') || 
+                            error.message?.includes('Quota exceeded');
+                            
+      const isUnavailable = error.status === 503 ||
+                            error.message?.includes('"code":503') ||
+                            error.message?.includes('UNAVAILABLE') ||
+                            error.message?.includes('experiencing high demand');
+
+      if (isRateLimited && retries > 1) {
+        console.warn(`API Key ${this.currentClientIndex + 1} rate limited. Rotating to next key...`);
+        this.currentClientIndex = (this.currentClientIndex + 1) % this.clients.length;
+        return this._generate(prompt, retries - 1);
+      }
+      
+      if (isUnavailable && retries > 1) {
+        console.warn(`Google Gemini API 503 Unavailable (High Demand). Retrying in 5 seconds...`);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        return this._generate(prompt, retries - 1);
+      }
+      
+      console.error('ProjectsAI generation failed:', error.message);
+      return null;
+    }
   }
 
   // ── Public Methods ───────────────────────────────────────────────────────────

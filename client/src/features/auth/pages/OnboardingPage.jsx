@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/shared/stores/authStore';
@@ -6,34 +6,62 @@ import { useUser } from '../hooks/useAuth';
 import { api } from '@/shared/utils/api-client';
 import { Select } from '@/design-system/components/Select';
 import clsx from 'clsx';
-import { Briefcase, Dumbbell, Wallet, ArrowRight, ArrowLeft, Check, User, HeartPulse, Target, DollarSign, Sparkles } from 'lucide-react';
+import { Briefcase, Dumbbell, Wallet, ArrowRight, ArrowLeft, Check, User, HeartPulse, Target, Sparkles, MapPin, Smile } from 'lucide-react';
+import Autocomplete from 'react-google-autocomplete';
 
 const steps = [
-  { id: 1, title: 'Identity', icon: User },
-  { id: 2, title: 'Baselines', icon: HeartPulse },
-  { id: 3, title: 'Ambition', icon: Target },
+  { id: 1, title: 'Career', icon: Briefcase },
+  { id: 2, title: 'World', icon: MapPin },
+  { id: 3, title: 'Physical', icon: HeartPulse },
+  { id: 4, title: 'Persona', icon: Smile },
 ];
 
 export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const user = useAuthStore(s => s.user);
   const { refetch } = useUser();
 
-  const [form, setForm] = useState({
-    // Step 1: Identity
-    primaryFocus: 'career', // career, fitness, finance
-    jobTitle: '',
-    // Step 2: Physical
-    height: '',
-    weight: '',
-    goal: 'general',
-    experienceLevel: 'beginner',
-    // Step 3: Ambition
-    targetIncome: '',
-    baseCurrency: 'INR',
-    dreamRole: ''
+  const [form, setForm] = useState(() => {
+    const userEmail = useAuthStore.getState().user?.email || '';
+    const initialEmail = userEmail.includes('@github.com') ? '' : userEmail;
+    
+    return {
+      email: initialEmail,
+      // Step 1: Career
+      primaryFocus: 'career', // career, fitness, finance
+      jobTitle: '',
+      currentSalary: '',
+      dreamRole: '',
+      targetIncome: '',
+      baseCurrency: 'INR',
+
+      // Step 2: Location
+      address: '',
+      city: '',
+      country: '',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+      countryCode: '+91',
+      phoneNumber: '',
+
+      // Step 3: Physical
+      height: '',
+      weight: '',
+      dateOfBirth: '',
+      gender: 'male',
+      goal: 'general',
+      experienceLevel: 'beginner',
+
+      // Step 4: Persona
+      mantra: '',
+      leetcodeUrl: '',
+      linkedinUrl: '',
+      twitterUrl: '',
+      githubUrl: '',
+      portfolioUrl: '',
+
+      onboardingStep: 4,
+    };
   });
 
   const handleNext = () => {
@@ -51,9 +79,11 @@ export default function OnboardingPage() {
         ...form,
         height: form.height ? parseFloat(form.height) : undefined,
         weight: form.weight ? parseFloat(form.weight) : undefined,
+        currentSalary: form.currentSalary ? parseFloat(form.currentSalary) : undefined,
         targetIncome: form.targetIncome ? parseFloat(form.targetIncome) : undefined,
+        dateOfBirth: form.dateOfBirth || undefined,
+        phoneNumber: form.phoneNumber ? `${form.countryCode} ${form.phoneNumber}` : undefined,
       });
-      // Refresh user context so it picks up isOnboarded = true
       await refetch();
       navigate('/dashboard');
     } catch (error) {
@@ -92,21 +122,175 @@ export default function OnboardingPage() {
         ))}
       </div>
 
-      <div className="space-y-2 mt-8">
-        <label className="block text-sm font-medium">What is your current Job Title / Role?</label>
-        <input 
-          type="text" 
-          value={form.jobTitle} 
-          onChange={e => setForm(f => ({ ...f, jobTitle: e.target.value }))}
-          placeholder="e.g. Frontend Developer, Student..."
-          className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] transition-colors"
-          style={{ borderColor: 'var(--th-border)' }}
-        />
+      <div className="grid grid-cols-2 gap-4 pt-4 border-t" style={{ borderColor: 'var(--th-border)' }}>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Current Job Title</label>
+          <input 
+            type="text" 
+            value={form.jobTitle} 
+            onChange={e => setForm(f => ({ ...f, jobTitle: e.target.value }))}
+            placeholder="e.g. SDE 1"
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] transition-colors"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Dream Role</label>
+          <input 
+            type="text" 
+            value={form.dreamRole} 
+            onChange={e => setForm(f => ({ ...f, dreamRole: e.target.value }))}
+            placeholder="e.g. Sr. Architect"
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] transition-colors"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-4 space-y-2">
+          <label className="block text-sm font-medium">Currency</label>
+          <Select 
+            size="lg"
+            value={form.baseCurrency}
+            onChange={val => setForm(f => ({ ...f, baseCurrency: val }))}
+            options={[
+              { value: 'USD', label: 'USD ($)' },
+              { value: 'EUR', label: 'EUR (€)' },
+              { value: 'GBP', label: 'GBP (£)' },
+              { value: 'INR', label: 'INR (₹)' }
+            ]}
+          />
+        </div>
+        <div className="col-span-4 space-y-2">
+          <label className="block text-sm font-medium">Current Salary /yr</label>
+          <input 
+            type="number" 
+            value={form.currentSalary} 
+            onChange={e => setForm(f => ({ ...f, currentSalary: e.target.value }))}
+            placeholder="50000"
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+        <div className="col-span-4 space-y-2">
+          <label className="block text-sm font-medium">Target Income /yr</label>
+          <input 
+            type="number" 
+            value={form.targetIncome} 
+            onChange={e => setForm(f => ({ ...f, targetIncome: e.target.value }))}
+            placeholder="150000"
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
       </div>
     </div>
   );
 
   const renderStep2 = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold mb-2">Location & Contact</h2>
+        <p style={{ color: 'var(--th-text-secondary)' }}>Used for accurate local AI recommendations.</p>
+      </div>
+      
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Home Location (Address)</label>
+        <Autocomplete
+          apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+          onPlaceSelected={(place) => {
+            const city = place.address_components?.find(c => c.types.includes('locality'))?.long_name || '';
+            const country = place.address_components?.find(c => c.types.includes('country'))?.long_name || '';
+            setForm(f => ({ 
+              ...f, 
+              address: place.formatted_address || f.address,
+              city,
+              country
+            }));
+          }}
+          options={{ types: [] }}
+          className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
+          style={{ borderColor: 'var(--th-border)' }}
+          placeholder="Start typing your address or city..."
+          defaultValue={form.address}
+          onChange={(e) => setForm(f => ({ ...f, address: e.target.value }))}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">City</label>
+          <input 
+            type="text" 
+            value={form.city} 
+            onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Country</label>
+          <input 
+            type="text" 
+            value={form.country} 
+            onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 pt-4 border-t" style={{ borderColor: 'var(--th-border)' }}>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium flex items-center gap-2">
+            Timezone <span className="text-xs bg-[var(--th-primary)]/10 text-[var(--th-primary)] px-2 py-0.5 rounded-full">Auto</span>
+          </label>
+          <input 
+            type="text" 
+            value={form.timezone} 
+            disabled
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)]/50 text-[var(--th-text-secondary)] outline-none"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Phone Number</label>
+          <div className="flex gap-2">
+            <div className="w-[110px] shrink-0">
+              <Select 
+                value={form.countryCode}
+                onChange={val => setForm(f => ({ ...f, countryCode: val }))}
+                options={[
+                  { value: '+1', label: '🇺🇸 +1' },
+                  { value: '+44', label: '🇬🇧 +44' },
+                  { value: '+91', label: '🇮🇳 +91' },
+                  { value: '+61', label: '🇦🇺 +61' },
+                  { value: '+81', label: '🇯🇵 +81' },
+                  { value: '+49', label: '🇩🇪 +49' },
+                  { value: '+33', label: '🇫🇷 +33' },
+                  { value: '+971', label: '🇦🇪 +971' },
+                  { value: '+65', label: '🇸🇬 +65' },
+                ]}
+                size="lg"
+                menuPlacement="top"
+              />
+            </div>
+            <input 
+              type="tel" 
+              value={form.phoneNumber} 
+              onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value.replace(/[^0-9]/g, '') }))}
+              placeholder="1234567890"
+              className="flex-1 px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] min-w-0"
+              style={{ borderColor: 'var(--th-border)', color: 'var(--th-text)' }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStep3 = () => (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-2">Physical Baselines</h2>
@@ -134,6 +318,32 @@ export default function OnboardingPage() {
             placeholder="70"
             className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
             style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Date of Birth</label>
+          <input 
+            type="date" 
+            value={form.dateOfBirth} 
+            onChange={e => setForm(f => ({ ...f, dateOfBirth: e.target.value }))}
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
+            style={{ borderColor: 'var(--th-border)', colorScheme: 'dark' }}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Gender</label>
+          <Select 
+            size="lg"
+            value={form.gender}
+            onChange={val => setForm(f => ({ ...f, gender: val }))}
+            options={[
+              { value: 'male', label: 'Male' },
+              { value: 'female', label: 'Female' },
+              { value: 'other', label: 'Other' }
+            ]}
           />
         </div>
       </div>
@@ -179,55 +389,98 @@ export default function OnboardingPage() {
     </div>
   );
 
-  const renderStep3 = () => (
+  const renderStep4 = () => (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold mb-2">The Ambition</h2>
-        <p style={{ color: 'var(--th-text-secondary)' }}>What are you working towards?</p>
+        <h2 className="text-2xl font-bold mb-2">The Persona</h2>
+        <p style={{ color: 'var(--th-text-secondary)' }}>Establish your digital identity.</p>
       </div>
-      
+
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Dream Tech Role</label>
+        <label className="flex items-center justify-between text-sm font-medium mb-2">
+          <span>Email Address</span>
+          <span className="text-[10px] font-normal px-2 py-0.5 rounded-full bg-[var(--th-bg-secondary)] text-[var(--th-text-dim)] border border-[var(--th-border)]">Optional</span>
+        </label>
         <input 
-          type="text" 
-          value={form.dreamRole} 
-          onChange={e => setForm(f => ({ ...f, dreamRole: e.target.value }))}
-          placeholder="e.g. Senior Fullstack Engineer at Google"
-          className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
+          type="email" 
+          value={form.email} 
+          onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+          placeholder="your@email.com"
+          className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] text-sm transition-colors"
           style={{ borderColor: 'var(--th-border)' }}
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-1 space-y-2">
-          <label className="block text-sm font-medium">Currency</label>
-          <Select 
-            size="lg"
-            value={form.baseCurrency}
-            onChange={val => setForm(f => ({ ...f, baseCurrency: val }))}
-            options={[
-              { value: 'USD', label: 'USD ($)' },
-              { value: 'EUR', label: 'EUR (€)' },
-              { value: 'GBP', label: 'GBP (£)' },
-              { value: 'INR', label: 'INR (₹)' }
-            ]}
+      <div className="space-y-2">
+        <label className="flex items-center justify-between text-sm font-medium mb-2">
+          <span>Personal Mantra / Bio</span>
+          <span className="text-[10px] font-normal px-2 py-0.5 rounded-full bg-[var(--th-bg-secondary)] text-[var(--th-text-dim)] border border-[var(--th-border)]">Optional</span>
+        </label>
+        <textarea 
+          value={form.mantra} 
+          onChange={e => setForm(f => ({ ...f, mantra: e.target.value }))}
+          placeholder="e.g. Getting 1% better every day."
+          className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] transition-colors resize-none"
+          style={{ borderColor: 'var(--th-border)', minHeight: '80px' }}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="flex items-center justify-between text-sm font-medium mb-2">
+            <span>LinkedIn URL</span>
+            <span className="text-[10px] font-normal px-2 py-0.5 rounded-full bg-[var(--th-bg-secondary)] text-[var(--th-text-dim)] border border-[var(--th-border)]">Optional</span>
+          </label>
+          <input 
+            type="text" 
+            value={form.linkedinUrl} 
+            onChange={e => setForm(f => ({ ...f, linkedinUrl: e.target.value }))}
+            placeholder="linkedin.com/in/..."
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] text-sm"
+            style={{ borderColor: 'var(--th-border)' }}
           />
         </div>
-        <div className="col-span-2 space-y-2">
-          <label className="block text-sm font-medium">Target Monthly Income</label>
-          <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 font-medium" style={{ color: 'var(--th-text-dim)' }}>
-              {{ USD: '$', EUR: '€', GBP: '£', INR: '₹' }[form.baseCurrency] || '₹'}
-            </span>
-            <input 
-              type="number" 
-              value={form.targetIncome} 
-              onChange={e => setForm(f => ({ ...f, targetIncome: e.target.value }))}
-              placeholder="100000"
-              className="w-full pl-10 pr-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)]"
-              style={{ borderColor: 'var(--th-border)' }}
-            />
-          </div>
+        <div className="space-y-2">
+          <label className="flex items-center justify-between text-sm font-medium mb-2">
+            <span>Twitter URL</span>
+            <span className="text-[10px] font-normal px-2 py-0.5 rounded-full bg-[var(--th-bg-secondary)] text-[var(--th-text-dim)] border border-[var(--th-border)]">Optional</span>
+          </label>
+          <input 
+            type="text" 
+            value={form.twitterUrl} 
+            onChange={e => setForm(f => ({ ...f, twitterUrl: e.target.value }))}
+            placeholder="twitter.com/..."
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] text-sm"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="flex items-center justify-between text-sm font-medium mb-2">
+            <span>GitHub URL</span>
+            <span className="text-[10px] font-normal px-2 py-0.5 rounded-full bg-[var(--th-bg-secondary)] text-[var(--th-text-dim)] border border-[var(--th-border)]">Optional</span>
+          </label>
+          <input 
+            type="text" 
+            value={form.githubUrl} 
+            onChange={e => setForm(f => ({ ...f, githubUrl: e.target.value }))}
+            placeholder="github.com/..."
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] text-sm"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="flex items-center justify-between text-sm font-medium mb-2">
+            <span>LeetCode URL</span>
+            <span className="text-[10px] font-normal px-2 py-0.5 rounded-full bg-[var(--th-bg-secondary)] text-[var(--th-text-dim)] border border-[var(--th-border)]">Optional</span>
+          </label>
+          <input 
+            type="text" 
+            value={form.leetcodeUrl} 
+            onChange={e => setForm(f => ({ ...f, leetcodeUrl: e.target.value }))}
+            placeholder="leetcode.com/u/..."
+            className="w-full px-4 py-3 rounded-xl border bg-[var(--th-bg)] outline-none focus:border-[var(--th-primary)] text-sm"
+            style={{ borderColor: 'var(--th-border)' }}
+          />
         </div>
       </div>
     </div>
@@ -238,9 +491,7 @@ export default function OnboardingPage() {
       <div className="max-w-2xl w-full">
         {/* Premium Progress Stepper */}
         <div className="mb-14 relative px-2 sm:px-10">
-          {/* Background Line */}
           <div className="absolute left-10 right-10 top-6 -translate-y-1/2 h-1.5 rounded-full bg-[var(--th-border)]/50 overflow-hidden">
-            {/* Animated Progress Line */}
             <motion.div 
               className="absolute left-0 top-0 bottom-0 bg-[var(--th-primary)]"
               initial={{ width: '0%' }}
@@ -300,6 +551,7 @@ export default function OnboardingPage() {
               {currentStep === 1 && renderStep1()}
               {currentStep === 2 && renderStep2()}
               {currentStep === 3 && renderStep3()}
+              {currentStep === 4 && renderStep4()}
             </motion.div>
           </AnimatePresence>
 

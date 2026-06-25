@@ -68,17 +68,51 @@ export const onboardUser = asyncHandler(async (req, res) => {
   const data = req.body;
 
   // 1. Update User Profile
+  const currentUser = await prisma.user.findUnique({ where: { id: userId } });
+  
+  const updateData = {
+    // Step 0: Base Info
+    ...(data.email && { email: data.email }),
+    
+    // Step 1: Career & Finance
+    primaryFocus: data.primaryFocus,
+    jobTitle: data.jobTitle,
+    currentSalary: data.currentSalary,
+    dreamRole: data.dreamRole,
+    targetIncome: data.targetIncome,
+    baseCurrency: data.baseCurrency || 'USD',
+    
+    // Step 2: Localization
+    address: data.address,
+    city: data.city,
+    country: data.country,
+    phoneNumber: data.phoneNumber,
+    timezone: data.timezone,
+    mantra: data.mantra,
+
+    // Step 3: Physical (partially in User)
+    gender: data.gender,
+    dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
+
+    // Step 4: Persona
+    leetcodeUrl: data.leetcodeUrl,
+    linkedinUrl: data.linkedinUrl,
+    twitterUrl: data.twitterUrl,
+    githubUrl: data.githubUrl,
+    portfolioUrl: data.portfolioUrl,
+
+    onboardingStep: data.onboardingStep,
+    isOnboarded: data.onboardingStep === 4 ? true : currentUser.isOnboarded, // Complete onboarding on step 4
+  };
+
+  // Only give XP if this is their first time onboarding
+  if (!currentUser.isOnboarded) {
+    updateData.totalXp = { increment: 50 };
+  }
+
   await prisma.user.update({
     where: { id: userId },
-    data: {
-      jobTitle: data.jobTitle,
-      dreamRole: data.dreamRole,
-      targetIncome: data.targetIncome,
-      primaryFocus: data.primaryFocus,
-      baseCurrency: data.baseCurrency || 'USD',
-      isOnboarded: true,
-      totalXp: { increment: 50 }, // Give 50 XP for onboarding!
-    }
+    data: updateData
   });
 
   // 2. Upsert Fitness Profile

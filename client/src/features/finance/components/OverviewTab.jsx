@@ -95,17 +95,21 @@ export default function OverviewTab() {
 
   const { kpis, wealthAllocation, cashFlow, expenseLeaks, budgetHealth, upcomingObligations, emergencyFund, streaks, aiInsight, upgradeScore, lifeROI, monthlyReflection } = data;
 
-  const formatInsightToMarkdown = (insight) => `
+  const formatInsightToMarkdown = (insight) => {
+    if (!insight) return '';
+    return `
 # ${insight.title || 'AI CFO Analysis'}
 
 ${insight.summary || ''}
 
 ### Key Insights
+
 ${(insight.keyInsights || []).map(i => `* ${i}`).join('\n')}
 
 ### Action Items
+
 ${(insight.actionItems || []).map(i => `* ${i}`).join('\n')}
-  `;
+  `};
 
   const handleViewInsight = () => {
     if (!aiInsight) return;
@@ -119,7 +123,7 @@ ${(insight.actionItems || []).map(i => `* ${i}`).join('\n')}
     try {
       setIsGenerating(true);
       const res = await getCFOInsight();
-      const insight = res.content || res;
+      const insight = res.data?.content || res.data || res;
       
       setModalState({
         isOpen: true,

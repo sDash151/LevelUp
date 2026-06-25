@@ -74,10 +74,14 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
     const todayDate = new Date();
     return todayDate.getDay() === 0 ? 6 : todayDate.getDay() - 1;
   });
-  const [expandedDiet, setExpandedDiet] = useState(null);
+  const [selectedDietDay, setSelectedDietDay] = useState(() => {
+    const todayDate = new Date();
+    return todayDate.getDay() === 0 ? 6 : todayDate.getDay() - 1;
+  });
 
   const [selectedExercises, setSelectedExercises] = useState({});
   const [selectedFoods, setSelectedFoods] = useState({});
+  const [expandedMeals, setExpandedMeals] = useState({});
   
   const { data: catalogData } = useExerciseCatalog();
   const catalog = catalogData?.data || catalogData || [];
@@ -220,6 +224,17 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
     });
   };
 
+  const toggleAllFoods = (dayIdx, mealIdx, foodsArray) => {
+    const key = `${dayIdx}-${mealIdx}`;
+    setSelectedFoods(prev => {
+      const currentSel = prev[key] || [];
+      if (currentSel.length === foodsArray.length) {
+        return { ...prev, [key]: [] };
+      }
+      return { ...prev, [key]: foodsArray.map((_, i) => i) };
+    });
+  };
+
   const handleLogWorkout = (dayIdx) => {
     const day = workout?.schedule?.[dayIdx];
     if (!day) return;
@@ -354,7 +369,7 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
              </div>
           </div>
 
-          <div className="flex gap-3 overflow-x-auto pb-4 snap-x hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <div className="flex gap-3 overflow-x-auto pb-4 pt-1 px-2 scroll-pl-2 snap-x hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             {workout.schedule && (() => {
               const todayDate = new Date();
               const todayDayOfWeek = todayDate.getDay() === 0 ? 6 : todayDate.getDay() - 1; // 0=Mon, 6=Sun
@@ -569,7 +584,7 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
              </div>
           </div>
 
-          <div className="grid gap-3">
+          <div className="flex overflow-x-auto gap-4 pb-4 pt-1 px-2 scroll-pl-2 snap-x sm:justify-start hide-scrollbar relative z-10">
             {(() => {
               const mealsList = Array.isArray(diet.mealsJson) ? diet.mealsJson : [];
               if (mealsList.length === 0) return null;
@@ -580,7 +595,7 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
               return Array.from({ length: 7 }, (_, i) => (currentDayIndex + i) % 7).map((originalIdx, renderIdx) => {
                 const dayPlan = mealsList[originalIdx];
                 if (!dayPlan) return null;
-                const isExpanded = expandedDiet === originalIdx;
+                const isSelected = selectedDietDay === originalIdx;
                 
                 const targetDate = new Date(todayDate);
                 targetDate.setDate(todayDate.getDate() + renderIdx);
@@ -588,111 +603,145 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
                 const dateNumLabel = targetDate.getDate();
 
                 return (
-                  <div key={originalIdx} className="overflow-hidden rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md" style={{ background: 'var(--th-card)', borderColor: isExpanded ? '#10B981' : 'var(--th-border)' }}>
-                    <button
-                      onClick={() => setExpandedDiet(isExpanded ? null : originalIdx)}
-                      className="w-full flex items-center justify-between p-4 focus:outline-none"
-                    >
-                      <div className="flex items-center gap-4">
-                         <div className={`w-12 h-12 rounded-xl flex flex-col items-center justify-center border transition-all ${isExpanded ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-[var(--th-bg)] border-[var(--th-border)]'}`}>
-                           <span className="text-[10px] font-black uppercase tracking-widest text-[var(--th-text-secondary)]">
-                             {renderIdx === 0 ? 'TODAY' : dayNameLabel}
-                           </span>
-                           <span className="text-lg font-black leading-none mt-0.5" style={{ color: isExpanded ? '#10B981' : 'var(--th-text-secondary)' }}>
-                             {dateNumLabel}
-                           </span>
-                         </div>
-                         <div className="text-left">
-                           <span className="text-base font-black capitalize" style={{ color: 'var(--th-text)' }}>{dayPlan.day} Nutrition</span>
-                           {dayPlan.meals && (
-                             <p className="text-[11px] font-bold text-[var(--th-text-secondary)] mt-0.5">{dayPlan.meals.length} Meals Planned</p>
-                           )}
-                         </div>
+                  <button
+                    key={originalIdx}
+                    onClick={() => setSelectedDietDay(originalIdx)}
+                    className={`flex-none w-36 sm:w-40 snap-start flex flex-col p-4 rounded-3xl transition-all duration-300 relative overflow-hidden text-center shadow-sm ${isSelected ? 'bg-emerald-500/5 border-emerald-500 ring-2 ring-emerald-500/20' : 'bg-[var(--th-card)] hover:bg-[var(--th-bg-secondary)] border border-[var(--th-border)] hover:border-emerald-500/30'}`}
+                    style={{ minHeight: '160px' }}
+                  >
+                    {isSelected && <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent pointer-events-none" />}
+                    
+                    <div className="flex flex-col items-center justify-center relative z-10 w-full h-full">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[var(--th-text-secondary)] mb-1">
+                        {renderIdx === 0 ? 'TODAY' : dayNameLabel}
+                      </span>
+                      <span className={`text-3xl font-black tracking-tighter mb-4 ${isSelected ? 'text-emerald-500' : 'text-[var(--th-text)]'}`}>
+                        {dateNumLabel}
+                      </span>
+                      
+                      <span className="text-sm font-bold truncate w-full mb-3" style={{ color: 'var(--th-text)' }}>
+                        {dayPlan.day}
+                      </span>
+
+                      <div className="mt-auto flex justify-center w-full">
+                        <span className={`px-3 py-1 rounded-full text-[9px] font-black tracking-widest uppercase ${isSelected ? 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-black/5 dark:bg-white/5 text-[var(--th-text-secondary)]'}`}>
+                          {dayPlan.meals?.length || 0} MEALS
+                        </span>
                       </div>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isExpanded ? 'bg-emerald-500/10 text-emerald-500 rotate-90' : 'bg-black/5 dark:bg-white/5 text-[var(--th-text-secondary)] hover:bg-black/10 dark:hover:bg-white/10'}`}>
-                         <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </button>
-
-                    <AnimatePresence>
-                      {isExpanded && dayPlan.meals && (
-                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="bg-[var(--th-bg)]">
-                           <div className="p-4 pt-0 space-y-4 border-t border-[var(--th-border)] mt-2">
-                             {dayPlan.meals.map((meal, mIdx) => (
-                                <div key={mIdx} className="group/meal relative p-4 rounded-xl border border-[var(--th-border)] bg-[var(--th-card)] hover:border-emerald-500/30 transition-colors shadow-sm">
-                                  <div className="flex justify-between items-start mb-3">
-                                    <div>
-                                      <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-[9px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                          {meal.type}
-                                        </span>
-                                      </div>
-                                      <h5 className="text-sm font-bold" style={{ color: 'var(--th-text)' }}>{meal.name}</h5>
-                                    </div>
-                                    <button
-                                      onClick={() => swapMealMut.mutate({ planId: diet.id, day: dayPlan.day, mealType: meal.type })}
-                                      disabled={swapMealMut.isPending}
-                                      className="p-2 rounded-xl bg-[var(--th-bg)] border border-[var(--th-border)] transition-colors hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-500 group-hover/meal:opacity-100 sm:opacity-0"
-                                      title="Swap meal"
-                                    >
-                                      {swapMealMut.isPending ? <Loader2 className="w-4 h-4 animate-spin text-emerald-500" /> : <RefreshCw className="w-4 h-4" />}
-                                    </button>
-                                  </div>
-
-                                  {/* Mini Macro pills for meal */}
-                                  <div className="flex items-center gap-2 mb-4 p-2 rounded-lg bg-[var(--th-bg)] border border-black/5 dark:border-white/5">
-                                     <div className="flex-1 text-center border-r border-[var(--th-border)] last:border-0">
-                                       <p className="text-[9px] font-bold text-[var(--th-text-secondary)] uppercase tracking-wider">Kcal</p>
-                                       <p className="text-xs font-black" style={{ color: '#F59E0B' }}>{meal.calories}</p>
-                                     </div>
-                                     <div className="flex-1 text-center border-r border-[var(--th-border)] last:border-0">
-                                       <p className="text-[9px] font-bold text-[var(--th-text-secondary)] uppercase tracking-wider">Pro</p>
-                                       <p className="text-xs font-black" style={{ color: '#EF4444' }}>{meal.protein}g</p>
-                                     </div>
-                                     <div className="flex-1 text-center border-r border-[var(--th-border)] last:border-0">
-                                       <p className="text-[9px] font-bold text-[var(--th-text-secondary)] uppercase tracking-wider">Carb</p>
-                                       <p className="text-xs font-black" style={{ color: '#3B82F6' }}>{meal.carbs}g</p>
-                                     </div>
-                                     <div className="flex-1 text-center border-r border-[var(--th-border)] last:border-0">
-                                       <p className="text-[9px] font-bold text-[var(--th-text-secondary)] uppercase tracking-wider">Fat</p>
-                                       <p className="text-xs font-black" style={{ color: '#10B981' }}>{meal.fats}g</p>
-                                     </div>
-                                  </div>
-
-                                  {meal.foods && meal.foods.length > 0 && (
-                                    <div className="space-y-2 pl-1 bg-black/5 dark:bg-white/5 p-3 rounded-lg border border-[var(--th-border)] mt-4">
-                                      {meal.foods.map((f, i) => (
-                                        <div key={i} onClick={() => toggleFood(originalIdx, mIdx, i)} className="flex items-start gap-3 text-xs cursor-pointer group/chk p-2 -mx-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                                          <div className={`w-4 h-4 mt-0.5 rounded flex items-center justify-center border transition-all duration-300 shrink-0 ${(selectedFoods[`${originalIdx}-${mIdx}`] || []).includes(i) ? 'bg-emerald-500 border-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)]' : 'bg-black/10 dark:bg-white/5 border-emerald-500/40 shadow-[0_0_8px_rgba(16,185,129,0.2)] group-hover/chk:border-emerald-500 group-hover/chk:shadow-[0_0_12px_rgba(16,185,129,0.4)]'}`}>
-                                            {(selectedFoods[`${originalIdx}-${mIdx}`] || []).includes(i) && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
-                                          </div>
-                                          <div className="flex flex-col">
-                                            <span className={`font-semibold transition-colors ${(selectedFoods[`${originalIdx}-${mIdx}`] || []).includes(i) ? 'text-emerald-500' : 'text-[var(--th-text)]'}`}>{f.name}</span>
-                                            <span className="opacity-70 text-[var(--th-text-secondary)]">{f.quantity || f.amount}</span>
-                                          </div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  )}
-                                  {(selectedFoods[`${originalIdx}-${mIdx}`]?.length > 0) && (
-                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between shadow-sm">
-                                      <span className="text-xs font-bold text-emerald-500">{selectedFoods[`${originalIdx}-${mIdx}`].length} items selected</span>
-                                      <button onClick={() => handleLogMeal(originalIdx, mIdx)} className="px-3 py-1.5 bg-emerald-500 text-white rounded-lg text-xs font-bold shadow-md hover:bg-emerald-600 transition-colors active:scale-95">
-                                        Log Selected
-                                      </button>
-                                    </motion.div>
-                                  )}
-                                </div>
-                             ))}
-                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                    </div>
+                  </button>
                 );
               });
             })()}
           </div>
+
+          <AnimatePresence mode="wait">
+            {(() => {
+              const mealsList = Array.isArray(diet.mealsJson) ? diet.mealsJson : [];
+              const dayPlan = mealsList[selectedDietDay];
+              if (!dayPlan || !dayPlan.meals) return null;
+
+              return (
+                <motion.div
+                  key={selectedDietDay}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-2 space-y-4"
+                >
+                  {dayPlan.meals.map((meal, mIdx) => (
+                    <div key={mIdx} className="group/meal relative p-4 rounded-xl border border-[var(--th-border)] bg-[var(--th-card)] hover:border-emerald-500/30 transition-colors shadow-sm">
+                      <div 
+                        onClick={() => setExpandedMeals(prev => ({ ...prev, [`${selectedDietDay}-${mIdx}`]: !prev[`${selectedDietDay}-${mIdx}`] }))}
+                        className="flex justify-between items-start mb-3 cursor-pointer group/header"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[9px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                              {meal.type}
+                            </span>
+                          </div>
+                          <h5 className="text-sm font-bold group-hover/header:text-emerald-500 transition-colors" style={{ color: 'var(--th-text)' }}>{meal.name}</h5>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); swapMealMut.mutate({ planId: diet.id, day: dayPlan.day, mealType: meal.type }); }}
+                            disabled={swapMealMut.isPending}
+                            className="p-2 rounded-xl bg-[var(--th-bg)] border border-[var(--th-border)] transition-colors hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-500 group-hover/meal:opacity-100 sm:opacity-0"
+                            title="Swap meal"
+                          >
+                            {swapMealMut.isPending ? <Loader2 className="w-4 h-4 animate-spin text-emerald-500" /> : <RefreshCw className="w-4 h-4" />}
+                          </button>
+                        </div>
+                      </div>
+
+                      <AnimatePresence>
+                        {expandedMeals[`${selectedDietDay}-${mIdx}`] && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                            {/* Mini Macro pills for meal */}
+                            <div className="flex items-center gap-2 mb-4 p-2 rounded-lg bg-[var(--th-bg)] border border-black/5 dark:border-white/5">
+                               <div className="flex-1 text-center border-r border-[var(--th-border)] last:border-0">
+                                 <p className="text-[9px] font-bold text-[var(--th-text-secondary)] uppercase tracking-wider">Kcal</p>
+                                 <p className="text-xs font-black" style={{ color: '#F59E0B' }}>{meal.calories}</p>
+                               </div>
+                               <div className="flex-1 text-center border-r border-[var(--th-border)] last:border-0">
+                                 <p className="text-[9px] font-bold text-[var(--th-text-secondary)] uppercase tracking-wider">Pro</p>
+                                 <p className="text-xs font-black" style={{ color: '#EF4444' }}>{meal.protein}g</p>
+                               </div>
+                               <div className="flex-1 text-center border-r border-[var(--th-border)] last:border-0">
+                                 <p className="text-[9px] font-bold text-[var(--th-text-secondary)] uppercase tracking-wider">Carb</p>
+                                 <p className="text-xs font-black" style={{ color: '#3B82F6' }}>{meal.carbs}g</p>
+                               </div>
+                               <div className="flex-1 text-center border-r border-[var(--th-border)] last:border-0">
+                                 <p className="text-[9px] font-bold text-[var(--th-text-secondary)] uppercase tracking-wider">Fat</p>
+                                 <p className="text-xs font-black" style={{ color: '#10B981' }}>{meal.fats}g</p>
+                               </div>
+                            </div>
+
+                            {meal.foods && meal.foods.length > 0 && (
+                              <div className="space-y-2 pl-1 bg-black/5 dark:bg-white/5 p-3 rounded-lg border border-[var(--th-border)] mt-4">
+                                <div 
+                                  onClick={() => toggleAllFoods(selectedDietDay, mIdx, meal.foods)} 
+                                  className="flex items-center gap-3 text-xs cursor-pointer group/chk p-2 -mx-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors border-b border-black/10 dark:border-white/10 mb-2 pb-3"
+                                >
+                                  <div className={`w-4 h-4 rounded flex items-center justify-center border transition-all duration-300 shrink-0 ${(selectedFoods[`${selectedDietDay}-${mIdx}`] || []).length === meal.foods.length ? 'bg-emerald-500 border-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)]' : 'bg-black/10 dark:bg-white/5 border-emerald-500/40 shadow-[0_0_8px_rgba(16,185,129,0.2)] group-hover/chk:border-emerald-500 group-hover/chk:shadow-[0_0_12px_rgba(16,185,129,0.4)]'}`}>
+                                    {((selectedFoods[`${selectedDietDay}-${mIdx}`] || []).length === meal.foods.length) && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                                  </div>
+                                  <span className={`font-black uppercase tracking-wider transition-colors ${(selectedFoods[`${selectedDietDay}-${mIdx}`] || []).length === meal.foods.length ? 'text-emerald-500' : 'text-[var(--th-text-secondary)]'}`}>
+                                    {(selectedFoods[`${selectedDietDay}-${mIdx}`] || []).length === meal.foods.length ? 'Deselect All Foods' : 'Select All Foods'}
+                                  </span>
+                                </div>
+                                {meal.foods.map((f, i) => (
+                                  <div key={i} onClick={() => toggleFood(selectedDietDay, mIdx, i)} className="flex items-start gap-3 text-xs cursor-pointer group/chk p-2 -mx-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                                    <div className={`w-4 h-4 mt-0.5 rounded flex items-center justify-center border transition-all duration-300 shrink-0 ${(selectedFoods[`${selectedDietDay}-${mIdx}`] || []).includes(i) ? 'bg-emerald-500 border-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)]' : 'bg-black/10 dark:bg-white/5 border-emerald-500/40 shadow-[0_0_8px_rgba(16,185,129,0.2)] group-hover/chk:border-emerald-500 group-hover/chk:shadow-[0_0_12px_rgba(16,185,129,0.4)]'}`}>
+                                      {(selectedFoods[`${selectedDietDay}-${mIdx}`] || []).includes(i) && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <span className={`font-semibold transition-colors ${(selectedFoods[`${selectedDietDay}-${mIdx}`] || []).includes(i) ? 'text-emerald-500' : 'text-[var(--th-text)]'}`}>{f.name}</span>
+                                      <span className="opacity-70 text-[var(--th-text-secondary)]">{f.quantity || f.amount}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            {(selectedFoods[`${selectedDietDay}-${mIdx}`]?.length > 0) && (
+                              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between shadow-sm">
+                                <span className="text-xs font-bold text-emerald-500">{selectedFoods[`${selectedDietDay}-${mIdx}`].length} items selected</span>
+                                <button onClick={() => handleLogMeal(selectedDietDay, mIdx)} className="px-3 py-1.5 bg-emerald-500 text-white rounded-lg text-xs font-bold shadow-md hover:bg-emerald-600 transition-colors active:scale-95">
+                                  Log Selected
+                                </button>
+                              </motion.div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                                </div>
+                  ))}
+                </motion.div>
+              );
+            })()}
+          </AnimatePresence>
         </div>
       )}
 
@@ -763,7 +812,7 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
                 );
                 return (
                   <>
-                    <div className="p-6 border-b border-[var(--th-border)] flex justify-between items-start bg-[var(--th-card)] relative overflow-hidden">
+                    <div className="shrink-0 p-6 border-b border-[var(--th-border)] flex justify-between items-start bg-[var(--th-card)] relative overflow-hidden">
                       <div className="absolute top-0 left-0 w-full h-1 bg-indigo-500/20">
                         <div className="h-full bg-indigo-500 w-1/3 blur-sm" />
                       </div>
@@ -778,24 +827,42 @@ export default function ActivePlanView({ onLogWorkout, onLogMeal }) {
                         <ChevronDown className="w-5 h-5 text-[var(--th-text-secondary)]" />
                       </button>
                     </div>
-                    <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col md:flex-row gap-6">
-                      <div className="flex-1 shrink-0">
-                        <h4 className="text-[11px] font-black uppercase tracking-widest text-[var(--th-text-secondary)] mb-3">Muscle Activation</h4>
-                        <div className="bg-[var(--th-card)] rounded-2xl border border-[var(--th-border)] p-4 shadow-inner">
-                          <MuscleHeatmap activeMuscles={[...(ex.primaryMuscles || []), ...(ex.secondaryMuscles || [])]} />
+                    <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-6">
+                      {ex.images && ex.images.length > 0 && (
+                        <div>
+                          <h4 className="text-[11px] font-black uppercase tracking-widest text-[var(--th-text-secondary)] mb-3">Demonstration</h4>
+                          <div className="flex overflow-x-auto gap-4 pb-2 snap-x hide-scrollbar">
+                            {ex.images.map((img, i) => (
+                              <img 
+                                key={i} 
+                                src={img} 
+                                alt={`${ex.name} position ${i + 1}`} 
+                                className="h-48 md:h-64 w-auto rounded-xl object-contain snap-center bg-white dark:bg-black/20 border border-[var(--th-border)] shadow-sm" 
+                                loading="lazy" 
+                              />
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex-[1.5]">
-                        <h4 className="text-[11px] font-black uppercase tracking-widest text-[var(--th-text-secondary)] mb-3">Form Guide</h4>
-                        <div className="space-y-3">
-                          {ex.instructions?.length > 0 ? ex.instructions.map((step, i) => (
-                            <div key={i} className="flex gap-3 text-sm">
-                              <span className="w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0 font-black text-[10px] mt-0.5">{i + 1}</span>
-                              <p style={{ color: 'var(--th-text)' }} className="leading-relaxed opacity-90">{step}</p>
-                            </div>
-                          )) : (
-                            <p className="text-sm opacity-50 italic">No instructions available.</p>
-                          )}
+                      )}
+                      <div className="flex flex-col md:flex-row gap-6">
+                        <div className="flex-1 shrink-0">
+                          <h4 className="text-[11px] font-black uppercase tracking-widest text-[var(--th-text-secondary)] mb-3">Muscle Activation</h4>
+                          <div className="bg-[var(--th-card)] rounded-2xl border border-[var(--th-border)] p-4 shadow-inner">
+                            <MuscleHeatmap activeMuscles={[...(ex.primaryMuscles || []), ...(ex.secondaryMuscles || [])]} />
+                          </div>
+                        </div>
+                        <div className="flex-[1.5]">
+                          <h4 className="text-[11px] font-black uppercase tracking-widest text-[var(--th-text-secondary)] mb-3">Form Guide</h4>
+                          <div className="space-y-3">
+                            {ex.instructions?.length > 0 ? ex.instructions.map((step, i) => (
+                              <div key={i} className="flex gap-3 text-sm">
+                                <span className="w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0 font-black text-[10px] mt-0.5">{i + 1}</span>
+                                <p style={{ color: 'var(--th-text)' }} className="leading-relaxed opacity-90">{step}</p>
+                              </div>
+                            )) : (
+                              <p className="text-sm opacity-50 italic">No instructions available.</p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

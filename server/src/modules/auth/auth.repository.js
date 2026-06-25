@@ -12,7 +12,11 @@ class AuthRepository {
         id: true, name: true, email: true, avatar: true, googleId: true, 
         createdAt: true, updatedAt: true, isOnboarded: true, primaryFocus: true,
         jobTitle: true, dreamRole: true, baseCurrency: true, targetIncome: true,
-        totalXp: true, level: true
+        monthlyBudget: true, codingLanguage: true, githubUrl: true, portfolioUrl: true,
+        gender: true, dateOfBirth: true, currentSalary: true, phoneNumber: true,
+        address: true, city: true, country: true, timezone: true, mantra: true,
+        theme: true, onboardingStep: true, leetcodeUrl: true, linkedinUrl: true, twitterUrl: true,
+        totalXp: true, level: true, currentStreak: true, longestStreak: true, rankTitle: true
       },
     });
   }

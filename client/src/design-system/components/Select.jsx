@@ -10,7 +10,8 @@ export function Select({
   placeholder = 'Select...', 
   className,
   disabled = false,
-  size = 'sm'
+  size = 'sm',
+  menuPlacement = 'bottom'
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
@@ -57,11 +58,14 @@ export function Select({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 5, scale: 0.95 }}
+            initial={{ opacity: 0, y: menuPlacement === 'bottom' ? 5 : -5, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 5, scale: 0.95 }}
+            exit={{ opacity: 0, y: menuPlacement === 'bottom' ? 5 : -5, scale: 0.95 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute z-50 w-full mt-1 rounded-xl shadow-lg border overflow-hidden"
+            className={clsx(
+              "absolute z-50 w-full rounded-xl shadow-lg border overflow-hidden",
+              menuPlacement === 'bottom' ? 'mt-1 top-full' : 'mb-1 bottom-full'
+            )}
             style={{ 
               background: 'var(--th-card-solid)', 
               borderColor: 'var(--th-border)',

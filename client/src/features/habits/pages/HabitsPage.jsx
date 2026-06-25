@@ -94,7 +94,7 @@ function HabitRow({ habit, onToggle, onEdit, onDelete }) {
   const today = new Date().toISOString().split('T')[0];
   const catConfig = CATEGORY_CONFIG[habit.category] || CATEGORY_CONFIG.general;
   return (
-    <motion.div layout initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }}
+    <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }}
       className="flex items-center gap-4 px-4 py-3 rounded-xl transition-colors group"
       style={{ background: 'transparent', border: '1px solid transparent' }}
       onMouseEnter={(e) => e.currentTarget.style.background = 'var(--th-highlight)'}
@@ -146,7 +146,7 @@ function HabitCard({ habit, onToggle, onEdit, onDelete }) {
   const today = new Date().toISOString().split('T')[0];
   const catConfig = CATEGORY_CONFIG[habit.category] || CATEGORY_CONFIG.general;
   return (
-    <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
+    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
       className="p-4 rounded-2xl" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
       <div className="flex items-start gap-3">
         <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${habit.color}20` }}>

@@ -537,7 +537,24 @@ class PlannerService {
   // ═══ HELPERS ═══
 
   async _getProfile(userId) {
-    return prisma.fitnessProfile.findUnique({ where: { userId } });
+    const profile = await prisma.fitnessProfile.findUnique({ 
+      where: { userId },
+      include: { user: { select: { dateOfBirth: true, gender: true } } }
+    });
+    if (!profile) return null;
+    
+    let age = null;
+    if (profile.user?.dateOfBirth) {
+      const diff = Date.now() - new Date(profile.user.dateOfBirth).getTime();
+      age = Math.abs(new Date(diff).getUTCFullYear() - 1970);
+    }
+    
+    return {
+      ...profile,
+      age: age,
+      gender: profile.user?.gender,
+      user: undefined
+    };
   }
 
   async _enrichWithProfile(userId, overrides = {}) {

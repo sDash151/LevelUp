@@ -34,6 +34,26 @@ model User {
   codingLanguage   String?   // python, cpp, java, javascript
   githubUrl        String?
   portfolioUrl     String?
+  gender           String?   // male, female, other
+  dateOfBirth      DateTime?
+
+  // ── Identity Expansion ──
+  currentSalary    Decimal?
+  phoneNumber      String?
+  address          String?
+  city             String?
+  country          String?
+  timezone         String?   @default("UTC")
+  mantra           String?
+  theme            String?   @default("system")
+  onboardingStep   Int?      @default(1)
+  leetcodeUrl      String?
+  linkedinUrl      String?
+  twitterUrl       String?
+  currentStreak    Int       @default(0)
+  longestStreak    Int       @default(0)
+  rankTitle        String    @default("Novice")
+  notificationPrefs Json?
 
   totalXp         Int      @default(0)
   level            Int      @default(1)
@@ -993,6 +1013,7 @@ model ExerciseCatalog {
   instructions            String[]  @default([])
   primaryMuscles          String[]  @default([])
   secondaryMuscles        String[]  @default([])
+  images                  String[]  @default([])
   createdAt   DateTime @default(now())
 
   @@index([muscleGroup])
@@ -1018,8 +1039,6 @@ model FitnessProfile {
   dailyFatsGoal    Int?     @default(70)
   dailyWaterGoal   Float?   @default(3.0) // liters
   // ── Planner fields ──
-  age               Int?
-  gender            String?    // male, female, other
   budget            Int?       // monthly food budget in INR
   foodStyle         String?    @default("hybrid") // familiar, hybrid, mixed, bodybuilding
   cookingAbility    String?    @default("basic")  // cannot_cook, basic, full

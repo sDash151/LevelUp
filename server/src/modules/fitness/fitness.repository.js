@@ -39,7 +39,25 @@ class FitnessRepository {
   // FITNESS PROFILE
   // ══════════════════════════════════════════════
   async getProfile(userId) {
-    return prisma.fitnessProfile.findUnique({ where: { userId } });
+    const profile = await prisma.fitnessProfile.findUnique({ 
+      where: { userId },
+      include: { user: { select: { dateOfBirth: true, gender: true } } }
+    });
+    if (!profile) return null;
+    
+    // Calculate precise age dynamically from DOB
+    let age = null;
+    if (profile.user?.dateOfBirth) {
+      const diff = Date.now() - new Date(profile.user.dateOfBirth).getTime();
+      age = Math.abs(new Date(diff).getUTCFullYear() - 1970);
+    }
+    
+    return {
+      ...profile,
+      age: age,
+      gender: profile.user?.gender,
+      user: undefined // prevent exposing nested user object
+    };
   }
 
   async upsertProfile(userId, data) {

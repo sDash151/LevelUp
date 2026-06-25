@@ -50,6 +50,25 @@ class FitnessAI {
     }
   }
 
+  // ── Embeddings ──
+  async generateEmbedding(text) {
+    if (this.clients.length === 0) return null;
+    try {
+      const ai = this.clients[this.currentClientIndex];
+      const response = await ai.models.embedContent({
+        model: 'gemini-embedding-2',
+        contents: [text]
+      });
+      if (response.embeddings && response.embeddings.length > 0) {
+        return response.embeddings[0].values;
+      }
+      return null;
+    } catch (error) {
+      console.error('FitnessAI.generateEmbedding failed:', error.message);
+      return null;
+    }
+  }
+
   // ── Smart Workout Parsing ──
   async parseWorkout(text, exerciseCatalog = []) {
     if (this.clients.length === 0) return null;

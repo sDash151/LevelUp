@@ -39,24 +39,39 @@ class AuthRepository {
   async upsertGithubUser(profile, accessToken) {
     const email = profile.email || `${profile.login}@github.com`;
     
-    // Check if user exists by email
-    let user = await prisma.user.findUnique({ where: { email } });
-    
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          name: profile.name || profile.login,
-          email: email,
-          avatar: profile.avatar_url,
-          isOnboarded: false,
-        }
-      });
+    // First, check if a GitHub connection already exists for this GitHub ID
+    let existingConnection = await prisma.githubConnection.findUnique({
+      where: { githubId: String(profile.id) },
+      include: { user: true }
+    });
+
+    let user;
+
+    if (existingConnection) {
+      // If they connected GitHub before, we know exactly who they are
+      user = existingConnection.user;
+    } else {
+      // Otherwise, check if they have an existing account matching this email
+      user = await prisma.user.findUnique({ where: { email } });
+      
+      if (!user) {
+        // Brand new user
+        user = await prisma.user.create({
+          data: {
+            name: profile.name || profile.login,
+            email: email,
+            avatar: profile.avatar_url,
+            isOnboarded: false,
+          }
+        });
+      }
     }
 
     // Upsert the GitHub connection
     await prisma.githubConnection.upsert({
       where: { githubId: String(profile.id) },
       update: {
+        userId: user.id,
         username: profile.login,
         avatar: profile.avatar_url,
         email: email,

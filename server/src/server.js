@@ -14,19 +14,24 @@ const server = app.listen(env.PORT, async () => {
   logger.info(`🚀 LevelUp server running on port ${env.PORT} [${env.NODE_ENV}]`);
 });
 
-// ── Graceful shutdown ─────────────────────────
 const shutdown = async (signal) => {
   logger.info(`${signal} received. Shutting down gracefully...`);
   server.close(async () => {
     await prisma.$disconnect();
     logger.info('Server closed');
-    process.exit(0);
+    if (signal === 'SIGUSR2') {
+      process.kill(process.pid, 'SIGUSR2');
+    } else {
+      process.exit(0);
+    }
   });
   setTimeout(() => process.exit(1), 10000);
 };
 
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
+process.once('SIGUSR2', () => shutdown('SIGUSR2'));
+
 process.on('unhandledRejection', (err) => {
   logger.error('Unhandled Rejection:', err);
   shutdown('UNHANDLED_REJECTION');

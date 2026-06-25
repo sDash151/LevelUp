@@ -3,7 +3,22 @@ import { fitnessRepository } from './fitness.repository.js';
 import { fitnessAI } from './fitness.ai.js';
 import { awardXp } from '../../shared/utils/xp.js';
 import { NotFoundError } from '../../shared/errors/NotFoundError.js';
+import fs from 'fs';
+import path from 'path';
 import { uploadImage } from '../../shared/utils/cloudinary.js';
+
+function cosineSimilarity(vecA, vecB) {
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
+  for (let i = 0; i < vecA.length; i++) {
+    dotProduct += vecA[i] * vecB[i];
+    normA += vecA[i] * vecA[i];
+    normB += vecB[i] * vecB[i];
+  }
+  if (normA === 0 || normB === 0) return 0;
+  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+}
 
 // ── MET-based calorie constants ──
 const DEFAULT_MET = {
@@ -621,24 +636,68 @@ class FitnessService {
     // Enrich with catalog data
     const profile = await this.getProfile(userId);
     const userWeight = profile.weight || 70;
-    const exercises = (parsed.exercises || []).map(ex => {
+    // Load pre-generated embeddings
+    let embeddings = null;
+    try {
+      const embsPath = path.resolve(process.cwd(), 'src', 'data', 'exercise_embeddings.json');
+      if (fs.existsSync(embsPath)) {
+        embeddings = JSON.parse(fs.readFileSync(embsPath, 'utf8'));
+      }
+    } catch (e) {
+      console.warn("Could not load exercise embeddings.", e.message);
+    }
+
+    const exercises = await Promise.all((parsed.exercises || []).map(async ex => {
       let catalogEntry = catalog.find(c => c.name.toLowerCase() === ex.name?.toLowerCase());
       
-      // Fallback: Fuzzy matching if AI generated a non-standard name
-      if (!catalogEntry && ex.name) {
-        const searchWords = ex.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 2);
-        let maxScore = 0;
-        let bestMatch = null;
-        for (const catEx of catalog) {
-          const catWords = catEx.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 2);
-          const score = searchWords.filter(w => catWords.includes(w)).length;
-          if (score > maxScore) {
-            maxScore = score;
-            bestMatch = catEx;
+      // Fallback: Semantic Vector Search if exact name not found
+      if (!catalogEntry && ex.name && embeddings) {
+        const userVector = await fitnessAI.generateEmbedding(ex.name);
+        if (userVector) {
+          let bestScore = -1;
+          let bestMatch = null;
+
+          for (const catEx of catalog) {
+            const catVec = embeddings[catEx.slug];
+            if (catVec) {
+              const score = cosineSimilarity(userVector, catVec);
+              if (score > bestScore) {
+                bestScore = score;
+                bestMatch = catEx;
+              }
+            }
+          }
+          
+          if (bestScore > 0.6) { // A reasonable threshold for semantic similarity
+            catalogEntry = bestMatch;
           }
         }
-        if (maxScore >= 1) { // Accept single strong word matches for parser (e.g. "bench" -> "Bench Press")
-           catalogEntry = bestMatch;
+      }
+
+      // If embeddings are missing or it still failed to match, fallback to basic fuzzy
+      if (!catalogEntry && ex.name) {
+        const cleanName = ex.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+        
+        catalogEntry = catalog.find(c => {
+          const cName = c.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+          return cName.includes(cleanName) || cleanName.includes(cName);
+        });
+
+        if (!catalogEntry) {
+          const searchWords = cleanName.split(/\s+/).filter(w => w.length > 2);
+          let maxScore = 0;
+          let bestMatch = null;
+          for (const catEx of catalog) {
+            const catWords = catEx.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 2);
+            let score = searchWords.filter(w => catWords.includes(w)).length;
+            const equipments = ['dumbbell', 'barbell', 'cable', 'machine', 'band'];
+            for (const eq of equipments) {
+              if (searchWords.includes(eq) && !catWords.includes(eq)) score -= 2;
+              if (!searchWords.includes(eq) && catWords.includes(eq)) score -= 2;
+            }
+            if (score > maxScore) { maxScore = score; bestMatch = catEx; }
+          }
+          if (maxScore > 0) catalogEntry = bestMatch;
         }
       }
 
@@ -649,7 +708,7 @@ class FitnessService {
         muscleGroup: catalogEntry?.muscleGroup || ex.muscleGroup || 'other',
         catalogMatch: catalogEntry?.name || null,
       };
-    });
+    }));
 
     const totalVolume = this.calculateVolume(exercises);
     const caloriesBurned = this.calculateCalories(parsed.type, parsed.duration, userWeight, exercises, catalog);

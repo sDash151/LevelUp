@@ -55,6 +55,18 @@ class AuthService {
     const profile = await userRes.json();
     if (!profile.id) throw new UnauthorizedError('Failed to fetch GitHub profile');
 
+    // Fetch user emails if the primary email is private
+    if (!profile.email) {
+      const emailRes = await fetch('https://api.github.com/user/emails', {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      if (emailRes.ok) {
+        const emails = await emailRes.json();
+        const primaryEmail = emails.find(e => e.primary)?.email || emails[0]?.email;
+        if (primaryEmail) profile.email = primaryEmail;
+      }
+    }
+
     // 3. Upsert user and connection
     const user = await authRepository.upsertGithubUser(profile, accessToken);
 

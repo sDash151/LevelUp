@@ -72,9 +72,16 @@ export function useUser() {
   return useQuery({
     queryKey: ['user', 'me'],
     queryFn: async () => {
-      const user = await getMe().then((r) => r.data.user);
-      updateUser(user);
-      return user;
+      try {
+        const user = await getMe().then((r) => r.data.user);
+        updateUser(user);
+        return user;
+      } catch (error) {
+        if (error.response?.status === 401 || error.response?.status === 404) {
+          useAuthStore.getState().logout();
+        }
+        throw error;
+      }
     },
     enabled: isAuthenticated,
     staleTime: 10 * 60 * 1000,

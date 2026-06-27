@@ -58,9 +58,12 @@ export default function MobileMenuPage() {
         <h1 className="text-2xl font-bold mb-6 px-1 tracking-tight" style={{ color: 'var(--th-text)' }}>Menu</h1>
 
         {/* Profile Card */}
-        <button
+        <div
+          role="button"
+          tabIndex={0}
           onClick={() => navigate('/profile')}
-          className="w-full flex items-center gap-4 p-4 rounded-2xl mb-8 transition-transform active:scale-[0.98] text-left shadow-sm"
+          onKeyDown={(e) => e.key === 'Enter' && navigate('/profile')}
+          className="w-full flex items-center gap-4 p-4 rounded-2xl mb-8 transition-transform active:scale-[0.98] text-left shadow-sm cursor-pointer select-none"
           style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}
         >
           <Avatar src={user?.avatar} alt={user?.name} size="lg" bordered={true} />
@@ -73,7 +76,7 @@ export default function MobileMenuPage() {
             </p>
           </div>
           <ChevronRight className="w-5 h-5 opacity-40" style={{ color: 'var(--th-text)' }} />
-        </button>
+        </div>
 
         {/* Navigation Grid */}
         <div className="space-y-6">

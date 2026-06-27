@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Plus, Target, ChevronLeft, ChevronRight, TrendingUp, TrendingDown,
   CheckCircle2, AlertTriangle, Circle, MoreVertical, Filter,
-  Heart, Dumbbell, BookOpen, Briefcase, Star, Zap, Flame, Trash2, Pencil,
+  Heart, Dumbbell, BookOpen, Briefcase, Star, Zap, Flame, Trash2, Pencil, Sparkles,
 } from 'lucide-react';
 import { AnimatedPage, PageSkeleton } from '@/design-system/components';
 import { useGoals, useGoalStats, useToggleMilestone, useCreateGoal, useUpdateGoal, useDeleteGoal } from '../hooks/useGoals';
@@ -452,90 +452,93 @@ function GoalCardMobile({ goal, onToggle, onEdit, onDelete }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+    <motion.div initial={{ opacity: 0, y: 10, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }}
       onClick={() => setExpanded(!expanded)}
-      className="rounded-xl p-4 transition-colors cursor-pointer hover:bg-[var(--th-highlight)]" 
-      style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: catColor + '18' }}>
-            <CatIcon className="w-3.5 h-3.5" style={{ color: catColor }} />
+      className="glass-card rounded-[20px] p-4 transition-all cursor-pointer relative overflow-hidden active:scale-[0.98]">
+      <div className="flex items-start justify-between mb-3 relative z-10">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm" style={{ background: catColor + '20', border: `1px solid ${catColor}40` }}>
+            <CatIcon className="w-4 h-4" style={{ color: catColor }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[13px] font-semibold truncate" style={{ color: 'var(--th-text)' }}>{goal.title}</p>
-            <p className="text-[11px] truncate" style={{ color: 'var(--th-text-dim)' }}>{goal.description || ''}</p>
+            <p className="text-[14px] font-bold truncate tracking-tight" style={{ color: 'var(--th-text)' }}>{goal.title}</p>
+            <p className="text-[12px] truncate opacity-80" style={{ color: 'var(--th-text-dim)' }}>{goal.description || 'No description'}</p>
           </div>
         </div>
         <div className="relative ml-2 shrink-0" onClick={e => e.stopPropagation()}>
-          <button onClick={() => setMenuOpen(!menuOpen)} className="p-1 rounded-md" style={{ color: 'var(--th-text-dim)' }}>
-            <MoreVertical className="w-4 h-4" />
+          <button onClick={() => setMenuOpen(!menuOpen)} className="p-1.5 rounded-lg bg-[var(--th-surface)] hover:bg-[var(--th-surface-hover)] transition-colors">
+            <MoreVertical className="w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
           </button>
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-7 z-40 rounded-xl p-1.5 min-w-[120px] shadow-lg"
-                style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}>
+              <div className="absolute right-0 top-8 z-40 rounded-xl p-1.5 min-w-[130px] glass-strong shadow-elevated">
                 <button onClick={() => { setMenuOpen(false); onEdit?.(goal); }}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] hover:bg-[var(--th-highlight)]"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[12px] font-medium transition-colors hover:bg-[var(--th-highlight)]"
                   style={{ color: 'var(--th-text-secondary)' }}>
-                  <Pencil className="w-3 h-3" /> Edit
+                  <Pencil className="w-3.5 h-3.5" /> Edit
                 </button>
                 <button onClick={() => { setMenuOpen(false); onDelete?.(goal.id); }}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] hover:bg-[var(--th-highlight)]"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[12px] font-medium transition-colors hover:bg-[var(--th-highlight)]"
                   style={{ color: '#ef4444' }}>
-                  <Trash2 className="w-3 h-3" /> Delete
+                  <Trash2 className="w-3.5 h-3.5" /> Delete
                 </button>
               </div>
             </>
           )}
         </div>
       </div>
+      
       {/* Progress + Streak + Status row */}
-      <div className="flex items-center gap-4">
-        {/* Progress */}
+      <div className="flex items-center gap-3 relative z-10 mt-1">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[12px] font-bold" style={{ color: 'var(--th-text)' }}>{goal.progress}%</span>
-            <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-highlight)' }}>
-              <div className="h-full rounded-full" style={{
-                width: `${goal.progress}%`,
-                background: goal.progress >= 80 ? '#10b981' : goal.progress >= 40 ? '#E8B94A' : '#f97316',
-              }} />
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[12px] font-black tracking-tight" style={{ color: 'var(--th-text)' }}>{goal.progress}%</span>
+          </div>
+          <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-highlight)' }}>
+            <div className="h-full rounded-full transition-all duration-700 ease-out relative" style={{
+              width: `${goal.progress}%`,
+              background: goal.progress >= 80 ? 'linear-gradient(90deg, #059669, #10b981)' : goal.progress >= 40 ? 'linear-gradient(90deg, #D4952B, #E8B94A)' : 'linear-gradient(90deg, #ea580c, #f97316)',
+            }}>
+              <div className="absolute inset-0 bg-white/20 w-1/2 skew-x-[-20deg] animate-shimmer" />
             </div>
           </div>
         </div>
-        {/* Streak */}
-        <div className="flex items-center gap-1 shrink-0">
+        
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg glass">
+          <Flame className="w-3.5 h-3.5" style={{ color: streak > 0 ? '#f97316' : 'var(--th-text-dim)' }} />
           <span className="text-[12px] font-bold" style={{ color: 'var(--th-text)' }}>{streak}</span>
-          <Flame className="w-3 h-3" style={{ color: streak > 0 ? '#f97316' : 'var(--th-text-dim)' }} />
         </div>
-        {/* Status */}
+        
         <StatusBadge status={status} />
       </div>
+
+      {/* Decorative gradient blob */}
+      <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-[0.03] blur-2xl pointer-events-none" style={{ background: catColor }} />
 
       {/* Milestones Dropdown */}
       <AnimatePresence>
         {expanded && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-            <div className="pt-4 mt-3 space-y-2.5" style={{ borderTop: '1px solid var(--th-border)' }}>
-              <h4 className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-dim)' }}>Milestones</h4>
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden relative z-10">
+            <div className="pt-4 mt-4 space-y-3 border-t border-[var(--th-border)]">
+              <h4 className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--th-text-dim)' }}>Milestones</h4>
               {(!goal.milestones || goal.milestones.length === 0) ? (
                 <p className="text-[12px] italic" style={{ color: 'var(--th-text-muted)' }}>No milestones for this goal.</p>
               ) : (
                 goal.milestones.map((m, i) => (
-                  <div key={m.id || i} className="flex items-start gap-3">
+                  <div key={m.id || i} className="flex items-start gap-3 group">
                     <button 
                       onClick={(e) => { e.stopPropagation(); onToggle?.(goal.id, m.id); }}
-                      className="w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-all hover:opacity-80"
+                      className="w-5 h-5 mt-0.5 rounded-md flex items-center justify-center shrink-0 transition-all hover:scale-110 active:scale-95"
                       style={{
-                        background: m.isCompleted ? 'var(--th-primary)' : 'transparent',
-                        border: m.isCompleted ? 'none' : '1.5px solid var(--th-text-dim)'
+                        background: m.isCompleted ? 'var(--th-primary)' : 'var(--th-surface)',
+                        border: m.isCompleted ? 'none' : '1px solid var(--th-border)',
+                        boxShadow: m.isCompleted ? '0 0 8px rgba(232,185,74,0.3)' : 'none'
                       }}
                     >
-                      {m.isCompleted && <CheckCircle2 className="w-3 h-3 text-[#08080d]" />}
+                      {m.isCompleted && <CheckCircle2 className="w-3.5 h-3.5 text-[#08080d]" />}
                     </button>
-                    <span className={clsx('text-[12px] font-medium transition-all leading-tight', m.isCompleted && 'line-through opacity-50')}
-                      style={{ color: 'var(--th-text-secondary)' }}>
+                    <span className={clsx('text-[13px] font-medium transition-all leading-snug pt-0.5', m.isCompleted ? 'line-through text-[var(--th-text-dim)]' : 'text-[var(--th-text-secondary)]')}>
                       {m.title}
                     </span>
                   </div>
@@ -621,145 +624,129 @@ export default function GoalsPage() {
       {/* ══════════════════════════════════════
           MOBILE LAYOUT
           ══════════════════════════════════════ */}
-      <div className="lg:hidden w-full overflow-x-hidden">
-        {activeTab === 'MONTHLY' ? (
-          <div className="pb-24">
-            {/* Mobile Monthly Header */}
-            <div className="mb-2 pr-12">
-              <h1 className="text-[22px] font-bold" style={{ color: 'var(--th-text)' }}>Goals</h1>
-              <p className="text-[12px] mt-0.5" style={{ color: 'var(--th-text-muted)' }}>Track your weekly & monthly goals</p>
-            </div>
-            {/* Weekly / Monthly toggle */}
-            <div className="flex rounded-xl p-1 mb-4 w-fit" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-              {['WEEKLY', 'MONTHLY'].map(tab => (
-                <button key={tab} onClick={() => setActiveTab(tab)}
-                  className="px-5 py-2 text-[12px] font-semibold rounded-lg transition-all"
-                  style={{
-                    background: activeTab === tab ? 'var(--th-primary)' : 'transparent',
-                    color: activeTab === tab ? '#08080d' : 'var(--th-text-muted)',
-                  }}>
-                  {tab === 'WEEKLY' ? 'Weekly' : 'Monthly'}
-                </button>
-              ))}
-            </div>
-            <MonthlyGoalsView
-              goals={goals}
-              stats={s}
-              isLoading={isLoading}
-              categoryFilter={categoryFilter}
-              setCategoryFilter={setCategoryFilter}
-              onShowForm={() => { setEditingGoal(null); setShowForm(true); }}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+      <div className="lg:hidden w-full overflow-x-hidden min-h-screen relative pb-28">
+        
+        {/* Sticky Header with Glassmorphism */}
+        <div className="sticky top-0 z-30 glass-nav px-5 py-4 mb-4 -mx-0 flex items-center justify-between border-b border-[var(--th-border)]">
+          <div>
+            <h1 className="text-[26px] font-black tracking-tight" style={{ color: 'var(--th-text)' }}>Goals</h1>
+            <p className="text-[12px] font-medium mt-0.5 opacity-80" style={{ color: 'var(--th-text-muted)' }}>Level up your life.</p>
           </div>
-        ) : (
-        <div>
-
-        {/* Header */}
-        <div className="mb-2 pr-12">
-          <h1 className="text-[22px] font-bold" style={{ color: 'var(--th-text)' }}>Goals</h1>
-          <p className="text-[12px] mt-0.5" style={{ color: 'var(--th-text-muted)' }}>Track your weekly & monthly goals</p>
+          {/* Weekly / Monthly toggle */}
+          <div className="flex rounded-xl p-1 bg-[#08080d] border border-[var(--th-border)] shadow-inner">
+            {['WEEKLY', 'MONTHLY'].map(tab => (
+              <button key={tab} onClick={() => setActiveTab(tab)}
+                className={clsx(
+                  "px-3.5 py-1.5 text-[11px] font-bold rounded-lg transition-all uppercase tracking-wide",
+                  activeTab === tab ? "bg-[var(--th-primary)] text-[#08080d] shadow-md" : "text-[var(--th-text-muted)] hover:text-[var(--th-text)]"
+                )}>
+                {tab === 'WEEKLY' ? 'Weekly' : 'Monthly'}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Weekly / Monthly toggle */}
-        <div className="flex rounded-xl p-1 mb-4 w-fit" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-          {['WEEKLY', 'MONTHLY'].map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)}
-              className="px-5 py-2 text-[12px] font-semibold rounded-lg transition-all"
-              style={{
-                background: activeTab === tab ? 'var(--th-primary)' : 'transparent',
-                color: activeTab === tab ? '#08080d' : 'var(--th-text-muted)',
-              }}>
-              {tab === 'WEEKLY' ? 'Weekly' : 'Monthly'}
-            </button>
-          ))}
-        </div>
-
-        {/* Stats 2x2 grid */}
-        <div className="grid grid-cols-2 gap-3 mb-3">
-          <StatCard label="Goals Progress" isRing pct={s.overallProgress} sub="Overall Progress"
-            icon={<TrendingUp className="w-3.5 h-3.5" />} iconColor="#E8B94A"
-            change={s.progressChange ?? 0} />
-          <StatCard label="Completed" value={s.completedCount}
-            icon={<CheckCircle2 className="w-3.5 h-3.5" />} iconColor="#10b981"
-            sub={`of ${s.totalGoals} goals`} change={s.completedChange ?? 0} />
-          <StatCard label="On Track" value={s.onTrackCount}
-            icon={<Target className="w-3.5 h-3.5" />} iconColor="#E8B94A"
-            sub="goal" change={s.onTrackChange ?? 0} />
-          <StatCard label="Needs Attention" value={s.needsAttentionCount}
-            icon={<AlertTriangle className="w-3.5 h-3.5" />} iconColor="#f97316"
-            sub="goal" change={s.attentionChange ?? 0} />
-        </div>
-
-        {/* Completion Rate + Calendar */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          <StatCard label="Completion Rate" value={`${s.completionRate}%`}
-            icon={<Target className="w-3.5 h-3.5" />} iconColor="#10b981"
-            sub="avg. completion" change={s.rateChange ?? 0} />
-          <GoalCalendar calendarDays={calDays} />
-        </div>
-
-        <AIGoalInsight />
-
-        {/* Category Filters */}
-        <div className="mb-4">
-          <CategoryFilters active={categoryFilter} onChange={setCategoryFilter} />
-        </div>
-
-        {/* Tab header */}
-        <div className="flex items-center gap-4 px-1 mb-2 border-b" style={{ borderColor: 'var(--th-border)' }}>
-          {['GOAL', 'PROGRESS', 'STREAK', 'STATUS'].map(col => (
-            <span key={col} className={clsx('text-[10px] font-semibold pb-2 uppercase', col === 'GOAL' ? 'flex-1' : '')}
-              style={{ color: 'var(--th-text-dim)' }}>{col}</span>
-          ))}
-        </div>
-
-        {/* Goal cards */}
-        <div className="space-y-3 mb-4">
-          {isLoading ? (
-            Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-20 rounded-xl animate-pulse" style={{ background: 'var(--th-card)' }} />
-            ))
-          ) : filteredGoals.length === 0 ? (
-            <div className="text-center py-12">
-              <Target className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--th-text-dim)' }} />
-              <p className="text-[13px] font-medium" style={{ color: 'var(--th-text-muted)' }}>No {activeTab.toLowerCase()} goals yet</p>
-              <button onClick={() => setShowForm(true)} className="mt-3 px-4 py-2 rounded-xl text-[12px] font-semibold"
-                style={{ background: 'var(--th-primary)', color: '#08080d' }}>Create Goal</button>
+        <div className="px-4">
+          {activeTab === 'MONTHLY' ? (
+            <div>
+              <MonthlyGoalsView
+                goals={goals}
+                stats={s}
+                isLoading={isLoading}
+                categoryFilter={categoryFilter}
+                setCategoryFilter={setCategoryFilter}
+                onShowForm={() => { setEditingGoal(null); setShowForm(true); }}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             </div>
           ) : (
-            filteredGoals.map((goal, i) => (
-              <motion.div key={goal.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06 }}>
-                <div key={goal.id} className="relative">
-                  <GoalCardMobile goal={goal} onToggle={(gId, mId) => toggleMilestone.mutate({ goalId: gId, milestoneId: mId })} onEdit={handleEdit} onDelete={handleDelete} />
+            <div className="space-y-4">
+              
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div className="col-span-2 transform hover:scale-[1.01] transition-transform">
+                  <StatCard label="Goals Progress" isRing pct={s.overallProgress} sub="Overall Progress"
+                    icon={<TrendingUp className="w-3.5 h-3.5" />} iconColor="#E8B94A"
+                    change={s.progressChange ?? 0} />
                 </div>
-              </motion.div>
-            ))
+                <div className="transform hover:scale-[1.02] transition-transform">
+                  <StatCard label="Completed" value={s.completedCount}
+                    icon={<CheckCircle2 className="w-3.5 h-3.5" />} iconColor="#10b981"
+                    sub={`of ${s.totalGoals} goals`} change={s.completedChange ?? 0} />
+                </div>
+                <div className="transform hover:scale-[1.02] transition-transform">
+                  <StatCard label="On Track" value={s.onTrackCount}
+                    icon={<Target className="w-3.5 h-3.5" />} iconColor="#E8B94A"
+                    sub="goal" change={s.onTrackChange ?? 0} />
+                </div>
+                <div className="transform hover:scale-[1.02] transition-transform">
+                  <StatCard label="Needs Attention" value={s.needsAttentionCount}
+                    icon={<AlertTriangle className="w-3.5 h-3.5" />} iconColor="#f97316"
+                    sub="goal" change={s.attentionChange ?? 0} />
+                </div>
+                <div className="transform hover:scale-[1.02] transition-transform">
+                  <StatCard label="Completion Rate" value={`${s.completionRate}%`}
+                    icon={<Target className="w-3.5 h-3.5" />} iconColor="#10b981"
+                    sub="avg. completion" change={s.rateChange ?? 0} />
+                </div>
+              </div>
+
+              {/* Calendar */}
+              <div className="mb-4 transform hover:scale-[1.01] transition-transform">
+                <GoalCalendar calendarDays={calDays} />
+              </div>
+
+              <AIGoalInsight />
+
+              {/* Category Filters */}
+              <div className="-mx-4 px-4 overflow-x-auto hide-scrollbar py-2">
+                <CategoryFilters active={categoryFilter} onChange={setCategoryFilter} />
+              </div>
+
+              {/* Tab header */}
+              <div className="flex items-center gap-4 px-2 mb-1">
+                {['GOAL', 'PROGRESS', 'STREAK', 'STATUS'].map(col => (
+                  <span key={col} className={clsx('text-[9px] font-black tracking-widest uppercase', col === 'GOAL' ? 'flex-1' : '')}
+                    style={{ color: 'var(--th-text-dim)' }}>{col}</span>
+                ))}
+              </div>
+
+              {/* Goal cards */}
+              <div className="space-y-3 pb-2">
+                {isLoading ? (
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="h-24 rounded-[20px] animate-pulse glass-card" />
+                  ))
+                ) : filteredGoals.length === 0 ? (
+                  <div className="text-center py-12 glass-card rounded-[20px]">
+                    <Target className="w-12 h-12 mx-auto mb-3 opacity-50" style={{ color: 'var(--th-text-dim)' }} />
+                    <p className="text-[14px] font-semibold" style={{ color: 'var(--th-text-muted)' }}>No {activeTab.toLowerCase()} goals yet</p>
+                    <button onClick={() => setShowForm(true)} className="mt-4 px-5 py-2.5 rounded-xl text-[12px] font-bold shadow-lg active:scale-95 transition-transform"
+                      style={{ background: 'var(--th-primary)', color: '#08080d' }}>Create Goal</button>
+                  </div>
+                ) : (
+                  filteredGoals.map((goal, i) => (
+                    <motion.div key={goal.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.06 }}>
+                      <GoalCardMobile goal={goal} onToggle={(gId, mId) => toggleMilestone.mutate({ goalId: gId, milestoneId: mId })} onEdit={handleEdit} onDelete={handleDelete} />
+                    </motion.div>
+                  ))
+                )}
+              </div>
+
+              {/* Weekly Overview */}
+              <div>
+                <WeeklyOverview goals={goals} />
+              </div>
+
+              {/* Motivation Boost */}
+              <div className="pb-8">
+                <MotivationBoost />
+              </div>
+            </div>
           )}
         </div>
-
-        {/* Add New Goal link */}
-        {filteredGoals.length > 0 && (
-          <button onClick={() => setShowForm(true)}
-            className="flex items-center gap-1.5 text-[12px] font-semibold mb-4"
-            style={{ color: 'var(--th-primary)' }}>
-            <Plus className="w-3.5 h-3.5" /> Add New Goal
-          </button>
-        )}
-
-        {/* Weekly Overview */}
-        <div className="mb-4">
-          <WeeklyOverview goals={goals} />
-        </div>
-
-        {/* Motivation Boost */}
-        <div className="mb-6">
-          <MotivationBoost />
-        </div>
-      </div>
-        )}
       </div>
 
 
@@ -900,12 +887,12 @@ export default function GoalsPage() {
 
 
       {/* ─── FAB (Mobile) ─── */}
-      <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+      <button
         onClick={() => { setEditingGoal(null); setShowForm(true); }}
-        className="fixed bottom-20 lg:hidden left-1/2 -translate-x-1/2 w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl z-40"
-        style={{ background: 'var(--th-primary)' }}>
-        <Plus className="w-6 h-6" style={{ color: '#08080d' }} />
-      </motion.button>
+        className="lg:hidden fixed bottom-[5.5rem] right-4 z-50 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-2xl transition-transform active:scale-95"
+        style={{ background: 'linear-gradient(135deg, #E8A23A, #D4891A)' }}>
+        <Plus className="w-6 h-6" />
+      </button>
 
       {/* ─── Goal Form Modal ─── */}
       <GoalForm

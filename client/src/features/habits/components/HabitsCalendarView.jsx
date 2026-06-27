@@ -98,16 +98,22 @@ function HabitRow({ habit, onToggle, compact = false }) {
 }
 
 /* ─── Calendar Grid (small dots matching design) ─── */
-function CalendarGrid({ calendarDays, mondayOffset, selectedDate, onDayClick, compact = false }) {
+function CalendarGrid({ calendarDays, mondayOffset, selectedDate, onDayClick, compact = false, view = 'month' }) {
   const cells = [];
   for (let i = 0; i < mondayOffset; i++) cells.push(null);
   for (const d of calendarDays) cells.push(d);
   const rows = [];
   for (let i = 0; i < cells.length; i += 7) rows.push(cells.slice(i, i + 7));
 
+  const displayRows = view === 'week' 
+    ? (rows.filter(row => row.some(cell => cell?.date === selectedDate)).length > 0
+        ? rows.filter(row => row.some(cell => cell?.date === selectedDate))
+        : [rows[0]])
+    : rows;
+
   return (
     <div className={compact ? 'space-y-0' : 'space-y-1'}>
-      {rows.map((row, ri) => (
+      {displayRows.map((row, ri) => (
         <div key={ri} className="grid grid-cols-7">
           {Array.from({ length: 7 }).map((_, ci) => {
             const cell = row[ci];
@@ -129,10 +135,12 @@ function CalendarGrid({ calendarDays, mondayOffset, selectedDate, onDayClick, co
             else if (isPartial) { dotBg = 'transparent'; dotBorder = '1.5px solid #E8B94A'; dotW = 7; }
             else if (isNoData) { dotBg = '#ef4444'; dotW = 6; }
 
-            // Today gets a filled gold circle behind the number
+            // Today gets a filled green circle. Selected day gets a subtle gold ring.
             const todayBg = cell.isToday
               ? { background: '#10b981', borderRadius: '50%', width: compact ? 26 : 32, height: compact ? 26 : 32, display: 'flex', alignItems: 'center', justifyContent: 'center' }
-              : {};
+              : isSel
+                ? { background: 'rgba(232,185,74,0.15)', border: '1px solid rgba(232,185,74,0.4)', borderRadius: '50%', width: compact ? 26 : 32, height: compact ? 26 : 32, display: 'flex', alignItems: 'center', justifyContent: 'center' }
+                : { width: compact ? 26 : 32, height: compact ? 26 : 32, display: 'flex', alignItems: 'center', justifyContent: 'center' };
 
             return (
               <div key={cell.date}
@@ -141,11 +149,11 @@ function CalendarGrid({ calendarDays, mondayOffset, selectedDate, onDayClick, co
                   + (!isFuture ? 'cursor-pointer hover:bg-[var(--th-highlight)]' : 'cursor-default')}
                 onClick={() => !isFuture && onDayClick(cell.date, cell.status)}>
 
-                {/* Date number — today gets a green circle bg like design */}
+                {/* Date number — today gets a green circle bg, selected gets a gold ring */}
                 <div style={todayBg}>
                   <span style={{
                     fontSize: compact ? 12 : 14,
-                    fontWeight: cell.isToday ? 700 : isSel ? 600 : 400,
+                    fontWeight: cell.isToday ? 700 : isSel ? 700 : 400,
                     color: cell.isToday ? '#fff' : isSel ? '#E8B94A' : 'var(--th-text-secondary)',
                   }}>
                     {dayNum}
@@ -243,22 +251,22 @@ function DayOverviewCard({ selData, mood }) {
 /* ─── Momentum Section ─── */
 function MomentumSection({ momentum, isLoading, streakMessage, mobile = false }) {
   return (
-    <div className="rounded-2xl p-5 h-full" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-      <div className="flex items-center gap-2 mb-4">
-        <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>Your Momentum</h3>
-        <Info className="w-3.5 h-3.5" style={{ color: 'var(--th-text-dim)' }} />
+    <div className="rounded-2xl p-6 h-full flex flex-col justify-center" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+      <div className="flex items-center gap-2 mb-8">
+        <h3 className="text-[16px] font-semibold" style={{ color: 'var(--th-text)' }}>Your Momentum</h3>
+        <Info className="w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
       </div>
       {isLoading ? <Skeleton className="h-20 w-full" /> : (
         <>
           {/* Timeline with flame icons and connecting line */}
-          <div className="relative">
+          <div className="relative mb-4">
             {/* Connecting horizontal line */}
-            <div className="absolute left-0 right-0" style={{ top: 20, height: 2, background: '#E8B94A', opacity: 0.4 }} />
-            <div className={'flex items-start ' + (mobile ? 'overflow-x-auto gap-2 pb-2' : 'justify-between')}>
+            <div className="absolute left-0 right-0" style={{ top: 24, height: 2, background: '#E8B94A', opacity: 0.4 }} />
+            <div className={'flex items-start ' + (mobile ? 'overflow-x-auto gap-3 pb-2' : 'justify-between')}>
               {momentum.map((m) => (
-                <div key={m.date} className={'flex flex-col items-center gap-1 relative z-10 ' + (mobile ? 'min-w-[48px]' : '')}>
-                  <div className={'w-10 h-10 rounded-full flex items-center justify-center '
-                    + (m.isToday ? 'ring-2 ring-[#E8B94A] ring-offset-2' : '')}
+                <div key={m.date} className={'flex flex-col items-center gap-2 relative z-10 ' + (mobile ? 'min-w-[56px]' : '')}>
+                  <div className={'w-12 h-12 rounded-full flex items-center justify-center '
+                    + (m.isToday ? 'ring-2 ring-[#E8B94A] ring-offset-4' : '')}
                     style={{
                       background: m.type === 'missed' ? 'var(--th-highlight)' : 'rgba(232,185,74,0.1)',
                       ringOffsetColor: 'var(--th-card)',
@@ -267,8 +275,8 @@ function MomentumSection({ momentum, isLoading, streakMessage, mobile = false })
                     <MomentumIcon type={m.type} animated={m.isToday} />
                   </div>
                   {/* Dot on the line */}
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#E8B94A' }} />
-                  <span className="text-[9px] text-center whitespace-nowrap" style={{ color: m.isToday ? '#E8B94A' : 'var(--th-text-dim)' }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#E8B94A' }} />
+                  <span className="text-[11px] text-center whitespace-nowrap" style={{ color: m.isToday ? '#E8B94A' : 'var(--th-text-dim)' }}>
                     {m.label}
                   </span>
                 </div>
@@ -278,13 +286,13 @@ function MomentumSection({ momentum, isLoading, streakMessage, mobile = false })
 
           {/* Streak encouragement message */}
           {streakMessage && (
-            <p className="text-[11px] mt-4 pt-3" style={{ color: 'var(--th-text-muted)', borderTop: '1px solid var(--th-border)' }}>
+            <p className="text-[12px] mt-6 pt-4" style={{ color: 'var(--th-text-muted)', borderTop: '1px solid var(--th-border)' }}>
               {streakMessage}
             </p>
           )}
 
           {/* Legend */}
-          <div className="flex items-center flex-wrap gap-4 mt-3 pt-3" style={{ borderTop: streakMessage ? 'none' : '1px solid var(--th-border)' }}>
+          <div className="flex items-center flex-wrap gap-5 mt-6 pt-4" style={{ borderTop: streakMessage ? 'none' : '1px solid var(--th-border)' }}>
             {[
               { icon: '\uD83D\uDD25', label: 'Streak' },
               { icon: '\u2B50', label: 'Milestone' },
@@ -312,15 +320,15 @@ function MomentumSection({ momentum, isLoading, streakMessage, mobile = false })
 function ConsistencyTrend({ data, isLoading }) {
   const maxPct = data.length ? Math.max(...data.map((d) => d.pct)) : 0;
   return (
-    <div className="rounded-2xl p-5" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+    <div className="rounded-2xl p-5 min-w-0 w-full" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>Consistency Trend</h3>
         <span className="text-[11px] px-2 py-0.5 rounded-md" style={{ background: 'var(--th-highlight)', color: 'var(--th-text-muted)' }}>This Month</span>
       </div>
       {isLoading ? <Skeleton className="h-36 w-full" /> : (
         <>
-          <div style={{ height: 140 }}>
-            <ResponsiveContainer width="100%" height="100%">
+          <div style={{ height: 140, width: '100%' }}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={1}>
               <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -24 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.1)" vertical={false} />
                 <XAxis dataKey="label" tick={{ fontSize: 9, fill: 'var(--th-text-dim)' }} axisLine={false} tickLine={false} />
@@ -486,7 +494,7 @@ export function HabitsCalendarView({ onNavigate }) {
         ))}
       </div>
       <CalendarGrid calendarDays={calendarDays} mondayOffset={mondayOffset}
-        selectedDate={selectedDate} onDayClick={handleDayClick} compact={compact} />
+        selectedDate={selectedDate} onDayClick={handleDayClick} compact={compact} view={calView} />
       <CalLegend />
     </>
   );
@@ -521,7 +529,7 @@ export function HabitsCalendarView({ onNavigate }) {
           </div>
 
           {/* ─── ROW 1: 4 Stat Cards ─── */}
-          <div className="grid gap-4 mb-5" style={{ gridTemplateColumns: '1.3fr 1fr 1fr 0.8fr' }}>
+          <div className="grid gap-4 mb-5 grid-cols-2 xl:grid-cols-[1.3fr_1fr_1fr_0.8fr]">
 
             {/* Current Streak — wider card with large flame on right */}
             <div className="relative rounded-2xl p-5 overflow-hidden"
@@ -634,7 +642,7 @@ export function HabitsCalendarView({ onNavigate }) {
           </div>
 
           {/* ─── ROW 2: Calendar + Day Panel ─── */}
-          <div className="grid gap-4 mb-5" style={{ gridTemplateColumns: '1fr 320px' }}>
+          <div className="grid gap-4 mb-5 grid-cols-1 xl:grid-cols-[1fr_320px]">
             {/* Calendar */}
             <div className="rounded-2xl p-5" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
               <div className="flex items-center justify-between mb-4">
@@ -657,10 +665,11 @@ export function HabitsCalendarView({ onNavigate }) {
               {calGridBlock(false)}
             </div>
 
-            {/* Day Panel — habits list + "Add Note" only (Day Overview is separate) */}
-            <div className="rounded-2xl p-5 flex flex-col" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>
+            {/* Day Panel Wrapper */}
+            <div className="w-full xl:h-full xl:relative">
+              <div className="xl:absolute xl:inset-0 rounded-2xl p-5 flex flex-col max-h-[500px] xl:max-h-none" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>
                   {formattedSelDate}
                 </h3>
                 <button className="p-1 rounded-md" style={{ background: 'var(--th-highlight)' }}>
@@ -668,14 +677,14 @@ export function HabitsCalendarView({ onNavigate }) {
                 </button>
               </div>
               {selData && (
-                <span className="inline-block mb-3 px-2.5 py-0.5 rounded-full text-[11px] font-semibold self-start"
+                <span className="inline-block mb-3 px-2.5 py-0.5 rounded-full text-[11px] font-semibold self-start shrink-0"
                   style={{ background: 'rgba(232,185,74,0.15)', color: '#E8B94A' }}>
                   {selData.completedCount}/{selData.totalCount} Completed
                 </span>
               )}
-              <div className="flex-1">{dayHabitsBlock(false)}</div>
+              <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">{dayHabitsBlock(false)}</div>
               <button onClick={() => onNavigate?.('/reflections')}
-                className="mt-3 w-full flex items-center justify-between p-3 rounded-xl transition-all hover:bg-[var(--th-highlight)]"
+                className="mt-3 shrink-0 w-full flex items-center justify-between p-3 rounded-xl transition-all hover:bg-[var(--th-highlight)]"
                 style={{ border: '1px solid var(--th-border)' }}>
                 <div className="flex items-center gap-2">
                   <span style={{ fontSize: 16 }}>{'\uD83D\uDCDD'}</span>
@@ -685,16 +694,17 @@ export function HabitsCalendarView({ onNavigate }) {
               </button>
             </div>
           </div>
-
-          {/* ─── ROW 3: Momentum + Day Overview (side by side, same ratio) ─── */}
-          <div className="grid gap-4 mb-5" style={{ gridTemplateColumns: '1fr 320px' }}>
-            <MomentumSection momentum={data?.momentum ?? []} isLoading={isLoading} streakMessage={streakMessage} />
-            <DayOverviewCard selData={selData} mood={mood} />
           </div>
 
-          {/* ─── ROW 4: Consistency Trend + Performance Cards ─── */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* ─── ROW 3: Momentum + Consistency Trend (side by side, same ratio) ─── */}
+          <div className="grid gap-4 mb-5 grid-cols-1 xl:grid-cols-[1fr_320px]">
+            <MomentumSection momentum={data?.momentum ?? []} isLoading={isLoading} streakMessage={streakMessage} />
             <ConsistencyTrend data={data?.consistencyTrend ?? []} isLoading={isLoading} />
+          </div>
+
+          {/* ─── ROW 4: Day Overview + Performance Cards ─── */}
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+            <DayOverviewCard selData={selData} mood={mood} />
             <HabitPerformanceCard title="Best Performing Habit" habit={data?.bestHabit}
               color="#10b981" icon={<Trophy className="w-4 h-4" style={{ color: '#10b981' }} />}
               cta={`Keep it up! ${'\uD83D\uDD25'}`} />

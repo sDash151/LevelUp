@@ -142,7 +142,7 @@ function HabitRow({ habit, onToggle, onEdit, onDelete }) {
 }
 
 /* ─── Habit Card (Mobile) ─── */
-function HabitCard({ habit, onToggle, onEdit, onDelete }) {
+function HabitCard({ habit, onToggle, onEdit, onDelete, isEditMode }) {
   const today = new Date().toISOString().split('T')[0];
   const catConfig = CATEGORY_CONFIG[habit.category] || CATEGORY_CONFIG.general;
   return (
@@ -158,6 +158,18 @@ function HabitCard({ habit, onToggle, onEdit, onDelete }) {
             <span className="text-[11px]" style={{ color: 'var(--th-text-dim)' }}>🔥 {habit.currentStreak ?? 0} day streak</span>
             <span className="text-[11px]" style={{ color: 'var(--th-text-dim)' }}>{habit.consistencyPct ?? 0}% consistent</span>
           </div>
+          <AnimatePresence>
+            {isEditMode && (
+              <motion.div initial={{ opacity: 0, height: 0, marginTop: 0 }} animate={{ opacity: 1, height: 'auto', marginTop: 12 }} exit={{ opacity: 0, height: 0, marginTop: 0 }} className="flex items-center gap-2 overflow-hidden">
+                <button onClick={() => onEdit(habit)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-colors active:scale-95" style={{ background: 'var(--th-highlight)', color: 'var(--th-text-secondary)' }}>
+                  <Pencil className="w-3.5 h-3.5" /> <span className="text-[11px] font-medium">Edit</span>
+                </button>
+                <button onClick={() => onDelete(habit.id)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-colors active:scale-95" style={{ background: 'var(--th-highlight)', color: 'var(--th-text-secondary)' }}>
+                  <Trash2 className="w-3.5 h-3.5 hover:text-red-400" /> <span className="text-[11px] font-medium hover:text-red-400">Delete</span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
         <button onClick={() => onToggle(habit.id, today)}
           className={clsx('w-7 h-7 rounded-full border-2 flex items-center justify-center shrink-0 transition-all hover:scale-110',
@@ -300,6 +312,7 @@ export default function HabitsPage() {
   const [showForm, setShowForm] = useState(false);
   const [showPlanner, setShowPlanner] = useState(false);
   const [editingHabit, setEditingHabit] = useState(null);
+  const [isMobileEditMode, setIsMobileEditMode] = useState(false);
 
   const habits = stats?.habits ?? [];
   const today = new Date().toISOString().split('T')[0];
@@ -382,9 +395,6 @@ export default function HabitsPage() {
             <CategoryFilters />
           </div>
         )}
-
-        {/* AI Insight */}
-        {view === 'list' && <AIHabitInsight />}
 
         {/* Calendar view */}
         {view === 'calendar' && (
@@ -495,7 +505,9 @@ export default function HabitsPage() {
           className="rounded-2xl" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
           <div className="flex items-center justify-between px-4 pt-4 pb-3">
             <h3 className="text-[15px] font-semibold" style={{ color: 'var(--th-text)' }}>Today's Habits</h3>
-            <button className="text-[13px] font-medium" style={{ color: 'var(--th-primary)' }}>View all</button>
+            <button onClick={() => setIsMobileEditMode(!isMobileEditMode)} className="text-[13px] font-medium" style={{ color: isMobileEditMode ? 'var(--th-text-muted)' : 'var(--th-primary)' }}>
+              {isMobileEditMode ? 'Done' : 'Edit'}
+            </button>
           </div>
 
           {filteredHabits.length === 0 ? (
@@ -512,12 +524,17 @@ export default function HabitsPage() {
             <div className="px-3 pb-3 space-y-2">
               <AnimatePresence>
                 {filteredHabits.map((habit) => (
-                  <HabitCard key={habit.id} habit={habit} onToggle={handleToggle} onEdit={handleEdit} onDelete={handleDelete} />
+                  <HabitCard key={habit.id} habit={habit} onToggle={handleToggle} onEdit={handleEdit} onDelete={handleDelete} isEditMode={isMobileEditMode} />
                 ))}
               </AnimatePresence>
             </div>
           )}
         </motion.div>
+
+        {/* AI Insight — mobile */}
+        <div className="mt-4">
+          <AIHabitInsight />
+        </div>
 
         {/* Weekly Overview — mobile */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
@@ -673,9 +690,6 @@ export default function HabitsPage() {
         {/* Main content: habits list + sidebar */}
         <div className="flex gap-5">
           <div className="flex-1 min-w-0">
-            {/* AI Insight */}
-            <AIHabitInsight />
-            
             {/* Category filter + Filter */}
             <div className="flex items-center gap-3 mb-4">
               <CategoryFilters />
@@ -721,33 +735,16 @@ export default function HabitsPage() {
               )}
             </div>
 
-            {/* Weekly Overview + Top Habits */}
-            <div className="grid grid-cols-2 gap-5 mt-5">
-              <div className="rounded-3xl p-6" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-[18px] font-bold" style={{ color: 'var(--th-text)' }}>Weekly Overview</h3>
-                  <button className="text-[13px] font-medium px-3 py-1.5 rounded-lg transition-colors hover:bg-[var(--th-border)]" style={{ background: 'var(--th-highlight)', color: 'var(--th-text-muted)' }}>This Week</button>
-                </div>
-                {stats?.weeklyOverview?.length ? (
-                  <WeeklyOverview data={stats.weeklyOverview} />
-                ) : (
-                  <div className="flex items-center justify-center h-24">
-                    <p className="text-[13px]" style={{ color: 'var(--th-text-dim)' }}>No data yet</p>
-                  </div>
-                )}
-              </div>
-              <div className="rounded-3xl p-6" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-[18px] font-bold" style={{ color: 'var(--th-text)' }}>Top Habits</h3>
-                  <BarChart2 className="w-5 h-5" style={{ color: 'var(--th-text-dim)' }} />
-                </div>
-                <TopHabitsChart habits={stats?.topHabits ?? []} />
-              </div>
+            {/* AI Insight */}
+            <div className="mt-5">
+              <AIHabitInsight />
             </div>
+
+            {/* Weekly Overview + Top Habits moved to right sidebar */}
           </div>
 
           {/* Right Sidebar */}
-          <div className="flex flex-col gap-4 w-[240px] shrink-0">
+          <div className="flex flex-col gap-4 w-[280px] shrink-0">
             {/* Habit Calendar */}
             <div className="rounded-2xl p-4" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
               <HabitCalendar logDates={stats?.logDates ?? []} />
@@ -771,6 +768,30 @@ export default function HabitsPage() {
                 ))}
               </div>
             </div>
+            
+            {/* Weekly Overview */}
+            <div className="rounded-2xl p-4" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>Weekly Overview</h3>
+                <span className="text-[11px] px-2.5 py-1 rounded-lg" style={{ background: 'var(--th-highlight)', color: 'var(--th-text-muted)' }}>This Week</span>
+              </div>
+              {stats?.weeklyOverview?.length ? (
+                <WeeklyOverview data={stats.weeklyOverview} />
+              ) : (
+                <div className="flex items-center justify-center h-20">
+                  <p className="text-[12px]" style={{ color: 'var(--th-text-dim)' }}>No data yet</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Top Habits */}
+            <div className="rounded-2xl p-4" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>Top Habits</h3>
+                <BarChart2 className="w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
+              </div>
+              <TopHabitsChart habits={stats?.topHabits ?? []} />
+            </div>
           </div>
         </div>
           </>
@@ -778,12 +799,12 @@ export default function HabitsPage() {
       </div>
 
       {/* ─── FAB (Mobile) ─── */}
-      <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+      <button
         onClick={() => { setEditingHabit(null); setShowForm(true); }}
-        className="fixed bottom-20 lg:hidden left-1/2 -translate-x-1/2 w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl z-40"
-        style={{ background: 'var(--th-primary)' }}>
-        <Plus className="w-6 h-6" style={{ color: '#08080d' }} />
-      </motion.button>
+        className="lg:hidden fixed bottom-[5.5rem] right-4 z-50 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-2xl transition-transform active:scale-95"
+        style={{ background: 'linear-gradient(135deg, #E8A23A, #D4891A)' }}>
+        <Plus className="w-6 h-6" />
+      </button>
 
       {/* ─── Habit Form Modal ─── */}
       <HabitForm

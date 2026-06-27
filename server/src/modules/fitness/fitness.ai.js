@@ -654,6 +654,116 @@ Return JSON:
       return null;
     }
   }
+  // ══════════════════════════════════════════════════════════════
+  // SEMANTIC FOOD SEARCH
+  // ══════════════════════════════════════════════════════════════
+
+  /**
+   * Fast DB-level fallback search. Zero Gemini cost.
+   * Checks: exact normalizedName → alias array contains → slug match.
+   * @param {string} queryText - Raw user input (e.g. "paneer")
+   * @param {import('@prisma/client').PrismaClient} prisma
+   * @returns {Promise<Object|null>} FoodCatalog row or null
+   */
+  async searchFoodFallback(queryText, prisma) {
+    if (!queryText || !prisma) return null;
+    const normalized = queryText.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    const slug = normalized.replace(/\s+/g, '-').replace(/-+/g, '-');
+
+    try {
+      // 1. Exact normalizedName match
+      let food = await prisma.foodCatalog.findUnique({ where: { normalizedName: normalized } });
+      if (food) return { food, matchType: 'exact', confidence: 1.0 };
+
+      // 2. Slug match
+      food = await prisma.foodCatalog.findUnique({ where: { slug } });
+      if (food) return { food, matchType: 'slug', confidence: 0.95 };
+
+      // 3. Alias array contains the normalized query
+      food = await prisma.foodCatalog.findFirst({
+        where: { aliases: { has: normalized } },
+        orderBy: { isVerified: 'desc' },
+      });
+      if (food) return { food, matchType: 'alias', confidence: 0.92 };
+
+      // 4. Partial name match (last resort DB fallback)
+      food = await prisma.foodCatalog.findFirst({
+        where: { normalizedName: { contains: normalized } },
+        orderBy: { isVerified: 'desc' },
+      });
+      if (food) return { food, matchType: 'partial', confidence: 0.80 };
+
+      return null;
+    } catch (err) {
+      console.error('FitnessAI.searchFoodFallback failed:', err.message);
+      return null;
+    }
+  }
+
+  /**
+   * Cosine similarity semantic search against in-memory food embedding store.
+   * Uses global.foodEmbeddingStore loaded at server boot.
+   * @param {string} queryText - Natural language food description
+   * @param {import('@prisma/client').PrismaClient} prisma - Needed to fetch full food data
+   * @param {number} topK - How many top results to return (default 5)
+   * @returns {Promise<Array<{food, confidence, matchType}>>}
+   */
+  async searchFoodSemantic(queryText, prisma, topK = 5) {
+    if (!queryText || !prisma) return [];
+    const store = global.foodEmbeddingStore;
+
+    if (!store || Object.keys(store).filter(k => k !== '_meta').length === 0) {
+      console.warn('[FoodSearch] Embedding store is empty. Run generate-food-embeddings.js.');
+      return [];
+    }
+
+    // 1. Generate query embedding
+    const queryVector = await this.generateEmbedding(queryText);
+    if (!queryVector) {
+      console.warn('[FoodSearch] Could not generate query embedding.');
+      return [];
+    }
+
+    // 2. Compute cosine similarity against all stored vectors
+    const scores = [];
+    for (const [slug, entry] of Object.entries(store)) {
+      if (slug === '_meta' || !entry?.vector) continue;
+      const sim = cosineSimilarity(queryVector, entry.vector);
+      scores.push({ slug, id: entry.id, name: entry.name, similarity: sim });
+    }
+
+    // 3. Sort by similarity descending and take top K
+    scores.sort((a, b) => b.similarity - a.similarity);
+    const topResults = scores.slice(0, topK);
+
+    if (topResults.length === 0) return [];
+
+    // 4. Fetch full food data from DB for top results
+    const slugs = topResults.map(r => r.slug);
+    const foods = await prisma.foodCatalog.findMany({ where: { slug: { in: slugs } } });
+    const foodMap = Object.fromEntries(foods.map(f => [f.slug, f]));
+
+    return topResults
+      .filter(r => foodMap[r.slug])
+      .map(r => ({
+        food: foodMap[r.slug],
+        confidence: r.similarity,
+        matchType: 'semantic',
+      }));
+  }
+}
+
+// ── Cosine Similarity Helper ──────────────────────────────────
+function cosineSimilarity(vecA, vecB) {
+  if (!vecA || !vecB || vecA.length !== vecB.length) return 0;
+  let dot = 0, normA = 0, normB = 0;
+  for (let i = 0; i < vecA.length; i++) {
+    dot += vecA[i] * vecB[i];
+    normA += vecA[i] * vecA[i];
+    normB += vecB[i] * vecB[i];
+  }
+  const denom = Math.sqrt(normA) * Math.sqrt(normB);
+  return denom === 0 ? 0 : dot / denom;
 }
 
 export const fitnessAI = new FitnessAI();

@@ -391,75 +391,107 @@ function MonthlyGoalCardMobile({ goal, onToggle, onEdit, onDelete }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+    <motion.div initial={{ opacity: 0, y: 10, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }}
       onClick={() => setExpanded(!expanded)}
-      className="rounded-xl p-4 transition-colors cursor-pointer hover:bg-[var(--th-highlight)]" 
-      style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
-      <div className="flex items-start justify-between mb-2">
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: catColor + '18' }}>
-            <CatIcon className="w-3.5 h-3.5" style={{ color: catColor }} />
+      className="glass-card rounded-[20px] p-4 transition-all cursor-pointer relative overflow-hidden active:scale-[0.98]">
+      <div className="flex items-start justify-between mb-3 relative z-10">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm" style={{ background: catColor + '20', border: `1px solid ${catColor}40` }}>
+            <CatIcon className="w-4 h-4" style={{ color: catColor }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[13px] font-semibold truncate" style={{ color: 'var(--th-text)' }}>{goal.title}</p>
-            <p className="text-[11px] truncate" style={{ color: 'var(--th-text-dim)' }}>{goal.description || ''}</p>
+            <p className="text-[14px] font-bold truncate tracking-tight" style={{ color: 'var(--th-text)' }}>{goal.title}</p>
+            <p className="text-[12px] truncate opacity-80" style={{ color: 'var(--th-text-dim)' }}>{goal.description || 'No description'}</p>
           </div>
         </div>
-        <StatusBadge status={status} />
-      </div>
-      {/* Progress + Milestones row */}
-      <div className="flex items-center justify-between mt-2">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-bold" style={{ color: 'var(--th-text)' }}>{goal.progress}%</span>
-          <div className="w-16 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-highlight)' }}>
-            <div className="h-full rounded-full" style={{
-              width: `${goal.progress}%`,
-              background: goal.progress >= 80 ? '#10b981' : goal.progress >= 40 ? '#E8B94A' : '#f97316',
-            }} />
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5">
-          {['W1', 'W2', 'W3', 'W4'].map((label, i) => {
-            const wk = weekMilestones[i];
-            return (
-              <div key={label} className="flex flex-col items-center gap-0.5">
-                <span className="text-[8px]" style={{ color: 'var(--th-text-dim)' }}>{label}</span>
-                <div className="w-4 h-4 rounded-full flex items-center justify-center border"
-                  style={{
-                    background: wk?.allCompleted ? '#10b981' : 'transparent',
-                    borderColor: wk?.allCompleted ? '#10b981' : wk?.hasCompleted ? '#10b981' : 'var(--th-border)',
-                    color: wk?.allCompleted ? '#fff' : wk?.hasCompleted ? '#10b981' : 'var(--th-text-dim)',
-                  }}>
-                  {(wk?.allCompleted || wk?.hasCompleted) ? <CheckCircle2 className="w-2.5 h-2.5" /> : <Circle className="w-2.5 h-2.5" />}
-                </div>
-              </div>
-            );
-          })}
+          <StatusBadge status={status} />
         </div>
       </div>
+      
+      {/* Progress + Milestones row */}
+      <div className="flex flex-col gap-3 relative z-10">
+        <div className="flex items-center justify-between mt-1">
+          <div className="flex items-center gap-2.5 flex-1">
+            <span className="text-[13px] font-black tracking-tight" style={{ color: 'var(--th-text)' }}>{goal.progress}%</span>
+            <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--th-highlight)' }}>
+              <div className="h-full rounded-full transition-all duration-700 ease-out relative" style={{
+                width: `${goal.progress}%`,
+                background: goal.progress >= 80 ? 'linear-gradient(90deg, #059669, #10b981)' : goal.progress >= 40 ? 'linear-gradient(90deg, #D4952B, #E8B94A)' : 'linear-gradient(90deg, #ea580c, #f97316)',
+              }}>
+                <div className="absolute inset-0 bg-white/20 w-1/2 skew-x-[-20deg] animate-shimmer" />
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 ml-4">
+            {['W1', 'W2', 'W3', 'W4'].map((label, i) => {
+              const wk = weekMilestones[i];
+              return (
+                <div key={label} className="flex flex-col items-center gap-1">
+                  <span className="text-[8px] font-bold uppercase tracking-widest" style={{ color: 'var(--th-text-dim)' }}>{label}</span>
+                  <div className="w-4 h-4 rounded-[6px] flex items-center justify-center transition-all"
+                    style={{
+                      background: wk?.allCompleted ? '#10b981' : 'var(--th-surface)',
+                      border: wk?.allCompleted ? 'none' : wk?.hasCompleted ? '1px solid #10b981' : '1px solid var(--th-border)',
+                      color: wk?.allCompleted ? '#fff' : wk?.hasCompleted ? '#10b981' : 'var(--th-text-dim)',
+                      boxShadow: wk?.allCompleted ? '0 0 8px rgba(16,185,129,0.4)' : 'none'
+                    }}>
+                    {(wk?.allCompleted || wk?.hasCompleted) ? <CheckCircle2 className="w-2.5 h-2.5" /> : <Circle className="w-2.5 h-2.5 opacity-50" />}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Decorative gradient blob */}
+      <div className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full opacity-[0.03] blur-2xl pointer-events-none" style={{ background: catColor }} />
+
       {/* Milestones Dropdown */}
       <AnimatePresence>
         {expanded && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-            <div className="pt-4 mt-3 space-y-2.5" style={{ borderTop: '1px solid var(--th-border)' }}>
-              <h4 className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--th-text-dim)' }}>Milestones</h4>
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden relative z-10">
+            <div className="pt-4 mt-4 space-y-3 border-t border-[var(--th-border)]">
+              <div className="flex items-center justify-between mb-1">
+                <h4 className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--th-text-dim)' }}>Milestones</h4>
+                <div className="relative" onClick={e => e.stopPropagation()}>
+                  <button onClick={() => setMenuOpen(!menuOpen)} className="p-1.5 rounded-lg hover:bg-[var(--th-surface-hover)] transition-colors">
+                    <MoreVertical className="w-4 h-4" style={{ color: 'var(--th-text-dim)' }} />
+                  </button>
+                  {menuOpen && (
+                    <>
+                      <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
+                      <div className="absolute right-0 top-8 z-40 rounded-xl p-1.5 min-w-[130px] glass-strong shadow-elevated">
+                        <button onClick={() => { setMenuOpen(false); onEdit?.(goal); }}
+                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-[var(--th-highlight)]"
+                          style={{ color: 'var(--th-text-secondary)' }}><Pencil className="w-3.5 h-3.5" /> Edit</button>
+                        <button onClick={() => { setMenuOpen(false); onDelete?.(goal.id); }}
+                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-[var(--th-highlight)]"
+                          style={{ color: '#ef4444' }}><Trash2 className="w-3.5 h-3.5" /> Delete</button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              
               {(!goal.milestones || goal.milestones.length === 0) ? (
                 <p className="text-[12px] italic" style={{ color: 'var(--th-text-muted)' }}>No milestones for this goal.</p>
               ) : (
                 goal.milestones.map((m, i) => (
-                  <div key={m.id || i} className="flex items-start gap-3">
+                  <div key={m.id || i} className="flex items-start gap-3 group">
                     <button 
                       onClick={(e) => { e.stopPropagation(); onToggle?.(goal.id, m.id); }}
-                      className="w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-all hover:opacity-80"
+                      className="w-5 h-5 mt-0.5 rounded-md flex items-center justify-center shrink-0 transition-all hover:scale-110 active:scale-95"
                       style={{
-                        background: m.isCompleted ? 'var(--th-primary)' : 'transparent',
-                        border: m.isCompleted ? 'none' : '1.5px solid var(--th-text-dim)'
+                        background: m.isCompleted ? 'var(--th-primary)' : 'var(--th-surface)',
+                        border: m.isCompleted ? 'none' : '1px solid var(--th-border)',
+                        boxShadow: m.isCompleted ? '0 0 8px rgba(232,185,74,0.3)' : 'none'
                       }}
                     >
-                      {m.isCompleted && <CheckCircle2 className="w-3 h-3 text-[#08080d]" />}
+                      {m.isCompleted && <CheckCircle2 className="w-3.5 h-3.5 text-[#08080d]" />}
                     </button>
-                    <span className={clsx('text-[12px] font-medium transition-all leading-tight', m.isCompleted && 'line-through opacity-50')}
-                      style={{ color: 'var(--th-text-secondary)' }}>
+                    <span className={clsx('text-[13px] font-medium transition-all leading-snug pt-0.5', m.isCompleted ? 'line-through text-[var(--th-text-dim)]' : 'text-[var(--th-text-secondary)]')}>
                       {m.title}
                     </span>
                   </div>
@@ -976,44 +1008,56 @@ export default function MonthlyGoalsView({
       {/* ══════════════════════════════════════
           MOBILE LAYOUT
           ══════════════════════════════════════ */}
-      <div className="lg:hidden space-y-4">
+      <div className="lg:hidden space-y-5 pb-8">
         {/* Hero */}
-        <MonthlyProgressHero overallProgress={progress} currentStreak={currentStreak} bestStreak={bestStreak} />
+        <div className="transform hover:scale-[1.01] transition-transform">
+          <MonthlyProgressHero overallProgress={progress} currentStreak={currentStreak} bestStreak={bestStreak} />
+        </div>
 
         {/* Stats 2x2 */}
         <div className="grid grid-cols-2 gap-3">
-          <MonthlyStatCard label="Total XP Earned" value={totalXp.toLocaleString()}
-            icon={<Zap className="w-3.5 h-3.5" />} iconColor="#E8B94A"
-            sub="XP" change={s.xpChange ?? 18} />
-          <MonthlyStatCard label="Goals Achieved"
-            value={<><span>{goalsAchieved}</span><span className="text-[14px] font-normal" style={{ color: 'var(--th-text-dim)' }}> / {totalGoals}</span></>}
-            icon={<Target className="w-3.5 h-3.5" />} iconColor="#10b981"
-            sub="goals" change={s.completedChange ?? 0} />
-          <MonthlyStatCard label="Success Rate" value={`${successRate}%`}
-            icon={<CheckCircle2 className="w-3.5 h-3.5" />} iconColor="#10b981"
-            sub="consistency" change={s.successRateChange ?? 10} />
-          <HealthScoreCard score={healthScore} />
+          <div className="transform hover:scale-[1.02] transition-transform">
+            <MonthlyStatCard label="Total XP Earned" value={totalXp.toLocaleString()}
+              icon={<Zap className="w-3.5 h-3.5" />} iconColor="#E8B94A"
+              sub="XP" change={s.xpChange ?? 18} />
+          </div>
+          <div className="transform hover:scale-[1.02] transition-transform">
+            <MonthlyStatCard label="Goals Achieved"
+              value={<><span>{goalsAchieved}</span><span className="text-[14px] font-normal" style={{ color: 'var(--th-text-dim)' }}> / {totalGoals}</span></>}
+              icon={<Target className="w-3.5 h-3.5" />} iconColor="#10b981"
+              sub="goals" change={s.completedChange ?? 0} />
+          </div>
+          <div className="transform hover:scale-[1.02] transition-transform">
+            <MonthlyStatCard label="Success Rate" value={`${successRate}%`}
+              icon={<CheckCircle2 className="w-3.5 h-3.5" />} iconColor="#10b981"
+              sub="consistency" change={s.successRateChange ?? 10} />
+          </div>
+          <div className="transform hover:scale-[1.02] transition-transform">
+            <HealthScoreCard score={healthScore} />
+          </div>
         </div>
 
         {/* Category Filters */}
-        <CategoryFilters active={categoryFilter} onChange={setCategoryFilter} />
+        <div className="-mx-4 px-4 overflow-x-auto hide-scrollbar py-2">
+          <CategoryFilters active={categoryFilter} onChange={setCategoryFilter} />
+        </div>
 
         {/* Goals List */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[14px] font-semibold" style={{ color: 'var(--th-text)' }}>Your Goals This Month</h3>
-            <span className="text-[11px] font-medium" style={{ color: 'var(--th-primary)' }}>View all</span>
+          <div className="flex items-center justify-between mb-3 px-1">
+            <h3 className="text-[14px] font-bold tracking-tight" style={{ color: 'var(--th-text)' }}>Your Goals This Month</h3>
+            <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: 'var(--th-primary)' }}>View all</span>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-3 pb-2">
             {isLoading ? (
               Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-20 rounded-xl animate-pulse" style={{ background: 'var(--th-card)' }} />
+                <div key={i} className="h-24 rounded-[20px] animate-pulse glass-card" />
               ))
             ) : filteredGoals.length === 0 ? (
-              <div className="text-center py-12">
-                <Target className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--th-text-dim)' }} />
-                <p className="text-[13px]" style={{ color: 'var(--th-text-muted)' }}>No monthly goals yet</p>
-                <button onClick={onShowForm} className="mt-3 px-4 py-2 rounded-xl text-[12px] font-semibold"
+              <div className="text-center py-12 glass-card rounded-[20px]">
+                <Target className="w-12 h-12 mx-auto mb-3 opacity-50" style={{ color: 'var(--th-text-dim)' }} />
+                <p className="text-[14px] font-semibold" style={{ color: 'var(--th-text-muted)' }}>No monthly goals yet</p>
+                <button onClick={onShowForm} className="mt-4 px-5 py-2.5 rounded-xl text-[12px] font-bold shadow-lg active:scale-95 transition-transform"
                   style={{ background: 'var(--th-primary)', color: '#08080d' }}>Create Goal</button>
               </div>
             ) : filteredGoals.map((goal, i) => (
@@ -1025,8 +1069,10 @@ export default function MonthlyGoalsView({
         </div>
 
         {/* Charts */}
-        <GoalMomentumChart momentum={momentum} bestWeekIndex={bestWeekIndex} />
-        <GoalsByCategoryChart categoryBreakdown={categoryBreakdown} totalGoals={totalGoals} />
+        <div className="space-y-4">
+          <GoalMomentumChart momentum={momentum} bestWeekIndex={bestWeekIndex} />
+          <GoalsByCategoryChart categoryBreakdown={categoryBreakdown} totalGoals={totalGoals} />
+        </div>
       </div>
     </>
   );

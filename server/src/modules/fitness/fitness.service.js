@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { fitnessRepository } from './fitness.repository.js';
 import { fitnessAI } from './fitness.ai.js';
+import { prisma } from '../../config/database.js';
 import { awardXp } from '../../shared/utils/xp.js';
 import { NotFoundError } from '../../shared/errors/NotFoundError.js';
 import fs from 'fs';
@@ -26,6 +27,56 @@ const DEFAULT_MET = {
 };
 
 const WORKOUT_XP = { strength: 15, cardio: 10, hiit: 15, yoga: 8, mobility: 5, sports: 12 };
+
+// ── Quantity Scaling Engine ───────────────────────────────────
+// Converts a user quantity string (e.g. "2 bowls", "150g", "3 pieces")
+// into total grams using the food's unitGramMap, then scales macros.
+function scaleMarcos(food, quantityStr) {
+  const servingSize = food.servingSize || 100;
+
+  // Parse quantity string: extract number and unit
+  const qStr = String(quantityStr || '').toLowerCase().trim();
+  const match = qStr.match(/^([\d.]+)\s*([a-z]*)$/);
+
+  let totalGrams = servingSize; // Default: 1 serving
+
+  if (match) {
+    const qty = parseFloat(match[1]) || 1;
+    const unit = match[2] || food.servingUnit || 'g';
+
+    // Resolve unit to grams
+    const unitGramMap = food.unitGramMap || {};
+
+    if (unit === 'g' || unit === 'gram' || unit === 'grams') {
+      totalGrams = qty;
+    } else if (unit === 'ml') {
+      // ml ≈ g for water-based foods
+      totalGrams = qty;
+    } else if (unitGramMap[unit] !== undefined) {
+      totalGrams = qty * unitGramMap[unit];
+    } else if (unit === food.servingUnit) {
+      totalGrams = qty * servingSize;
+    } else {
+      // Unknown unit — assume qty × servingSize
+      totalGrams = qty * servingSize;
+    }
+  }
+
+  // Scale macros: (totalGrams / servingSize) × baseMacros
+  const ratio = totalGrams / servingSize;
+  const round = (v) => Math.round((v * ratio) * 10) / 10;
+
+  return {
+    calories: round(food.calories),
+    protein: round(food.protein),
+    carbs: round(food.carbs),
+    fats: round(food.fats),
+    fiber: food.fiber != null ? round(food.fiber) : null,
+    totalGrams: Math.round(totalGrams),
+    servingDescription: quantityStr || `${servingSize}${food.servingUnit || 'g'}`,
+  };
+}
+
 
 class FitnessService {
 
@@ -991,9 +1042,75 @@ class FitnessService {
   }
 
   async smartLogFood(userId, text) {
+    // ── STEP 1: Gemini parses natural language ──────────────────────────────
+    // Extract food names + quantities + units from free text.
+    // e.g. "I ate 2 bowls of rice and 3 eggs" → [{name:"rice",quantity:"2 bowls"},{name:"egg",quantity:"3 pieces"}]
     const parsed = await fitnessAI.parseFood(text);
-    if (!parsed) return null;
-    return { items: parsed.items || [], _preview: true };
+    if (!parsed || !Array.isArray(parsed.items) || parsed.items.length === 0) return null;
+
+    const results = [];
+
+    for (const item of parsed.items) {
+      // ── STEP 2: Fallback search first (zero Gemini cost) ─────────────────
+      const fallback = await fitnessAI.searchFoodFallback(item.name, prisma);
+
+      let matchResult = null;
+
+      if (fallback && fallback.confidence >= 0.80) {
+        matchResult = fallback;
+      } else {
+        // ── STEP 3: Semantic search via cosine similarity ────────────────
+        const semanticResults = await fitnessAI.searchFoodSemantic(item.name, prisma, 1);
+        if (semanticResults.length > 0) {
+          matchResult = semanticResults[0];
+        }
+      }
+
+      // ── STEP 4: Confidence threshold gating ─────────────────────────
+      let status = 'needs_confirmation';
+      if (matchResult) {
+        if (matchResult.confidence >= 0.90) status = 'auto_accept';
+        else if (matchResult.confidence >= 0.82) status = 'probable';
+        else status = 'needs_confirmation';
+      }
+
+      // ── STEP 5: Quantity Scaling Engine ─────────────────────────────
+      // item.quantity is a string like "2 bowls", "200g", "3 pieces"
+      let scaledMacros = null;
+
+      if (matchResult?.food) {
+        const food = matchResult.food;
+        scaledMacros = scaleMarcos(food, item.quantity);
+      } else if (item.calories !== undefined) {
+        // Gemini's own estimate is the only data we have
+        scaledMacros = {
+          calories: item.calories || 0,
+          protein: item.protein || 0,
+          carbs: item.carbs || 0,
+          fats: item.fats || 0,
+          fiber: null,
+          servingDescription: item.quantity || '1 serving',
+        };
+      }
+
+      results.push({
+        inputName: item.name,
+        inputQuantity: item.quantity,
+        match: matchResult ? {
+          id: matchResult.food.id,
+          name: matchResult.food.name,
+          slug: matchResult.food.slug,
+          category: matchResult.food.category,
+          imageUrl: matchResult.food.imageUrl || null,
+          matchType: matchResult.matchType,
+        } : null,
+        confidence: matchResult?.confidence ?? 0,
+        status,
+        macros: scaledMacros,
+      });
+    }
+
+    return { items: results, _preview: true };
   }
 
   async logWater(userId, amount, date) {

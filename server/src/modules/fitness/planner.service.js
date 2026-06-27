@@ -660,7 +660,29 @@ class PlannerService {
       where.availabilityScore = { gte: 7 };
     }
 
-    return prisma.foodCatalog.findMany({ where });
+    // ── RAG Food Retrieval ─────────────────────────────────────
+    // Priority 1: Verified foods (USDA / INDB / manual — most accurate macros)
+    const verifiedFoods = await prisma.foodCatalog.findMany({
+      where: { ...where, isVerified: true },
+      orderBy: [{ availabilityScore: 'desc' }, { name: 'asc' }],
+      take: 30,
+    });
+
+    // Priority 2: Supplement with unverified foods to fill up to 40 total
+    const remainingSlots = 40 - verifiedFoods.length;
+    const verifiedIds = verifiedFoods.map(f => f.id);
+
+    let supplementFoods = [];
+    if (remainingSlots > 0) {
+      supplementFoods = await prisma.foodCatalog.findMany({
+        where: { ...where, id: { notIn: verifiedIds } },
+        orderBy: [{ availabilityScore: 'desc' }],
+        take: remainingSlots,
+      });
+    }
+
+    // Verified foods first — Gemini will naturally prefer them
+    return [...verifiedFoods, ...supplementFoods];
   }
 
   async _logGeneration(userId, planType, inputParams, outputPlan, status, retryCount) {

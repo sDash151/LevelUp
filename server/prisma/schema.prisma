@@ -1359,22 +1359,45 @@ model RecoveryPlan {
 
 model FoodCatalog {
   id                String   @id @default(cuid())
-  name              String   @unique
-  category          String   // indian_staple, fitness_food, easy_access, global
-  protein           Float    // per 100g
-  carbs             Float    // per 100g
-  fats              Float    // per 100g
-  calories          Int      // per 100g
-  servingSize       Float    @default(100)  // default serving grams
-  servingUnit       String   @default("g")
+  name              String
+  normalizedName    String   @unique // Lowercased + cleaned name for exact-match lookups e.g. "chicken biryani"
+  slug              String   @unique
+  aliases           String[] @default([]) // e.g. ["chapati", "phulka"]
+  category          String   // protein, carb, fat, dairy, fruit, mixed-meal, etc.
+  mealTypes         String[] @default([]) // e.g. ["breakfast", "lunch"]
+  servingUnit       String   @default("g") // piece, bowl, glass, plate
+  servingSize       Float    @default(100)
+  unitGramMap       Json?    // e.g. {"piece": 50, "bowl": 180}
+  
+  // Macros
+  calories          Float
+  protein           Float
+  carbs             Float
+  fats              Float
+  fiber             Float?
+  
+  // Existing AI/Business Fields
   estimatedPricePerServing Float? // INR per serving
   priceTier         String   @default("medium") // budget, medium, premium
   availabilityScore Int      @default(8) // 1-10
   cookingDifficulty String   @default("basic") // none, basic, full
   dietType          String[] @default(["non_veg"]) // veg, eggetarian, non_veg, vegan
+  
+  // Source & Trust
+  imageUrl          String?
+  source            String   @default("levelup_seed") // INDB, USDA, Kaggle, OFF
+  isVerified        Boolean  @default(false) // Verified = USDA / INDB / manual
+  confidence        Float?
+  varianceLow       Float?
+  varianceHigh      Float?
+  
   createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   @@index([category])
+  @@index([category, mealTypes])
+  @@index([slug])
+  @@index([source])
   @@index([dietType])
   @@map("food_catalog")
 }
@@ -1456,3 +1479,4 @@ model RecoveryLog {
   @@index([userId, date])
   @@map("recovery_logs")
 }
+

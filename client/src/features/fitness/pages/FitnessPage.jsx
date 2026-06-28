@@ -181,7 +181,7 @@ export default function FitnessPage() {
         {/* ── Mobile FAB (Floating Action Button) ── */}
         <button
           onClick={handleAction}
-          className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] right-4 z-50 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-2xl transition-transform active:scale-95"
+          className="md:hidden fixed bottom-[5.5rem] right-4 z-50 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-2xl transition-transform active:scale-95"
           style={{ background: 'linear-gradient(135deg, #E8A23A, #D4891A)' }}
         >
           <actionBtn.icon className="w-6 h-6" />

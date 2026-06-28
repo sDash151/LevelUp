@@ -29,7 +29,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }) {
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center p-0 sm:p-4">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -42,12 +42,13 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }) {
 
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
             className={clsx(
-              'relative w-full rounded-2xl overflow-hidden flex flex-col max-h-[90vh]',
+              'relative w-full overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]',
+              'rounded-t-3xl sm:rounded-2xl rounded-b-none sm:rounded-b-2xl',
               sizeMap[size]
             )}
             style={{ 

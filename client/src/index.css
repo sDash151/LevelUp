@@ -331,11 +331,11 @@ select:focus-visible {
   }
 
   .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
   }
   .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+    display: none !important;
   }
 
   /* Text Utilities */
@@ -457,11 +457,11 @@ select:focus-visible {
    ============================================ */
 
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 /* ============================================

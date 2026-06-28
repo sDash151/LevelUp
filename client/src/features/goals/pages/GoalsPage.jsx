@@ -626,20 +626,21 @@ export default function GoalsPage() {
           ══════════════════════════════════════ */}
       <div className="lg:hidden w-full overflow-x-hidden min-h-screen relative pb-28">
         
-        {/* Sticky Header with Glassmorphism */}
-        <div className="sticky top-0 z-30 glass-nav px-5 py-4 mb-4 -mx-0 flex items-center justify-between border-b border-[var(--th-border)]">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4 px-4 pt-4">
           <div>
-            <h1 className="text-[26px] font-black tracking-tight" style={{ color: 'var(--th-text)' }}>Goals</h1>
-            <p className="text-[12px] font-medium mt-0.5 opacity-80" style={{ color: 'var(--th-text-muted)' }}>Level up your life.</p>
+            <h1 className="text-[28px] font-bold" style={{ color: 'var(--th-text)' }}>Goals</h1>
+            <p className="text-[13px] mt-1" style={{ color: 'var(--th-text-muted)' }}>Level up your life.</p>
           </div>
           {/* Weekly / Monthly toggle */}
-          <div className="flex rounded-xl p-1 bg-[#08080d] border border-[var(--th-border)] shadow-inner">
+          <div className="flex rounded-xl p-1 mr-12" style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
             {['WEEKLY', 'MONTHLY'].map(tab => (
               <button key={tab} onClick={() => setActiveTab(tab)}
-                className={clsx(
-                  "px-3.5 py-1.5 text-[11px] font-bold rounded-lg transition-all uppercase tracking-wide",
-                  activeTab === tab ? "bg-[var(--th-primary)] text-[#08080d] shadow-md" : "text-[var(--th-text-muted)] hover:text-[var(--th-text)]"
-                )}>
+                className="px-3.5 py-1.5 text-[11px] font-bold rounded-lg transition-all uppercase tracking-wide"
+                style={{
+                  background: activeTab === tab ? 'var(--th-primary)' : 'transparent',
+                  color: activeTab === tab ? '#08080d' : 'var(--th-text-muted)',
+                }}>
                 {tab === 'WEEKLY' ? 'Weekly' : 'Monthly'}
               </button>
             ))}

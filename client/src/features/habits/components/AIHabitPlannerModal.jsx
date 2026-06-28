@@ -9,7 +9,7 @@ const CATEGORY_ICONS = {
   general: '✦', mindfulness: '🧘', fitness: '💪', learning: '📚', career: '💼', health: '❤️',
 };
 
-export function AIHabitPlannerModal({ isOpen, onClose }) {
+export function AIHabitPlannerView({ onFinished }) {
   const [step, setStep] = useState('input'); // input, loading, selection
   const [goal, setGoal] = useState('');
   const [suggestedHabits, setSuggestedHabits] = useState([]);
@@ -45,7 +45,7 @@ export function AIHabitPlannerModal({ isOpen, onClose }) {
     setGoal('');
     setSuggestedHabits([]);
     setSelectedIndices([]);
-    onClose();
+    onFinished?.();
   };
 
   const toggleSelection = (index) => {
@@ -54,16 +54,8 @@ export function AIHabitPlannerModal({ isOpen, onClose }) {
     );
   };
 
-  const handleClose = () => {
-    if (step === 'loading') return; // prevent closing while loading
-    setStep('input');
-    setGoal('');
-    setSuggestedHabits([]);
-    onClose();
-  };
-
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="AI Habit Planner" size="md">
+    <div className="w-full">
       <AnimatePresence mode="wait">
         {step === 'input' && (
           <motion.div
@@ -204,6 +196,6 @@ export function AIHabitPlannerModal({ isOpen, onClose }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </Modal>
+    </div>
   );
 }

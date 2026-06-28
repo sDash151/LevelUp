@@ -261,22 +261,24 @@ function MomentumSection({ momentum, isLoading, streakMessage, mobile = false })
           {/* Timeline with flame icons and connecting line */}
           <div className="relative mb-4">
             {/* Connecting horizontal line */}
-            <div className="absolute left-0 right-0" style={{ top: 24, height: 2, background: '#E8B94A', opacity: 0.4 }} />
-            <div className={'flex items-start ' + (mobile ? 'overflow-x-auto gap-3 pb-2' : 'justify-between')}>
+            <div className="absolute left-0 right-0 max-sm:top-[18px] sm:top-6" style={{ height: 2, background: '#E8B94A', opacity: 0.4 }} />
+            <div className="flex items-start justify-between">
               {momentum.map((m) => (
-                <div key={m.date} className={'flex flex-col items-center gap-2 relative z-10 ' + (mobile ? 'min-w-[56px]' : '')}>
-                  <div className={'w-12 h-12 rounded-full flex items-center justify-center '
-                    + (m.isToday ? 'ring-2 ring-[#E8B94A] ring-offset-4' : '')}
+                <div key={m.date} className="flex flex-col items-center gap-2 relative z-10 max-sm:w-9 sm:w-12">
+                  <div className={'rounded-full flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 '
+                    + (m.isToday ? 'ring-2 ring-[#E8B94A] ring-offset-[3px] sm:ring-offset-4' : '')}
                     style={{
                       background: m.type === 'missed' ? 'var(--th-highlight)' : 'rgba(232,185,74,0.1)',
                       ringOffsetColor: 'var(--th-card)',
                       ['--tw-ring-offset-color']: 'var(--th-card)',
                     }}>
-                    <MomentumIcon type={m.type} animated={m.isToday} />
+                    <div className="scale-[0.8] sm:scale-100 flex items-center justify-center">
+                      <MomentumIcon type={m.type} animated={m.isToday} />
+                    </div>
                   </div>
                   {/* Dot on the line */}
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#E8B94A' }} />
-                  <span className="text-[11px] text-center whitespace-nowrap" style={{ color: m.isToday ? '#E8B94A' : 'var(--th-text-dim)' }}>
+                  <div className="rounded-full bg-[#E8B94A] w-[6px] h-[6px] sm:w-[8px] sm:h-[8px]" />
+                  <span className="text-[9px] sm:text-[11px] text-center whitespace-nowrap" style={{ color: m.isToday ? '#E8B94A' : 'var(--th-text-dim)' }}>
                     {m.label}
                   </span>
                 </div>

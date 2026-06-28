@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Modal, Button } from '@/design-system/components';
 import clsx from 'clsx';
+import { AIHabitPlannerView } from './AIHabitPlannerModal';
+import { Sparkles, Edit3 } from 'lucide-react';
 
 const COLORS = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#f97316'];
 const CATEGORIES = ['general', 'mindfulness', 'fitness', 'learning', 'career', 'health'];
@@ -9,6 +11,8 @@ const CATEGORY_ICONS = {
 };
 
 export function HabitForm({ isOpen, onClose, habit = null, onSubmit }) {
+  const [activeTab, setActiveTab] = useState('manual');
+  
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -40,10 +44,32 @@ export function HabitForm({ isOpen, onClose, habit = null, onSubmit }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={habit ? 'Edit Habit' : 'New Habit'} size="md">
-      <div className="space-y-5">
-        {/* Name */}
-        <div>
+    <Modal isOpen={isOpen} onClose={onClose} title={habit ? 'Edit Habit' : (activeTab === 'ai' ? 'AI Habit Planner' : 'New Habit')} size="md">
+      {!habit && (
+        <div className="flex rounded-xl p-1 mb-6" style={{ background: 'var(--th-card-solid)', border: '1px solid var(--th-border)' }}>
+          <button onClick={() => setActiveTab('manual')}
+            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-[12px] font-bold rounded-lg transition-all uppercase tracking-wide"
+            style={{
+              background: activeTab === 'manual' ? 'var(--th-primary)' : 'transparent',
+              color: activeTab === 'manual' ? '#08080d' : 'var(--th-text-muted)',
+            }}>
+            <Edit3 className="w-3.5 h-3.5" /> Manual
+          </button>
+          <button onClick={() => setActiveTab('ai')}
+            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-[12px] font-bold rounded-lg transition-all uppercase tracking-wide"
+            style={{
+              background: activeTab === 'ai' ? 'var(--th-primary)' : 'transparent',
+              color: activeTab === 'ai' ? '#08080d' : 'var(--th-text-muted)',
+            }}>
+            <Sparkles className="w-3.5 h-3.5" /> AI Planner
+          </button>
+        </div>
+      )}
+
+      {activeTab === 'manual' || habit ? (
+        <div className="space-y-5">
+          {/* Name */}
+          <div>
           <label className="text-xs font-medium mb-2 block" style={{ color: 'var(--th-text-secondary)' }}>Habit Name *</label>
           <input
             value={form.name}
@@ -131,6 +157,9 @@ export function HabitForm({ isOpen, onClose, habit = null, onSubmit }) {
           </button>
         </div>
       </div>
+      ) : (
+        <AIHabitPlannerView onFinished={onClose} />
+      )}
     </Modal>
   );
 }

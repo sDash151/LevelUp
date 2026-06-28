@@ -47,35 +47,62 @@ export function Avatar({
       )}
       
       {/* Main Avatar Bubble */}
-      <motion.button
-        onClick={onClick}
-        disabled={!onClick}
-        whileHover={onClick ? { scale: 1.05 } : {}}
-        whileTap={onClick ? { scale: 0.95 } : {}}
-        className={clsx(
-          'relative flex items-center justify-center rounded-full overflow-hidden shadow-lg transition-transform',
-          sizeClasses,
-          bordered && 'ring-2 ring-[var(--th-bg)] ring-offset-2 ring-offset-[var(--th-primary)]/20',
-          !showImage && 'bg-gradient-to-br from-[var(--th-primary)] to-purple-600 text-white font-bold',
-          onClick ? 'cursor-pointer' : 'cursor-default'
-        )}
-      >
-        {showImage ? (
-          <img
-            src={src}
-            alt={name || 'Avatar'}
-            onError={() => setImageError(true)}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <span className="relative z-10 drop-shadow-md">
-            {getInitials(name)}
-          </span>
-        )}
-        
-        {/* Subtle inner shadow overlay */}
-        <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/10 pointer-events-none" />
-      </motion.button>
+      {onClick ? (
+        <motion.button
+          onClick={onClick}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={clsx(
+            'relative flex items-center justify-center rounded-full overflow-hidden shadow-lg transition-transform',
+            sizeClasses,
+            bordered && 'ring-2 ring-[var(--th-bg)] ring-offset-2 ring-offset-[var(--th-primary)]/20',
+            !showImage && 'bg-gradient-to-br from-[var(--th-primary)] to-purple-600 text-white font-bold',
+            'cursor-pointer'
+          )}
+        >
+          {showImage ? (
+            <img
+              src={src}
+              alt={name || 'Avatar'}
+              onError={() => setImageError(true)}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="relative z-10 drop-shadow-md">
+              {getInitials(name)}
+            </span>
+          )}
+          
+          {/* Subtle inner shadow overlay */}
+          <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/10 pointer-events-none" />
+        </motion.button>
+      ) : (
+        <motion.div
+          className={clsx(
+            'relative flex items-center justify-center rounded-full overflow-hidden shadow-lg transition-transform',
+            sizeClasses,
+            bordered && 'ring-2 ring-[var(--th-bg)] ring-offset-2 ring-offset-[var(--th-primary)]/20',
+            !showImage && 'bg-gradient-to-br from-[var(--th-primary)] to-purple-600 text-white font-bold',
+            'cursor-default'
+          )}
+        >
+          {showImage ? (
+            <img
+              src={src}
+              alt={name || 'Avatar'}
+              onError={() => setImageError(true)}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="relative z-10 drop-shadow-md">
+              {getInitials(name)}
+            </span>
+          )}
+          
+          {/* Subtle inner shadow overlay */}
+          <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/10 pointer-events-none" />
+        </motion.div>
+      )}
 
       {/* Status Dot */}
       {status && (
